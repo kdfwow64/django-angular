@@ -1,0 +1,8 @@
+# Folders #
+###################
+/venv
+
+# Sublime #
+############
+.sublime-project
+.sublime-workspace

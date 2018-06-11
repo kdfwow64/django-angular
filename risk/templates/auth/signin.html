@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% load bootstrap %}
+
+{% block body %}
+<div id="register" class="content" data-scrollview="true">
+  <div class="container" data-animation="true" data-animation-type="fadeInDown">
+    <h2 class="content-title">Sign in.</h2>
+    <p class="content-desc">
+        Your continued use of Risk Log Book replaces fear with data for better decision making.<br />
+        Thanks for your ongoing contribution.  You are making a difference.
+    </p>
+  <div class="alert-info">
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+  </div>
+  <div class="col-md-4 form-col"></div>
+  <div class="col-md-4 form-col login-content" data-animation="true" data-animation-type="fadeInRight">
+    <div class="alert-info"></div>
+    <form method="POST" action="." accept-charset="UTF-8" role="form">
+      {% csrf_token %}
+      {{ form|bootstrap }}
+      <div>
+      <label>
+        <input type="checkbox" name="remember" value="1"> Remember Me
+      </label>
+      <a role="button" href="">Forgot your password?</a><span class="clearfix"></span>
+      </div>
+      <button type="submit" name="submit">Sign in</button>
+    </form>
+    <br/><br/>
+  </div>
+</div>
+{% endblock %}

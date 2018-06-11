@@ -1,0 +1,152 @@
+{% load staticfiles %}
+<!-- begin #sidebar -->
+<div id="sidebar" class="sidebar" ng-controller="sidebarController" ng-class="{ 'sidebar-transparent': setting.layout.pageSidebarTransparent }">
+    <!-- begin sidebar scrollbar -->
+    <div data-scrollbar="true" data-height="100%">
+        <!-- begin sidebar user -->
+        <ul class="nav">
+            <li class="nav-profile">
+                <div class="image">
+                    <a href="javascript:;"><img src="{% static "dashboard_assets/img/user-13.jpg" %}" alt="" /></a>
+                </div>
+                <div class="info">
+                    ACME Corporation
+                    <small>change</small>
+                </div>
+            </li>
+        </ul>
+        <!-- end sidebar user -->
+        <!-- begin sidebar nav -->
+        <ul class="nav">
+            <li class="nav-header">My Workbench</li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.email')}">
+                <a href="javascript:;">
+                    <span class="badge pull-right">10</span>
+                    <i class="fa fa-bullhorn"></i>
+                    <span>Open Items</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.email.inbox">Evaluations</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.email.inbox-v2">Reminders</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.email.compose">Tasks</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.email.detail">Completions</a></li>
+                </ul>
+            </li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.gallery')}">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <span class="badge pull-right">4</span>
+                    <i class="fa fa-inbox"></i>
+                    <span>Messages</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.email.inbox">Inbox</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.email.inbox-v2">Feedback</a></li>
+                </ul>
+            </li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.form')}">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-clock-o"></i>
+                    <span>Meetings</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Meetings</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Create Meeting</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Search Meetings</a></li>
+                </ul>
+            </li>
+            <li ui-sref-active="active"><a ui-sref="app.calendar"><i class="fa fa-calendar"></i> <span>Calendar</span></a></li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.table')}">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-group"></i>
+                    <span>Contacts</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Contacts</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Contact</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Contact Group</a></li>
+                </ul>
+            </li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.ui')}">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-book"></i>
+                    <span>Register</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Entries</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add an Entry</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-shield"></i>
+                    <span>Controls</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Controls</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Control</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Control Group</a></li>
+                </ul>
+            </li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.chart')}">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-tags"></i>
+                    <span>Assets</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Assets</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Asset</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Asset Group</a></li>
+                </ul>
+            </li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-wrench"></i>
+                    <span>Vendors</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Vendors</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Vendor</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Vendor Group</a></li>
+                </ul>
+            </li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-paper-plane"></i>
+                    <span>Projects</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Projects</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Project</a></li>
+                </ul>
+            </li>
+            <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-pencil"></i>
+                    <span>IR Playbooks</span>
+                </a>
+                <ul class="sub-menu">
+                    <li ui-sref-active="active"><a ui-sref="app.ui.general">List Playbooks</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Create Playbooks</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Playbook Group</a></li>
+                </ul>
+            </li>
+            <!-- begin sidebar minify button -->
+            <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
+            <!-- end sidebar minify button -->
+        </ul>
+        <!-- end sidebar nav -->
+    </div>
+    <!-- end sidebar scrollbar -->
+</div>
+<div class="sidebar-bg"></div>
+<!-- end #sidebar -->
+

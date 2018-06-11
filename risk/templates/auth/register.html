@@ -1,0 +1,26 @@
+<!-- app/templates/auth/register.html -->
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% load staticfiles %}
+{% block title %}Register{% endblock %}
+{% block body %}
+<div id="register" class="content" data-scrollview="true">
+  <div class="container" data-animation="true" data-animation-type="fadeInDown">
+    <h2 class="content-title">Register</h2>
+    <p class="content-desc">
+        Thank you for your interest in becoming a part of the fastest growing <br>
+        risk communications platform in the security industry.  We look forward to your contribution and feedback.
+    </p>
+    <div class="col-md-4 form-col"></div>
+    <div class="col-md-4 form-col" data-animation="true" data-animation-type="fadeInRight">
+    <form action="" method="post" class="form" role="form">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <input class="btn btn-default" type="submit" value="Register">
+    </form>
+    </div>
+    <div class="col-md-4 form-col"></div>
+  </div>
+</div>
+{% endblock %}
