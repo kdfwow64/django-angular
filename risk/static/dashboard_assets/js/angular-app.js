@@ -25,6 +25,174 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             template: '<div ui-view></div>',
             abstract: true
         })
+        .state('app.dashboard.evaluations', {
+            url: '/evaluations',
+            templateUrl: 'views/evaluations.html',
+            data: { pageTitle: 'Evaluations' },
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
+                            '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
+                            '/static/dashboard_assets/plugins/morris/morris.css',
+                            '/static/dashboard_assets/plugins/morris/raphael.min.js',
+                            '/static/dashboard_assets/plugins/morris/morris.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
+                            '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.dashboard.reminders', {
+            url: '/reminders',
+            templateUrl: 'views/reminders.html',
+            data: { pageTitle: 'Reminders' },
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
+                            '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
+                            '/static/dashboard_assets/plugins/morris/morris.css',
+                            '/static/dashboard_assets/plugins/morris/raphael.min.js',
+                            '/static/dashboard_assets/plugins/morris/morris.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
+                            '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.dashboard.tasks', {
+            url: '/tasks',
+            templateUrl: 'views/tasks.html',
+            data: { pageTitle: 'Tasks' },
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
+                            '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
+                            '/static/dashboard_assets/plugins/morris/morris.css',
+                            '/static/dashboard_assets/plugins/morris/raphael.min.js',
+                            '/static/dashboard_assets/plugins/morris/morris.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
+                            '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.dashboard.completions', {
+            url: '/completions',
+            templateUrl: 'views/completions.html',
+            data: { pageTitle: 'Completions' },
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
+                            '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
+                            '/static/dashboard_assets/plugins/morris/morris.css',
+                            '/static/dashboard_assets/plugins/morris/raphael.min.js',
+                            '/static/dashboard_assets/plugins/morris/morris.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
+                            '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.dashboard.list_meetings', {
+            url: '/list-meetings',
+            templateUrl: 'views/list_meetings.html',
+            data: { pageTitle: 'List Meetings' },
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
+                            '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
+                            '/static/dashboard_assets/plugins/morris/morris.css',
+                            '/static/dashboard_assets/plugins/morris/raphael.min.js',
+                            '/static/dashboard_assets/plugins/morris/morris.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
+                            '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.dashboard.create_meeting', {
+            url: '/create-meeting',
+            templateUrl: 'views/create_meeting.html',
+            data: { pageTitle: 'Create Meeting' },
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
+                            '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
+                            '/static/dashboard_assets/plugins/morris/morris.css',
+                            '/static/dashboard_assets/plugins/morris/raphael.min.js',
+                            '/static/dashboard_assets/plugins/morris/morris.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
+                            '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.dashboard.search_meetings', {
+            url: '/search-meeting',
+            templateUrl: 'views/search_meeting.html',
+            data: { pageTitle: 'Search Meeting' },
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
+                            '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
+                            '/static/dashboard_assets/plugins/morris/morris.css',
+                            '/static/dashboard_assets/plugins/morris/raphael.min.js',
+                            '/static/dashboard_assets/plugins/morris/morris.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
+                            '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
+                            '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
+                            '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
+                        ]
+                    });
+                }]
+            }
+        })
         .state('app.dashboard.v1', {
             url: '/v1',
             templateUrl: 'views/index.html',

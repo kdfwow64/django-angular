@@ -193,16 +193,12 @@
             <li class="dropdown navbar-user">
                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                     <img src="{% static "dashboard_assets/img/user-13.jpg" %}" alt="" />
-                    <span class="hidden-xs">Adam Schwartz</span> <b class="caret"></b>
+                    <span class="hidden-xs user_fullname">{{ user.get_full_name }}</span> <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu animated fadeInLeft">
                     <li class="arrow"></li>
                     <li><a href="javascript:;">Edit Profile</a></li>
-                    <li><a href="javascript:;"><span class="badge badge-danger pull-right">2</span> Inbox</a></li>
-                    <li><a href="javascript:;">Calendar</a></li>
-                    <li><a href="javascript:;">Setting</a></li>
-                    <li class="divider"></li>
-                    <li><a href="javascript:;">Log Out</a></li>
+                    <li><a href="/auth/signout/">Log Out</a></li>
                 </ul>
             </li>
             <li class="hidden-xs" ng-if="setting.layout.pageTwoSidebar === true">

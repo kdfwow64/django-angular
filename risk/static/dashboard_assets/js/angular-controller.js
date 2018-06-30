@@ -469,7 +469,7 @@ colorAdminApp.controller('dashboardController', function($scope, $rootScope, $st
         ------------------------- */
         setTimeout(function() {
             $.gritter.add({
-                title: 'Welcome back, Admin!',
+                title: $(".user_fullname").text(),
                 text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus lacus ut lectus rutrum placerat.',
                 image: '/static/dashboard_assets/img/user-2.jpg',
                 sticky: true,
@@ -658,7 +658,7 @@ colorAdminApp.controller('dashboardV2Controller', function($scope, $rootScope, $
         ------------------------- */
         setTimeout(function() {
             $.gritter.add({
-                title: 'Welcome back, Admin!',
+                title: $(".user_fullname").text(),
                 text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus lacus ut lectus rutrum placerat.',
                 image: '/static/dashboard_assets/img/user-14.jpg',
                 sticky: true,
