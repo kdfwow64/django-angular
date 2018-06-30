@@ -6,3 +6,9 @@
 ############
 *.sublime-project
 *.sublime-workspace
+# Python #
+##########
+__pycache__/
+*.py[cod]
+
+

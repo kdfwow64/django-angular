@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'risk',
         'USER': 'rlbadmin',
         'PASSWORD': 'Qazxsw2#',
-        #'PASSWORD': 'Testing123',
+        # 'PASSWORD': 'Testing123',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
