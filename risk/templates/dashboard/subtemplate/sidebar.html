@@ -64,9 +64,9 @@
                     <span>Contacts</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Contacts</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Contact</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Contact Group</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_contacts">List Contacts</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-contact" data-toggle="modal">Add Contact</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-contact-group" data-toggle="modal">Add Contact Group</a></li>
                 </ul>
             </li>
             <li class="has-sub" ng-class="{active:$state.includes('app.ui')}">
@@ -76,8 +76,8 @@
                     <span>Register</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Entries</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add an Entry</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_entries">List Entries</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.add_entry">Add an Entry</a></li>
                 </ul>
             </li>
             <li class="has-sub">
@@ -87,9 +87,9 @@
                     <span>Controls</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Controls</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Control</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Control Group</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_controls">List Controls</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-control" data-toggle="modal">Add Control</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-control-group" data-toggle="modal">Add Control Group</a></li>
                 </ul>
             </li>
             <li class="has-sub" ng-class="{active:$state.includes('app.chart')}">
@@ -99,9 +99,9 @@
                     <span>Assets</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Assets</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Asset</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Asset Group</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_assets">List Assets</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-asset" data-toggle="modal">Add Asset</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-asset-group" data-toggle="modal">Add Asset Group</a></li>
                 </ul>
             </li>
             <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
@@ -111,9 +111,9 @@
                     <span>Vendors</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Vendors</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Vendor</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Vendor Group</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_vendors">List Vendors</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-vendor" data-toggle="modal">Add Vendor</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-vendor-group" data-toggle="modal">Add Vendor Group</a></li>
                 </ul>
             </li>
             <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
@@ -123,8 +123,8 @@
                     <span>Projects</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">List Projects</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Project</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_projects">List Projects</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.add_project">Add Project</a></li>
                 </ul>
             </li>
             <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
@@ -134,9 +134,9 @@
                     <span>IR Playbooks</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.ui.general">List Playbooks</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Create Playbooks</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.ui.typography">Add Playbook Group</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_playbooks">List Playbooks</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.dashboard.create_playbook">Create Playbooks</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#create-playbook-group" data-toggle="modal">Add Playbook Group</a></li>
                 </ul>
             </li>
             <!-- begin sidebar minify button -->
@@ -150,3 +150,199 @@
 <div class="sidebar-bg"></div>
 <!-- end #sidebar -->
 
+<!-- #modal- Add Contact -->
+<div class="modal fade" id="add-contact">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Contact</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Add Contact</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #modal- Add Contact Group -->
+<div class="modal fade" id="add-contact-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Contact Group</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Add Contact Group</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #modal- Add Contact -->
+<div class="modal fade" id="add-control">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Control</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Add Contact</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #modal- Add Contact Group -->
+<div class="modal fade" id="add-control-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Control Group</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Add Contact Group</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #modal- Add Asset -->
+<div class="modal fade" id="add-asset">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Asset</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Add Asset</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #modal- Add Asset Group -->
+<div class="modal fade" id="add-asset-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Asset Group</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Add Asset Group</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #modal- Add Vendor -->
+<div class="modal fade" id="add-vendor">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Vendor</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Add Vendor</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #modal- Add Asset Group -->
+<div class="modal fade" id="add-vendor-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Vendor Group</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Add Vendor Group</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #modal- Create playbook Group -->
+<div class="modal fade" id="create-playbook-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create Playbook Group</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <h5><i class="fa fa-info-circle"></i> Create Playbook Group</h5>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Action</a>
+            </div>
+        </div>
+    </div>
+</div>
