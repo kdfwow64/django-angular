@@ -55,6 +55,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Get company name."""
         return self.companymember_set.get().id_company.name
 
+    def get_company_id(self):
+        """Get company id."""
+        return self.companymember_set.get().id_company.id
+
     def get_short_name(self):
         """Get short name."""
         if self.full_name:

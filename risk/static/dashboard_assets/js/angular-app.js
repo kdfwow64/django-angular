@@ -9,7 +9,10 @@ var colorAdminApp = angular.module('colorAdminApp', [
     'ui.router',
     'ui.bootstrap',
     'oc.lazyLoad'
-]);
+], function($interpolateProvider) {
+            $interpolateProvider.startSymbol('{(');
+            $interpolateProvider.endSymbol(')}');
+});
 
 colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/app/dashboard/v2');

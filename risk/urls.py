@@ -8,6 +8,8 @@ urlpatterns = [
     re_path(r'^auth/signout/$', auth.signout, name='auth_signout'),
     re_path(r'^auth/register/$', auth.register, name='auth_register'),
     re_path(r'^dashboard/$', dashboard.index, name='dashboard'),
+    re_path(r'^dashboard/update-company/$', dashboard.update_company, name='dashboard_update_company'),
+    re_path(r'^dashboard/template/sidebar.html$', dashboard.sidebar),
     re_path(r'^dashboard/template/(?P<name>[^/]+).html$', dashboard.template),
     re_path(r'^dashboard/views/(?P<name>[^/]+).html$', dashboard.views),
 

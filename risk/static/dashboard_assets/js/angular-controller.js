@@ -68,6 +68,9 @@ Website: http://www.seantheme.com/color-admin-v3.0/admin/angularjs/
    60.0 CONTROLLER - Login V3
    61.0 CONTROLLER - Register V3
    62.0 CONTROLLER - Summernote
+   63.0 CONTROLLER - Bootstrap 4
+
+   64.0 CONTROLLER - Show company list on click change
     <!-- ======== GLOBAL SCRIPT SETTING ======== -->
 */
 
@@ -153,8 +156,23 @@ colorAdminApp.controller('appController', ['$rootScope', '$scope', function($roo
 /* -------------------------------
    2.0 CONTROLLER - Sidebar
 ------------------------------- */
-colorAdminApp.controller('sidebarController', function($scope, $rootScope, $state) {
+colorAdminApp.controller('sidebarController', function($scope, $rootScope, $state, $http) {
     App.initSidebar();
+    $scope.show_company_dropdown = function(){
+            $scope.change_company = true;
+    }
+    $scope.update_company_id = function(){
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/update-company/', {'company_id': $scope.selected_company}).then(function(r){
+            $("#current_company").text($("#companies_list").find("option:selected").text());
+            $scope.change_company = false;
+        }, function(r){
+
+        });
+
+
+    }
 });
 
 
@@ -3138,3 +3156,4 @@ colorAdminApp.controller('summernoteController', function($scope, $rootScope, $s
 ------------------------------- */
 colorAdminApp.controller('bootstrap4Controller', function($scope, $rootScope, $state) {
 });
+
