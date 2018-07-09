@@ -12,7 +12,7 @@
                 <div class="info">
                     <span id="current_company">{{user.get_company_name}}</span>
                     <a href="#" ng-click="show_company_dropdown();" ng-hide="change_company"><small>change</small></a>
-                    <select ng-model="selected_company" id="companies_list" ng-show="change_company" class="ng-hide" ng-change="update_company_id()">
+                    <select class="form-control" ng-model="selected_company" id="companies_list" ng-show="change_company" class="ng-hide" ng-change="update_company_id()">
                         {% for c in companies %}<option value='{{c.id}}' data-name="{{c.name}}">{{c.name}}</option>{% endfor %}
                     </select>
                 </div>
