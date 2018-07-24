@@ -679,7 +679,7 @@ colorAdminApp.controller('dashboardV2Controller', function($scope, $rootScope, $
                 title: $(".user_fullname").text(),
                 text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus lacus ut lectus rutrum placerat.',
                 image: '/static/dashboard_assets/img/user-14.jpg',
-                sticky: true,
+                sticky: false,
                 time: '',
                 class_name: 'my-sticky-class'
             });
