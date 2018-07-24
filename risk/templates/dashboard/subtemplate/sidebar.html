@@ -11,10 +11,19 @@
                 </div>
                 <div class="info">
                     <span id="current_company">{{user.get_company_name}}</span>
-                    <a href="#" ng-click="show_company_dropdown();" ng-hide="change_company"><small style="text-align: right;">change</small></a>
-                    <select class="form-control" ng-model="selected_company" id="companies_list" ng-show="change_company" class="ng-hide" ng-change="update_company_id()">
-                        {% for c in companies %}<option value='{{c.id}}' data-name="{{c.name}}">{{c.name}}</option>{% endfor %}
-                    </select>
+                    <div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <span class="hidden-xs">change</span></b>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInLeft">
+                                <li class="arrow"></li>
+                                {% for c in companies %}<li><a ng-click="update_company_id('{{c.name}}')">{{c.name}}</a></li>{% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                    </div>
                 </div>
             </li>
         </ul>

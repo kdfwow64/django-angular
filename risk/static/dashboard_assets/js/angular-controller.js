@@ -161,17 +161,17 @@ colorAdminApp.controller('sidebarController', function($scope, $rootScope, $stat
     $scope.show_company_dropdown = function(){
             $scope.change_company = true;
     }
-    $scope.update_company_id = function(){
-        $http.defaults.xsrfCookieName = 'csrftoken';
-        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
-        $http.post('/dashboard/update-company/', {'company_id': $scope.selected_company}).then(function(r){
-            $("#current_company").text($("#companies_list").find("option:selected").text());
-            $scope.change_company = false;
-        }, function(r){
+    $scope.update_company_id = function(name){
+        // $http.defaults.xsrfCookieName = 'csrftoken';
+        // $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        // $http.post('/dashboard/update-company/', {'company_id': $scope.selected_company}).then(function(r){
+        //     $("#current_company").text($("#companies_list").find("option:selected").text());
+        //     $scope.change_company = false;
+        // }, function(r){
 
-        });
-
-
+        // });
+        $("#current_company").text(name);
+        $scope.change_company = false;
     }
 });
 

@@ -1,5 +1,6 @@
 """User & related models."""
 from django.db import models
+from django.db.models import Q
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractBaseUser
@@ -53,15 +54,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_company_name(self):
         """Get company name."""
-        if self.companymember_set.count() > 0:
-            return self.companymember_set.first().id_company.name
-        return ''
+        return self.userprofile.default_company.name
 
     def get_company_id(self):
         """Get company id."""
-        if self.companymember_set.count() > 0:
-            return self.companymember_set.first().id_company.id
-        return None
+        return self.userprofile.default_company.id
 
     def get_short_name(self):
         """Get short name."""
