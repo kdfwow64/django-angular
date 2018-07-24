@@ -28,7 +28,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             template: '<div ui-view></div>',
             abstract: true
         })
-        .state('app.dashboard.evaluations', {
+        .state('app.openitems', {
+            url: '/openitems',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.openitems.evaluations', {
             url: '/evaluations',
             templateUrl: 'views/evaluations.html',
             data: { pageTitle: 'Evaluations' },
@@ -52,7 +57,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.reminders', {
+        .state('app.openitems.reminders', {
             url: '/reminders',
             templateUrl: 'views/reminders.html',
             data: { pageTitle: 'Reminders' },
@@ -76,7 +81,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.tasks', {
+        .state('app.openitems.tasks', {
             url: '/tasks',
             templateUrl: 'views/tasks.html',
             data: { pageTitle: 'Tasks' },
@@ -100,7 +105,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.completions', {
+        .state('app.openitems.completions', {
             url: '/completions',
             templateUrl: 'views/completions.html',
             data: { pageTitle: 'Completions' },
@@ -124,7 +129,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.list_meetings', {
+        .state('app.meetings', {
+            url: '/meetings',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.meetings.list_meetings', {
             url: '/list-meetings',
             templateUrl: 'views/list_meetings.html',
             data: { pageTitle: 'List Meetings' },
@@ -148,7 +158,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.create_meeting', {
+        .state('app.meetings.create_meeting', {
             url: '/create-meeting',
             templateUrl: 'views/create_meeting.html',
             data: { pageTitle: 'Create Meeting' },
@@ -172,7 +182,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.search_meetings', {
+        .state('app.meetings.search_meetings', {
             url: '/search-meeting',
             templateUrl: 'views/search_meeting.html',
             data: { pageTitle: 'Search Meeting' },
@@ -196,7 +206,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.list_contacts', {
+        .state('app.contacts', {
+            url: '/contacts',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.contacts.list_contacts', {
             url: '/list-contacts',
             templateUrl: 'views/list_contacts.html',
             data: { pageTitle: 'List Contacts' },
@@ -220,7 +235,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.list_entries', {
+        .state('app.entries', {
+            url: '/entries',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.entries.list_entries', {
             url: '/list-entries',
             templateUrl: 'views/list_entries.html',
             data: { pageTitle: 'List Entries' },
@@ -244,7 +264,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.add_entry', {
+        .state('app.entries.add_entry', {
             url: '/add-entry',
             templateUrl: 'views/add_entry.html',
             data: { pageTitle: 'Add Entry' },
@@ -268,7 +288,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.list_controls', {
+        .state('app.controls', {
+            url: '/controls',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.controls.list_controls', {
             url: '/list-controls',
             templateUrl: 'views/list_controls.html',
             data: { pageTitle: 'List Controls' },
@@ -292,7 +317,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.list_assets', {
+        .state('app.assets', {
+            url: '/assets',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.assets.list_assets', {
             url: '/list-assets',
             templateUrl: 'views/list_assets.html',
             data: { pageTitle: 'List Assets' },
@@ -316,7 +346,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.list_vendors', {
+        .state('app.vendors', {
+            url: '/vendors',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.vendors.list_vendors', {
             url: '/list-vendors',
             templateUrl: 'views/list_vendors.html',
             data: { pageTitle: 'List Vendors' },
@@ -340,7 +375,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.list_projects', {
+        .state('app.projects', {
+            url: '/projects',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.projects.list_projects', {
             url: '/list-projects',
             templateUrl: 'views/list_projects.html',
             data: { pageTitle: 'List Projects' },
@@ -364,7 +404,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.add_project', {
+        .state('app.projects.add_project', {
             url: '/add-project',
             templateUrl: 'views/add_project.html',
             data: { pageTitle: 'Add Project' },
@@ -388,7 +428,12 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.list_playbooks', {
+        .state('app.playbooks', {
+            url: '/playbooks',
+            template: '<div ui-view></div>',
+            abstract: true
+        })
+        .state('app.playbooks.list_playbooks', {
             url: '/list-playbooks',
             templateUrl: 'views/list_playbooks.html',
             data: { pageTitle: 'List Playbooks' },
@@ -412,7 +457,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
-        .state('app.dashboard.create_playbook', {
+        .state('app.playbooks.create_playbook', {
             url: '/create-playbook',
             templateUrl: 'views/create_playbook.html',
             data: { pageTitle: 'Create Playbook' },
@@ -525,7 +570,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             data: { pageTitle: 'Email Detail' },
             templateUrl: 'views/email_detail.html'
         })
-        .state('app.ui', {
+        /*.state('app.ui', {
             url: '/ui',
             template: '<div ui-view></div>',
             abstract: true
@@ -1328,6 +1373,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             data: { pageTitle: 'Page with Transparent Sidebar' },
             templateUrl: 'views/page_with_transparent_sidebar.html'
         })
+        */
         .state('app.extra', {
             url: '/extra',
             template: '<div ui-view></div>',

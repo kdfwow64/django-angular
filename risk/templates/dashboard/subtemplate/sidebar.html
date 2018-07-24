@@ -22,20 +22,20 @@
         <!-- begin sidebar nav -->
         <ul class="nav">
             <li class="nav-header">My Workbench</li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.email')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.openitems')}">
                 <a href="javascript:;">
                     <span class="badge pull-right">10</span>
                     <i class="fa fa-bullhorn"></i>
                     <span>Open Items</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.evaluations">Evaluations</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.reminders">Reminders</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.tasks">Tasks</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.completions">Completions</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.openitems.evaluations">Evaluations</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.openitems.reminders">Reminders</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.openitems.tasks">Tasks</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.openitems.completions">Completions</a></li>
                 </ul>
             </li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.gallery')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.email')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <span class="badge pull-right">4</span>
@@ -47,98 +47,98 @@
                     <li ui-sref-active="active"><a ui-sref="app.email.inbox-v2">Feedback</a></li>
                 </ul>
             </li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.form')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.meetings')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <i class="fa fa-clock-o"></i>
                     <span>Meetings</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_meetings">List Meetings</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.create_meeting">Create Meeting</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.search_meetings">Search Meetings</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.meetings.list_meetings">List Meetings</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.meetings.create_meeting">Create Meeting</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.meetings.search_meetings">Search Meetings</a></li>
                 </ul>
             </li>
             <li ui-sref-active="active"><a ui-sref="app.calendar"><i class="fa fa-calendar"></i> <span>Calendar</span></a></li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.table')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.contacts')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <i class="fa fa-group"></i>
                     <span>Contacts</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_contacts">List Contacts</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.contacts.list_contacts">List Contacts</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-contact" data-toggle="modal">Add Contact</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-contact-group" data-toggle="modal">Add Contact Group</a></li>
                 </ul>
             </li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.ui')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.entries')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <i class="fa fa-book"></i>
                     <span>Register</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_entries">List Entries</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.add_entry">Add an Entry</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.entries.list_entries">List Entries</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.entries.add_entry">Add an Entry</a></li>
                 </ul>
             </li>
-            <li class="has-sub">
+            <li class="has-sub" ng-class="{active:$state.includes('app.controls')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <i class="fa fa-shield"></i>
                     <span>Controls</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_controls">List Controls</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.controls.list_controls">List Controls</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-control" data-toggle="modal">Add Control</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-control-group" data-toggle="modal">Add Control Group</a></li>
                 </ul>
             </li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.chart')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.assets')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <i class="fa fa-tags"></i>
                     <span>Assets</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_assets">List Assets</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.assets.list_assets">List Assets</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-asset" data-toggle="modal">Add Asset</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-asset-group" data-toggle="modal">Add Asset Group</a></li>
                 </ul>
             </li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.vendors')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <i class="fa fa-wrench"></i>
                     <span>Vendors</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_vendors">List Vendors</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.vendors.list_vendors">List Vendors</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-vendor" data-toggle="modal">Add Vendor</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-vendor-group" data-toggle="modal">Add Vendor Group</a></li>
                 </ul>
             </li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.projects')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <i class="fa fa-paper-plane"></i>
                     <span>Projects</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_projects">List Projects</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.add_project">Add Project</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.projects.list_projects">List Projects</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.projects.add_project">Add Project</a></li>
                 </ul>
             </li>
-            <li class="has-sub" ng-class="{active:$state.includes('app.map')}">
+            <li class="has-sub" ng-class="{active:$state.includes('app.playbooks')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
                     <i class="fa fa-pencil"></i>
                     <span>IR Playbooks</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.list_playbooks">List Playbooks</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.dashboard.create_playbook">Create Playbooks</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.playbooks.list_playbooks">List Playbooks</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.playbooks.create_playbook">Create Playbooks</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#create-playbook-group" data-toggle="modal">Add Playbook Group</a></li>
                 </ul>
             </li>
