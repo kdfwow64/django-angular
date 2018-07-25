@@ -10,8 +10,8 @@ var colorAdminApp = angular.module('colorAdminApp', [
     'ui.bootstrap',
     'oc.lazyLoad'
 ], function($interpolateProvider) {
-            $interpolateProvider.startSymbol('{(');
-            $interpolateProvider.endSymbol(')}');
+    $interpolateProvider.startSymbol('{(');
+    $interpolateProvider.endSymbol(')}');
 });
 
 colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {

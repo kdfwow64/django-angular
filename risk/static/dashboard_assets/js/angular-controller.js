@@ -156,27 +156,27 @@ colorAdminApp.controller('appController', ['$rootScope', '$scope', function($roo
 /* -------------------------------
    2.0 CONTROLLER - Sidebar
 ------------------------------- */
-colorAdminApp.controller('sidebarController', function($scope, $rootScope, $state, $http) {
+colorAdminApp.controller('sidebarController', function($scope, $uibModal, $rootScope, $state, $http, $document) {
     App.initSidebar();
-    $scope.show_company_dropdown = function(){
-            $scope.change_company = true;
-    }
-    $scope.update_company_id = function(name){
-        // $http.defaults.xsrfCookieName = 'csrftoken';
-        // $http.defaults.xsrfHeaderName = 'X-CSRFToken';
-        // $http.post('/dashboard/update-company/', {'company_id': $scope.selected_company}).then(function(r){
-        //     $("#current_company").text($("#companies_list").find("option:selected").text());
-        //     $scope.change_company = false;
-        // }, function(r){
+    var $ctrl = this;
+    $ctrl.animationsEnabled = true;
 
-        // });
-        $("#current_company").text(name);
-        $scope.change_company = false;
-    }
+    $scope.open_company_controler = function (size, parentSelector) {
+        var parentElem = parentSelector ?
+            angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+        var modalInstance = $uibModal.open({
+            animation: $ctrl.animationsEnabled,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'changeCompanyModelContent.html',
+            controller: 'changeCompanyController',
+            controllerAs: '$ctrl',
+            size: size,
+            appendTo: parentElem,
+        });
+    };
+
 });
-
-
-
 /* -------------------------------
    3.0 CONTROLLER - Right Sidebar
 ------------------------------- */
@@ -3157,3 +3157,26 @@ colorAdminApp.controller('summernoteController', function($scope, $rootScope, $s
 colorAdminApp.controller('bootstrap4Controller', function($scope, $rootScope, $state) {
 });
 
+
+/*-------------------------------------------------
+    64.0 Change company controller
+---------------------------------------------------*/
+
+colorAdminApp.controller('changeCompanyController', function($scope, $uibModalInstance, $state, $http) {
+    $scope.update_company_id = function(name){
+        // $http.defaults.xsrfCookieName = 'csrftoken';
+        // $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        // $http.post('/dashboard/update-company/', {'company_id': $scope.selected_company}).then(function(r){
+        //     $("#current_company").text($("#companies_list").find("option:selected").text());
+        //     $scope.change_company = false;
+        // }, function(r){
+
+        // });
+        $("#current_company").text(name);
+        $scope.change_company = false;
+        $uibModalInstance.close();
+    };
+    $scope.ok = function () {
+        $uibModalInstance.close();
+    }
+});
