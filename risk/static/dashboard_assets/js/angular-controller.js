@@ -161,7 +161,7 @@ colorAdminApp.controller('sidebarController', function($scope, $uibModal, $rootS
     var $ctrl = this;
     $ctrl.animationsEnabled = true;
 
-    $scope.open_company_controler = function (size, parentSelector) {
+    $scope.open_company_controller = function (size, parentSelector) {
         var parentElem = parentSelector ?
             angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
         var modalInstance = $uibModal.open({
