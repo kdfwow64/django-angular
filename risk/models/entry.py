@@ -425,8 +425,8 @@ class EntryEvaluation(models.Model):
     # Foreign Key and Relationships
     entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entryevaluation', help_text=(
         'The entry the associated with the evaluation'),)  # Evaluation entry
-    evaluation_adequacy = models.ForeignKey('EvaluationAdequacy', on_delete=models.PROTECT, null=True, related_name='entryevaluation', help_text=(
-        'Evaluation level based on infromation available'),)  # Is the control mitigation adequate for the risk based on the users perception.
+    mitigation_adequacy = models.ForeignKey('MitigationAdequacy', on_delete=models.PROTECT, null=True, related_name='entrymitigation', help_text=(
+        'Mitigation level based on infromation available'),)  # Is the control mitigation adequate for the risk based on the users perception.
     user = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='entryevaluation', help_text=(
         'The user that performed the evaluation'),)  # User that completed the evaluation.
 
@@ -749,13 +749,13 @@ class RiskType(models.Model):
         verbose_name_plural = ("Risk Types")
 
 
-class EvaluationAdequacy(models.Model):
-    """Evaluation Adequacy.  When the evaluation occurs, this bes defines the evalutaion state."""
+class MitigationAdequacy(models.Model):
+    """Mitigation Adequacy.  This best defines the mitigation state."""
 
     name = models.CharField(
-        max_length=45, blank=False, help_text=('Name of how adequate the evaluation is defined'),)  # Name of the evaluation adequacy
+        max_length=45, blank=False, help_text=('Name of how adequate the mitigation is defined'),)  # Name of the mitigation adequacy
     desc = models.TextField(
-        blank=False, help_text=('Description of how adequate the evaluation is defined'),)  # Description of the evaluation adequacy
+        blank=False, help_text=('Description of how adequate the mitigation is defined'),)  # Description of the mitigation adequacy
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
     example_title1 = models.CharField(
@@ -778,7 +778,7 @@ class EvaluationAdequacy(models.Model):
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Evaluation Adequacy")
+        verbose_name_plural = ("Mitigation Adequacy")
 
     def __str__(self):
         """String."""
