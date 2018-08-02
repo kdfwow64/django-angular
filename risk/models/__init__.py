@@ -98,7 +98,7 @@ from .entry import (
     EntryResponse,
     EntryTask,
     EntryUrl,
-    EvaluationAdequacy,
+    MitigationAdequacy,
     EntryRiskType,
     RiskType,
     Register,

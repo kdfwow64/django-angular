@@ -255,11 +255,11 @@ class EntryEvaluationAdmin(admin.ModelAdmin):
         'date_created',
         'date_evaluated',
         'entry',
-        'evaluation_adequacy',
+        'mitigation_adequacy',
         'user',
     )
     list_filter = ('date_created', 'date_evaluated',
-                   'entry', 'evaluation_adequacy', 'user')
+                   'entry', 'mitigation_adequacy', 'user')
 
 
 class EntryImpactAdmin(admin.ModelAdmin):
@@ -355,7 +355,7 @@ class EntryUrlAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class EvaluationAdequacyAdmin(admin.ModelAdmin):
+class MitigationAdequacyAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',

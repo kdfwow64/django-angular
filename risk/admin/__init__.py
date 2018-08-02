@@ -9,7 +9,7 @@ from ..models.audit import Notification, NotificationGroup, AuditChange, Snapsho
 from ..models.common import Calendar, CurrencyType, DataType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus
 from ..models.compliance import Compliance, ComplianceType, ComplianceRequirement, ComplianceVersion, KillChain, Naics, PyramidofPain
 from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomain, ControlFunction, ControlOperation, ControlCategory, ControlCategoryType, DependencyEffort, DependencyType
-from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryEvaluation, EntryImpact, EntryIndicator, EntryCompanyLocation, EntryResponse, EntryRiskType, RiskType, Response, ResponseVote, EntryUrl, EvaluationAdequacy
+from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryEvaluation, EntryImpact, EntryIndicator, EntryCompanyLocation, EntryResponse, EntryRiskType, RiskType, Response, ResponseVote, EntryUrl, MitigationAdequacy
 from ..models.feedback import Feedback, FeedbackStatus, FeedbackType, FeedbackQuestion, FeedbackAnswer, FeedbackCorrespondence
 from ..models.meeting import Meeting, TopicComment, TopicAction, MeetingTopic, MeetingType
 from ..models.scenario import EventType, Frequency, Impact, ImpactType, CIATriad, Severity
@@ -25,7 +25,7 @@ from .audit import NotificationAdmin, NotificationGroupAdmin, AuditChangeAdmin, 
 from .common import CalendarAdmin, CurrencyTypeAdmin, DataTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin
 from .compliance import ComplianceAdmin, ComplianceTypeAdmin, ComplianceVersionAdmin, ComplianceRequirementAdmin, KillChainAdmin, NaicsAdmin, PyramidofPainAdmin
 from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, ControlDomainAdmin, ControlFunctionAdmin, ControlOperationAdmin, ControlCategoryAdmin, ControlCategoryTypeAdmin, DependencyEffortAdmin, DependencyTypeAdmin
-from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryEvaluationAdmin, EntryImpactAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, EvaluationAdequacyAdmin
+from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryEvaluationAdmin, EntryImpactAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
 from .feedback import FeedbackAdmin, FeedbackStatusAdmin, FeedbackTypeAdmin, FeedbackQuestionAdmin, FeedbackAnswerAdmin, FeedbackCorrespondenceAdmin
 from .meeting import MeetingAdmin, TopicCommentAdmin, TopicActionAdmin, MeetingTopicAdmin, MeetingTypeAdmin
 from .scenario import EventTypeAdmin, FrequencyAdmin, ImpactAdmin, ImpactTypeAdmin, CIATriadAdmin, SeverityAdmin
@@ -110,7 +110,7 @@ admin.site.register(RiskType, RiskTypeAdmin)
 admin.site.register(ResponseVote, ResponseVoteAdmin)
 admin.site.register(Response, ResponseAdmin)
 admin.site.register(EntryUrl, EntryUrlAdmin)
-admin.site.register(EvaluationAdequacy, EvaluationAdequacyAdmin)
+admin.site.register(MitigationAdequacy, MitigationAdequacyAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(FeedbackQuestion, FeedbackQuestionAdmin)
 admin.site.register(FeedbackAnswer, FeedbackAnswerAdmin)
