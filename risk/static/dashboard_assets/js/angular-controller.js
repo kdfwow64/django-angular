@@ -70,7 +70,7 @@ Website: http://www.seantheme.com/color-admin-v3.0/admin/angularjs/
    62.0 CONTROLLER - Summernote
    63.0 CONTROLLER - Bootstrap 4
 
-   64.0 CONTROLLER - Show company list on click change
+   A01.0 CONTROLLER - Show company list on click change
     <!-- ======== GLOBAL SCRIPT SETTING ======== -->
 */
 
@@ -3159,7 +3159,7 @@ colorAdminApp.controller('bootstrap4Controller', function($scope, $rootScope, $s
 
 
 /*-------------------------------------------------
-    64.0 Change company controller
+    A01.0 Change company controller
 ---------------------------------------------------*/
 
 colorAdminApp.controller('changeCompanyController', function($scope, $uibModalInstance, $state, $http) {
@@ -3179,4 +3179,17 @@ colorAdminApp.controller('changeCompanyController', function($scope, $uibModalIn
     $scope.ok = function () {
         $uibModalInstance.close();
     }
+});
+/*-------------------------------------------------
+    A02.0 List Entries Controller
+---------------------------------------------------*/
+
+colorAdminApp.controller('registerListEntriresController', function($scope, $rootScope, $state) {
+    angular.element(document).ready(function () {
+        if ($('#data-table').length !== 0) {
+            $('#data-table').DataTable({
+                responsive: true
+            });
+        }
+    });
 });
