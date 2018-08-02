@@ -23,13 +23,18 @@ def index(request):
 def sidebar(request):
     """Sub template for dashboard sidebar."""
     user = request.user
-    core_account = user.accountmembership_set.filter(id_account_id__name=settings.CORE_ACCOUNT).get()
-    # print(risk_account.id_account)
-    if core_account:
+    try:
+        core_account = user.accountmembership_set.filter(id_account_id__name=settings.CORE_ACCOUNT, is_company_viewable=1).get()
         # Can see everything
         companies = [{'id': c.id, 'name': c.name} for c in Company.objects.filter(Q(is_active=True)).all()]
-    else:
-        companies = [{'id': c.id_company.id, 'name': c.id_company.name} for c in request.user.companymember_set.filter(Q(is_active=True)).all()]
+    except:
+        try:
+            admin_account_membership = user.accountmembership_set.filter(is_admin=1, is_company_viewable=1).all()
+            companies = []
+            for account_membership in admin_account_membership:
+                companies += [{'id': c.id, 'name': c.name} for c in account_membership.id_account.account_company.filter(Q(is_active=True)).all()]
+        except:
+            companies = [{'id': c.id_company.id, 'name': c.id_company.name} for c in request.user.companymember_set.filter(Q(is_active=True)).all()]
     return render(request, 'dashboard/subtemplate/sidebar.html', context={'companies': companies})
 
 @login_required
