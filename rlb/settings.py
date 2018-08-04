@@ -138,6 +138,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # from risk.models.auth import User
 AUTH_USER_MODEL = 'risk.User'
+CORE_ACCOUNT = 'Core Account'
 
 # Greppelli
 GRAPPELLI_ADMIN_TITLE = "Register Risk"
