@@ -86,7 +86,7 @@ class UserProfile(models.Model):
     country_code = models.CharField(
         max_length=5, null=True, blank=True, help_text=('Country code of user'),)  # Use of 2 character country codes should be leveraged during capture.  May need to get a database of CC as a dropdown for the contributor.
     providence_code = models.CharField(
-        max_length=30, null=True, blank=False, help_text=('Select state or providence'),)  # Used for state or providence of the users location.
+        max_length=30, null=True, blank=True, help_text=('Select state or providence'),)  # Used for state or providence of the users location.
     use_helpmenu = models.BooleanField(
         default=True, help_text=('Enable help menu functionality'),)  # Should default to true and should be managed in the users profile.  This dictates the use of help and context while using the platform.
     email_subscriber = models.BooleanField(
@@ -96,7 +96,7 @@ class UserProfile(models.Model):
     bkof_notes = models.TextField(
         blank=True, null=True, help_text=('Backoffice notes on the user'),)  # Primary notes fot he backoffice regarding the user.  This is different than feedback and other tracked user detail.
     profile_image = models.ImageField(
-        null=True, help_text=('The profile image and location for the user'),)  # Image for the user profile.  It should default to the generic avatar until the user uploads their own
+        null=True, blank=True, help_text=('The profile image and location for the user'),)  # Image for the user profile.  It should default to the generic avatar until the user uploads their own
     due_date_reminder = models.IntegerField(
         default=4, help_text=('Number of days to be reminded when items are due.'),)  # If 0 then no reminder is sent, otherwise this states the number of days to remind a user something is due.
     email_code_reg = models.CharField(
