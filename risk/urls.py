@@ -12,6 +12,7 @@ urlpatterns = [
     re_path(r'^dashboard/template/sidebar.html$', dashboard.sidebar),
     re_path(r'^dashboard/template/(?P<name>[^/]+).html$', dashboard.template),
     re_path(r'^dashboard/views/(?P<name>[^/]+).html$', dashboard.views),
+    re_path(r'^dashboard/api/entries/$', dashboard.api_list_entreis),
 
     # SHOULD BE THE LAST IN THIS LIST
     re_path(r'^$', home.index, name='index'),

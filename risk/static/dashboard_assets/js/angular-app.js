@@ -273,25 +273,21 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             url: '/add-entry',
             templateUrl: 'views/add_entry.html',
             data: { pageTitle: 'Add Entry' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
+                            '/static/dashboard_assets/js/form-wizards-validation.demo.js',
+                        ]
+                    });
+                }]
+            }
         })
         .state('app.controls', {
             url: '/controls',

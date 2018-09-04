@@ -71,6 +71,8 @@ Website: http://www.seantheme.com/color-admin-v3.0/admin/angularjs/
    63.0 CONTROLLER - Bootstrap 4
 
    A01.0 CONTROLLER - Show company list on click change
+   A02.0 CONTROLLER - registerListEntriresController - List entry controller
+   A03.0 CONTROLLER - registerAddEntriresController - Add entry controller
     <!-- ======== GLOBAL SCRIPT SETTING ======== -->
 */
 
@@ -3163,15 +3165,15 @@ colorAdminApp.controller('bootstrap4Controller', function($scope, $rootScope, $s
 ---------------------------------------------------*/
 
 colorAdminApp.controller('changeCompanyController', function($scope, $uibModalInstance, $state, $http) {
-    $scope.update_company_id = function(name){
-        // $http.defaults.xsrfCookieName = 'csrftoken';
-        // $http.defaults.xsrfHeaderName = 'X-CSRFToken';
-        // $http.post('/dashboard/update-company/', {'company_id': $scope.selected_company}).then(function(r){
-        //     $("#current_company").text($("#companies_list").find("option:selected").text());
-        //     $scope.change_company = false;
-        // }, function(r){
+    $scope.update_company_id = function(name, company_id){
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/update-company/', {'company_id': company_id}).then(function(r){
+            $("#current_company").text(name);
+            $scope.change_company = false;
+        }, function(r){
 
-        // });
+        });
         $("#current_company").text(name);
         $scope.change_company = false;
         $uibModalInstance.close();
@@ -3187,9 +3189,23 @@ colorAdminApp.controller('changeCompanyController', function($scope, $uibModalIn
 colorAdminApp.controller('registerListEntriresController', function($scope, $rootScope, $state) {
     angular.element(document).ready(function () {
         if ($('#data-table').length !== 0) {
+            $("#list-entry_title").text($("#current_company").text());
             $('#data-table').DataTable({
-                responsive: true
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "ajax": 'api/entries/'
             });
         }
+    });
+});
+
+/*-------------------------------------------------
+    A03.0 Add Entries Controller
+---------------------------------------------------*/
+
+colorAdminApp.controller('registerAddEntriresController', function($scope, $rootScope, $state) {
+    angular.element(document).ready(function () {
+        FormWizardValidation.init();
     });
 });

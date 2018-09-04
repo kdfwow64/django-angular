@@ -67,6 +67,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         else:
             return self.email
 
+    def get_current_company(self):
+        """Get current company."""
+        return self.userprofile.current_company or self.userprofile.default_company
 
 class UserProfile(models.Model):
     """
@@ -109,6 +112,8 @@ class UserProfile(models.Model):
         'Designates whether this user has been defined as reputable by backoffice'),)  # The user is been deemed reputable for metrics
     default_company = models.ForeignKey('Company', on_delete=models.PROTECT, blank=True, null=True, related_name='default_company_register', help_text=(
         'The default Company register that is shown first in the user portal'),)  # This is the default company that is opened in the users dashboard.  It can be modified in the user profile.
+    current_company = models.ForeignKey('Company', on_delete=models.PROTECT, blank=True, null=True, related_name='current_company_register', help_text=(
+        'The current Company register that is shown first in the user portal and user is viewing'),)  # This is the current company that is currently viewed in the users dashboard.  It can be modified in the user profile.
 
     class Meta:
         """Meta class."""

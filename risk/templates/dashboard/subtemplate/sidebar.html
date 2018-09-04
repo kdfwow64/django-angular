@@ -165,7 +165,7 @@
             <h5><i class="fa fa-info-circle"></i> Select a Company</h5>
             <p>Please select the company you would like to view</p>
             <ul>
-                {% for c in companies %}<li><a href="#" ng-click="update_company_id('{{c.name}}')">{{c.name}}</a></li>{% endfor %}
+                {% for c in companies %}<li><a href="#" ng-click="update_company_id('{{c.name}}', {{c.id}})">{{c.name}}</a></li>{% endfor %}
             </ul>
         </div>
     </div>

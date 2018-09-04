@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div ng-controller="dashboardV2Controller">
+<div ng-controller="registerAddEntriresController">
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li><a href="javascript:;">Home</a></li>
@@ -66,4 +66,325 @@
         <!-- end col-3 -->
     </div>
     <!-- end row -->
+    <!-- begin #content -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-12 -->
+        <div class="col-md-12">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">Add Risk Entry</h4>
+                </div>
+                <div class="panel-body">
+                    <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">
+                        <div id="wizard">
+                            <ol>
+                                <li>
+                                    Basic Info
+                                    <small></small>
+                                </li>
+                                <li>
+                                    Threat Detail
+                                    <small></small>
+                                </li>
+                                <li>
+                                    Affected Assets
+                                    <small></small>
+                                </li>
+                                <li>
+                                    Mitigating Controls
+                                    <small></small>
+                                </li>
+                                <li>
+                                    Measurements
+                                    <small></small>
+                                </li>
+                                <li>
+                                    Entry Activity
+                                    <small></small>
+                                </li>
+                            </ol>
+                            <!-- begin wizard step-1 -->
+                            <div class="wizard-step-1">
+                                <fieldset>
+                                    <legend class="pull-left width-full">Affected Aseets</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group block1">
+                                                <label>Summary</label>
+                                                <input type="text" name="summary" placeholder="Summary" class="form-control" data-parsley-group="wizard-step-1" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <textarea rows="4" name="desc" placeholder="Description" class="form-control" data-parsley-group="wizard-step-1" required /></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Risk Types</label>
+                                                <select name="risk_types" class="form-control" data-parsley-group="wizard-step-1" multiple=true required /></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Response</label>
+                                                <select name="response" class="form-control" data-parsley-group="wizard-step-1"  required /></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Locations</label>
+                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-1" multiple=true/></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Compliances</label>
+                                                <select name="compliances" class="form-control" data-parsley-group="wizard-step-1" multiple=true/></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Entry Owner</label>
+                                                <select name="entry_owner" class="form-control" data-parsley-group="wizard-step-1"  required /></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group block1">
+                                                <label>Frequency Multiplier</label>
+                                                <input type="number" name="frequency_multiplier" placeholder="Frequency Multiplier" class="form-control" data-parsley-group="wizard-step-1" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Frequency Notes</label>
+                                                <textarea rows="4" name="frequency_notes" placeholder="Frequency Notes" class="form-control" data-parsley-group="wizard-step-1"/></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 <!-- end row -->
+                                </fieldset>
+                            </div>
+                            <!-- end wizard step-1 -->
+                            <!-- begin wizard step-2 -->
+                            <div class="wizard-step-2">
+                                <fieldset>
+                                    <legend class="pull-left width-full">Threat Detail</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <!-- begin col-4 -->
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Threat Actor</label>
+                                                <select name="threat_actor" class="form-control" data-parsley-group="wizard-step-2"  required /></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Intention</label>
+                                                <select name="intention" class="form-control" data-parsley-group="wizard-step-2" multiple=true/></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Motive</label>
+                                                <select name="motive" class="form-control" data-parsley-group="wizard-step-2" multiple=true/></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Detail</label>
+                                                <textarea rows="4" name="threat_detail" placeholder="Threat Details" class="form-control" data-parsley-group="wizard-step-2"/></textarea>
+                                            </div>
+                                        </div>
+                                        <!-- end col-6 -->
+                                    </div>
+                                    <!-- end row -->
+                                </fieldset>
+                            </div>
+                            <!-- end wizard step-2 -->
+                            <!-- begin wizard step-3 -->
+                            <div class="wizard-step-3">
+                                <fieldset>
+                                    <legend class="pull-left width-full">Affected Assets</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Asset</label>
+                                                <select name="asset_name" class="form-control" data-parsley-group="wizard-step-3"  required /></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Exposure Percentage</label>
+                                                <div class="controls">
+                                                    <input type="text" name="exposure_percentage" placeholder="100" class="form-control" data-parsley-group="wizard-step-3" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Detail</label>
+                                                <textarea rows="4" name="asset_detail" placeholder="Asset Details" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Frequency Notes</label>
+                                                <textarea rows="4" name="impact_notes" placeholder="Frequency Notes" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                </fieldset>
+                            </div>
+                            <!-- end wizard step-3 -->
+                            <!-- begin wizard step-4 -->
+                            <div class="wizard-step-4">
+                                <fieldset>
+                                    <legend class="pull-left width-full">Mitigating Controls</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Name</label>
+                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-4"  required /></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Mitigation Rate</label>
+                                                <div class="controls">
+                                                    <input type="text" name="mitigation_rate" placeholder="100" class="form-control" data-parsley-group="wizard-step-4" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Detail</label>
+                                                <textarea rows="4" name="notes" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>URL</label>
+                                                <select name="url" class="form-control" data-parsley-group="wizard-step-4"  required /></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label> Additional Mitigation Opportunites</label>
+                                                <textarea rows="4" name="addtional_mitigation" placeholder=" Additional Mitigation Opportunites" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                </fieldset>
+                            </div>
+                            <!-- end wizard step-4 -->
+                            <!-- begin wizard step-5 -->
+                            <div class="wizard-step-5">
+                                <fieldset>
+                                    <legend class="pull-left width-full">Measurements</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Control</label>
+                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-5" multiple=true required /></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Measurement</label>
+                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-5" multiple=true/></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 <!-- end row -->
+                                </fieldset>
+                            </div>
+                            <!-- end wizard step-5 -->
+                            <!-- begin wizard step-6 -->
+                            <div class="wizard-step-6">
+                                <fieldset>
+                                    <legend class="pull-left width-full">Entry Activity</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Entry Activity</label>
+                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Created By</label>
+                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Last Modified Date</label>
+                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Last Modified By</label>
+                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Last Evaluated</label>
+                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Mitigation Adequacey</label>
+                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Total Asset Value</label>
+                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Total Control Mitigation</label>
+                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                 <!-- end row -->
+                                </fieldset>
+                            </div>
+                            <!-- end wizard step-6 -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-12 -->
+    </div>
+    <!-- end row -->
+    <!-- end #content -->
 </div>
+
+

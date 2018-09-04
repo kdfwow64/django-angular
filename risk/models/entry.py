@@ -108,6 +108,29 @@ class Entry(models.Model):
         """String."""
         return self.summary
 
+    @property
+    def severity(self):
+        """Severity calculated with formula (24 ((entryid)-1)) /(maxrevenueloss)."""
+        try:
+            severity = (24 * (self.id - 1) / self.maxrevenueloss)
+        except:
+            severity = 0
+        return severity
+
+    @property
+    def mitigation_rate(self):
+        """A percentage based formula generated from other items in the application."""
+        return (.78) - (.56)
+
+    def get_summary(self, length=20):
+        """Up to x number of characters with an ellipses if the entry is longer that allowed."""
+        return (self.summary[:length] + '...') if len(self.summary) > length + 3 else self.summary
+
+    @property
+    def date_evaluated(self):
+        """Date evaluated."""
+        return self.entryevaluation.first().date_evaluated
+
 
 class EntryTask(models.Model):
     """Entry Task.  This task will be managed by the entry owner."""
@@ -161,7 +184,7 @@ class EntryCause(models.Model):
     desc = models.TextField(
         blank=False, help_text=('Description of the cause'),)  # Not in use
     keywords = models.TextField(
-        blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
+        blank=True, null=True, help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
     example_title1 = models.CharField(
         max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
     example_title2 = models.CharField(
