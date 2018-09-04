@@ -23,6 +23,7 @@ from .auth import (
     UserAccess,
     # UserProfile,
     AuthenticationType,
+    User,
     # UserLevel,
     UserGrant,
     UserRole,

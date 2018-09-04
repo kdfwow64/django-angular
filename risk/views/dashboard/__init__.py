@@ -7,6 +7,9 @@ from django.db.models import Q
 from django.conf import settings
 
 from .entry import *
+from .company import *
+from .compliance import *
+from .auth import *
 
 from risk.models import (
     # AccountMembership,

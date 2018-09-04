@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div ng-controller="registerAddEntriresController">
+<div>
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li><a href="javascript:;">Home</a></li>
@@ -78,7 +78,6 @@
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
                     </div>
                     <h4 class="panel-title">Add Risk Entry</h4>
                 </div>
@@ -126,43 +125,43 @@
                                         <div class="col-md-8">
                                             <div class="form-group">
                                                 <label>Description</label>
-                                                <textarea rows="4" name="desc" placeholder="Description" class="form-control" data-parsley-group="wizard-step-1" required /></textarea>
+                                                <textarea rows="4" name="desc" placeholder="Description" class="form-control" data-parsley-group="wizard-step-1" required/></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Risk Types</label>
-                                                <select name="risk_types" class="form-control" data-parsley-group="wizard-step-1" multiple=true required /></select>
+                                                <select name="risktypes" class="form-control" data-parsley-group="wizard-step-1" multiple=true required ng-model="risk_type" ng-options="k as v for (k, v) in risk_types"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Response</label>
-                                                <select name="response" class="form-control" data-parsley-group="wizard-step-1"  required /></select>
+                                                <select name="response" class="form-control" ng-model="response" ng-options="k as v for (k, v) in response_types"data-parsley-group="wizard-step-1"  required /></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Locations</label>
-                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-1" multiple=true/></select>
+                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="locations" ng-options="k as v for (k, v) in company_locations"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Compliances</label>
-                                                <select name="compliances" class="form-control" data-parsley-group="wizard-step-1" multiple=true/></select>
+                                                <select name="compliances" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="compliances" ng-options="k as v for (k, v) in company_compliances"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Entry Owner</label>
-                                                <select name="entry_owner" class="form-control" data-parsley-group="wizard-step-1"  required /></select>
+                                                <select name="entry_owner" class="form-control" data-parsley-group="wizard-step-1" required ng-model="entry_owner" ng-options="k as v for (k, v) in users"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group block1">
                                                 <label>Frequency Multiplier</label>
-                                                <input type="number" name="frequency_multiplier" placeholder="Frequency Multiplier" class="form-control" data-parsley-group="wizard-step-1" required />
+                                                <input type="number" step="0.01" name="frequency_multiplier" placeholder="Frequency Multiplier" class="form-control" data-parsley-group="wizard-step-1" required />
                                             </div>
                                         </div>
                                         <div class="col-md-4">

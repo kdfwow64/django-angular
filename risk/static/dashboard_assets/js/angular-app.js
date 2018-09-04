@@ -273,7 +273,23 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             url: '/add-entry',
             templateUrl: 'views/add_entry.html',
             data: { pageTitle: 'Add Entry' },
+            controller: 'registerAddEntriresController',
             resolve: {
+                riskTypes: function(RiskTypeService){
+                    return RiskTypeService.getAllMyRiskTypes();
+                },
+                responseTypes: function(ResponseTypeService){
+                    return ResponseTypeService.getAllResponseTypes();
+                },
+                companyLocations: function(CompanyLocationService){
+                    return CompanyLocationService.getCompanyLocations();
+                },
+                compliances: function(ComplianceService){
+                    return ComplianceService.getCompliances();
+                },
+                users: function(UserService){
+                    return UserService.getUsers();
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,

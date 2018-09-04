@@ -1,19 +1,17 @@
-"""Home page aka Index page."""
+"""All views related to Entry in models/entry.py."""
 # import json
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-# from django.shortcuts import render
-# from django.db.models import Q
-# from django.conf import settings
 
-# from risk.models import (
-#     Entry
-# )
+from risk.models import (
+    RiskType,
+    Response,
+)
 
 
 @login_required
 def api_list_entreis(request):
-    """Index for dashboard."""
+    """List entries."""
     user = request.user
     company = user.get_current_company()
     company_registers = company.company_register.first()
@@ -50,4 +48,25 @@ def api_list_entreis(request):
         'recordsTotal': request.GET.get('draw'),
         'recordsFiltered': len(rows),
     }
+    return JsonResponse(data)
+
+
+@login_required
+def get_all_risk_type_for_dropdown(request):
+    """Get all risk types for dropdown."""
+    data = {}
+    # for rt in RiskType.objects.filter().all():
+    for rt in RiskType.objects.filter().all():
+        data.update({rt.id: rt.name})
+
+    return JsonResponse(data)
+
+
+@login_required
+def get_all_response_type_for_dropdown(request):
+    """Get all respose types for dropdown."""
+    data = {}
+    for rt in Response.objects.filter().all():
+        data.update({rt.id: rt.name})
+
     return JsonResponse(data)

@@ -3204,8 +3204,15 @@ colorAdminApp.controller('registerListEntriresController', function($scope, $roo
     A03.0 Add Entries Controller
 ---------------------------------------------------*/
 
-colorAdminApp.controller('registerAddEntriresController', function($scope, $rootScope, $state) {
+colorAdminApp.controller('registerAddEntriresController', function($scope, riskTypes, responseTypes, companyLocations, compliances, users) {
+    $scope.risk_types = riskTypes;
+    $scope.response_types = responseTypes;
+    $scope.company_locations = companyLocations;
+    $scope.company_compliances = compliances;
+    $scope.users = users;
+
     angular.element(document).ready(function () {
         FormWizardValidation.init();
     });
+
 });
