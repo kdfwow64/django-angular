@@ -137,7 +137,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Response</label>
-                                                <select name="response" class="form-control" ng-model="response" ng-options="k as v for (k, v) in response_types"data-parsley-group="wizard-step-1"  required /></select>
+                                                <select name="response" class="form-control" ng-model="response" ng-options="k as v for (k, v) in response_types"data-parsley-group="wizard-step-1"  required/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -155,7 +155,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Entry Owner</label>
-                                                <select name="entry_owner" class="form-control" data-parsley-group="wizard-step-1" required ng-model="entry_owner" ng-options="k as v for (k, v) in users"/></select>
+                                                <select name="entry_owner" class="form-control" data-parsley-group="wizard-step-1" ng-model="entry_owner" ng-options="k as v for (k, v) in users" required/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -185,19 +185,19 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Threat Actor</label>
-                                                <select name="threat_actor" class="form-control" data-parsley-group="wizard-step-2"  required /></select>
+                                                <select name="threat_actor" class="form-control" data-parsley-group="wizard-step-2" required ng-model="actor" ng-options="k as v for (k, v) in actors"/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Intention</label>
-                                                <select name="intention" class="form-control" data-parsley-group="wizard-step-2" multiple=true/></select>
+                                                <select name="intention" class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_intent" ng-options="k as v for (k, v) in actor_intents"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Motive</label>
-                                                <select name="motive" class="form-control" data-parsley-group="wizard-step-2" multiple=true/></select>
+                                                <select name="motive" class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_motive" ng-options="k as v for (k, v) in actor_motives"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -221,7 +221,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Asset</label>
-                                                <select name="asset_name" class="form-control" data-parsley-group="wizard-step-3"  required /></select>
+                                                <select name="asset_name" class="form-control" data-parsley-group="wizard-step-3" required ng-model="asset" ng-options="k as v for (k, v) in company_assets"/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -258,7 +258,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Name</label>
-                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-4"  required /></select>
+                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-4" required ng-model="mitigating_control" ng-options="k as v for (k, v) in company_controls"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -278,7 +278,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>URL</label>
-                                                <select name="url" class="form-control" data-parsley-group="wizard-step-4"  required /></select>
+                                                <input type="url" name="url" class="form-control" data-parsley-group="wizard-step-4" />
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -301,13 +301,13 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Control</label>
-                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-5" multiple=true required /></select>
+                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-5" required ng-model="measurement_control" ng-options="k as v for (k, v) in company_controls"/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Measurement</label>
-                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-5" multiple=true/></select>
+                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-5" multiple=true ng-model="measurements" ng-options="k as v for (k, v) in control_measures"/></select>
                                             </div>
                                         </div>
                                     </div>

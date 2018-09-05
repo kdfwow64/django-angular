@@ -290,6 +290,24 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 users: function(UserService){
                     return UserService.getUsers();
                 },
+                actors: function(ActorService){
+                    return ActorService.getActors();
+                },
+                actorIntents: function(ActorIntentService){
+                    return ActorIntentService.getActorIntents();
+                },
+                actorMotives: function(ActorMotiveService){
+                    return ActorMotiveService.getActorMotives();
+                },
+                companyAssets: function(CompanyAssetsService){
+                    return CompanyAssetsService.getCompanyAssets();
+                },
+                companyControls: function(CompanyControlsService){
+                    return CompanyControlsService.getCompanyControls();
+                },
+                controlMeasures: function(CompanyControlMeasuresService){
+                    return CompanyControlMeasuresService.getCompanyControlMeasures();
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,
@@ -297,8 +315,8 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                             '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
                             '/static/dashboard_assets/plugins/parsley/src/parsley.css',
                             '/static/dashboard_assets/plugins/pace/pace.min.js',
-                            '/static/dashboard_assets/plugins/parsley/dist/parsley.js',
-                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.min.js',
                             '/static/dashboard_assets/js/form-wizards-validation.demo.js',
                         ]
                     });

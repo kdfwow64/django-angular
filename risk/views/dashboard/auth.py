@@ -11,9 +11,9 @@ from risk.models import (
 def get_all_users_for_dropdown(request):
     """Get all compliances for dropdown."""
     data = {}
-    # for rt in User.objects.filter().all():
-    for rt in User.objects.filter().all():
-        data.update({rt.id: rt.full_name})
+    # for user in User.objects.filter().all():
+    for user in User.objects.filter().all():
+        data.update({user.id: user.full_name})
 
     return JsonResponse(data)
 

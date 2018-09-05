@@ -10,6 +10,7 @@ from .entry import *
 from .company import *
 from .compliance import *
 from .auth import *
+from .actor import *
 
 from risk.models import (
     # AccountMembership,

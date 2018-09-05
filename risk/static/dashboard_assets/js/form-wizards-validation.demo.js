@@ -8,7 +8,6 @@ Website: http://www.seantheme.com/color-admin-v3.0/admin/html/
 var handleBootstrapWizardsValidation = function() {
 	"use strict";
 	$("#wizard").bwizard({ validating: function (e, ui) {
-            return true;
 	        if (ui.index == 0) {
 	            // step-1 validation
                 if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-1')) {
@@ -24,7 +23,17 @@ var handleBootstrapWizardsValidation = function() {
                 if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-3')) {
                     return false;
                 }
-	        }
+	        }else if (ui.index == 3) {
+                // step-3 validation
+                if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-4')) {
+                    return false;
+                }
+            }else if (ui.index == 4) {
+                // step-3 validation
+                if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-5')) {
+                    return false;
+                }
+            }
 	    }
 	});
 };

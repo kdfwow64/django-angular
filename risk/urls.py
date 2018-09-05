@@ -15,9 +15,15 @@ urlpatterns = [
     re_path(r'^dashboard/api/entries/$', dashboard.api_list_entreis, name="api-list-entries"),
     re_path(r'^dashboard/api/risk-types/$', dashboard.get_all_risk_type_for_dropdown, name="risk-types-dropdown-list"),
     re_path(r'^dashboard/api/response-types/$', dashboard.get_all_risk_type_for_dropdown, name="response-types-dropdown-list"),
+    re_path(r'^dashboard/api/company-assets/$', dashboard.get_all_company_assets_for_dropdown, name="company-assets-dropdown-list"),
+    re_path(r'^dashboard/api/company-controls/$', dashboard.get_all_company_control_for_dropdown, name="company-control-dropdown-list"),
+    re_path(r'^dashboard/api/company-control-measures/$', dashboard.get_all_company_control_measures_for_dropdown, name="company-control-measures-dropdown-list"),
     re_path(r'^dashboard/api/company-locations/$', dashboard.get_all_company_locations_for_dropdown, name="company-locations-dropdown-list"),
     re_path(r'^dashboard/api/compliances/$', dashboard.get_all_compliances_for_dropdown, name="compliance-dropdown-list"),
     re_path(r'^dashboard/api/users/$', dashboard.get_all_users_for_dropdown, name="users-dropdown-list"),
+    re_path(r'^dashboard/api/actors/$', dashboard.get_all_actors_for_dropdown, name="actors-dropdown-list"),
+    re_path(r'^dashboard/api/actor-intents/$', dashboard.get_all_actor_intents_for_dropdown, name="actor-intents-dropdown-list"),
+    re_path(r'^dashboard/api/actor-motives/$', dashboard.get_all_actor_motives_for_dropdown, name="actor-motives-dropdown-list"),
 
     # SHOULD BE THE LAST IN THIS LIST
     re_path(r'^$', home.index, name='index'),

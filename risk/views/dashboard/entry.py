@@ -55,9 +55,9 @@ def api_list_entreis(request):
 def get_all_risk_type_for_dropdown(request):
     """Get all risk types for dropdown."""
     data = {}
-    # for rt in RiskType.objects.filter().all():
-    for rt in RiskType.objects.filter().all():
-        data.update({rt.id: rt.name})
+    # for risk_type in RiskType.objects.filter().all():
+    for risk_type in RiskType.objects.filter().all():
+        data.update({risk_type.id: risk_type.name})
 
     return JsonResponse(data)
 
@@ -66,7 +66,7 @@ def get_all_risk_type_for_dropdown(request):
 def get_all_response_type_for_dropdown(request):
     """Get all respose types for dropdown."""
     data = {}
-    for rt in Response.objects.filter().all():
-        data.update({rt.id: rt.name})
+    for response_type in Response.objects.filter().all():
+        data.update({response_type.id: response_type.name})
 
     return JsonResponse(data)
