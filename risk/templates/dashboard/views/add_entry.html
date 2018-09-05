@@ -110,7 +110,7 @@
                                     <small></small>
                                 </li>
                             </ol>
-                            <!-- begin wizard step-1 -->
+                            <!-- begin wizard step-1 Affected Assets.-->
                             <div class="wizard-step-1">
                                 <fieldset>
                                     <legend class="pull-left width-full">Affected Aseets</legend>
@@ -175,7 +175,7 @@
                                 </fieldset>
                             </div>
                             <!-- end wizard step-1 -->
-                            <!-- begin wizard step-2 -->
+                            <!-- begin wizard step-2 Threat Details.-->
                             <div class="wizard-step-2">
                                 <fieldset>
                                     <legend class="pull-left width-full">Threat Detail</legend>
@@ -200,7 +200,7 @@
                                                 <select name="motive" class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_motive" ng-options="k as v for (k, v) in actor_motives"/></select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-8">
                                             <div class="form-group">
                                                 <label>Detail</label>
                                                 <textarea rows="4" name="threat_detail" placeholder="Threat Details" class="form-control" data-parsley-group="wizard-step-2"/></textarea>
@@ -212,7 +212,7 @@
                                 </fieldset>
                             </div>
                             <!-- end wizard step-2 -->
-                            <!-- begin wizard step-3 -->
+                            <!-- begin wizard step-3  Affected Assets-->
                             <div class="wizard-step-3">
                                 <fieldset>
                                     <legend class="pull-left width-full">Affected Assets</legend>
@@ -228,7 +228,7 @@
                                             <div class="form-group">
                                                 <label>Exposure Percentage</label>
                                                 <div class="controls">
-                                                    <input type="text" name="exposure_percentage" placeholder="100" class="form-control" data-parsley-group="wizard-step-3" />
+                                                    <input type="number" value='100' step="0.10" name="exposure_percentage" placeholder="100" class="form-control" data-parsley-group="wizard-step-3" />
                                                 </div>
                                             </div>
                                         </div>
@@ -249,7 +249,7 @@
                                 </fieldset>
                             </div>
                             <!-- end wizard step-3 -->
-                            <!-- begin wizard step-4 -->
+                            <!-- begin wizard step-4 Mitigating Controls-->
                             <div class="wizard-step-4">
                                 <fieldset>
                                     <legend class="pull-left width-full">Mitigating Controls</legend>
@@ -258,7 +258,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Name</label>
-                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-4" required ng-model="mitigating_control" ng-options="k as v for (k, v) in company_controls"/></select>
+                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-4" ng-model="mitigating_control" ng-options="k as v for (k, v) in company_controls" required/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -292,7 +292,7 @@
                                 </fieldset>
                             </div>
                             <!-- end wizard step-4 -->
-                            <!-- begin wizard step-5 -->
+                            <!-- begin wizard step-5 Measurements-->
                             <div class="wizard-step-5">
                                 <fieldset>
                                     <legend class="pull-left width-full">Measurements</legend>
@@ -315,7 +315,7 @@
                                 </fieldset>
                             </div>
                             <!-- end wizard step-5 -->
-                            <!-- begin wizard step-6 -->
+                            <!-- begin wizard step-6 Entry Activity-->
                             <div class="wizard-step-6">
                                 <fieldset>
                                     <legend class="pull-left width-full">Entry Activity</legend>

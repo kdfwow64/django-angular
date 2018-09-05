@@ -349,7 +349,7 @@ class CompanyControl(models.Model):
         'Company', on_delete=models.PROTECT, related_name='company', help_text=('The company that the control is related'),)
     control = models.ForeignKey('Control', on_delete=models.PROTECT, related_name='company_control', help_text=(
         'The control detail for the company'),)
-    inline_after = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='control_before', help_text=(
+    inline_after = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, blank=True, related_name='control_before', help_text=(
         'The upstream control id'),)  # If available, this is the control that is upstream.  This will be used for viewing a layer approach to asset secuirity.
     recovery_time_unit = models.ForeignKey(
         'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='controlresilienceunites', help_text=('Resilience time unit of the company control'),)  # This setting combined with resilience_number will define the time it takes for a control to recover.

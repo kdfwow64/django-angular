@@ -24,12 +24,12 @@ var handleBootstrapWizardsValidation = function() {
                     return false;
                 }
 	        }else if (ui.index == 3) {
-                // step-3 validation
+                // step-4 validation
                 if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-4')) {
                     return false;
                 }
             }else if (ui.index == 4) {
-                // step-3 validation
+                // step-5 validation
                 if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-5')) {
                     return false;
                 }
