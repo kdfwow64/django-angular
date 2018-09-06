@@ -20,3 +20,18 @@ colorAdminApp.directive('a', function() {
         }
     };
 });
+
+
+colorAdminApp.directive('formWizard', ['WizardValidatorService', function(WizardValidatorService){
+    return {
+        restrict: 'A',
+        scope: {
+            validator: '='
+        },
+        link: function($scope, element, attributes){
+            $scope.wizard_element = element;
+            $(element).bwizard({ validating: WizardValidatorService[attributes.validator]});
+
+        }
+    }
+}]);

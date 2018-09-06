@@ -328,7 +328,7 @@ class EntryCompanyControl(models.Model):
         'Websites or locations of data supporting the controls mitigation against the risk'),)  # In addtion to notes.  Users can leverage websites for reference.
     submitted_mitigation = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='userlastsubmittedmitigation', help_text=(
         'User id of the user that last submitted mitigation'),)  # This will be the same for all company controls on the entry.  It is captured to understand the last user that submitted values for the control mitigations.
-    operation = models.ForeignKey('ControlOperation', on_delete=models.PROTECT, related_name='operation_controlentry', help_text=(
+    operation = models.ForeignKey('ControlOperation', on_delete=models.PROTECT, blank=True, null=True, related_name='operation_controlentry', help_text=(
         'The operation associated to the control entered'),)  # Control categories can have multiple operation levels.  This field is used show what may be available for the control and tie its operational level to the entry
     functions = models.ManyToManyField("ControlFunction", through='EntryCompanyControlFunction', through_fields=('id_entrycompanycontrol', 'id_controlfunction'), related_name='EntryCompanyControlFunction', help_text=(
         'The level at which the control functions for the entry'),)  # Control categories can have multiple functions.  This field is used show what may be available for the control.

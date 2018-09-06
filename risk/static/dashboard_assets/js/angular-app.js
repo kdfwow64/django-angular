@@ -305,6 +305,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 companyControls: function(CompanyControlsService){
                     return CompanyControlsService.getCompanyControls();
                 },
+                // entryCompanyControls: function(EntryCompanyControlsService){
+                //     return EntryCompanyControlsService.getEntryCompanyControls();
+                // },
                 controlMeasures: function(CompanyControlMeasuresService){
                     return CompanyControlMeasuresService.getCompanyControlMeasures();
                 },
@@ -317,7 +320,6 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                             '/static/dashboard_assets/plugins/pace/pace.min.js',
                             '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
                             '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.min.js',
-                            '/static/dashboard_assets/js/form-wizards-validation.demo.js',
                         ]
                     });
                 }]

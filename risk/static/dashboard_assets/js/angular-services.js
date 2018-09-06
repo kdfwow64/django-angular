@@ -17,6 +17,8 @@ Website: http://www.atemon.com/
     9.0 SERVICE - CompanyAssetsService
    10.0 SERVICE - CompanyControlsService
    11.0 SERVICE - CompanyControlMeasuresService
+   12.0 SERVICE - WizardValidatorService
+   13.0 SERVICE - EntryCompanyControlsService
 
 */
 
@@ -222,7 +224,110 @@ function CompanyControlMeasuresService($http){
     }
     return service;
 }
+/* --------------------------------------------
+  12.0 SERVICE - WizardValidatorService
+-----------------------------------------------*/
 
+function WizardValidatorService(){
+    riskEntryValidator = function (e, ui) {
+        $scope = angular.element(e.target).scope()
+        if (ui.index == 0) {
+            // step-1 validation
+            if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-1')) {
+                return false;
+            }
+            else if(service.status.basic_info == false){
+                $scope.save_basic_info(this);
+                return false;
+            }
+            else{
+                return true;
+            }
+        } else if (ui.index == 1) {
+            // step-2 validation
+            if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-2')) {
+                return false;
+            }else if(service.status.threat_details == false){
+                $scope.save_threat_details(this);
+                return false;
+            }
+            else{
+                return true;
+            }
+        } else if (ui.index == 2) {
+            // step-3 validation
+            if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-3')) {
+                return false;
+            }else if(service.status.affected_assets == false){
+                $scope.save_affected_assets(this);
+                return false;
+            }
+            else{
+                return true;
+            }
+        }else if (ui.index == 3) {
+            // step-4 validation
+            if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-4')) {
+                return false;
+            }else if(service.status.mitigating_controls == false){
+                $scope.save_mitigating_controls(this);
+                return false;
+            }
+            else{
+                return true;
+            }
+        }else if (ui.index == 4) {
+            // step-5 validation
+            if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-5')) {
+                return false;
+            }else if(service.status.measurements == false){
+                $scope.save_measurements(this);
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+    }
+
+    var service = {
+        riskEntryValidator: riskEntryValidator,
+        status: {
+            basic_info: false,
+            threat_details: false,
+            affected_assets: false,
+            mitigating_controls: false,
+            measurements:false,
+        },
+        reset: function(){
+            this.status= {
+                basic_info: false,
+                threat_details: false,
+                affected_assets: false,
+                mitigating_controls: false,
+                measurements:false,
+            }
+        }
+    }
+    return service;
+}
+
+/* -----------------------------------
+  13.0 SERVICE - EntryCompanyControlsService
+--------------------------------------*/
+
+function EntryCompanyControlsService($http){
+    function get_all_entry_company_controls($scope){
+        return $http.get('/dashboard/api/entry-company-controls/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getEntryCompanyControls: get_all_entry_company_controls,
+    }
+    return service;
+}
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseTypeService', ['$http', ResponseTypeService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
@@ -233,5 +338,6 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ActorMotiveService', ['$http', ActorMotiveService])
              .factory('CompanyAssetsService', ['$http', CompanyAssetsService])
              .factory('CompanyControlsService', ['$http', CompanyControlsService])
+             .factory('EntryCompanyControlsService', ['$http', EntryCompanyControlsService])
              .factory('CompanyControlMeasuresService', ['$http', CompanyControlMeasuresService])
-
+             .factory('WizardValidatorService', [WizardValidatorService])

@@ -3207,6 +3207,8 @@ colorAdminApp.controller('registerListEntriresController', function($scope, $roo
 colorAdminApp.controller('registerAddEntriresController',
     function(
         $scope,
+        $http,
+        WizardValidatorService,
         riskTypes,
         responseTypes,
         companyLocations,
@@ -3219,7 +3221,7 @@ colorAdminApp.controller('registerAddEntriresController',
         companyControls,
         controlMeasures
     ){
-
+    $scope.basicinfo = {}
     $scope.risk_types = riskTypes;
     $scope.response_types = responseTypes;
     $scope.company_locations = companyLocations;
@@ -3230,10 +3232,114 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.actor_motives = actorMotives;
     $scope.company_assets = companyAssets;
     $scope.company_controls = companyControls;
+    // $scope.entry_company_controls = entryCompanyControls;
     $scope.control_measures = controlMeasures;
 
-    angular.element(document).ready(function () {
-        FormWizardValidation.init();
-    });
+    // basic_info: false,
+    // threat_details: false,
+    // affected_assets: false,
+    // mitigating_controls: false,
+    // measurements:false,
+
+
+    $scope.save_basic_info = function(element){
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/risk-entry/create/', $scope.basicinfo)
+        .then(function(r){
+            if(r.data.code == 200){
+                $scope.entry_id = r.data.id;
+                WizardValidatorService.status.basic_info = true;
+                $(element).bwizard("next");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }).catch(function(r){
+            return false
+        })
+    }
+
+    $scope.save_threat_details = function(element){
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/risk-entry/threat-details/' + $scope.entry_id + '/', $scope.threat_details)
+        .then(function(r){
+            if(r.data.code == 200){
+                WizardValidatorService.status.threat_details = true;
+                $(element).bwizard("next");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }).catch(function(r){
+            return false
+        })
+    }
+
+    $scope.save_affected_assets = function(element){
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/risk-entry/affected-assets/' + $scope.entry_id + '/', $scope.affected_assets)
+        .then(function(r){
+            if(r.data.code == 200){
+                WizardValidatorService.status.affected_assets = true;
+                $(element).bwizard("next");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }).catch(function(r){
+            return false
+        })
+    }
+
+    $scope.save_mitigating_controls = function(element){
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/risk-entry/mitigating-controls/' + $scope.entry_id + '/', $scope.mitigating_controls)
+        .then(function(r){
+            if(r.data.code == 200){
+                WizardValidatorService.status.mitigating_controls = true;
+                $scope.entry_company_controls = r.data.entry_control
+                $(element).bwizard("next");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }).catch(function(r){
+            return false
+        })
+    }
+
+    $scope.save_measurements = function(element){
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/risk-entry/measurements/' + $scope.entry_id + '/', $scope.measurements)
+        .then(function(r){
+            if(r.data.code == 200){
+                WizardValidatorService.status.measurements = true;
+                $(element).bwizard("next");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }).catch(function(r){
+            return false
+        })
+    }
+
+
+    $scope.initialize = function(){
+        WizardValidatorService.reset();
+    }
+    // angular.element(document).ready(function () {
+    //     FormWizardValidation.init();
+    // });
 
 });
