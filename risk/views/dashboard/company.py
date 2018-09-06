@@ -13,42 +13,36 @@ from risk.models import (
 @login_required
 def get_all_company_locations_for_dropdown(request):
     """Get all company locations for dropdown."""
-    data = {}
-    # for company in CompanyLocation.objects.filter().all():
-    for company in CompanyLocation.objects.filter().all():
-        data.update({company.id: company.name})
+    data = []
+    for company in CompanyLocation.objects.order_by('name').all():
+        data.append({'id': company.id, 'name': company.name})
 
-    return JsonResponse(data)
+    return JsonResponse(data, safe=False)
 
 
 @login_required
 def get_all_company_assets_for_dropdown(request):
     """Get all company assets for dropdown."""
-    data = {}
-    # for asset in CompanyAsset.objects.filter().all():
-    for asset in CompanyAsset.objects.filter().all():
-        data.update({asset.id: asset.name})
-
-    return JsonResponse(data)
+    data = []
+    for asset in CompanyAsset.objects.order_by('name').all():
+        data.append({'id': asset.id, 'name': asset.name})
+    return JsonResponse(data, safe=False)
 
 
 @login_required
 def get_all_company_control_for_dropdown(request):
     """Get all company control for dropdown."""
-    data = {}
-    # for control in CompanyControl.objects.filter().all():
-    for control in CompanyControl.objects.filter().all():
-        data.update({control.id: control.name})
+    data = []
+    for control in CompanyControl.objects.order_by('name').all():
+        data.append({'id': control.id, 'name': control.name})
+    return JsonResponse(data, safe=False)
 
-    return JsonResponse(data)
 
 @login_required
 def get_all_company_control_measures_for_dropdown(request):
     """Get all company control measures for dropdown."""
-    data = {}
-    # for measures in CompanyControlMeasure.objects.filter().all():
-    for measures in CompanyControlMeasure.objects.filter().all():
-        data.update({measures.id: measures.name})
-
-    return JsonResponse(data)
+    data = []
+    for measures in CompanyControlMeasure.objects.order_by('name').all():
+        data.append({'id': measures.id, 'name': measures.name})
+    return JsonResponse(data, safe=False)
 

@@ -30,7 +30,7 @@ colorAdminApp.directive('formWizard', ['WizardValidatorService', function(Wizard
         },
         link: function($scope, element, attributes){
             $scope.wizard_element = element;
-            $(element).bwizard({ validating: WizardValidatorService[attributes.validator]});
+            $(element).bwizard({ backBtnText:'', validating: WizardValidatorService[attributes.validator]});
 
         }
     }

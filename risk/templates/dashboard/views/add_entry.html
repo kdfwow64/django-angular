@@ -131,31 +131,31 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Risk Types</label>
-                                                <select name="risktypes"  ng-model="basicinfo.risk_types" class="form-control" data-parsley-group="wizard-step-1" multiple=true required ng-model="risk_type" ng-options="k as v for (k, v) in risk_types"/></select>
+                                                <select name="risktypes"  ng-model="basicinfo.risk_types" class="form-control" data-parsley-group="wizard-step-1" multiple=true required ng-model="risk_type" ng-options="k.id as k.name for k in risk_types"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Response</label>
-                                                <select name="response" ng-model="basicinfo.final_response" class="form-control" ng-model="response" ng-options="k as v for (k, v) in response_types"data-parsley-group="wizard-step-1"  required/><option value=""></option></select>
+                                                <select name="response" ng-model="basicinfo.final_response" class="form-control" ng-model="response" ng-options="k.id as k.name for k in response_types"data-parsley-group="wizard-step-1"  required/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Company Location</label>
-                                                <select name="locations" ng-model="basicinfo.locations" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="locations" ng-options="k as v for (k, v) in company_locations"/></select>
+                                                <select name="locations" ng-model="basicinfo.locations" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="locations" ng-options="k.id as k.name for k in company_locations"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Compliances</label>
-                                                <select name="compliances" ng-model="basicinfo.compliances" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="compliances" ng-options="k as v for (k, v) in company_compliances"/></select>
+                                                <select name="compliances" ng-model="basicinfo.compliances" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="compliances" ng-options="k.id as k.name for k in company_compliances"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Entry Owner</label>
-                                                <select name="entry_owner" ng-model="basicinfo.entry_owner" class="form-control" data-parsley-group="wizard-step-1" ng-model="entry_owner" ng-options="k as v for (k, v) in users" required/><option value=""></option></select>
+                                                <select name="entry_owner" ng-model="basicinfo.entry_owner" class="form-control" data-parsley-group="wizard-step-1" ng-model="entry_owner" ng-options="k.id as k.name for k in users" required/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -185,19 +185,19 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Threat Actor</label>
-                                                <select name="threat_actor" ng-model="threat_details.actor_name" class="form-control" data-parsley-group="wizard-step-2" required ng-model="actor" ng-options="k as v for (k, v) in actors"/><option value=""></option></select>
+                                                <select name="threat_actor" ng-model="threat_details.actor_name" class="form-control" data-parsley-group="wizard-step-2" required ng-model="actor" ng-options="k.id as k.name for k in actors"/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Intention</label>
-                                                <select name="intention" ng-model="threat_details.intensions" class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_intent" ng-options="k as v for (k, v) in actor_intents"/></select>
+                                                <select name="intention" ng-model="threat_details.intensions" class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_intent" ng-options="k.id as k.name for k in actor_intents"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Motive</label>
-                                                <select name="motive" ng-model="threat_details.motives"class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_motive" ng-options="k as v for (k, v) in actor_motives"/></select>
+                                                <select name="motive" ng-model="threat_details.motives"class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_motive" ng-options="k.id as k.name for k in actor_motives"/></select>
                                             </div>
                                         </div>
                                         <div class="col-md-8">
@@ -221,7 +221,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Asset</label>
-                                                <select name="asset_name" ng-model="affected_assets.asset_name" class="form-control" data-parsley-group="wizard-step-3" required ng-model="asset" ng-options="k as v for (k, v) in company_assets"/><option value=""></option></select>
+                                                <select name="asset_name" ng-model="affected_assets.asset_name" class="form-control" data-parsley-group="wizard-step-3" required ng-model="asset" ng-options="k.id as k.name for k in company_assets"/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -258,7 +258,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Name</label>
-                                                <select name="control_name" ng-model="mitigating_controls.control" class="form-control" data-parsley-group="wizard-step-4" ng-model="mitigating_control" ng-options="k as v for (k, v) in company_controls" required/><option value=""></option></select>
+                                                <select name="control_name" ng-model="mitigating_controls.control" class="form-control" data-parsley-group="wizard-step-4" ng-model="mitigating_control" ng-options="k.id as k.name for k in company_controls" required/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -301,13 +301,13 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Control</label>
-                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-5" required ng-model="measurements.control" ng-options="k as v for (k, v) in entry_company_controls"/><option value=""></option></select>
+                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-5" required ng-model="measurements.control" ng-options="k.id as k.name for k in entry_company_controls"/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Measurement</label>
-                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-5" multiple=true ng-model="measurements.measurement" ng-options="k as v for (k, v) in control_measures"/></select>
+                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-5" multiple=true ng-model="measurements.measurement" ng-options="k.id as k.name for k in control_measures"/></select>
                                             </div>
                                         </div>
                                     </div>
@@ -323,44 +323,42 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Created By</label>
-                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                                <label>Date Created:</label> {(entry_details.entry_date_created)}
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Last Modified Date</label>
-                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                                <label>Created By :</label> {(entry_details.created_by)}
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Last Modified By</label>
-                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                                <label>Last Modified Date :</label> {(entry_details.date_modified)}
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Last Evaluated</label>
-                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                                <label>Last Modified By :</label>{(entry_details.modified_by)}
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Mitigation Adequacey</label>
-                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                                <label>Last Evaluated :</label>{(entry_details.date_evaluation)}
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Total Asset Value</label>
-                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                                <label>Mitigation Adequacey :</label>{(entry_details.mitigation_adequacy)}
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Total Control Mitigation</label>
-                                                <input type="text" name="date_created" class="form-control" data-parsley-group="wizard-step-6" />
+                                                <label>Total Asset Value :</label>{(entry_details.total_asset_value)}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Total Control Mitigation :</label>{(entry_details.total_control_mitigation)}
                                             </div>
                                         </div>
                                     </div>

@@ -3223,6 +3223,8 @@ colorAdminApp.controller('registerAddEntriresController',
         controlMeasures
     ){
     $scope.basicinfo = {}
+    $scope.affected_assets = {}
+    $scope.mitigating_controls = {}
     $scope.risk_types = riskTypes;
     $scope.response_types = responseTypes;
     $scope.company_locations = companyLocations;
@@ -3234,8 +3236,12 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.company_assets = companyAssets;
     $scope.company_controls = companyControls;
     // $scope.entry_company_controls = entryCompanyControls;
+    $scope.entry_company_controls = []
     $scope.control_measures = controlMeasures;
-
+    $scope.basicinfo.locations = [1];
+    $scope.basicinfo.entry_owner = $scope.users[0].id;
+    $scope.affected_assets.exposure_percentage = 100;
+    $scope.mitigating_controls.mitigation_rate = 0
     // basic_info: false,
     // threat_details: false,
     // affected_assets: false,
@@ -3324,6 +3330,7 @@ colorAdminApp.controller('registerAddEntriresController',
         .then(function(r){
             if(r.data.code == 200){
                 WizardValidatorService.status.measurements = true;
+                $scope.entry_details = r.data.entry_details;
                 $(element).bwizard("next");
                 return true;
             }

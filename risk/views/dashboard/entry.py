@@ -92,7 +92,10 @@ class CreateRiskEntry(View):
         if form.is_valid():
             risk_entry = form.save(commit=False)
             risk_entry.register = request.user.get_current_company().get_active_register()
-            risk_entry.entry_owner_id = int(request_data.get("entry_owner"))
+            risk_entry.entry_owner_id = int(request_data.get("entry_owner", request.user.id))
+            risk_entry.created_by = request.user
+            risk_entry.modified_by = request.user
+
             risk_entry.save()
 
             final_response = Response.objects.get(pk=request_data.get("final_response"))
@@ -104,7 +107,7 @@ class CreateRiskEntry(View):
                 if risk_type:
                     EntryRiskType.objects.create(id_entry=risk_entry, id_risktype=risk_type)
 
-            for location_id in request_data.get("locations", []):
+            for location_id in request_data.get("locations", [1, ]):  # 1 - All company locations
                 location = CompanyLocation.objects.get(pk=location_id)
                 if location:
                     EntryCompanyLocation.objects.create(id_entry=risk_entry, id_companylocation=location)
@@ -181,13 +184,14 @@ def api_update_mitigating_controls(request, entry_id):
     """Update threat entry."""
     risk_entry = Entry.objects.get(pk=entry_id)
     request_data = json.loads(request.body.decode('utf-8'))
+    print(request_data)
     if risk_entry and request.method == 'POST':
         control = CompanyControl.objects.get(pk=request_data.get('control'))
         if control:
             entry_control = EntryCompanyControl.objects.create(
                 id_entry=risk_entry,
                 id_companycontrol=control,
-                mitigation_rate=request_data.get('mitigation_rate'),
+                mitigation_rate=request_data.get('mitigation_rate', 0) or 0,
                 notes=request_data.get('notes'),
                 url=request_data.get('url'),
             )
@@ -196,7 +200,7 @@ def api_update_mitigating_controls(request, entry_id):
         else:
             rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
 
-        rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, "entry_control": {entry_control.id: entry_control.id_companycontrol.name}}
+        rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, "entry_control": [{'id': entry_control.id, 'name': entry_control.id_companycontrol.name}]}
     else:
         rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
 
@@ -219,18 +223,21 @@ def api_update_measurements(request, entry_id):
         except:
             rv = {'status': 'error', 'code': 400, 'errors': ["Invalid asset"]}
 
+        print(risk_entry)
         rv = {
             'status': 'success',
             'code': 200,
-            'id': risk_entry.id,
-            'entry_date_create': risk_entry.date_created,
-            # 'created_by': risk_entry.created_by.full_name,
-            'date_modified': risk_entry.date_modified,
-            # 'modified_by': risk_entry.modified_by.full_name,
-            # 'date_evaluation': risk_entry.entryevaluation.date_evaluation,
-            # 'mitigation_adequacy': risk_entry.entryevaluation.mitigation_adequacy,
-            # 'company_asset': risk_entry.companyasset_entry.id_companyasset.name,
-            # 'company_control': risk_entry.companycontrol_entry.id_companycontrol.name,
+            'entry_details': {
+                'id': risk_entry.id,
+                'created_by': risk_entry.created_by.full_name,
+                'entry_date_created': risk_entry.date_created.strftime("%m-%d-%Y"),
+                'modified_by': risk_entry.modified_by.full_name,
+                'date_modified': risk_entry.date_modified.strftime("%m-%d-%Y"),
+                'mitigation_adequacy': risk_entry.evaluation.mitigation_adequacy if risk_entry.evaluation else '',
+                'date_evaluation': risk_entry.evaluation.date_evaluation if risk_entry.evaluation else '',
+                'total_asset_value': risk_entry.total_asset_value,
+                'total_control_mitigation': risk_entry.total_control_mitigation,
+            }
         }
     else:
         rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
@@ -241,31 +248,26 @@ def api_update_measurements(request, entry_id):
 @login_required
 def get_all_risk_type_for_dropdown(request):
     """Get all risk types for dropdown."""
-    data = {}
-    # for risk_type in RiskType.objects.filter().all():
-    for risk_type in RiskType.objects.filter().all():
-        data.update({risk_type.id: risk_type.name})
-
-    return JsonResponse(data)
+    data = []
+    for risk_type in RiskType.objects.order_by('name').all():
+        data.append({'id': risk_type.id, 'name': risk_type.name})
+    return JsonResponse(data, safe=False)
 
 
 @login_required
 def get_all_response_type_for_dropdown(request):
     """Get all respose types for dropdown."""
-    data = {}
-    for response_type in Response.objects.filter().all():
-        data.update({response_type.id: response_type.name})
-
-    return JsonResponse(data)
+    data = []
+    for response_type in Response.objects.order_by('name').all():
+        data.append({'id': response_type.id, 'name': response_type.name})
+    return JsonResponse(data, safe=False)
 
 
 @login_required
 def get_all_entry_company_control_for_dropdown(request):
     """Get all entry company control for dropdown."""
-    data = {}
-    # for measures in EntryCompanyControl.objects.filter().all():
-    for measures in EntryCompanyControl.objects.select_related('id_companycontrol').filter().all():
-        data.update({measures.id: measures.id_companycontrol.name})
-
-    return JsonResponse(data)
+    data = []
+    for measures in EntryCompanyControl.objects.select_related('id_companycontrol').order_by('name').all():
+        data.append({'id': measures.id, 'name': measures.id_companycontrol.name})
+    return JsonResponse(data, safe=False)
 

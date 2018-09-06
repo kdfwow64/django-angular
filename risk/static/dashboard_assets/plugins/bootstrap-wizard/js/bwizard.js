@@ -407,12 +407,16 @@ $.widget("bootstrap.bwizard", {
 		}
 
 		if (this.buttons && !o.loop) {
-			this.backBtn[o.activeIndex <= 0 ? 'addClass' :
-				'removeClass']('disabled')
-				.attr('aria-disabled', o.activeIndex === 0);
-			this.nextBtn[o.activeIndex >= this.panels.length - 1 ?
-				'addClass' : 'removeClass']('disabled')
-				.attr('aria-disabled', (o.activeIndex >= this.panels.length - 1));
+			if(this.backBtn){
+				this.backBtn[o.activeIndex <= 0 ? 'addClass' :
+					'removeClass']('disabled')
+					.attr('aria-disabled', o.activeIndex === 0);
+			}
+			if(this.nextBtn){
+				this.nextBtn[o.activeIndex >= this.panels.length - 1 ?
+					'addClass' : 'removeClass']('disabled')
+					.attr('aria-disabled', (o.activeIndex >= this.panels.length - 1));
+			}
 		}
 	},
 

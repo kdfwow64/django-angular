@@ -127,9 +127,26 @@ class Entry(models.Model):
         return (self.summary[:length] + '...') if len(self.summary) > length + 3 else self.summary
 
     @property
-    def date_evaluated(self):
-        """Date evaluated."""
-        return self.entryevaluation.first().date_evaluated
+    def evaluation(self):
+        """Evaluation."""
+        return self.entryevaluation.order_by('-date_evaluated').first()
+
+    @property
+    def total_asset_value(self):
+        """Company Assets."""
+        total = 0
+        for asset_entry in self.companyasset_entry.select_related('id_companyasset').all():
+            total += asset_entry.get_asset_value()
+        return total
+
+    @property
+    def total_control_mitigation(self):
+        """Company Control."""
+        entry_control = self.companycontrol_entry.order_by('-id').first()
+        if entry_control:
+            return self.total_asset_value * entry_control.mitigation_rate
+        else:
+            return 0
 
 
 class EntryTask(models.Model):
@@ -310,7 +327,15 @@ class EntryCompanyAsset(models.Model):
 
     class Meta:
         """Meta class."""
+
         verbose_name_plural = ("Entry Company Assets")
+
+    def get_asset_value(self):
+        """Get the asset value."""
+        if self.id_companyasset.monetary_value_toggle:
+            return (self.id_companyasset.fixed_monetary_value * self.exposure_percentage)  # / 100.0
+        else:
+            return (self.id_companyasset.par_monetary_value * self.exposure_percentage)  # / 100.0
 
 
 class EntryCompanyControl(models.Model):

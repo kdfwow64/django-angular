@@ -319,7 +319,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                             '/static/dashboard_assets/plugins/parsley/src/parsley.css',
                             '/static/dashboard_assets/plugins/pace/pace.min.js',
                             '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
-                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
                         ]
                     });
                 }]

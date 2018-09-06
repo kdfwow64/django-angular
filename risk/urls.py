@@ -21,7 +21,7 @@ urlpatterns = [
     re_path(r'^dashboard/api/risk-entry/measurements/(?P<entry_id>[0-9]+)/$', dashboard.api_update_measurements, name="api-update-measurements"),
 
     re_path(r'^dashboard/api/risk-types/$', dashboard.get_all_risk_type_for_dropdown, name="risk-types-dropdown-list"),
-    re_path(r'^dashboard/api/response-types/$', dashboard.get_all_risk_type_for_dropdown, name="response-types-dropdown-list"),
+    re_path(r'^dashboard/api/response-types/$', dashboard.get_all_response_type_for_dropdown, name="response-types-dropdown-list"),
     re_path(r'^dashboard/api/company-assets/$', dashboard.get_all_company_assets_for_dropdown, name="company-assets-dropdown-list"),
     re_path(r'^dashboard/api/company-controls/$', dashboard.get_all_company_control_for_dropdown, name="company-control-dropdown-list"),
     # re_path(r'^dashboard/api/entry-company-controls/$', dashboard.get_all_entry_company_control_for_dropdown, name="entry-company-control-dropdown-list"),
