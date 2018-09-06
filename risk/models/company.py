@@ -135,6 +135,11 @@ class Company(models.Model):
         """String."""
         return self.name
 
+    def get_active_register(self):
+        """Get active register for this company."""
+        # Return first for timebeing.
+        return self.company_register.first()
+
 
 class CompanyMember(models.Model):
     ''' This table is used to tie users to a specific company.  '''

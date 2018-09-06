@@ -48,13 +48,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         """String representation."""
         return self.email
 
+    def get_profile(self):
+        """Return user profile."""
+        return self.userprofile
+
     def get_full_name(self):
         """Get full name."""
         return self.full_name
 
     def get_company_name(self):
         """Get company name."""
-        return self.userprofile.default_company.name
+        try:
+            return self.userprofile.current_company.name
+        except:
+            return self.userprofile.default_company.name
 
     def get_company_id(self):
         """Get company id."""
@@ -70,6 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_current_company(self):
         """Get current company."""
         return self.userprofile.current_company or self.userprofile.default_company
+
 
 class UserProfile(models.Model):
     """

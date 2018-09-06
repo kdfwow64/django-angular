@@ -39,28 +39,30 @@ def api_list_risk_entreis(request):
     """List entries."""
     user = request.user
     company = user.get_current_company()
-    company_registers = company.company_register.first()
+    # Get fist register for company from entry.py/Register
+    company_register = company.get_active_register()
 
     rows = []
-
     total = 0
-    # for register in company_registers:
-    register_entries = company_registers.entry
-    start = int(request.GET.get('start'))
-    length = int(request.GET.get('length'))
-    search = request.GET.get('search')
+
+    register_entries = company_register.entry
+
+    start = int(request.GET.get('start', '0'))
+    length = int(request.GET.get('length', '10'))
+    search = request.GET.get('search', '')
 
     if search:
         register_entries = register_entries.filter(summary__contains=search)
 
     total = register_entries.count()
+
     for entry in register_entries.all()[start:start + length]:
         rows.append([
             entry.entry_number,     # Entry number
             entry.severity,         # Severity = (24 ((entryid)-1)) /(maxrevenueloss)
             entry.mitigation_rate,  #
             entry.get_summary(),    #
-            "{first_name} {last_name}".format(entry.entry_owner.first_name, entry.entry_owner.last_name),
+            entry.entry_owner.full_name,
             entry.date_created.strftime("%m/%d/%Y"),
             entry.date_modified.strftime("%m/%d/%Y"),
             entry.date_created.strftime("%m/%d/%Y"),
@@ -69,8 +71,8 @@ def api_list_risk_entreis(request):
 
     data = {
         'data': rows,
-        'draw': int(request.GET.get('draw')),
-        'recordsTotal': request.GET.get('draw'),
+        'draw': int(request.GET.get('draw', 0)),
+        'recordsTotal': total,
         'recordsFiltered': len(rows),
     }
     return JsonResponse(data)
@@ -89,6 +91,7 @@ class CreateRiskEntry(View):
 
         if form.is_valid():
             risk_entry = form.save(commit=False)
+            risk_entry.register = request.user.get_current_company().get_active_register()
             risk_entry.entry_owner_id = int(request_data.get("entry_owner"))
             risk_entry.save()
 
@@ -221,13 +224,13 @@ def api_update_measurements(request, entry_id):
             'code': 200,
             'id': risk_entry.id,
             'entry_date_create': risk_entry.date_created,
-            'created_by': risk_entry.created_by.full_name,
+            # 'created_by': risk_entry.created_by.full_name,
             'date_modified': risk_entry.date_modified,
-            'modified_by': risk_entry.modified_by.full_name,
-            # 'date_evaluation': risk_entry.date_evaluation,
-            # 'mitigation_adequacy': risk_entry.mitigation_adequacy,
-            # 'company_asset': risk_entry.company_asset,
-            # 'company_control': risk_entry.company_control,
+            # 'modified_by': risk_entry.modified_by.full_name,
+            # 'date_evaluation': risk_entry.entryevaluation.date_evaluation,
+            # 'mitigation_adequacy': risk_entry.entryevaluation.mitigation_adequacy,
+            # 'company_asset': risk_entry.companyasset_entry.id_companyasset.name,
+            # 'company_control': risk_entry.companycontrol_entry.id_companycontrol.name,
         }
     else:
         rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}

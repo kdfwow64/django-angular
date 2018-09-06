@@ -112,7 +112,7 @@ class Entry(models.Model):
     def severity(self):
         """Severity calculated with formula (24 ((entryid)-1)) /(maxrevenueloss)."""
         try:
-            severity = (24 * (self.id - 1) / self.maxrevenueloss)
+            severity = (24 * (self.id - 1) / self.register.company.annual_revenue)
         except:
             severity = 0
         return severity

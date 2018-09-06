@@ -3164,11 +3164,12 @@ colorAdminApp.controller('bootstrap4Controller', function($scope, $rootScope, $s
     A01.0 Change company controller
 ---------------------------------------------------*/
 
-colorAdminApp.controller('changeCompanyController', function($scope, $uibModalInstance, $state, $http) {
+colorAdminApp.controller('changeCompanyController', function($scope, $state, $uibModalInstance, $state, $http) {
     $scope.update_company_id = function(name, company_id){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
         $http.post('/dashboard/update-company/', {'company_id': company_id}).then(function(r){
+            $state.transitionTo('app.dashboard.v2', {}, {reload: false, inherit: false, notify: false });
             $("#current_company").text(name);
             $scope.change_company = false;
         }, function(r){
@@ -3194,7 +3195,7 @@ colorAdminApp.controller('registerListEntriresController', function($scope, $roo
                 "responsive": true,
                 "processing": true,
                 "serverSide": true,
-                "ajax": 'api/entries/'
+                "ajax": 'api/risk-entries/'
             });
         }
     });
