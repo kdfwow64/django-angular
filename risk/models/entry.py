@@ -94,6 +94,8 @@ class Entry(models.Model):
         'Specifies what company locations are associated with the entry'),)  # If no locations are specified, it should be ALL locations.
     risk_types = models.ManyToManyField('RiskType', through='EntryRiskType', through_fields=('id_entry', 'id_risktype'), related_name='EntryRiskTypes', help_text=(
         'Specifies business risk types are associated with the entry'),)  # The entry can be associated to more than on risk type
+    addtional_mitigation = models.TextField(
+        blank=True, null=True, help_text=('Used to provide context on additional mitigation thoughts from the contributor'),)  # Used to provide context on additional mitigation thoughts from the contributor.
 
     class Meta:
         """Meta class."""

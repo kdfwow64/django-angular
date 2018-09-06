@@ -177,6 +177,11 @@ colorAdminApp.controller('sidebarController', function($scope, $uibModal, $rootS
             appendTo: parentElem,
         });
     };
+    angular.element(document).ready(function () {
+        if ($('#risk-entry-table').length !== 0 && $("#list-entry_title").length !== 0) {
+            $("#list-entry_title").text("Risk Entries - " + $("#current_company").text());
+        }
+    });
 
 });
 /* -------------------------------
@@ -3189,14 +3194,25 @@ colorAdminApp.controller('changeCompanyController', function($scope, $state, $ui
 
 colorAdminApp.controller('registerListEntriresController', function($scope, $rootScope, $state) {
     angular.element(document).ready(function () {
-        if ($('#data-table').length !== 0) {
-            $("#list-entry_title").text($("#current_company").text());
-            $('#data-table').DataTable({
+        if ($('#risk-entry-table').length !== 0) {
+            var table = $('#risk-entry-table').DataTable({
                 "responsive": true,
-                "processing": true,
-                "serverSide": true,
-                "ajax": 'api/risk-entries/'
+                // "processing": true,
+                // "serverSide": true,
+                "ajax": 'api/risk-entries/',
+                "columnDefs": [ {
+                    "targets": -1,
+                    "data": null,
+                    "render":  function ( data, type, row, meta ) {
+                        return "<a href='/dashboard/#!/app/entries/edit-entry/"+ data[8] +"'class='btn btn-success edit-risk-entry'><i class='fa fa-edit'></i> Edit</a>";
+                    }
+                } ]
             });
+            $("#list-entry_title").text("Risk Entries - " + $("#current_company").text());
+            $('#risk-entry-table tbody').on( 'click', '.edit-risk-entry', function () {
+                var data = table.row( $(this).parents('tr') ).data();
+                console.log(data[8])
+            } );
         }
     });
 });
@@ -3220,11 +3236,14 @@ colorAdminApp.controller('registerAddEntriresController',
         actorMotives,
         companyAssets,
         companyControls,
-        controlMeasures
+        controlMeasures,
+        riskEntry,
     ){
-    $scope.basicinfo = {}
-    $scope.affected_assets = {}
-    $scope.mitigating_controls = {}
+    // console.log(riskEntry);
+
+    $scope.basicinfo = {};
+    $scope.affected_assets = {};
+    $scope.mitigating_controls = {};
     $scope.risk_types = riskTypes;
     $scope.response_types = responseTypes;
     $scope.company_locations = companyLocations;
@@ -3236,12 +3255,39 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.company_assets = companyAssets;
     $scope.company_controls = companyControls;
     // $scope.entry_company_controls = entryCompanyControls;
-    $scope.entry_company_controls = []
+    $scope.entry_company_controls = [];
     $scope.control_measures = controlMeasures;
-    $scope.basicinfo.locations = [1];
-    $scope.basicinfo.entry_owner = $scope.users[0].id;
-    $scope.affected_assets.exposure_percentage = 100;
-    $scope.mitigating_controls.mitigation_rate = 0
+
+    if(riskEntry.basicinfo){
+        $scope.basicinfo = riskEntry.basicinfo;
+    }
+    else{
+        $scope.basicinfo.locations = [1];
+        $scope.basicinfo.entry_owner = $scope.users[0].id;
+    }
+
+    if(riskEntry.affected_assets){
+        $scope.affected_assets = riskEntry.affected_assets;
+    }
+    else{
+        $scope.affected_assets.exposure_percentage = 100;
+    }
+
+    if(riskEntry.mitigating_controls){
+        $scope.mitigating_controls = riskEntry.mitigating_controls;
+    }
+    else{
+        $scope.mitigating_controls.mitigation_rate = 0
+    }
+
+    if(riskEntry){
+        $scope.threat_details = riskEntry.threat_details;
+        $scope.measurements = riskEntry.measurements;
+        if(riskEntry.measurements){
+            $scope.entry_company_controls = riskEntry.measurements.controls;
+        }
+    }
+
     // basic_info: false,
     // threat_details: false,
     // affected_assets: false,

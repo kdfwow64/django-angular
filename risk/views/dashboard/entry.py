@@ -47,16 +47,16 @@ def api_list_risk_entreis(request):
 
     register_entries = company_register.entry
 
-    start = int(request.GET.get('start', '0'))
-    length = int(request.GET.get('length', '10'))
-    search = request.GET.get('search', '')
+    # start = int(request.GET.get('start', '0'))
+    # length = int(request.GET.get('length', '10'))
+    # search = request.GET.get('search', '')
 
-    if search:
-        register_entries = register_entries.filter(summary__contains=search)
+    # if search:
+    #     register_entries = register_entries.filter(summary__contains=search)
 
     total = register_entries.count()
 
-    for entry in register_entries.all()[start:start + length]:
+    for entry in register_entries.all():
         rows.append([
             entry.entry_number,     # Entry number
             entry.severity,         # Severity = (24 ((entryid)-1)) /(maxrevenueloss)
@@ -66,7 +66,7 @@ def api_list_risk_entreis(request):
             entry.date_created.strftime("%m/%d/%Y"),
             entry.date_modified.strftime("%m/%d/%Y"),
             entry.date_created.strftime("%m/%d/%Y"),
-            'Edit'
+            entry.id,
         ])
 
     data = {
@@ -133,10 +133,10 @@ def api_update_threat_details(request, entry_id):
         actor = Actor.objects.get(pk=request_data.get('actor_name'))
         if actor:
             entry_actor = EntryActor.objects.create(id_entry=risk_entry, id_actor=actor, detail=request_data.get('detail'))
-            for intension_id in request_data.get("intensions", []):
-                intension = ActorIntent.objects.get(pk=intension_id)
-                if intension:
-                    EntryActorIntent.objects.create(id_entryactor=entry_actor, id_actorintent=intension)
+            for intention_id in request_data.get("intentions", []):
+                intention = ActorIntent.objects.get(pk=intention_id)
+                if intention:
+                    EntryActorIntent.objects.create(id_entryactor=entry_actor, id_actorintent=intention)
 
             for motives_id in request_data.get("motives", []):
                 motive = ActorMotive.objects.get(pk=motives_id)
@@ -214,7 +214,7 @@ def api_update_measurements(request, entry_id):
     request_data = json.loads(request.body.decode('utf-8'))
     if risk_entry and request.method == 'POST':
         try:
-            control = EntryCompanyControl.objects.get(pk=request_data.get('control'))
+            control = EntryCompanyControl.objects.get(id_entry=risk_entry, pk=request_data.get('control'))
             for measurement_id in request_data.get("measurement", []):
                 measurement = CompanyControlMeasure.objects.get(pk=measurement_id)
                 if measurement:
@@ -271,3 +271,58 @@ def get_all_entry_company_control_for_dropdown(request):
         data.append({'id': measures.id, 'name': measures.id_companycontrol.name})
     return JsonResponse(data, safe=False)
 
+
+@login_required
+def api_get_risk_entry(request, entry_id):
+    """Get risk entry by id."""
+    rv = {}
+    if entry_id:
+        try:
+            # Get fist register for company from entry.py/Register
+            risk_entry = request.user.get_current_company().get_active_register().entry.get(pk=entry_id)
+            entry_actor = risk_entry.actor_entry.latest('id')
+            entry_company_asset = risk_entry.companyasset_entry.latest('id')
+            mitigating_control = risk_entry.companycontrol_entry.latest('id')
+            rv = {
+                'basicinfo': {
+                    'entry_id': risk_entry.id,
+                    'summary': risk_entry.summary,
+                    'desc': risk_entry.desc,
+                    'risk_types': [ert.id_risktype_id for ert in risk_entry.entryrisktype.all()],
+                    'final_response': risk_entry.entryresponse.latest('id').final_response_id or 1,
+                    'locations': [loc.id_companylocation_id for loc in risk_entry.entry_companylocation.all()] or [1, ],
+                    'compliances': [rec.id_compliance_id for rec in risk_entry.entrycompliance.all()],
+                    'entry_owner': risk_entry.entry_owner_id or request.user.id,
+                    'frequency_multiplier': risk_entry.frequency_multiplier,
+                    'frequency_notes': risk_entry.frequency_notes,
+                },
+                'threat_details': {
+                    'actor_name': risk_entry.actor_entry.latest('id').id_actor_id,
+                    'intentions': [iea.id for iea in entry_actor.intentions.all()],
+                    'motives': [iea.id for iea in entry_actor.motives.all()],
+                    'detail': entry_actor.detail,
+                },
+                'affected_assets': {
+                    'asset_name': entry_company_asset.id_companyasset_id,
+                    'exposure_percentage': entry_company_asset.exposure_percentage,
+                    'asset_detail': entry_company_asset.detail,
+                    'impact_notes': risk_entry.impact_notes,
+                },
+                'mitigating_controls': {
+                    'control': mitigating_control.id_companycontrol_id,
+                    'mitigation_rate': mitigating_control.mitigation_rate,
+                    'notes': mitigating_control.notes,
+                    'url': mitigating_control.url,
+                    'addtional_mitigation': risk_entry.addtional_mitigation,
+                },
+                'measurements': {
+                    'controls': [{'id': mitigating_control.id_companycontrol.id, 'name': mitigating_control.id_companycontrol.name}],
+                    'control': mitigating_control.id_companycontrol_id,
+                    'measurement': [ccme.id_companycontrolmeasure_id for ccme in mitigating_control.companycontrolmeasure_entry.all()],
+                }
+            }
+        except:
+            raise
+
+
+    return JsonResponse(rv)

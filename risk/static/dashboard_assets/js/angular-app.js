@@ -305,11 +305,67 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 companyControls: function(CompanyControlsService){
                     return CompanyControlsService.getCompanyControls();
                 },
-                // entryCompanyControls: function(EntryCompanyControlsService){
-                //     return EntryCompanyControlsService.getEntryCompanyControls();
-                // },
                 controlMeasures: function(CompanyControlMeasuresService){
                     return CompanyControlMeasuresService.getCompanyControlMeasures();
+                },
+                riskEntry: function($stateParams, RiskEntryService){
+                    return RiskEntryService.getselectedRiskEntry(0);
+                },
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.entries.edit_entry', {
+            url: '/edit-entry/:id',
+            templateUrl: 'views/add_entry.html',
+            data: { pageTitle: 'Edit Entry' },
+            controller: 'registerAddEntriresController',
+            resolve: {
+                riskTypes: function(RiskTypeService){
+                    return RiskTypeService.getAllMyRiskTypes();
+                },
+                responseTypes: function(ResponseTypeService){
+                    return ResponseTypeService.getAllResponseTypes();
+                },
+                companyLocations: function(CompanyLocationService){
+                    return CompanyLocationService.getCompanyLocations();
+                },
+                compliances: function(ComplianceService){
+                    return ComplianceService.getCompliances();
+                },
+                users: function(UserService){
+                    return UserService.getUsers();
+                },
+                actors: function(ActorService){
+                    return ActorService.getActors();
+                },
+                actorIntents: function(ActorIntentService){
+                    return ActorIntentService.getActorIntents();
+                },
+                actorMotives: function(ActorMotiveService){
+                    return ActorMotiveService.getActorMotives();
+                },
+                companyAssets: function(CompanyAssetsService){
+                    return CompanyAssetsService.getCompanyAssets();
+                },
+                companyControls: function(CompanyControlsService){
+                    return CompanyControlsService.getCompanyControls();
+                },
+                controlMeasures: function(CompanyControlMeasuresService){
+                    return CompanyControlMeasuresService.getCompanyControlMeasures();
+                },
+                riskEntry: function($stateParams, RiskEntryService){
+                    return RiskEntryService.getselectedRiskEntry($stateParams.id);
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({

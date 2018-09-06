@@ -19,6 +19,7 @@ Website: http://www.atemon.com/
    11.0 SERVICE - CompanyControlMeasuresService
    12.0 SERVICE - WizardValidatorService
    13.0 SERVICE - EntryCompanyControlsService
+   14.0 SERVICE - RiskEntryService
 
 */
 
@@ -27,7 +28,7 @@ Website: http://www.atemon.com/
 ------------------------------- */
 
 function RiskTypeService($http){
-    function get_all_my_risk_types($scope){
+    function get_all_my_risk_types(){
         return $http.get('/dashboard/api/risk-types/').then(function(r){
             return r.data;
         }, function(r){});
@@ -44,7 +45,7 @@ function RiskTypeService($http){
 --------------------------------------*/
 
 function ResponseTypeService($http){
-    function get_all_response_types($scope){
+    function get_all_response_types(){
         return $http.get('/dashboard/api/response-types/').then(function(r){
             return r.data;
         }, function(r){});
@@ -60,7 +61,7 @@ function ResponseTypeService($http){
 --------------------------------------*/
 
 function CompanyLocationService($http){
-    function get_all_company_locations($scope){
+    function get_all_company_locations(){
         return $http.get('/dashboard/api/company-locations/').then(function(r){
             return r.data;
         }, function(r){});
@@ -77,7 +78,7 @@ function CompanyLocationService($http){
 --------------------------------------*/
 
 function ComplianceService($http){
-    function get_all_compliances($scope){
+    function get_all_compliances(){
         return $http.get('/dashboard/api/compliances/').then(function(r){
             return r.data;
         }, function(r){});
@@ -94,7 +95,7 @@ function ComplianceService($http){
 --------------------------------------*/
 
 function UserService($http){
-    function get_all_users($scope){
+    function get_all_users(){
         return $http.get('/dashboard/api/users/').then(function(r){
             return r.data;
         }, function(r){});
@@ -111,7 +112,7 @@ function UserService($http){
 --------------------------------------*/
 
 function ActorService($http){
-    function get_all_actors($scope){
+    function get_all_actors(){
         return $http.get('/dashboard/api/actors/').then(function(r){
             return r.data;
         }, function(r){});
@@ -128,7 +129,7 @@ function ActorService($http){
 --------------------------------------*/
 
 function ActorIntentService($http){
-    function get_all_actor_intents($scope){
+    function get_all_actor_intents(){
         return $http.get('/dashboard/api/actor-intents/').then(function(r){
             return r.data;
         }, function(r){});
@@ -145,7 +146,7 @@ function ActorIntentService($http){
 --------------------------------------*/
 
 function ActorMotiveService($http){
-    function get_all_actor_motives($scope){
+    function get_all_actor_motives(){
         return $http.get('/dashboard/api/actor-motives/').then(function(r){
             return r.data;
         }, function(r){});
@@ -162,7 +163,7 @@ function ActorMotiveService($http){
 --------------------------------------*/
 
 function CompanyAssetsService($http){
-    function get_all_company_assets($scope){
+    function get_all_company_assets(){
         return $http.get('/dashboard/api/company-assets/').then(function(r){
             return r.data;
         }, function(r){});
@@ -179,7 +180,7 @@ function CompanyAssetsService($http){
 --------------------------------------*/
 
 function CompanyControlsService($http){
-    function get_all_company_controls($scope){
+    function get_all_company_controls(){
         return $http.get('/dashboard/api/company-controls/').then(function(r){
             return r.data;
         }, function(r){});
@@ -196,7 +197,7 @@ function CompanyControlsService($http){
 --------------------------------------*/
 
 function CompanyControlsService($http){
-    function get_all_company_controls($scope){
+    function get_all_company_controls(){
         return $http.get('/dashboard/api/company-controls/').then(function(r){
             return r.data;
         }, function(r){});
@@ -213,7 +214,7 @@ function CompanyControlsService($http){
 -----------------------------------------------*/
 
 function CompanyControlMeasuresService($http){
-    function get_all_company_control_measures($scope){
+    function get_all_company_control_measures(){
         return $http.get('/dashboard/api/company-control-measures/').then(function(r){
             return r.data;
         }, function(r){});
@@ -230,6 +231,7 @@ function CompanyControlMeasuresService($http){
 
 function WizardValidatorService(){
     riskEntryValidator = function (e, ui) {
+        service.set();
         $scope = angular.element(e.target).scope()
         if (ui.index == 0) {
             // step-1 validation
@@ -299,6 +301,15 @@ function WizardValidatorService(){
             mitigating_controls: false,
             measurements:false,
         },
+        set: function(){
+            this.status= {
+                basic_info: true,
+                threat_details: true,
+                affected_assets: true,
+                mitigating_controls: true,
+                measurements:true,
+            }
+        },
         reset: function(){
             this.status= {
                 basic_info: false,
@@ -307,7 +318,7 @@ function WizardValidatorService(){
                 mitigating_controls: false,
                 measurements:false,
             }
-        }
+        },
     }
     return service;
 }
@@ -317,7 +328,7 @@ function WizardValidatorService(){
 --------------------------------------*/
 
 function EntryCompanyControlsService($http){
-    function get_all_entry_company_controls($scope){
+    function get_all_entry_company_controls(){
         return $http.get('/dashboard/api/entry-company-controls/').then(function(r){
             return r.data;
         }, function(r){});
@@ -328,6 +339,25 @@ function EntryCompanyControlsService($http){
     }
     return service;
 }
+
+/* -----------------------------------
+  14.0 SERVICE - RiskEntryService
+--------------------------------------*/
+
+function RiskEntryService($http){
+    function get_selected_risk_entry(id){
+        return $http.get('/dashboard/api/risk-entry/' + id + '/').then(function(r){
+            return r.data;
+        }, function(r){return {}});
+        // TODO: Resole properly when id=0, ie adding an entry
+    }
+
+    var service = {
+        getselectedRiskEntry: get_selected_risk_entry,
+    }
+    return service;
+}
+
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseTypeService', ['$http', ResponseTypeService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
@@ -341,3 +371,4 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('EntryCompanyControlsService', ['$http', EntryCompanyControlsService])
              .factory('CompanyControlMeasuresService', ['$http', CompanyControlMeasuresService])
              .factory('WizardValidatorService', [WizardValidatorService])
+             .factory('RiskEntryService', ['$http', RiskEntryService])
