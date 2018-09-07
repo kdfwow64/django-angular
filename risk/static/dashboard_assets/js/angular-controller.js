@@ -3206,7 +3206,29 @@ colorAdminApp.controller('registerListEntriresController', function($scope, $roo
                     "render":  function ( data, type, row, meta ) {
                         return "<a href='/dashboard/#!/app/entries/edit-entry/"+ data[8] +"'class='btn btn-success edit-risk-entry'><i class='fa fa-edit'></i> Edit</a>";
                     }
-                } ]
+                } ],
+                initComplete: function () {
+                    this.api().columns().every( function () {
+                        if([1, 2, 4].includes(this.index())){
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo( $(column.footer()).empty() )
+                                .on( 'change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                } );
+
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' )
+                            } );
+                        }
+                    } );
+                }
             });
             $("#list-entry_title").text("Risk Entries - " + $("#current_company").text());
             $('#risk-entry-table tbody').on( 'click', '.edit-risk-entry', function () {
