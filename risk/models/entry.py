@@ -122,7 +122,7 @@ class Entry(models.Model):
     @property
     def mitigation_rate(self):
         """A percentage based formula generated from other items in the application."""
-        return (.78) - (.56)
+        return round((.78) - (.56), 2)
 
     def get_summary(self, length=20):
         """Up to x number of characters with an ellipses if the entry is longer that allowed."""
