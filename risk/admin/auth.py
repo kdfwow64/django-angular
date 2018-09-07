@@ -1,6 +1,8 @@
 """Auth Admin."""
 from django.contrib import admin
 from risk.models.auth import AccountMembership, DefaultRoleGrant, UserProfile
+from risk.models.company import Company
+
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
@@ -12,6 +14,19 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'User Profile'
+    current_user_instance = None
+    exclude = ('current_company',)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """Foreign Keys."""
+        if db_field.name == "default_company":
+            member_fields = []
+            for cm in self.current_user_instance.companymember_set.filter(is_active=True).all():
+                member_fields.append(cm.id_company.id)
+            kwargs['queryset'] = Company.objects.filter(id__in=member_fields)
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 
 class AccountMembershipInline(admin.TabularInline):
@@ -69,7 +84,11 @@ class UserAdmin(BaseUserAdmin):
     def get_inline_instances(self, request, obj=None):
         if not obj:
             return list()
-        return super(UserAdmin, self).get_inline_instances(request, obj)
+        inline_instances = super(UserAdmin, self).get_inline_instances(request, obj)
+        for inline in inline_instances:
+            if type(inline) is UserProfileInline:
+                inline.current_user_instance = obj
+        return inline_instances
 
 
 # class UserProfileAdmin(admin.ModelAdmin):
