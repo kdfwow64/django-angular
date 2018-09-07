@@ -3211,7 +3211,7 @@ colorAdminApp.controller('registerListEntriresController', function($scope, $roo
                     this.api().columns().every( function () {
                         if([1, 2, 4].includes(this.index())){
                             var column = this;
-                            var select = $('<select><option value=""></option></select>')
+                            var select = $('<select class="form-control"><option value=""></option></select>')
                                 .appendTo( $(column.footer()).empty() )
                                 .on( 'change', function () {
                                     var val = $.fn.dataTable.util.escapeRegex(
