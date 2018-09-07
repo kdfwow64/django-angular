@@ -56,7 +56,7 @@ def api_list_risk_entreis(request):
 
     total = register_entries.count()
 
-    for entry in register_entries.all():
+    for entry in register_entries.order_by('-date_modified').all():
         rows.append([
             entry.entry_number,     # Entry number
             entry.severity,         # Severity = (24 ((entryid)-1)) /(maxrevenueloss)
@@ -87,35 +87,73 @@ class CreateRiskEntry(View):
     def post(self, request, *args, **kwargs):
         """Handle post requests."""
         request_data = json.loads(request.body.decode('utf-8'))
-        form = self.form_class(data=request_data)
+
+        # return JsonResponse({})
+        entry_id = request_data.get('entry_id')
+        if entry_id is None:
+            form = self.form_class(data=request_data)
+        else:
+            risk_entry = Entry.objects.get(pk=entry_id)
+            form = self.form_class(instance=risk_entry, data=request_data)
 
         if form.is_valid():
             risk_entry = form.save(commit=False)
-            risk_entry.register = request.user.get_current_company().get_active_register()
-            risk_entry.entry_owner_id = int(request_data.get("entry_owner", request.user.id))
-            risk_entry.created_by = request.user
-            risk_entry.modified_by = request.user
+            if entry_id is None:
+                risk_entry.register = request.user.get_current_company().get_active_register()
+                risk_entry.created_by = request.user
 
+            risk_entry.entry_owner_id = int(request_data.get("entry_owner", request.user.id))
+            risk_entry.modified_by = request.user
             risk_entry.save()
 
+            # Select single dropdown
             final_response = Response.objects.get(pk=request_data.get("final_response"))
             if final_response:
-                EntryResponse.objects.create(entry=risk_entry, final_response=final_response)
+                entry_response = EntryResponse.objects.filter(entry=risk_entry).latest('id')
+                if entry_response:
+                    entry_response.final_response = final_response
+                    entry_response.save()
+                else:
+                    EntryResponse.objects.create(entry=risk_entry, final_response=final_response)
 
-            for risk_type_id in request_data.get("risk_types", []):
+            # Select multiple dropdowns - Risk Type
+            selected_rt = request_data.get("risk_types", [])
+            for ert in risk_entry.entryrisktype.all():
+                try:
+                    selected_rt.remove(ert.id_risktype_id)
+                except:  # This risktype is not selected anymore
+                    ert.delete()
+            # Add new RiskType
+            for risk_type_id in selected_rt:
                 risk_type = RiskType.objects.get(pk=risk_type_id)
                 if risk_type:
-                    EntryRiskType.objects.create(id_entry=risk_entry, id_risktype=risk_type)
+                    EntryRiskType.objects.get_or_create(id_entry=risk_entry, id_risktype=risk_type)
 
-            for location_id in request_data.get("locations", [1, ]):  # 1 - All company locations
+            # Select multiple dropdowns - Company locations
+            selected_cl = request_data.get("locations", [1, ])  # 1 - All company locations
+            for ecl in risk_entry.entry_companylocation.all():
+                try:
+                    selected_cl.remove(ecl.id_companylocation_id)
+                except:  # This company location is not selected anymore
+                    ecl.delete()
+            # Add new Company Locations
+            for location_id in selected_cl:  # 1 - All company locations
                 location = CompanyLocation.objects.get(pk=location_id)
                 if location:
-                    EntryCompanyLocation.objects.create(id_entry=risk_entry, id_companylocation=location)
+                    EntryCompanyLocation.objects.get_or_create(id_entry=risk_entry, id_companylocation=location)
 
-            for compliances_id in request_data.get("compliances", []):
+            # Select multiple dropdowns - Compliance
+            selected_cp = request_data.get("compliances", [])
+            for ecp in risk_entry.entrycompliance.all():
+                try:
+                    selected_cp.remove(ecp.id_compliance_id)
+                except:  # This Compliance is not selected anymore
+                    ecp.delete()
+            # Add new Compliance
+            for compliances_id in selected_cp:
                 compliance = Compliance.objects.get(pk=compliances_id)
                 if compliance:
-                    EntryCompliance.objects.create(id_entry=risk_entry, id_compliance=compliance)
+                    EntryCompliance.objects.get_or_create(id_entry=risk_entry, id_compliance=compliance)
 
             rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
         else:
@@ -127,28 +165,53 @@ class CreateRiskEntry(View):
 @login_required
 def api_update_threat_details(request, entry_id):
     """Update threat entry."""
-    risk_entry = Entry.objects.get(pk=entry_id)
-    request_data = json.loads(request.body.decode('utf-8'))
-    if risk_entry and request.method == 'POST':
-        actor = Actor.objects.get(pk=request_data.get('actor_name'))
-        if actor:
-            entry_actor = EntryActor.objects.create(id_entry=risk_entry, id_actor=actor, detail=request_data.get('detail'))
-            for intention_id in request_data.get("intentions", []):
-                intention = ActorIntent.objects.get(pk=intention_id)
-                if intention:
-                    EntryActorIntent.objects.create(id_entryactor=entry_actor, id_actorintent=intention)
+    try:
+        risk_entry = Entry.objects.get(pk=entry_id)
+        if request.method == 'POST':
+            request_data = json.loads(request.body.decode('utf-8'))
+            try:
+                actor = Actor.objects.get(pk=request_data.get('actor_name'))
+                # Get current entry actor (if any)
+                try:  # If EntryActor already exists
+                    entry_actor = EntryActor.objects.get(id_entry=risk_entry)
+                    entry_actor.id_actor = actor
+                    entry_actor.detail = request_data.get('detail')
+                    entry_actor.save()
+                except:  # No actor already, create one
+                    entry_actor = EntryActor.objects.create(id_entry=risk_entry, id_actor=actor, detail=request_data.get('detail'))
 
-            for motives_id in request_data.get("motives", []):
-                motive = ActorMotive.objects.get(pk=motives_id)
-                if motive:
-                    EntryActorMotive.objects.create(id_entryactor=entry_actor, id_actormotive=motive)
+                # Select multiple dropdowns - Intensions
+                selected_intents = request_data.get("intentions", [])
+                for ai in entry_actor.intent_entryactor.all():
+                    try:
+                        selected_intents.remove()
+                    except:
+                        ai.delete()
+                for intention_id in selected_intents:
+                    intention = ActorIntent.objects.get(pk=intention_id)
+                    if intention:
+                        EntryActorIntent.objects.create(id_entryactor=entry_actor, id_actorintent=intention)
 
+                # Select multiple dropdowns - Motives
+                selected_motives = request_data.get("motives", [])
+                for am in entry_actor.motive_entryactor.all():
+                    try:
+                        selected_motives.remove()
+                    except:
+                        am.delete()
+
+                for motives_id in selected_motives:
+                    motive = ActorMotive.objects.get(pk=motives_id)
+                    if motive:
+                        EntryActorMotive.objects.create(id_entryactor=entry_actor, id_actormotive=motive)
+            except:
+                rv = {'status': 'error', 'code': 400, 'errors': ["Invalid actor"]}
+
+            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
         else:
-            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid actor"]}
-
-        rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
-    else:
-        rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid HTTP method"]}
+    except:
+        rv = {'status': 'error', 'code': 400, 'errors': ["Invalid risk entry"]}
 
     return JsonResponse(rv)
 
@@ -159,17 +222,25 @@ def api_update_affected_assets(request, entry_id):
     risk_entry = Entry.objects.get(pk=entry_id)
     request_data = json.loads(request.body.decode('utf-8'))
     if risk_entry and request.method == 'POST':
-        asset = CompanyAsset.objects.get(pk=request_data.get('asset_name'))
-        if asset:
-            EntryCompanyAsset.objects.create(
-                id_entry=risk_entry,
-                id_companyasset=asset,
-                detail=request_data.get('asset_detail'),
-                exposure_percentage=request_data.get('exposure_percentage'),
-            )
+        # Get current company asset (if any)
+        try:
+            asset = CompanyAsset.objects.get(pk=request_data.get('asset_name'))
+            try:
+                entry_asset = EntryCompanyAsset.objects.get(id_entry=risk_entry)
+                entry_asset.id_companyasset = asset
+                entry_asset.detail = request_data.get('asset_detail')
+                entry_asset.exposure_percentage = request_data.get('exposure_percentage')
+                entry_asset.save()
+            except:
+                EntryCompanyAsset.objects.create(
+                    id_entry=risk_entry,
+                    id_companyasset=asset,
+                    detail=request_data.get('asset_detail'),
+                    exposure_percentage=request_data.get('exposure_percentage'),
+                )
             risk_entry.impact_notes = request_data.get('impact_notes')
             risk_entry.save()
-        else:
+        except:
             rv = {'status': 'error', 'code': 400, 'errors': ["Invalid asset"]}
 
         rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
@@ -184,23 +255,31 @@ def api_update_mitigating_controls(request, entry_id):
     """Update threat entry."""
     risk_entry = Entry.objects.get(pk=entry_id)
     request_data = json.loads(request.body.decode('utf-8'))
-    print(request_data)
     if risk_entry and request.method == 'POST':
-        control = CompanyControl.objects.get(pk=request_data.get('control'))
-        if control:
-            entry_control = EntryCompanyControl.objects.create(
-                id_entry=risk_entry,
-                id_companycontrol=control,
-                mitigation_rate=request_data.get('mitigation_rate', 0) or 0,
-                notes=request_data.get('notes'),
-                url=request_data.get('url'),
-            )
+        try:
+            control = CompanyControl.objects.get(pk=request_data.get('control'))
+            try:
+                entry_control = EntryCompanyControl.objects.get(id_entry=risk_entry)
+                entry_control.id_companycontrol = control
+                entry_control.mitigation_rate = request_data.get('mitigation_rate', 0) or 0
+                entry_control.notes = request_data.get('notes')
+                entry_control.url = request_data.get('url')
+                entry_control.save()
+            except:
+                entry_control = EntryCompanyControl.objects.create(
+                    id_entry=risk_entry,
+                    id_companycontrol=control,
+                    mitigation_rate=request_data.get('mitigation_rate', 0) or 0,
+                    notes=request_data.get('notes'),
+                    url=request_data.get('url'),
+                )
+
             risk_entry.addtional_mitigation = request_data.get('addtional_mitigation')
             risk_entry.save()
-        else:
+        except:
             rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
 
-        rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, "entry_control": [{'id': entry_control.id, 'name': entry_control.id_companycontrol.name}]}
+        rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, "control": entry_control.id, "entry_control": [{'id': entry_control.id, 'name': entry_control.id_companycontrol.name}]}
     else:
         rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
 
@@ -215,15 +294,20 @@ def api_update_measurements(request, entry_id):
     if risk_entry and request.method == 'POST':
         try:
             control = EntryCompanyControl.objects.get(id_entry=risk_entry, pk=request_data.get('control'))
-            for measurement_id in request_data.get("measurement", []):
+            selected_measurements = request_data.get("measurement", [])
+            for ecm in control.companycontrolmeasure_entry.all():
+                try:
+                    selected_measurements.remove(ecm.id_companycontrolmeasure)
+                except:
+                    ecm.delete()
+            for measurement_id in selected_measurements:
                 measurement = CompanyControlMeasure.objects.get(pk=measurement_id)
                 if measurement:
                     EntryCompanyControlMeasure.objects.create(id_entrycompanycontrol=control, id_companycontrolmeasure=measurement)
 
         except:
-            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid asset"]}
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
 
-        print(risk_entry)
         rv = {
             'status': 'success',
             'code': 200,
@@ -280,10 +364,7 @@ def api_get_risk_entry(request, entry_id):
         try:
             # Get fist register for company from entry.py/Register
             risk_entry = request.user.get_current_company().get_active_register().entry.get(pk=entry_id)
-            entry_actor = risk_entry.actor_entry.latest('id')
-            entry_company_asset = risk_entry.companyasset_entry.latest('id')
-            mitigating_control = risk_entry.companycontrol_entry.latest('id')
-            rv = {
+            rv.update({
                 'basicinfo': {
                     'entry_id': risk_entry.id,
                     'summary': risk_entry.summary,
@@ -295,34 +376,55 @@ def api_get_risk_entry(request, entry_id):
                     'entry_owner': risk_entry.entry_owner_id or request.user.id,
                     'frequency_multiplier': risk_entry.frequency_multiplier,
                     'frequency_notes': risk_entry.frequency_notes,
-                },
-                'threat_details': {
-                    'actor_name': risk_entry.actor_entry.latest('id').id_actor_id,
-                    'intentions': [iea.id for iea in entry_actor.intentions.all()],
-                    'motives': [iea.id for iea in entry_actor.motives.all()],
-                    'detail': entry_actor.detail,
-                },
-                'affected_assets': {
-                    'asset_name': entry_company_asset.id_companyasset_id,
-                    'exposure_percentage': entry_company_asset.exposure_percentage,
-                    'asset_detail': entry_company_asset.detail,
-                    'impact_notes': risk_entry.impact_notes,
-                },
-                'mitigating_controls': {
-                    'control': mitigating_control.id_companycontrol_id,
-                    'mitigation_rate': mitigating_control.mitigation_rate,
-                    'notes': mitigating_control.notes,
-                    'url': mitigating_control.url,
-                    'addtional_mitigation': risk_entry.addtional_mitigation,
-                },
-                'measurements': {
-                    'controls': [{'id': mitigating_control.id_companycontrol.id, 'name': mitigating_control.id_companycontrol.name}],
-                    'control': mitigating_control.id_companycontrol_id,
-                    'measurement': [ccme.id_companycontrolmeasure_id for ccme in mitigating_control.companycontrolmeasure_entry.all()],
                 }
-            }
+            })
+            try:
+                entry_actor = risk_entry.actor_entry.latest('id')
+                rv.update({
+                    'threat_details': {
+                        'actor_name': entry_actor.id_actor_id,
+                        'intentions': [iea.id for iea in entry_actor.intentions.all()],
+                        'motives': [iea.id for iea in entry_actor.motives.all()],
+                        'detail': entry_actor.detail,
+                    }
+                })
+            except:
+                pass
+
+            try:
+                entry_company_asset = risk_entry.companyasset_entry.latest('id')
+                rv.update({
+                    'affected_assets': {
+                        'asset_name': entry_company_asset.id_companyasset_id,
+                        'exposure_percentage': entry_company_asset.exposure_percentage,
+                        'asset_detail': entry_company_asset.detail,
+                        'impact_notes': risk_entry.impact_notes,
+                    }
+                })
+            except:
+                pass
+
+            try:
+                mitigating_control = risk_entry.companycontrol_entry.latest('id')
+                rv.update({
+                    'mitigating_controls': {
+                        'control': mitigating_control.id_companycontrol_id,
+                        'mitigation_rate': mitigating_control.mitigation_rate,
+                        'notes': mitigating_control.notes,
+                        'url': mitigating_control.url,
+                        'addtional_mitigation': risk_entry.addtional_mitigation,
+                    },
+                    'measurements': {
+                        'controls': [{'id': mitigating_control.id_companycontrol.id, 'name': mitigating_control.id_companycontrol.name}],
+                        'control': mitigating_control.id_companycontrol_id,
+                        'measurement': [ccme.id_companycontrolmeasure_id for ccme in mitigating_control.companycontrolmeasure_entry.all()],
+                    }
+                })
+            except:
+                pass
         except:
-            raise
+            pass
+
 
 
     return JsonResponse(rv)

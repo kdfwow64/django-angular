@@ -3211,7 +3211,6 @@ colorAdminApp.controller('registerListEntriresController', function($scope, $roo
             $("#list-entry_title").text("Risk Entries - " + $("#current_company").text());
             $('#risk-entry-table tbody').on( 'click', '.edit-risk-entry', function () {
                 var data = table.row( $(this).parents('tr') ).data();
-                console.log(data[8])
             } );
         }
     });
@@ -3302,6 +3301,7 @@ colorAdminApp.controller('registerAddEntriresController',
         .then(function(r){
             if(r.data.code == 200){
                 $scope.entry_id = r.data.id;
+                $scope.basicinfo.entry_id = r.data.id;  // In case of back button, do not create twice
                 WizardValidatorService.status.basic_info = true;
                 $(element).bwizard("next");
                 return true;
@@ -3357,7 +3357,8 @@ colorAdminApp.controller('registerAddEntriresController',
         .then(function(r){
             if(r.data.code == 200){
                 WizardValidatorService.status.mitigating_controls = true;
-                $scope.entry_company_controls = r.data.entry_control
+                $scope.entry_company_controls = r.data.entry_control;
+                $scope.measurements.control = r.data.control;
                 $(element).bwizard("next");
                 return true;
             }

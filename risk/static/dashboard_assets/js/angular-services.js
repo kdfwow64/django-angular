@@ -231,8 +231,10 @@ function CompanyControlMeasuresService($http){
 
 function WizardValidatorService(){
     riskEntryValidator = function (e, ui) {
-        service.set();
         $scope = angular.element(e.target).scope()
+        if(ui.nextIndex < ui.index){
+            return true;
+        }
         if (ui.index == 0) {
             // step-1 validation
             if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-1')) {
@@ -303,7 +305,7 @@ function WizardValidatorService(){
         },
         set: function(){
             this.status= {
-                basic_info: true,
+                basic_info: false,
                 threat_details: true,
                 affected_assets: true,
                 mitigating_controls: true,
