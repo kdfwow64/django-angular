@@ -107,14 +107,16 @@ class CreateRiskEntry(View):
             risk_entry.save()
 
             # Select single dropdown
-            final_response = Response.objects.get(pk=request_data.get("final_response"))
-            if final_response:
-                entry_response = EntryResponse.objects.filter(entry=risk_entry).latest('id')
-                if entry_response:
+            try:
+                final_response = Response.objects.get(pk=request_data.get("final_response"))
+                try:
+                    entry_response = EntryResponse.objects.filter(entry=risk_entry).latest('id')
                     entry_response.final_response = final_response
                     entry_response.save()
-                else:
+                except:
                     EntryResponse.objects.create(entry=risk_entry, final_response=final_response)
+            except:
+                pass
 
             # Select multiple dropdowns - Risk Type
             selected_rt = request_data.get("risk_types", [])
@@ -125,9 +127,11 @@ class CreateRiskEntry(View):
                     ert.delete()
             # Add new RiskType
             for risk_type_id in selected_rt:
-                risk_type = RiskType.objects.get(pk=risk_type_id)
-                if risk_type:
+                try:
+                    risk_type = RiskType.objects.get(pk=risk_type_id)
                     EntryRiskType.objects.get_or_create(id_entry=risk_entry, id_risktype=risk_type)
+                except:
+                    pass
 
             # Select multiple dropdowns - Company locations
             selected_cl = request_data.get("locations", [1, ])  # 1 - All company locations
@@ -138,9 +142,11 @@ class CreateRiskEntry(View):
                     ecl.delete()
             # Add new Company Locations
             for location_id in selected_cl:  # 1 - All company locations
-                location = CompanyLocation.objects.get(pk=location_id)
-                if location:
+                try:
+                    location = CompanyLocation.objects.get(pk=location_id)
                     EntryCompanyLocation.objects.get_or_create(id_entry=risk_entry, id_companylocation=location)
+                except:
+                    pass
 
             # Select multiple dropdowns - Compliance
             selected_cp = request_data.get("compliances", [])
@@ -151,9 +157,11 @@ class CreateRiskEntry(View):
                     ecp.delete()
             # Add new Compliance
             for compliances_id in selected_cp:
-                compliance = Compliance.objects.get(pk=compliances_id)
-                if compliance:
+                try:
+                    compliance = Compliance.objects.get(pk=compliances_id)
                     EntryCompliance.objects.get_or_create(id_entry=risk_entry, id_compliance=compliance)
+                except:
+                    pass
 
             rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
         else:
@@ -188,9 +196,11 @@ def api_update_threat_details(request, entry_id):
                     except:
                         ai.delete()
                 for intention_id in selected_intents:
-                    intention = ActorIntent.objects.get(pk=intention_id)
-                    if intention:
+                    try:
+                        intention = ActorIntent.objects.get(pk=intention_id)
                         EntryActorIntent.objects.create(id_entryactor=entry_actor, id_actorintent=intention)
+                    except:
+                        pass
 
                 # Select multiple dropdowns - Motives
                 selected_motives = request_data.get("motives", [])
@@ -201,9 +211,11 @@ def api_update_threat_details(request, entry_id):
                         am.delete()
 
                 for motives_id in selected_motives:
-                    motive = ActorMotive.objects.get(pk=motives_id)
-                    if motive:
+                    try:
+                        motive = ActorMotive.objects.get(pk=motives_id)
                         EntryActorMotive.objects.create(id_entryactor=entry_actor, id_actormotive=motive)
+                    except:
+                        pass
             except:
                 rv = {'status': 'error', 'code': 400, 'errors': ["Invalid actor"]}
 
@@ -219,32 +231,35 @@ def api_update_threat_details(request, entry_id):
 @login_required
 def api_update_affected_assets(request, entry_id):
     """Update threat entry."""
-    risk_entry = Entry.objects.get(pk=entry_id)
-    request_data = json.loads(request.body.decode('utf-8'))
-    if risk_entry and request.method == 'POST':
-        # Get current company asset (if any)
-        try:
-            asset = CompanyAsset.objects.get(pk=request_data.get('asset_name'))
+    try:
+        risk_entry = Entry.objects.get(pk=entry_id)
+        request_data = json.loads(request.body.decode('utf-8'))
+        if request.method == 'POST':
+            # Get current company asset (if any)
             try:
-                entry_asset = EntryCompanyAsset.objects.get(id_entry=risk_entry)
-                entry_asset.id_companyasset = asset
-                entry_asset.detail = request_data.get('asset_detail')
-                entry_asset.exposure_percentage = request_data.get('exposure_percentage')
-                entry_asset.save()
+                asset = CompanyAsset.objects.get(pk=request_data.get('asset_name'))
+                try:
+                    entry_asset = EntryCompanyAsset.objects.get(id_entry=risk_entry)
+                    entry_asset.id_companyasset = asset
+                    entry_asset.detail = request_data.get('asset_detail')
+                    entry_asset.exposure_percentage = request_data.get('exposure_percentage')
+                    entry_asset.save()
+                except:
+                    EntryCompanyAsset.objects.create(
+                        id_entry=risk_entry,
+                        id_companyasset=asset,
+                        detail=request_data.get('asset_detail'),
+                        exposure_percentage=request_data.get('exposure_percentage'),
+                    )
+                risk_entry.impact_notes = request_data.get('impact_notes')
+                risk_entry.save()
             except:
-                EntryCompanyAsset.objects.create(
-                    id_entry=risk_entry,
-                    id_companyasset=asset,
-                    detail=request_data.get('asset_detail'),
-                    exposure_percentage=request_data.get('exposure_percentage'),
-                )
-            risk_entry.impact_notes = request_data.get('impact_notes')
-            risk_entry.save()
-        except:
-            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid asset"]}
+                rv = {'status': 'error', 'code': 400, 'errors': ["Invalid asset"]}
 
-        rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
-    else:
+            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
+        else:
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
+    except:
         rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
 
     return JsonResponse(rv)
@@ -253,34 +268,37 @@ def api_update_affected_assets(request, entry_id):
 @login_required
 def api_update_mitigating_controls(request, entry_id):
     """Update threat entry."""
-    risk_entry = Entry.objects.get(pk=entry_id)
-    request_data = json.loads(request.body.decode('utf-8'))
-    if risk_entry and request.method == 'POST':
-        try:
-            control = CompanyControl.objects.get(pk=request_data.get('control'))
+    try:
+        risk_entry = Entry.objects.get(pk=entry_id)
+        request_data = json.loads(request.body.decode('utf-8'))
+        if request.method == 'POST':
             try:
-                entry_control = EntryCompanyControl.objects.get(id_entry=risk_entry)
-                entry_control.id_companycontrol = control
-                entry_control.mitigation_rate = request_data.get('mitigation_rate', 0) or 0
-                entry_control.notes = request_data.get('notes')
-                entry_control.url = request_data.get('url')
-                entry_control.save()
+                control = CompanyControl.objects.get(pk=request_data.get('control'))
+                try:
+                    entry_control = EntryCompanyControl.objects.get(id_entry=risk_entry)
+                    entry_control.id_companycontrol = control
+                    entry_control.mitigation_rate = request_data.get('mitigation_rate', 0) or 0
+                    entry_control.notes = request_data.get('notes')
+                    entry_control.url = request_data.get('url')
+                    entry_control.save()
+                except:
+                    entry_control = EntryCompanyControl.objects.create(
+                        id_entry=risk_entry,
+                        id_companycontrol=control,
+                        mitigation_rate=request_data.get('mitigation_rate', 0) or 0,
+                        notes=request_data.get('notes'),
+                        url=request_data.get('url'),
+                    )
+
+                risk_entry.addtional_mitigation = request_data.get('addtional_mitigation')
+                risk_entry.save()
             except:
-                entry_control = EntryCompanyControl.objects.create(
-                    id_entry=risk_entry,
-                    id_companycontrol=control,
-                    mitigation_rate=request_data.get('mitigation_rate', 0) or 0,
-                    notes=request_data.get('notes'),
-                    url=request_data.get('url'),
-                )
+                rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
 
-            risk_entry.addtional_mitigation = request_data.get('addtional_mitigation')
-            risk_entry.save()
-        except:
-            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
-
-        rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, "control": entry_control.id, "entry_control": [{'id': entry_control.id, 'name': entry_control.id_companycontrol.name}]}
-    else:
+            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, "control": entry_control.id, "entry_control": [{'id': entry_control.id, 'name': entry_control.id_companycontrol.name}]}
+        else:
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
+    except:
         rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
 
     return JsonResponse(rv)
@@ -289,42 +307,45 @@ def api_update_mitigating_controls(request, entry_id):
 @login_required
 def api_update_measurements(request, entry_id):
     """Update threat entry."""
-    risk_entry = Entry.objects.get(pk=entry_id)
-    request_data = json.loads(request.body.decode('utf-8'))
-    if risk_entry and request.method == 'POST':
-        try:
-            control = EntryCompanyControl.objects.get(id_entry=risk_entry, pk=request_data.get('control'))
-            selected_measurements = request_data.get("measurement", [])
-            for ecm in control.companycontrolmeasure_entry.all():
-                try:
-                    selected_measurements.remove(ecm.id_companycontrolmeasure)
-                except:
-                    ecm.delete()
-            for measurement_id in selected_measurements:
-                measurement = CompanyControlMeasure.objects.get(pk=measurement_id)
-                if measurement:
-                    EntryCompanyControlMeasure.objects.create(id_entrycompanycontrol=control, id_companycontrolmeasure=measurement)
+    try:
+        risk_entry = Entry.objects.get(pk=entry_id)
+        request_data = json.loads(request.body.decode('utf-8'))
+        if risk_entry and request.method == 'POST':
+            try:
+                control = EntryCompanyControl.objects.get(id_entry=risk_entry, pk=request_data.get('control'))
+                selected_measurements = request_data.get("measurement", [])
+                for ecm in control.companycontrolmeasure_entry.all():
+                    try:
+                        selected_measurements.remove(ecm.id_companycontrolmeasure)
+                    except:
+                        ecm.delete()
+                for measurement_id in selected_measurements:
+                    measurement = CompanyControlMeasure.objects.get(pk=measurement_id)
+                    if measurement:
+                        EntryCompanyControlMeasure.objects.create(id_entrycompanycontrol=control, id_companycontrolmeasure=measurement)
 
-        except:
-            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+            except:
+                rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
 
-        rv = {
-            'status': 'success',
-            'code': 200,
-            'entry_details': {
-                'id': risk_entry.id,
-                'created_by': risk_entry.created_by.full_name,
-                'entry_date_created': risk_entry.date_created.strftime("%m-%d-%Y"),
-                'modified_by': risk_entry.modified_by.full_name,
-                'date_modified': risk_entry.date_modified.strftime("%m-%d-%Y"),
-                'mitigation_adequacy': risk_entry.evaluation.mitigation_adequacy if risk_entry.evaluation else '',
-                'date_evaluation': risk_entry.evaluation.date_evaluation if risk_entry.evaluation else '',
-                'total_asset_value': risk_entry.total_asset_value,
-                'total_control_mitigation': risk_entry.total_control_mitigation,
+            rv = {
+                'status': 'success',
+                'code': 200,
+                'entry_details': {
+                    'id': risk_entry.id,
+                    'created_by': risk_entry.created_by.full_name,
+                    'entry_date_created': risk_entry.date_created.strftime("%m-%d-%Y"),
+                    'modified_by': risk_entry.modified_by.full_name,
+                    'date_modified': risk_entry.date_modified.strftime("%m-%d-%Y"),
+                    'mitigation_adequacy': risk_entry.evaluation.mitigation_adequacy if risk_entry.evaluation else '',
+                    'date_evaluation': risk_entry.evaluation.date_evaluation if risk_entry.evaluation else '',
+                    'total_asset_value': risk_entry.total_asset_value,
+                    'total_control_mitigation': risk_entry.total_control_mitigation,
+                }
             }
-        }
-    else:
-        rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
+        else:
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
+    except:
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
 
     return JsonResponse(rv)
 
