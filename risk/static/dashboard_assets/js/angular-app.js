@@ -263,7 +263,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                             '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css',
                             '/static/dashboard_assets/plugins/DataTables/media/js/jquery.dataTables.js',
                             '/static/dashboard_assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js',
-                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js'
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js',
+                            '/static/dashboard_assets/plugins/switchery/switchery.min.css',
+                            '/static/dashboard_assets/plugins/switchery/switchery.min.js',
                         ]
                     });
                 }]

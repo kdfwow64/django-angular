@@ -385,13 +385,18 @@ def api_get_risk_entry(request, entry_id):
         try:
             # Get fist register for company from entry.py/Register
             risk_entry = request.user.get_current_company().get_active_register().entry.get(pk=entry_id)
+            try:
+                final_response = risk_entry.entryresponse.latest('id').final_response_id
+            except:
+                final_response = 1
+
             rv.update({
                 'basicinfo': {
                     'entry_id': risk_entry.id,
                     'summary': risk_entry.summary,
                     'desc': risk_entry.desc,
                     'risk_types': [ert.id_risktype_id for ert in risk_entry.entryrisktype.all()],
-                    'final_response': risk_entry.entryresponse.latest('id').final_response_id or 1,
+                    'final_response': final_response,
                     'locations': [loc.id_companylocation_id for loc in risk_entry.entry_companylocation.all()] or [1, ],
                     'compliances': [rec.id_compliance_id for rec in risk_entry.entrycompliance.all()],
                     'entry_owner': risk_entry.entry_owner_id or request.user.id,
