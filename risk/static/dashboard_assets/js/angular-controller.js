@@ -3192,44 +3192,84 @@ colorAdminApp.controller('changeCompanyController', function($scope, $state, $ui
     A02.0 List Entries Controller
 ---------------------------------------------------*/
 
-colorAdminApp.controller('registerListEntriresController', function($scope, $rootScope, $state) {
+
+colorAdminApp.controller('registerListEntriresController',
+    function($scope, $rootScope, $state, impactTypes, users) {
+    $scope.impact_types = impactTypes;
+    $scope.search = {};
+    $scope.search.response = true;
+    $scope.search.compliance = true;
+    $scope.search.revoked = '';
+    $scope.users = users;
     angular.element(document).ready(function () {
+
         if ($('#risk-entry-table').length !== 0) {
             var table = $('#risk-entry-table').DataTable({
                 "responsive": true,
                 // "processing": true,
                 // "serverSide": true,
                 "ajax": 'api/risk-entries/',
-                "columnDefs": [ {
-                    "targets": -1,
-                    "data": null,
-                    "render":  function ( data, type, row, meta ) {
-                        return "<a href='/dashboard/#!/app/entries/edit-entry/"+ data[8] +"'class='btn btn-success edit-risk-entry'><i class='fa fa-edit'></i> Edit</a>";
-                    }
-                } ],
-                initComplete: function () {
-                    this.api().columns().every( function () {
-                        if([1, 2, 4].includes(this.index())){
-                            var column = this;
-                            var select = $('<select class="form-control"><option value=""></option></select>')
-                                .appendTo( $(column.footer()).empty() )
-                                .on( 'change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-
-                                    column
-                                        .search( val ? '^'+val+'$' : '', true, false )
-                                        .draw();
-                                } );
-
-                            column.data().unique().sort().each( function ( d, j ) {
-                                select.append( '<option value="'+d+'">'+d+'</option>' )
-                            } );
+                columns: [
+                    {"data": "entry_number"},
+                    {"data": "severity"},
+                    {"data": "mr"},
+                    {"data": "summary"},
+                    {"data": "owner_name"},
+                    {"data": "created_date"},
+                    {"data": "modified_date"},
+                    {"data": "evaluated"},
+                    {"data": "response", "name": "response", "visible": false},
+                    {"data": "impact", "name":"impact", "visible": false},
+                    {"data": "mr", "name":"mr", "visible": false},
+                    {"data": "compliance", "name":"compliance", "visible": false},
+                    {"data": "owner_id", "name":"owner_id", "visible": false},
+                    {"data": "active", "name":"active", "visible": false},
+                    {"data": "impact_notes", "name":"impact_notes", "visible": false},
+                    {"data": "dec", "name":"dec", "visible": false},
+                    {
+                        "data": null,
+                        "orderable": false,
+                        "render":  function ( data, type, row, meta ) {
+                            return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success edit-risk-entry'><i class='fa fa-edit'></i> Edit</a>";
                         }
-                    } );
-                }
+                    }
+                ],
+
             });
+            $('#search_response').change( function() {
+               table.column('response:name').search($scope.search.response?1:0).draw();
+            } );
+            $('#search_impact').change( function() {
+                if($scope.search.impact_status){
+                   table.column('impact:name').search($scope.search.impact_status).draw();
+                }
+                else{
+                   table.column('impact:name').search('').draw();
+                }
+            } );
+            $('#search_mr').keyup( function() {
+                if($scope.search.mitigation_rate != null){
+                    table.column('mr:name').search($scope.search.mitigation_rate).draw();
+                }
+                else{
+                    table.column('mr:name').search('').draw();
+                }
+            } );
+            $('#search_compliance').change( function() {
+               table.column('compliance:name').search($scope.search.compliance?1:0).draw();
+            } );
+            $('#search_owner').change( function() {
+                if($scope.search.owner){
+                    table.column('owner_id:name').search($scope.search.owner).draw();
+                }
+                else{
+                    table.column('owner_id:name').search('').draw();
+                }
+            } );
+            $('#search_revoked').change( function() {
+               table.column('active:name').search($scope.search.revoked?0:1).draw(); // revoked is when active is 0
+            } );
+
             $("#list-entry_title").text("Risk Entries - " + $("#current_company").text());
             $('#risk-entry-table tbody').on( 'click', '.edit-risk-entry', function () {
                 var data = table.row( $(this).parents('tr') ).data();
@@ -3237,6 +3277,7 @@ colorAdminApp.controller('registerListEntriresController', function($scope, $roo
         }
     });
 });
+
 
 /*-------------------------------------------------
     A03.0 Add Entries Controller

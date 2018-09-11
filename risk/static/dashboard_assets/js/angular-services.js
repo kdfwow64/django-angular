@@ -20,6 +20,7 @@ Website: http://www.atemon.com/
    12.0 SERVICE - WizardValidatorService
    13.0 SERVICE - EntryCompanyControlsService
    14.0 SERVICE - RiskEntryService
+   15.0 SERVICE - ImpactTypeService
 
 */
 
@@ -360,6 +361,23 @@ function RiskEntryService($http){
     return service;
 }
 
+/* -----------------------------------
+  15.0 SERVICE - ImpactTypeService
+--------------------------------------*/
+
+function ImpactTypeService($http){
+    function get_all_impact_types(id){
+        return $http.get('/dashboard/api/impact-types/').then(function(r){
+            return r.data;
+        }, function(r){return {}});
+    }
+
+    var service = {
+        getAllImpactTypes: get_all_impact_types,
+    }
+    return service;
+}
+
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseTypeService', ['$http', ResponseTypeService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
@@ -374,3 +392,4 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('CompanyControlMeasuresService', ['$http', CompanyControlMeasuresService])
              .factory('WizardValidatorService', [WizardValidatorService])
              .factory('RiskEntryService', ['$http', RiskEntryService])
+             .factory('ImpactTypeService', ['$http', ImpactTypeService])

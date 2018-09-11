@@ -57,17 +57,25 @@ def api_list_risk_entreis(request):
     total = register_entries.count()
 
     for entry in register_entries.order_by('-date_modified').all():
-        rows.append([
-            entry.entry_number,     # Entry number
-            entry.severity,         # Severity = (24 ((entryid)-1)) /(maxrevenueloss)
-            entry.mitigation_rate,  #
-            entry.get_summary(),    #
-            entry.entry_owner.full_name,
-            entry.date_created.strftime("%m/%d/%Y"),
-            entry.date_modified.strftime("%m/%d/%Y"),
-            entry.date_created.strftime("%m/%d/%Y"),
-            entry.id,
-        ])
+
+        rows.append({
+            'entry_number': entry.entry_number,     # Entry number
+            'severity': entry.severity,         # Severity = (24 ((entryid)-1)) /(maxrevenueloss)
+            'mr': entry.mitigation_rate,  #
+            'summary': entry.get_summary(),    #
+            'owner_name': entry.entry_owner.full_name,
+            'created_date': entry.date_created.strftime("%m/%d/%Y"),
+            'modified_date': entry.date_modified.strftime("%m/%d/%Y"),
+            'evaluated': entry.date_evaluated.strftime("%m/%d/%Y") if entry.date_evaluated else '',
+            'id': entry.id,
+            'response': entry.has_response,
+            'impact': entry.impact,
+            'compliance': entry.has_compliance,
+            'owner_id': entry.entry_owner.id,
+            'active': 1 if entry.is_active else 0,
+            'impact_notes': entry.impact_notes,
+            'dec': entry.desc,
+        })
 
     data = {
         'data': rows,

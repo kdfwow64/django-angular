@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div ng-controller="registerListEntriresController">
+<div>
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
         <li><a href="javascript:;">Home</a></li>
@@ -83,29 +83,43 @@
                 <div class="panel-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-3 col-xs-12">
-                                Response : <input type="checkbox" class="js-switch" data-theme="default" checked />
+                            <div class="col-md-1 col-xs-4">
+                                <label>Response : </label><input id="search_response" ng-model="search.response" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}" checked/>
+                            </div>
+                            <div class="col-md-2 col-xs-8">
+                                <label>Impact Status : </label><select id="search_impact" ng-model="search.impact_status" class="form-control" ng-options="k.id as k.name for k in impact_types"/>>
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 col-xs-6">
+                                <label>Mitigation rate : </label><input id="search_mr" ng-model="search.mitigation_rate" type="number" min='0' max='100' step="0.01" class="form-control"/>
+                            </div>
+                            <div class="col-md-1 col-xs-4">
+                                <label>Compliance : </label><input id="search_compliance" ng-model="search.compliance" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}" checked/>
+                            </div>
+                            <div class="col-md-2 col-xs-8">
+                                <label>Owner : </label><select id="search_owner" ng-model="search.owner" class="form-control" ng-options="k.id as k.name for k in users"/>>
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="col-md-1 col-xs-4">
+                                <label>Revoked : </label><input id="search_revoked" ng-model="search.revoked" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}"/>
                             </div>
                         </div>
                     </div>
-                    <table id="risk-entry-table" class="table table-striped table-bordered">
+                    <br/>
+                    <table id="risk-entry-table" class="table table-striped table-bordered" width="100%">
                         <thead>
                             <tr>
-                                <th>Client Entry Id</th>
+                                <th>Client<br>Entry Id</th>
                                 <th>Severity</th>
-                                <th>Mitigation Rate</th>
+                                <th>Mitigation<br>Rate</th>
                                 <th>Entry Summary</th>
                                 <th>Owner</th>
                                 <th>Created</th>
                                 <th>Modified</th>
                                 <th>Evaluated</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th></th>
+                                <th>Response</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -115,7 +129,8 @@
                                 <th></th>
                                 <th></th>
                             </tr>
-                        </tfoot>
+                        </thead>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>

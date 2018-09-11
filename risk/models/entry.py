@@ -122,7 +122,41 @@ class Entry(models.Model):
     @property
     def mitigation_rate(self):
         """A percentage based formula generated from other items in the application."""
-        return round((.78) - (.56), 2)
+        try:
+            entry_control = EntryCompanyControl.objects.get(id_entry=self)
+            mitigation_rate = entry_control.mitigation_rate
+        except:
+            mitigation_rate = round((.78) - (.56), 2)
+
+        return mitigation_rate
+
+    @property
+    def has_response(self):
+        """Is there a response associated with this."""
+        try:
+            response = 1 if self.entryresponse.count() else 0
+        except:
+            response = 0
+        return response
+
+
+    @property
+    def impact(self):
+        """Is there a response associated with this."""
+        try:
+            impact = self.entryimpact.latest('id').impact_type_id
+        except:
+            impact = ''
+        return impact
+
+    @property
+    def has_compliance(self):
+        """Is there a compliance associated with this."""
+        try:
+            compliance = 1 if self.entrycompliance.count() else 0
+        except:
+            compliance = 0
+        return compliance
 
     def get_summary(self, length=20):
         """Up to x number of characters with an ellipses if the entry is longer that allowed."""
@@ -132,6 +166,14 @@ class Entry(models.Model):
     def evaluation(self):
         """Evaluation."""
         return self.entryevaluation.order_by('-date_evaluated').first()
+
+    @property
+    def date_evaluated(self):
+        """Date of valuation."""
+        try:
+            return self.entryevaluation.order_by('-date_evaluated').first().date_evaluated
+        except:
+            return ''
 
     @property
     def total_asset_value(self):

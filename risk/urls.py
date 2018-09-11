@@ -33,6 +33,7 @@ urlpatterns = [
     re_path(r'^dashboard/api/actors/$', dashboard.get_all_actors_for_dropdown, name="actors-dropdown-list"),
     re_path(r'^dashboard/api/actor-intents/$', dashboard.get_all_actor_intents_for_dropdown, name="actor-intents-dropdown-list"),
     re_path(r'^dashboard/api/actor-motives/$', dashboard.get_all_actor_motives_for_dropdown, name="actor-motives-dropdown-list"),
+    re_path(r'^dashboard/api/impact-types/$', dashboard.get_all_impact_types_for_dropdown, name="impact-type-dropdown-list"),
 
     # SHOULD BE THE LAST IN THIS LIST
     re_path(r'^$', home.index, name='index'),
