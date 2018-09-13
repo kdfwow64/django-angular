@@ -21,6 +21,7 @@ Website: http://www.atemon.com/
    13.0 SERVICE - EntryCompanyControlsService
    14.0 SERVICE - RiskEntryService
    15.0 SERVICE - ImpactTypeService
+   16.0 SERVICE - WizardFormService
 
 */
 
@@ -377,6 +378,61 @@ function ImpactTypeService($http){
     }
     return service;
 }
+/* -----------------------------------
+  15.6 SERVICE - WizardFormService
+--------------------------------------*/
+
+function WizardFormService($http){
+    function get_threat_detail_form(){
+        return {
+            entry_actor_id: null,
+            actor_name: null,
+            intentions: [],
+            motives: [],
+            detail: null,
+        }
+
+    }
+    function get_affected_assets_form(){
+        return {
+            entry_asset_id: null,
+            asset_name: null,
+            exposure_percentage: 100,
+            detail: null,
+            impact_notes: null,
+        }
+
+    }
+
+    function get_mitigating_controls_form(){
+        return {
+            entry_mcontrol_id: null,
+            control: null,
+            mitigation_rate: 100,
+            notes: null,
+            url: null,
+            addtional_mitigation: null,
+        }
+
+    }
+
+    function get_measurements_form(){
+        return {
+            entry_mcontrol_id: null,
+            control: null,
+            measurement: [],
+        }
+
+    }
+
+    var service = {
+        get_threat_detail_form: get_threat_detail_form,
+        get_affected_assets_form: get_affected_assets_form,
+        get_mitigating_controls_form: get_mitigating_controls_form,
+        get_measurements_form: get_measurements_form,
+    }
+    return service;
+}
 
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseTypeService', ['$http', ResponseTypeService])
@@ -393,3 +449,4 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('WizardValidatorService', [WizardValidatorService])
              .factory('RiskEntryService', ['$http', RiskEntryService])
              .factory('ImpactTypeService', ['$http', ImpactTypeService])
+             .factory('WizardFormService', [WizardFormService])

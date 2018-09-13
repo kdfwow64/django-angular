@@ -7469,7 +7469,14 @@ body .bootstrap-datetimepicker-widget table td {
 #companies_list {
     color:black!important;
 }
-
-.pager>li.previous{
-    display:none;
+.row.odd{
+    background:#f0f3f5;
+    border: 1px solid #f0f3f5;
+    padding: 10px;
+    margin:5px;
+}
+.row.even{
+    border: 1px solid #f0f3f5;
+    padding: 10px;
+    margin:5px;
 }

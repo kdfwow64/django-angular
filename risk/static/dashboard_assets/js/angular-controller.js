@@ -3288,6 +3288,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope,
         $http,
         WizardValidatorService,
+        WizardFormService,
         riskTypes,
         responseTypes,
         companyLocations,
@@ -3304,8 +3305,7 @@ colorAdminApp.controller('registerAddEntriresController',
     // console.log(riskEntry);
 
     $scope.basicinfo = {};
-    $scope.affected_assets = {};
-    $scope.mitigating_controls = {};
+
     $scope.risk_types = riskTypes;
     $scope.response_types = responseTypes;
     $scope.company_locations = companyLocations;
@@ -3332,30 +3332,58 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.affected_assets = riskEntry.affected_assets;
     }
     else{
-        $scope.affected_assets.exposure_percentage = 100;
+        $scope.affected_assets = [WizardFormService.get_affected_assets_form()];
     }
 
     if(riskEntry.mitigating_controls){
         $scope.mitigating_controls = riskEntry.mitigating_controls;
     }
     else{
-        $scope.mitigating_controls.mitigation_rate = 0
+        $scope.mitigating_controls = [WizardFormService.get_mitigating_controls_form()];
     }
 
     if(riskEntry){
         $scope.threat_details = riskEntry.threat_details;
         $scope.measurements = riskEntry.measurements;
-        if(riskEntry.measurements){
-            $scope.entry_company_controls = riskEntry.measurements.controls;
+        if(riskEntry.measurement_controls){
+            $scope.entry_company_controls = riskEntry.measurement_controls;
         }
     }
-
+    else{
+        $scope.threat_details = [WizardFormService.get_threat_detail_form()];
+        $scope.measurements = [WizardFormService.get_measurements_form()];
+    }
     // basic_info: false,
     // threat_details: false,
     // affected_assets: false,
     // mitigating_controls: false,
     // measurements:false,
 
+    $scope.add_more_threat_detail = function(){
+        $scope.threat_details.push(WizardFormService.get_threat_detail_form());
+    }
+    $scope.remove_this_threat_detail = function(index){
+        $scope.threat_details.splice(index, 1);
+    }
+
+    $scope.add_more_affected_assets = function(){
+        $scope.affected_assets.push(WizardFormService.get_affected_assets_form());
+    }
+    $scope.remove_this_affected_assets = function(index){
+        $scope.affected_assets.splice(index, 1);
+    }
+    $scope.add_more_mitigating_controls = function(){
+        $scope.mitigating_controls.push(WizardFormService.get_mitigating_controls_form());
+    }
+    $scope.remove_this_mitigating_controls = function(index){
+        $scope.mitigating_controls.splice(index, 1);
+    }
+    $scope.add_more_measurements = function(){
+        $scope.measurements.push(WizardFormService.get_measurements_form());
+    }
+    $scope.remove_this_measurement = function(index){
+        $scope.measurements.splice(index, 1);
+    }
 
     $scope.save_basic_info = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
@@ -3418,7 +3446,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
         $http.post('/dashboard/api/risk-entry/mitigating-controls/' + $scope.entry_id + '/', $scope.mitigating_controls)
         .then(function(r){
-            if(r.data.code == 200){
+            if(r.data.code){
                 WizardValidatorService.status.mitigating_controls = true;
                 $scope.entry_company_controls = r.data.entry_control;
                 $scope.measurements.control = r.data.control;
