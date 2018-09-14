@@ -235,6 +235,14 @@ function WizardValidatorService(){
     riskEntryValidator = function (e, ui) {
         $scope = angular.element(e.target).scope()
         if(ui.nextIndex < ui.index){
+            switch(ui.index){
+                case 1: service.status.basic_info = true; break;
+                case 2: service.status.threat_details = true; break;
+                case 3: service.status.affected_assets = true; break;
+                case 4: service.status.mitigating_controls = true; break;
+                case 5: service.status.measurements = true; break;
+            }
+
             return true;
         }
         if (ui.index == 0) {

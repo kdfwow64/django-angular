@@ -184,7 +184,7 @@ def api_update_threat_details(request, entry_id):
     try:
         if request.method == 'POST':
             risk_entry = Entry.objects.get(pk=entry_id)
-            payload = json.loads(request.body.decode('utf-8'))
+            payload = json.loads(request.body.decode('utf-8')).get("multidata", [])
             for request_data in payload:
                 try:
                     actor = Actor.objects.get(pk=request_data.get('actor_name'))
@@ -244,7 +244,8 @@ def api_update_affected_assets(request, entry_id):
     try:
         if request.method == 'POST':
             risk_entry = Entry.objects.get(pk=entry_id)
-            payload = json.loads(request.body.decode('utf-8'))
+            data = json.loads(request.body.decode('utf-8'))
+            payload = data.get("multidata", [])
             for request_data in payload:
                 # Get current company asset (if any)
                 try:
@@ -263,10 +264,10 @@ def api_update_affected_assets(request, entry_id):
                             detail=request_data.get('asset_detail'),
                             exposure_percentage=request_data.get('exposure_percentage'),
                         )
-                    risk_entry.impact_notes = request_data.get('impact_notes')
-                    risk_entry.save()
                 except:
                     rv = {'status': 'error', 'code': 400, 'errors': ["Invalid asset"]}
+            risk_entry.impact_notes = data.get('impact_notes')
+            risk_entry.save()
 
             rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
         else:
@@ -283,7 +284,9 @@ def api_update_mitigating_controls(request, entry_id):
     try:
         if request.method == 'POST':
             risk_entry = Entry.objects.get(pk=entry_id)
-            payload = json.loads(request.body.decode('utf-8'))
+            data = json.loads(request.body.decode('utf-8'))
+            payload = data.get("multidata", [])
+            measurement_controls = []
             for request_data in payload:
                 try:
                     control = CompanyControl.objects.get(pk=request_data.get('control'))
@@ -303,13 +306,15 @@ def api_update_mitigating_controls(request, entry_id):
                             notes=request_data.get('notes'),
                             url=request_data.get('url'),
                         )
+                    measurement_controls.append({'id': entry_control.id, 'name': entry_control.id_companycontrol.name})
 
-                    risk_entry.addtional_mitigation = request_data.get('addtional_mitigation')
-                    risk_entry.save()
                 except:
                     rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
 
-            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, "control": entry_control.id, "entry_control": [{'id': entry_control.id, 'name': entry_control.id_companycontrol.name}]}
+            risk_entry.addtional_mitigation = data.get('addtional_mitigation')
+            risk_entry.save()
+
+            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, "control": entry_control.id, "measurement_controls": measurement_controls }
         else:
             rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
     except:
@@ -324,7 +329,7 @@ def api_update_measurements(request, entry_id):
     try:
         if request.method == 'POST':
             risk_entry = Entry.objects.get(pk=entry_id)
-            payload = json.loads(request.body.decode('utf-8'))
+            payload = json.loads(request.body.decode('utf-8')).get("multidata", [])
             for request_data in payload:
                 try:
                     control = EntryCompanyControl.objects.get(id_entry=risk_entry, pk=request_data.get('control'))
@@ -430,7 +435,7 @@ def api_get_risk_entry(request, entry_id):
                         'detail': entry_actor.detail,
                     })
 
-                rv.update({'threat_details': threat_details})
+                rv.update({'threat_details': {'multidata': threat_details}})
 
             except:
                 pass
@@ -443,10 +448,8 @@ def api_get_risk_entry(request, entry_id):
                         'asset_name': entry_company_asset.id_companyasset_id,
                         'exposure_percentage': entry_company_asset.exposure_percentage,
                         'asset_detail': entry_company_asset.detail,
-                        'impact_notes': risk_entry.impact_notes,
                     })
-
-                rv.update({'affected_assets': affected_assets})
+                rv.update({'affected_assets': {'multidata': affected_assets, 'impact_notes': risk_entry.impact_notes}})
             except:
                 pass
 
@@ -462,7 +465,6 @@ def api_get_risk_entry(request, entry_id):
                         'mitigation_rate': mitigating_control.mitigation_rate,
                         'notes': mitigating_control.notes,
                         'url': mitigating_control.url,
-                        'addtional_mitigation': risk_entry.addtional_mitigation,
                     })
                     measurements.append({
                         'entry_mcontrol_id': mitigating_control.id,
@@ -470,9 +472,10 @@ def api_get_risk_entry(request, entry_id):
                         'measurement': [ccme.id_companycontrolmeasure_id for ccme in mitigating_control.companycontrolmeasure_entry.all()],
                     })
                     measurement_controls.append({'id': mitigating_control.id_companycontrol.id, 'name': mitigating_control.id_companycontrol.name})
+
                 rv.update({
-                    'mitigating_controls': mitigating_controls,
-                    'measurements': measurements,
+                    'mitigating_controls': {'multidata': mitigating_controls, 'addtional_mitigation': risk_entry.addtional_mitigation,},
+                    'measurements': {'multidata': measurements},
                     'measurement_controls': measurement_controls,
                 })
             except:

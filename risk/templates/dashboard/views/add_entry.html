@@ -125,7 +125,7 @@
                                         <div class="col-md-8">
                                             <div class="form-group">
                                                 <label>Full Description</label>
-                                                <textarea rows="4" ng-model="basicinfo.desc" name="desc" placeholder="Description" class="form-control" data-parsley-group="wizard-step-1" required/></textarea>
+                                                <textarea rows="3" ng-model="basicinfo.desc" name="desc" placeholder="Description" class="form-control" data-parsley-group="wizard-step-1" required/></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -167,7 +167,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Frequency Notes</label>
-                                                <textarea rows="4" ng-model="basicinfo.frequency_notes" name="frequency_notes" placeholder="Frequency Notes" class="form-control" data-parsley-group="wizard-step-1"/></textarea>
+                                                <textarea rows="3" ng-model="basicinfo.frequency_notes" name="frequency_notes" placeholder="Frequency Notes" class="form-control" data-parsley-group="wizard-step-1"/></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -180,7 +180,7 @@
                                 <fieldset>
                                     <legend class="pull-left width-full">Threat Detail </legend>
                                     <!-- begin row -->
-                                    <div class="row" ng-repeat="td in threat_details" ng-class="{'odd': $odd, 'even':$even}">
+                                    <div class="row" ng-repeat="td in threat_details.multidata" ng-class="{'odd': $odd, 'even':$even}">
                                         <input type='hidden' name='entry_actor_id' ng-model='td.entry_actor_id'>
                                         <!-- begin col-4 -->
                                         <div class="col-md-4">
@@ -201,10 +201,10 @@
                                                 <select name="motive" ng-model="td.motives"class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_motive" ng-options="k.id as k.name for k in actor_motives"/></select>
                                             </div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Detail</label>
-                                                <textarea rows="4" ng-model="td.detail" name="threat_detail" placeholder="Threat Details" class="form-control" data-parsley-group="wizard-step-2"/></textarea>
+                                                <textarea rows="3" ng-model="td.detail" name="threat_detail" placeholder="Threat Details" class="form-control" data-parsley-group="wizard-step-2"/></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-12" ng-show="$index>0"><a title="Remove this threat detail" class="btn btn-danger pull-right" ng-click="remove_this_threat_detail($index)"><i class="fa fa-trash-o"></i></a></div>
@@ -220,7 +220,7 @@
                                 <fieldset>
                                     <legend class="pull-left width-full">Affected Assets</legend>
                                     <!-- begin row -->
-                                    <div class="row" ng-repeat="as in affected_assets" ng-class="{'odd': $odd, 'even':$even}">
+                                    <div class="row" ng-repeat="as in affected_assets.multidata" ng-class="{'odd': $odd, 'even':$even}">
                                         <input type='hidden' name='entry_asset_id' ng-model='as.entry_asset_id'>
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -239,16 +239,18 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Detail</label>
-                                                <textarea rows="4" ng-model="as.asset_detail" name="asset_detail" placeholder="Asset Details" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Frequency Notes</label>
-                                                <textarea rows="4" ng-model="as.impact_notes" name="impact_notes" placeholder="Frequency Notes" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
+                                                <textarea rows="3" ng-model="as.asset_detail" name="asset_detail" placeholder="Asset Details" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-12" ng-show="$index>0"><a title="Remove this affected asset" class="btn btn-danger pull-right" ng-click="remove_this_affected_assets($index)"><i class="fa fa-trash-o"></i></a></div>
+                                    </div>
+                                    <div class="row even">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Frequency Notes</label>
+                                                <textarea rows="3" ng-model="affected_assets.impact_notes" name="impact_notes" placeholder="Frequency Notes" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                     <a class="btn btn-success pull-right" ng-click="add_more_affected_assets()"><i class="fa fa-plus"></i> Add More Affected Assets</a>
                                     <!-- end row -->
@@ -260,7 +262,7 @@
                                 <fieldset>
                                     <legend class="pull-left width-full">Mitigating Controls</legend>
                                     <!-- begin row -->
-                                    <div class="row" ng-repeat="mc in mitigating_controls" ng-class="{'odd': $odd, 'even':$even}">
+                                    <div class="row" ng-repeat="mc in mitigating_controls.multidata" ng-class="{'even': $odd, 'even':$even}">
                                         <input type='hidden' name='entry_mcontrol_id' ng-model='mc.entry_mcontrol_id'>
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -279,7 +281,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Detail</label>
-                                                <textarea rows="4"  ng-model="mc.notes" name="notes" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
+                                                <textarea rows="3"  ng-model="mc.notes" name="notes" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -288,13 +290,15 @@
                                                 <input type="url"  ng-model="mc.url" name="url" class="form-control" data-parsley-group="wizard-step-4" />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-12" ng-show="$index>0"><a title="Remove this mitigating control" class="btn btn-danger pull-right" ng-click="remove_this_mitigating_controls($index)"><i class="fa fa-trash-o"></i></a></div>
+                                    </div>
+                                    <div class="row even">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label> Additional Mitigation Opportunites</label>
-                                                <textarea rows="4"  ng-model="mc.addtional_mitigation" name="addtional_mitigation" placeholder=" Additional Mitigation Opportunites" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
+                                                <textarea rows="3"  ng-model="mitigating_controls.addtional_mitigation" name="addtional_mitigation" placeholder=" Additional Mitigation Opportunites" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" ng-show="$index>0"><a title="Remove this mitigating control" class="btn btn-danger pull-right" ng-click="remove_this_mitigating_controls($index)"><i class="fa fa-trash-o"></i></a></div>
                                     </div>
                                     <a class="btn btn-success pull-right" ng-click="add_more_mitigating_controls()"><i class="fa fa-plus"></i> Add More Mitigating Controls</a>
                                     <!-- end row -->
@@ -306,12 +310,12 @@
                                 <fieldset>
                                     <legend class="pull-left width-full">Measurements</legend>
                                     <!-- begin row -->
-                                    <div class="row" ng-repeat="mm in measurements" ng-class="{'odd': $odd, 'even':$even}">
+                                    <div class="row" ng-repeat="mm in measurements.multidata" ng-class="{'odd': $odd, 'even':$even}">
                                         <input type='hidden' name='entry_mcontrol_id' ng-model='mm.entry_mcontrol_id'>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Control</label>
-                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-5" required ng-model="mm.control" ng-options="k.id as k.name for k in entry_company_controls"/><option value=""></option></select>
+                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-5" required ng-model="mm.control" ng-options="k.id as k.name for k in measurements.measurement_controls"/><option value=""></option></select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
