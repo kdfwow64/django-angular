@@ -80,6 +80,8 @@ class Entry(models.Model):
         ' Who owns management of the risk entry.  This should be a contributor of the system'),)  # User that currently owns and is held accountable for the entry
     register = models.ForeignKey('Register', on_delete=models.PROTECT, null=True, related_name='entry', help_text=(
         'Register that the entry belongs'),)  # Register that the entry is associated.
+    response = models.ForeignKey('Response', on_delete=models.CASCADE, null=True, blank=True, related_name='entryfinalresponse', help_text=(
+        'The final decsion on what to do with the threat scenario'),)  # Based on the decision from the EntryRespons and EntryResponseResults.  This is what the company has determined to do about the threat scenario.
     actors = models.ManyToManyField('Actor', through='EntryActor',
                                     through_fields=('id_entry', 'id_actor'), related_name='EntryActors', help_text=('Specifies what actors are defined in the scenario'),)  # Many actors could be involved in the threat scenario.
     events = models.ManyToManyField('EventType', through='EntryEventType',
@@ -114,7 +116,8 @@ class Entry(models.Model):
     def severity(self):
         """Severity calculated with formula (24 ((entryid)-1)) /(maxrevenueloss)."""
         try:
-            severity = (24 * (self.id - 1) / self.register.company.annual_revenue)
+            severity = (24 * (self.id - 1) /
+                        self.register.company.annual_revenue)
         except:
             severity = 0
         return severity
@@ -138,7 +141,6 @@ class Entry(models.Model):
         except:
             response = 0
         return response
-
 
     @property
     def impact(self):
@@ -211,17 +213,17 @@ class EntryTask(models.Model):
     date_acknowledged = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the entry task was acknowledged by the user'),)  # When acknowledged the task status will change to In Progress.
     # Foreign Key and Relationships
-    task_owner = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='entrytask', help_text=(
+    task_owner = models.ForeignKey('CompanyContact', on_delete=models.CASCADE, null=True, related_name='entrytask', help_text=(
         ' Who owns the task'),)  # Task owner may be different from the user the that owns the entry.
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='created_entrytask', help_text=(
+    created_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='created_entrytask', help_text=(
         'User id of the user that created the field'),)
-    closed_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='closed_entrytask', help_text=(
+    closed_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='closed_entrytask', help_text=(
         'User id of the user that created the field'),)
-    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='deleted_entrytask', help_text=(
+    deleted_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='deleted_entrytask', help_text=(
         'User id if deleted by another user'),)
-    task_status = models.ForeignKey('TaskStatus', on_delete=models.PROTECT, default=1, null=True, related_name='entrytask_status', help_text=(
+    task_status = models.ForeignKey('TaskStatus', on_delete=models.CASCADE, default=1, null=True, related_name='entrytask_status', help_text=(
         'Current status of the task'),)
-    entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entrytask', help_text=(
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entrytask', help_text=(
         'Entry that the registery is tied '),)
 
     class Meta:
@@ -263,7 +265,7 @@ class EntryCause(models.Model):
     desc_form = models.CharField(
         max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
     # Foreign Key and Relationships
-    entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entrycause', help_text=(
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entrycause', help_text=(
         'The entry the associated with the cause'),)
 
     def __str__(self):
@@ -279,9 +281,9 @@ class EntryActor(models.Model):
     """Entry Actor.  Use to associate many threat actors and the specific intentions and motives against the assets of the entry."""
 
     # Entry Id from the Entry table
-    id_entry = models.ForeignKey('Entry', on_delete=models.PROTECT, related_name='actor_entry', help_text=(
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, related_name='actor_entry', help_text=(
         'The entry associated to the actor'),)  # Id of the entry
-    id_actor = models.ForeignKey('Actor', on_delete=models.PROTECT, related_name='entry_actor', help_text=(
+    id_actor = models.ForeignKey('Actor', on_delete=models.CASCADE, related_name='entry_actor', help_text=(
         'The actor associated to the entry'),)  # Id of the actor
     # Context to understand why the actor is tied to the entry
     detail = models.TextField(blank=True, help_text=(
@@ -295,7 +297,7 @@ class EntryActor(models.Model):
 
     def __str__(self):
         """String."""
-        return self.name
+        return self.id_actor.name
 
     class Meta:
         """Meta class."""
@@ -305,20 +307,20 @@ class EntryActor(models.Model):
 class EntryActorIntent(models.Model):
     ''' This table is used to tie threat actors to their intent.  '''
     id_entryactor = models.ForeignKey(
-        'EntryActor', on_delete=models.PROTECT, related_name='intent_entryactor', help_text=(
+        'EntryActor', on_delete=models.CASCADE, related_name='intent_entryactor', help_text=(
             'The actor chosen for the threat scenario'),)  # )  # EntryActor Id from the EntryActor table
     # ActorIntent Id from the ActorIntent table
-    id_actorintent = models.ForeignKey('ActorIntent', on_delete=models.PROTECT, related_name='entry_actorintent', help_text=(
+    id_actorintent = models.ForeignKey('ActorIntent', on_delete=models.CASCADE, related_name='entry_actorintent', help_text=(
         'The intent chosen for the threat scenario'),)
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the entry threat actor intent is active'),)  # There are default intentions for every actor, however this can be specified if needed.
     date_created = models.DateTimeField(
         auto_now_add=True, null=True, help_text=('Date the intent was tied to the threat actor'),)  # Date intent was tied to the actor
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='UserCreatedEntryActorIntent', help_text=(
+    created_by = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, related_name='UserCreatedEntryActorIntent', help_text=(
         'User id of the user that created the access'),)
     date_revoked = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the intent tied to the threat actor was revoked, if applicable'),)  # Date actor intent was revoked.
-    revoked_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='UserRevokedEntryActorIntent', help_text=(
+    revoked_by = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, related_name='UserRevokedEntryActorIntent', help_text=(
         'User id that revoked the intent from the threat actor'),)  # User id of the user that revoked the intent from the entry
 
     class Meta:
@@ -329,20 +331,20 @@ class EntryActorIntent(models.Model):
 class EntryActorMotive(models.Model):
     ''' This table is used to tie threat actors to their motive.  '''
     id_entryactor = models.ForeignKey(
-        'EntryActor', on_delete=models.PROTECT, related_name='motive_entryactor', help_text=(
+        'EntryActor', on_delete=models.CASCADE, related_name='motive_entryactor', help_text=(
             'The actor chosen for the threat scenario'),)  # )  # EntryActor Id from the Entry Actor table
     # ActorMotive Id from the ActorMotive table
-    id_actormotive = models.ForeignKey('ActorMotive', on_delete=models.PROTECT, related_name='entry_actormotive', help_text=(
+    id_actormotive = models.ForeignKey('ActorMotive', on_delete=models.CASCADE, related_name='entry_actormotive', help_text=(
         'The motive chosen for the threat scenario'),)  # The motive tied to the actor for the entry.
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the etry threat actor motive is active'),)  # There defualt motives for every actor, however this can be specified if needed.
     date_created = models.DateTimeField(
         auto_now_add=True, null=True, help_text=('Date the motive was tied to the threat actor'),)  # Date the motive was created
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='UserCreatedEntryActorMotive', help_text=(
+    created_by = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, related_name='UserCreatedEntryActorMotive', help_text=(
         'User id of the user that created the threat actor motive'),)
     date_revoked = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the motive tied to the threat actor was revoked, if applicable'),)  # Date threat actor motive was revoked.
-    revoked_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='UserRevokedEntryActorMotive', help_text=(
+    revoked_by = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, related_name='UserRevokedEntryActorMotive', help_text=(
         'User id that revoked the motive from the threat actor'),)  # User id  that revoked the motive from the entry threat actor
 
     class Meta:
@@ -354,9 +356,9 @@ class EntryCompanyAsset(models.Model):
     """Entry Company Assets.  Defines the assets associated with the risk entry."""
 
     # Entry Id from the Entry table
-    id_entry = models.ForeignKey('Entry', on_delete=models.PROTECT, related_name='companyasset_entry', help_text=(
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, related_name='companyasset_entry', help_text=(
         'The entry associated to the actor'),)  # Id of the entry
-    id_companyasset = models.ForeignKey('CompanyAsset', on_delete=models.PROTECT, related_name='entry_companyasset', help_text=(
+    id_companyasset = models.ForeignKey('CompanyAsset', on_delete=models.CASCADE, related_name='entry_companyasset', help_text=(
         'The asset associated to the entry'),)  # Id of the asset
     exposure_percentage = models.FloatField(default=1, blank=True, help_text=(
         'Maximum percentage of asset value exposed given the risk scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
@@ -367,7 +369,7 @@ class EntryCompanyAsset(models.Model):
 
     def __str__(self):
         """String."""
-        return self.name
+        return self.id_companyasset.name
 
     class Meta:
         """Meta class."""
@@ -377,17 +379,19 @@ class EntryCompanyAsset(models.Model):
     def get_asset_value(self):
         """Get the asset value."""
         if self.id_companyasset.monetary_value_toggle:
-            return (self.id_companyasset.fixed_monetary_value * self.exposure_percentage)  # / 100.0
+            # / 100.0
+            return (self.id_companyasset.fixed_monetary_value * self.exposure_percentage)
         else:
-            return (self.id_companyasset.par_monetary_value * self.exposure_percentage)  # / 100.0
+            # / 100.0
+            return (self.id_companyasset.par_monetary_value * self.exposure_percentage)
 
 
 class EntryCompanyControl(models.Model):
     """Entry Company Control."""
 
-    id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='entry_companycontrol', help_text=(
+    id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.CASCADE, null=True, related_name='entry_companycontrol', help_text=(
         'The company control assigned to mitigate the risk'),)
-    id_entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='companycontrol_entry', help_text=(
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='companycontrol_entry', help_text=(
         'The entry the associated with the company control'),)
     mitigation_rate = models.FloatField(default=0, blank=True, help_text=(
         'Percentage of mitigations the control applies to the inherit risk'),)  # Each control added to the entry should mitigate a portion of the over inherit risk. When selecting the mitigation percentage, it should remove the exposed inhert risk from the asset exposure.
@@ -395,9 +399,9 @@ class EntryCompanyControl(models.Model):
         blank=True, help_text=('Notes regarding the controls mitigation against the risk'),)  # Notes should be used to suppor the logical leverage to mitigate risk.
     url = models.URLField(max_length=200, blank=True, help_text=(
         'Websites or locations of data supporting the controls mitigation against the risk'),)  # In addtion to notes.  Users can leverage websites for reference.
-    submitted_mitigation = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='userlastsubmittedmitigation', help_text=(
+    submitted_mitigation = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, related_name='userlastsubmittedmitigation', help_text=(
         'User id of the user that last submitted mitigation'),)  # This will be the same for all company controls on the entry.  It is captured to understand the last user that submitted values for the control mitigations.
-    operation = models.ForeignKey('ControlOperation', on_delete=models.PROTECT, blank=True, null=True, related_name='operation_controlentry', help_text=(
+    operation = models.ForeignKey('ControlOperation', on_delete=models.CASCADE, blank=True, null=True, related_name='operation_controlentry', help_text=(
         'The operation associated to the control entered'),)  # Control categories can have multiple operation levels.  This field is used show what may be available for the control and tie its operational level to the entry
     functions = models.ManyToManyField("ControlFunction", through='EntryCompanyControlFunction', through_fields=('id_entrycompanycontrol', 'id_controlfunction'), related_name='EntryCompanyControlFunction', help_text=(
         'The level at which the control functions for the entry'),)  # Control categories can have multiple functions.  This field is used show what may be available for the control.
@@ -408,7 +412,7 @@ class EntryCompanyControl(models.Model):
 
     def __str__(self):
         """String."""
-        return self.id_companycontrol
+        return self.id_companycontrol.name
 
     class Meta:
         """Meta class."""
@@ -419,14 +423,14 @@ class EntryCompliance(models.Model):
     """Entry Compliance."""
 
     # Foreign Key and Relationships
-    id_entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entrycompliance', help_text=(
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entrycompliance', help_text=(
         'The entry the associated with the company control'),)
-    id_compliance = models.ForeignKey('Compliance', on_delete=models.PROTECT, null=True, related_name='entrycompliance', help_text=(
+    id_compliance = models.ForeignKey('Compliance', on_delete=models.CASCADE, null=True, related_name='entrycompliance', help_text=(
         'The compliance or regulation associated with the entry'),)
 
     def __str__(self):
         """String."""
-        return self.id_compliance
+        return self.id_compliance.name
 
     class Meta:
         """Meta class."""
@@ -437,14 +441,14 @@ class EntryRiskType(models.Model):
     """Entry Risk Type."""
 
     # Foreign Key and Relationships
-    id_entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entryrisktype', help_text=(
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entryrisktype', help_text=(
         'The entry the associated with the risk type'),)
-    id_risktype = models.ForeignKey('RiskType', on_delete=models.PROTECT, null=True, related_name='risktypeentry', help_text=(
+    id_risktype = models.ForeignKey('RiskType', on_delete=models.CASCADE, null=True, related_name='risktypeentry', help_text=(
         'The business risk type associated with the entry'),)
 
     def __str__(self):
         """String."""
-        return self.id_risktype
+        return self.id_risktype.name
 
     class Meta:
         """Meta class."""
@@ -455,14 +459,14 @@ class EntryCompanyControlFunction(models.Model):
     """Entry Company Control Function.  When chosing this list it should control functions should be limited by what is available for the control category."""
 
     # Foreign Key and Relationships
-    id_controlfunction = models.ForeignKey('ControlFunction', on_delete=models.PROTECT, null=True, related_name='entry_controlfunction', help_text=(
+    id_controlfunction = models.ForeignKey('ControlFunction', on_delete=models.CASCADE, null=True, related_name='entry_controlfunction', help_text=(
         'The function the control preforms against the threat event'),)
-    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.PROTECT, null=True, related_name='controlfunction_entry', help_text=(
+    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.CASCADE, null=True, related_name='controlfunction_entry', help_text=(
         'The entry control the associated with the company control'),)
 
     def __str__(self):
         """String."""
-        return self.id_controlfunction
+        return self.id_controlfunction.name
 
     class Meta:
         """Meta class."""
@@ -473,14 +477,14 @@ class EntryCompanyControlMeasure(models.Model):
     """Entry Control Measure."""
 
     # Foreign Key and Relationships
-    id_companycontrolmeasure = models.ForeignKey('CompanyControlMeasure', on_delete=models.PROTECT, null=True, related_name='entry_companycontrolmeasure', help_text=(
+    id_companycontrolmeasure = models.ForeignKey('CompanyControlMeasure', on_delete=models.CASCADE, null=True, related_name='entry_companycontrolmeasure', help_text=(
         'The measurement for the company control used on the threat scenario'),)
-    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.PROTECT, null=True, related_name='companycontrolmeasure_entry', help_text=(
+    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.CASCADE, null=True, related_name='companycontrolmeasure_entry', help_text=(
         'The entry associated with the company control'),)
 
     def __str__(self):
         """String."""
-        return self.id_companycontrolmeasure
+        return self.id_companycontrolmeasure.name
 
     class Meta:
         """Meta class."""
@@ -491,14 +495,14 @@ class EntryCompanyControlDependency(models.Model):
     """Entry Control Dependency."""
 
     # Foreign Key and Relationships
-    id_companycontroldependency = models.ForeignKey('CompanyControlDependency', on_delete=models.PROTECT, null=True, related_name='entry_companycontroldependency', help_text=(
+    id_companycontroldependency = models.ForeignKey('CompanyControlDependency', on_delete=models.CASCADE, null=True, related_name='entry_companycontroldependency', help_text=(
         'The dependency for the company control used on the threat scenario'),)
-    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.PROTECT, null=True, related_name='companycontroldependency_entry', help_text=(
+    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.CASCADE, null=True, related_name='companycontroldependency_entry', help_text=(
         'The entry associated with the company control'),)
 
     def __str__(self):
         """String."""
-        return self.id_companycontroldependency
+        return self.id_companycontroldependency.name
 
     class Meta:
         """Meta class."""
@@ -515,11 +519,11 @@ class EntryEvaluation(models.Model):
     date_evaluated = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the risk entry was evaluated'),)  # Date the user completed submitted the evaluation
     # Foreign Key and Relationships
-    entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entryevaluation', help_text=(
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entryevaluation', help_text=(
         'The entry the associated with the evaluation'),)  # Evaluation entry
-    mitigation_adequacy = models.ForeignKey('MitigationAdequacy', on_delete=models.PROTECT, null=True, related_name='entrymitigation', help_text=(
+    mitigation_adequacy = models.ForeignKey('MitigationAdequacy', on_delete=models.CASCADE, null=True, related_name='entrymitigation', help_text=(
         'Mitigation level based on infromation available'),)  # Is the control mitigation adequate for the risk based on the users perception.
-    user = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='entryevaluation', help_text=(
+    user = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='entryevaluation', help_text=(
         'The user that performed the evaluation'),)  # User that completed the evaluation.
 
     def __str__(self):
@@ -534,16 +538,16 @@ class EntryEvaluation(models.Model):
 class EntryEventType(models.Model):
     """Entry Event Type.  Define the event that is being mitigated."""
 
-    id_entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='eventtype_entry', help_text=(
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='eventtype_entry', help_text=(
         'The entry the associated with the company control'),)
-    id_eventtype = models.ForeignKey('EventType', on_delete=models.PROTECT, null=True, related_name='entry_eventtype', help_text=(
+    id_eventtype = models.ForeignKey('EventType', on_delete=models.CASCADE, null=True, related_name='entry_eventtype', help_text=(
         'Type of event associated to the threat event'),)
     context = models.TextField(
         blank=True, help_text=('Context to the event for the entry'),)  # Additional information may be needed to understand why the eventtype is being used for the threat scenario.
 
     def __str__(self):
         """String."""
-        return self.id_eventtype
+        return self.id_eventtype.name
 
     class Meta:
         """Meta class."""
@@ -562,9 +566,9 @@ class EntryImpact(models.Model):
     notes = models.TextField(
         blank=True, help_text=('Notes regarding the impact has for the impact'),)  # Not in use
     # Foreign Key and Relationships
-    entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entryimpact', help_text=(
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entryimpact', help_text=(
         'The entry the associated with the entry impact'),)
-    impact_type = models.ForeignKey('ImpactType', on_delete=models.PROTECT, null=True, related_name='entryimpact', help_text=(
+    impact_type = models.ForeignKey('ImpactType', on_delete=models.CASCADE, null=True, related_name='entryimpact', help_text=(
         'Impact type for the risk entry'),)
 
     def __str__(self):
@@ -603,7 +607,7 @@ class EntryIndicator(models.Model):
         max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
 
     # Foreign Key and Relationships
-    entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entryindicator', help_text=(
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entryindicator', help_text=(
         'The entry the associated with the entry impact'),)
 
     def __str__(self):
@@ -624,14 +628,14 @@ class EntryCompanyLocation(models.Model):
     """
 
     # Foreign Key and Relationships
-    id_entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entry_companylocation', help_text=(
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entry_companylocation', help_text=(
         'The entry the associated with company location'),)
-    id_companylocation = models.ForeignKey('CompanyLocation', on_delete=models.PROTECT, null=True, related_name='companylocation_entry', help_text=(
+    id_companylocation = models.ForeignKey('CompanyLocation', on_delete=models.CASCADE, null=True, related_name='companylocation_entry', help_text=(
         'Company location that the risk entry applies'),)
 
     def __str__(self):
         """String."""
-        return self.id_companylocation
+        return self.id_companylocation.name
 
     class Meta:
         """Meta class."""
@@ -659,18 +663,12 @@ class EntryResponse(models.Model):
     notes = models.TextField(
         blank=True, help_text=('Notes regarding the response decision'),)  # Additional information for the risk scenario.
     # Foreign Key and Relationships
-    entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entryresponse', help_text=(
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entryresponse', help_text=(
         'The entry the associated with the entry impact'),)  # There may be more that one review of the entry as time changes.  This will provide the historic content.
-    suggested_response = models.ForeignKey('Response', on_delete=models.PROTECT, null=True, related_name='entrysuggestedresponse', help_text=(
+    suggested_response = models.ForeignKey('Response', on_delete=models.CASCADE, null=True, blank=True, related_name='entrysuggestedresponse', help_text=(
         'The suggested response on what to do with the threat scenario'),)
-    final_response = models.ForeignKey('Response', on_delete=models.PROTECT, null=True, related_name='entryfinalresponse', help_text=(
-        'The final decsion on what to do with the threat scenario'),)
-    votes = models.ManyToManyField("CompanyContact", through='EntryResponseResult',
-                                   through_fields=('id_entryresponse', 'id_decisionmaker'), related_name='EntryResponseResult', help_text=('Shows the Decision Makers and their response'),)  # This provides information on who/how someone voted for the response on the threat scenario.
-
-    def __str__(self):
-        """String."""
-        return self.response
+    response_votes = models.ManyToManyField("CompanyContact", through='EntryResponseResult',
+                                            through_fields=('id_entryresponse', 'id_decisionmaker'), related_name='EntryResponseResult', help_text=('Shows the Decision Makers and their response'),)  # This provides information on who/how someone voted for the response on the threat scenario.
 
     class Meta:
         """Meta class."""
@@ -683,22 +681,24 @@ class EntryResponseResult(models.Model):
     """
 
     # Foreign Key and Relationships
-    id_entryresponse = models.ForeignKey('EntryResponse', on_delete=models.PROTECT, null=True, related_name='entryresponse_decisionmaker', help_text=(
-        'The entry response the associated with decisionmaker'),)
-    id_decisionmaker = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='decisionmaker_entryresponse', help_text=(
+    id_entryresponse = models.ForeignKey('EntryResponse', on_delete=models.CASCADE, null=True, related_name='entryresponse_decisionmaker', help_text=(
+        'The entry associated with decisionmaker response (vote)'),)
+    id_decisionmaker = models.ForeignKey('CompanyContact', on_delete=models.CASCADE, null=True, related_name='decisionmaker_entry', help_text=(
         'The decisionmaker that the risk entry response applies'),)
-    vote = models.ForeignKey('ResponseVote', on_delete=models.PROTECT, default=1, related_name='entryresponsevote', help_text=(
+    vote_status = models.ForeignKey('ResponseVote', on_delete=models.CASCADE, default=1, related_name='entryresponsevote', help_text=(
         'The vote cast by the decision maker'),)  # The vote cast by the decison maker
+    vote_response = models.ForeignKey('Response', on_delete=models.CASCADE, null=True, blank=True, related_name='entryresponseresultvote', help_text=(
+        'The suggested vote the decision maker made for the threat scenario'),)
     notes = models.TextField(
         blank=True, help_text=('Notes regarding the decison makers vote'),)
 
     def __str__(self):
         """String."""
-        return self.id_entryresponse
+        return self.vote_response.name
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Entry Response Results")
+        verbose_name_plural = ("Entry Response Votes")
 
 
 class ResponseVote(models.Model):
@@ -717,7 +717,7 @@ class ResponseVote(models.Model):
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Entry Response Votes")
+        verbose_name_plural = ("Response Votes")
 
 
 class Response(models.Model):
@@ -771,9 +771,9 @@ class EntryUrl(models.Model):
         auto_now_add=True, null=True, blank=True, help_text=('Timestamp the URL was created'),)  # User that added the URL
     date_deactivated = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the URL was deactivated'),)  # Date the URL was removed
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='created_entryurl', help_text=(
+    created_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='created_entryurl', help_text=(
         'User id of the user that created the field'),)  # User that created the URL
-    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='deactivated_entryurl', help_text=(
+    deactivated_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='deactivated_entryurl', help_text=(
         'User that deactivated the URL'),)  # User that deactivated the URL
     # RLB Processing
     date_scanned = models.DateTimeField(
@@ -784,12 +784,12 @@ class EntryUrl(models.Model):
         default=False, help_text=('Designates whether the URL recieves a page error'),)  # If is_public_domain is True after scan then has_page_error will be tested.  If has_page_error is True, then manual review is needed and alert will be sent to entry owner.
     is_recommended = models.BooleanField(
         default=False, help_text=('Designates whether the URL is recommended by RLB'),)  # URL has been reviewed by RLB and is recommend for this type of entry.
-    recommended_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='user_recommended', help_text=(
+    recommended_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='user_recommended', help_text=(
         'User that recommended the URL'),)  # User that recommended the URL
     recommended_notes = models.TextField(
         blank=True, help_text=('Notes on why the url was recommended reading for other RLB users'),)  # Recommendation notes associated with the URL
     # Foreign Key and Relationships
-    entry = models.ForeignKey('Entry', on_delete=models.PROTECT, null=True, related_name='entryurl', help_text=(
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entryurl', help_text=(
         'The entry the associated with the entry impact'),)
 
     def __str__(self):

@@ -135,6 +135,7 @@ class EntryAdmin(admin.ModelAdmin):
         'modified_by',
         'entry_owner',
         'register',
+        'response',
     )
     list_filter = (
         'date_created',
@@ -145,6 +146,7 @@ class EntryAdmin(admin.ModelAdmin):
         'modified_by',
         'entry_owner',
         'register',
+        'response',
     )
 
 
@@ -306,14 +308,12 @@ class EntryResponseAdmin(admin.ModelAdmin):
         'notes',
         'entry',
         'suggested_response',
-        'final_response',
     )
     list_filter = (
         'date_presented',
         'date_decision',
         'entry',
         'suggested_response',
-        'final_response',
     )
 
 
