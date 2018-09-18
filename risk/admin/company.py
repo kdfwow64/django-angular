@@ -1,8 +1,15 @@
 from django.contrib import admin
-from risk.models.company import CompanyMember, CompanyMemberGrant, CompanyControlLocation, CompanyTeamMember, CompanyAssetSegment, CompanyAssetLocation, CompanyControlFinding, CompanyControlSegment, CompanyControlDependency
+from risk.models.company import CompanyMember, CompanyProfile, CompanyMemberGrant, CompanyControlLocation, CompanyTeamMember, CompanyAssetSegment, CompanyAssetLocation, CompanyControlFinding, CompanyControlSegment, CompanyControlDependency
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
+
+
+class CompanyProfileInline(admin.StackedInline):
+
+    model = CompanyProfile
+    can_delete = False
+    verbose_name_plural = 'Company Profile'
 
 
 class CompanyMemberInline(admin.TabularInline):
@@ -60,7 +67,7 @@ class CompanyControlFindingInline(admin.TabularInline):
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    inlines = (CompanyMemberInline,)
+    inlines = (CompanyProfileInline, CompanyMemberInline,)
     list_display = (
         'id',
         'name',

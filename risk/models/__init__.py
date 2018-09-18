@@ -46,7 +46,7 @@ from .common import (
 from .company import (
     Company,
     CompanyMember,
-    # CompanyMemberGrant,
+    CompanyProfile,
     CompanyAsset,
     CompanyAssetType,
     CompanyControl,

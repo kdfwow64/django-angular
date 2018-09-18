@@ -141,6 +141,37 @@ class Company(models.Model):
         return self.company_register.first()
 
 
+class CompanyProfile(models.Model):
+    """
+    Company profilfe detail to gain a good understanding of the client.  This is separate from the company model because it is focused on the how the company operates.
+    """
+
+    company = models.OneToOneField(
+        Company, on_delete=models.PROTECT,)
+    sales_margin = models.TextField(
+        blank=True, null=True, help_text=('Brief description how the company dictates margins'),)  # This helps define the expecation for margins on products and services.
+    target_audience = models.TextField(
+        blank=True, null=True, help_text=('Brief description who the target audience is in the company'),)  # This helps define who is likely to purchase products and services.
+    value_statement = models.TextField(
+        blank=True, null=True, help_text=('Brief description how the company defines value of products/services'),)  # This helps define why the product would be purchased
+    culture_perception = models.TextField(
+        blank=True, null=True, help_text=('Brief description how the company culture is percieved'),)  # This helps define perception of the company culture.
+    number_employees = models.IntegerField(
+        blank=True, null=True, help_text=('The number of employees in the company'),)  # Number of employees in the company.
+    number_customers = models.IntegerField(
+        blank=True, null=True, help_text=('The number of customers the company services'),)  # Number of customers the company.
+    historical_growth_rate = models.FloatField(
+        blank=True, null=True, help_text=('Historical Year-over-Year Growth Rate'),)  # Used to determine how quickly the company is growing.
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Profiles")
+
+    def __str__(self):
+        """String representation."""
+        return str(self.company.name)
+
+
 class CompanyMember(models.Model):
     ''' This table is used to tie users to a specific company.  '''
     id_user = models.ForeignKey(
