@@ -3230,7 +3230,7 @@ colorAdminApp.controller('registerListEntriresController',
                         "data": null,
                         "orderable": false,
                         "render":  function ( data, type, row, meta ) {
-                            return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success edit-risk-entry'><i class='fa fa-edit'></i> Edit</a>";
+                            return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success btn-xs edit-risk-entry'>Edit</a>";
                         }
                     }
                 ],
