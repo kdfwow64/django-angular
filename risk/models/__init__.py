@@ -49,6 +49,7 @@ from .company import (
     CompanyProfile,
     CompanyAsset,
     CompanyAssetType,
+    CompanyObjective,
     CompanyControl,
     CompanyControlMeasure,
     CompanyControlMeasurementResult,

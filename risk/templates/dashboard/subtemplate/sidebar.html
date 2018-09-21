@@ -60,7 +60,12 @@
                     <li ui-sref-active="active"><a ui-sref="app.meetings.search_meetings">Search Meetings</a></li>
                 </ul>
             </li>
-            <li ui-sref-active="active"><a ui-sref="app.calendar"><i class="fa fa-calendar"></i> <span>Calendar</span></a></li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                    <i class="fa fa-calendar"></i>
+                    <span>Calendar</span>
+                </a>
+            </li>
             <li class="has-sub" ng-class="{active:$state.includes('app.contacts')}">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from risk.models.company import CompanyMember, CompanyProfile, CompanyMemberGrant, CompanyControlLocation, CompanyTeamMember, CompanyAssetSegment, CompanyAssetLocation, CompanyControlFinding, CompanyControlSegment, CompanyControlDependency
+from risk.models.company import CompanyMember, CompanyProfile, CompanyMemberGrant, CompanyControlLocation, CompanyTeamMember, CompanyAssetSegment, CompanyAssetLocation, CompanyControlFinding, CompanyControlSegment, CompanyControlDependency, CompanyObjectiveRiskType
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -63,6 +63,12 @@ class CompanyTeamMemberInline(admin.TabularInline):
 class CompanyControlFindingInline(admin.TabularInline):
 
     model = CompanyControlFinding
+    extra = 1
+
+
+class CompanyObjectiveRiskTypeInline(admin.TabularInline):
+
+    model = CompanyObjectiveRiskType
     extra = 1
 
 
@@ -180,6 +186,32 @@ class CompanyAssetAdmin(admin.ModelAdmin):
         'asset_owner',
     )
     search_fields = ('name', 'asset_owner')
+
+
+class CompanyObjectiveAdmin(admin.ModelAdmin):
+
+    inlines = (CompanyObjectiveRiskTypeInline,)
+    list_display = (
+        'id',
+        'name',
+        'desc',
+        'monetary_value_start',
+        'monetary_value_end',
+        'monetary_value_current',
+        'date_start',
+        'date_end',
+        'date_created',
+        'is_active',
+        'objective_owner',
+        'company',
+    )
+    list_filter = (
+        'name',
+        'desc',
+        'is_active',
+        'objective_owner',
+    )
+    search_fields = ('name', 'desc', 'objective_owner',)
 
 
 class CompanyControlAdmin(admin.ModelAdmin):

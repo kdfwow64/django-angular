@@ -207,6 +207,23 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             //     }]
             // }
         })
+        .state('app.calendar', {
+            url: '/calendar',
+            data: { pageTitle: 'Calendar' },
+            templateUrl: 'views/calendar.html',
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/fullcalendar/lib/moment.min.js',
+                            '/static/dashboard_assets/plugins/fullcalendar/fullcalendar.min.css',
+                            '/static/dashboard_assets/plugins/fullcalendar/fullcalendar.min.js'
+                        ]
+                    })
+                }]
+            }
+        })
         .state('app.contacts', {
             url: '/contacts',
             template: '<div ui-view></div>',

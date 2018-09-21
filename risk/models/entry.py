@@ -13,6 +13,8 @@ class Register(models.Model):
     # Used to determine how the cost is classifed for accounting purposes.
     name = models.CharField(
         max_length=14, choices=NAME_CHOICES, default='primary', blank=False, help_text=('Name of the company register '),)  # Name of the company register. There should only be 1 register per company, however special circumstances may require addtional registers such as transition, backup, demo, etc.
+    entry_number_queue = models.IntegerField(
+        default=1, help_text=('The entry number that is displayed to the contributor specific to the company register'),)  # Each company register will have its own numbering increment process based on this number. 1,2,3,etc.  Each time an entry is created the number will be incremented so it looks as though the numbering is specific to the company.
     date_created = models.DateTimeField(
         auto_now_add=True, null=True, blank=True, help_text=('Timestamp the individual was created'),)  # Date the register was created
     date_modified = models.DateTimeField(
@@ -46,7 +48,7 @@ class Entry(models.Model):
     desc = models.TextField(
         blank=False, help_text=('Description broader description of the registery entry'),)  # More content to provide a better understanding of the risk.
     entry_number = models.IntegerField(
-        blank=True, null=True, help_text=('The number that is displayed to the client for the register'),)  # This is the number viewable to the user.  The companies should not see the actual entry id in the application.  Logic will need to be used to find the last entry id for a company and add.
+        blank=True, null=True, help_text=('The number that is displayed to the client for the register'),)  # This is the number viewable to the user.  The companies should not see the actual entry id in the application.  Logic will need to be used to identify the lastest value in the "entry_number_queue" from the Register Model.
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the entry is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the entry has been revoked on the company.
     date_created = models.DateTimeField(

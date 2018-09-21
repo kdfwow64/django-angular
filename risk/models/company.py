@@ -549,6 +549,66 @@ class CompanyControlCostType(models.Model):
         verbose_name_plural = ("Company Control Cost Types")
 
 
+class CompanyObjective(models.Model):
+    """Company Objective.
+
+    This allows the company to track objectives that support a path to continued profitability.  Company objectives are future state outcomes the company would like to achieve.  Threats that affect these objectives are handled with enablers.
+    """
+
+    name = models.CharField(
+        max_length=100, blank=False, help_text=('Name of the company objective'),)  # Company to determine the name of the objective
+    desc = models.TextField(
+        blank=True, help_text=('Description about the company objective'),)  # Description of the company objective
+    monetary_value_start = models.DecimalField(default=0.00, max_digits=30, decimal_places=2, help_text=(
+        'The beginning monetary value of the objective'),)  # The monetary value of the objective at its start date
+    monetary_value_end = models.DecimalField(default=0.00, max_digits=30, decimal_places=2, help_text=(
+        'The ending monetary value of the objective'),)  # The monetary value of the objective at its end date
+    monetary_value_current = models.DecimalField(default=0.00, max_digits=30, decimal_places=2, help_text=(
+        'The ending monetary value of the objective'),)  # The current monetary value of the objective for status benchmarking
+    date_start = models.DateField(
+        null=True, blank=True, help_text=('Date the objective will start'),)  # Dates used to determine current state  and benchmark of the objective
+    date_end = models.DateField(
+        null=True, blank=True, help_text=('Date the objective will end'),)  # Dates used to determine current state and benchmark of the objective
+    date_created = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the objective was created'),)  # Date the objective was added
+    is_active = models.BooleanField(
+        default=True, help_text=('Designates whether the company objective is active.'),)  #
+    """Application Input"""
+    # Foreign Key and Relationships
+    objective_owner = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='companycontact_objective', help_text=(
+        ' Who owns the requirement and detail of the objective'),)  # Who leads the objective effort.
+    company = models.ForeignKey('Company', on_delete=models.PROTECT, blank=False, related_name='companyobjective', help_text=(
+        'Company id for the company has defined the objective'),)  # Company that defined the objective
+    risk_types = models.ManyToManyField('RiskType', through='CompanyObjectiveRiskType', through_fields=('id_companyobjective', 'id_risktype'), related_name='CompanyObjectiveRiskTypes', help_text=(
+        'Specifies business sector the objective is related'),)  # The objectives can be tied to more than on sector.
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Objectives")
+
+
+class CompanyObjectiveRiskType(models.Model):
+    """Entry Risk Type."""
+
+    # Foreign Key and Relationships
+    id_companyobjective = models.ForeignKey('CompanyObjective', on_delete=models.CASCADE, null=True, related_name='companyobjectverisktype', help_text=(
+        'The objective the associated with the risk type'),)
+    id_risktype = models.ForeignKey('RiskType', on_delete=models.CASCADE, null=True, related_name='risktypeobjective', help_text=(
+        'The business risk type associated with the objective'),)
+
+    def __str__(self):
+        """String."""
+        return self.id_risktype.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Objective Risk Types")
+
+
 class CompanyContact(models.Model):
     """Company Contacts.  Contacts are identifed at the Company level.  When listing POC for a company"""
 
