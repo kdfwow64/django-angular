@@ -15,8 +15,6 @@ Website: http://www.seantheme.com/color-admin-v1.9/admin/
     2.3 Header & header elements
     2.4 Sidebar & sidebar elements
     2.5 Content & content elements
-    2.6 Footer & footer elements
-
 ::  3.0 Component Setting
 -------------------------------------------
     3.1 Component - Form Elements
@@ -731,6 +729,9 @@ label {
 }
 .sidebar .nav > li.nav-profile .info {
     font-size: 14px;
+}
+.sidebar .nav > li.nav-profile .info-link {
+    font-size: 10px;
 }
 .sidebar .nav > li.nav-profile .info small {
     display: block;

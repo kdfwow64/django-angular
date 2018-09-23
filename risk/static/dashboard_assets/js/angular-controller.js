@@ -684,8 +684,8 @@ colorAdminApp.controller('dashboardV2Controller', function($scope, $rootScope, $
         setTimeout(function() {
             $.gritter.add({
                 title: $(".user_fullname").text(),
-                text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus lacus ut lectus rutrum placerat.',
-                image: '/static/dashboard_assets/img/user-14.jpg',
+                text: 'You last logged in on 09/12/2018 11:34am.  Welcome back.',
+                image: '/static/dashboard_assets/img/user-15.jpg',
                 sticky: false,
                 time: '',
                 class_name: 'my-sticky-class'
