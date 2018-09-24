@@ -73,7 +73,7 @@ def update_company(request):
             company_dict.update({c.id: c.name for c in account_membership.id_account.account_company.filter(
                 Q(is_active=True)).all() if c.id not in company_dict})
 
-        if company_member or company_id in company_dict:
+        if company_member or company_id in company_dict or user.email == settings.CORE_USER:
             user_profile = request.user.get_profile()
             user_profile.current_company_id = company_id
             user_profile.save()
@@ -82,7 +82,6 @@ def update_company(request):
             return JsonResponse({'status': 'failure'})
 
     except:
-        raise
         return JsonResponse({'status': 'failure'})
 
 

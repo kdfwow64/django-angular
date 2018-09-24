@@ -35,7 +35,7 @@ from risk.forms.entry import(
 
 
 @login_required
-def api_list_risk_entreis(request):
+def api_list_risk_entries(request):
     """List entries."""
     user = request.user
     company = user.get_current_company()

@@ -87,8 +87,8 @@
                                 <label>Response : </label><input id="search_response" ng-model="search.response" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}" checked/>
                             </div>
                             <div class="col-md-2 col-xs-8">
-                                <label>Impact Status : </label><select id="search_impact" ng-model="search.impact_status" class="form-control" ng-options="k.id as k.name for k in impact_types"/>>
-                                    <option></option>
+                                <label>Impact Status : </label><select id="search_impact" ng-model="search.impact_status" class="form-control" ng-options="k.id as k.name for k in impact_types">
+                                    <option value="" selected>All</option>
                                 </select>
                             </div>
                             <div class="col-md-2 col-xs-6">
@@ -98,8 +98,8 @@
                                 <label>Compliance : </label><input id="search_compliance" ng-model="search.compliance" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}" checked/>
                             </div>
                             <div class="col-md-2 col-xs-8">
-                                <label>Owner : </label><select id="search_owner" ng-model="search.owner" class="form-control" ng-options="k.id as k.name for k in users"/>>
-                                    <option></option>
+                                <label>Owner : </label><select id="search_owner" ng-model="search.owner" class="form-control" ng-options="k.id as k.name for k in users">
+                                    <option value="" selected>All</option>
                                 </select>
                             </div>
                             <div class="col-md-1 col-xs-4">
