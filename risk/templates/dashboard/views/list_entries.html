@@ -91,6 +91,11 @@
                                     <option value="" selected>All</option>
                                 </select>
                             </div>
+                            <div class="col-md-2 col-xs-8">
+                                <label>Severity : </label><select id="search_severity" ng-model="search.severity_status" class="form-control" ng-options="k.id as k.name for k in severities"/>>
+                                    <option></option>
+                                </select>
+                            </div>
                             <div class="col-md-2 col-xs-6">
                                 <label>Mitigation rate : </label><input id="search_mr" ng-model="search.mitigation_rate" type="number" min='0' max='100' step="0.01" class="form-control"/>
                             </div>
@@ -108,7 +113,7 @@
                         </div>
                     </div>
                     <br/>
-                    <table id="risk-entry-table" class="table table-striped table-bordered" width="100%">
+                    <table id="risk-entry-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>Entry Id</th>
@@ -119,7 +124,8 @@
                                 <th>Created</th>
                                 <th>Modified</th>
                                 <th>Evaluated</th>
-                                <th>Response</th>
+                                <th>Test</th>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>

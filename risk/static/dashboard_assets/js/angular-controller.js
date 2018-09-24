@@ -3194,8 +3194,9 @@ colorAdminApp.controller('changeCompanyController', function($scope, $state, $ui
 
 
 colorAdminApp.controller('registerListEntriresController',
-    function($scope, $rootScope, $state, impactTypes, users) {
+    function($scope, $rootScope, $state, impactTypes, severities, users) {
     $scope.impact_types = impactTypes;
+    $scope.severities = severities;
     $scope.search = {};
     $scope.search.response = true;
     $scope.search.compliance = true;
@@ -3220,6 +3221,7 @@ colorAdminApp.controller('registerListEntriresController',
                     {"data": "evaluated"},
                     {"data": "response", "name": "response", "visible": false},
                     {"data": "impact", "name":"impact", "visible": false},
+                    {"data": "severity_dd", "name":"severity_dd", "visible": false},
                     {"data": "mr", "name":"mr", "visible": false},
                     {"data": "compliance", "name":"compliance", "visible": false},
                     {"data": "owner_id", "name":"owner_id", "visible": false},
@@ -3245,6 +3247,14 @@ colorAdminApp.controller('registerListEntriresController',
                 }
                 else{
                    table.column('impact:name').search('').draw();
+                }
+            } );
+            $('#search_severity').change( function() {
+                if($scope.search.severity_status){
+                   table.column('severity_dd:name').search($scope.search.severity_status).draw();
+                }
+                else{
+                   table.column('severity_dd:name').search('').draw();
                 }
             } );
             $('#search_mr').keyup( function() {

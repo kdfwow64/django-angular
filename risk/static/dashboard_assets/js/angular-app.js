@@ -267,6 +267,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 impactTypes: function(ImpactTypeService){
                     return ImpactTypeService.getAllImpactTypes();
                 },
+                severities: function(SeverityService){
+                    return SeverityService.getAllSeverities();
+                },
                 users: function(UserService){
                     return UserService.getUsers();
                 },
