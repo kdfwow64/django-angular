@@ -386,8 +386,26 @@ function ImpactTypeService($http){
     }
     return service;
 }
+
 /* -----------------------------------
-  15.6 SERVICE - WizardFormService
+  16.0 SERVICE - SeverityService
+--------------------------------------*/
+
+function SeverityService($http){
+    function get_all_severities(id){
+        return $http.get('/dashboard/api/severity/').then(function(r){
+            return r.data;
+        }, function(r){return {}});
+    }
+
+    var service = {
+        getAllSeverities: get_all_severities,
+    }
+    return service;
+}
+
+/* -----------------------------------
+  17.0 SERVICE - WizardFormService
 --------------------------------------*/
 
 function WizardFormService($http){
@@ -457,4 +475,5 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('WizardValidatorService', [WizardValidatorService])
              .factory('RiskEntryService', ['$http', RiskEntryService])
              .factory('ImpactTypeService', ['$http', ImpactTypeService])
+             .factory('SeverityService', ['$http', SeverityService])
              .factory('WizardFormService', [WizardFormService])
