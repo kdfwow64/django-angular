@@ -15,7 +15,7 @@ urlpatterns = [
     re_path(r'^dashboard/views/(?P<name>[^/]+).html$', dashboard.views),
 
     re_path(r'^dashboard/api/risk-entries/$',
-            dashboard.api_list_risk_entreis, name="api-list-risk-entries"),
+            dashboard.api_list_risk_entries, name="api-list-risk-entries"),
     re_path(r'^dashboard/api/risk-entry/(?P<entry_id>[0-9]+)/$',
             dashboard.api_get_risk_entry, name="api-get-risk-entry"),
     re_path(r'^dashboard/api/risk-entry/create/$',
