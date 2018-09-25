@@ -162,7 +162,7 @@ class Entry(models.Model):
             compliance = 0
         return compliance
 
-    def get_summary(self, length=20):
+    def get_summary(self, length=80):
         """Up to x number of characters with an ellipses if the entry is longer that allowed."""
         return (self.summary[:length] + '...') if len(self.summary) > length + 3 else self.summary
 
