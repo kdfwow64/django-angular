@@ -98,6 +98,7 @@ function ComplianceService($http){
 
 function UserService($http){
     function get_all_users(){
+        return []
         return $http.get('/dashboard/api/users/').then(function(r){
             return r.data;
         }, function(r){});

@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 @login_required
 def get_all_users_for_dropdown(request):
-    """Get all compliances for dropdown."""
+    """Get all users having access to current register for dropdown."""
     user = request.user
     company = user.get_current_company()
     data = [{'id': user.id, 'name': user.full_name}]

@@ -3194,14 +3194,14 @@ colorAdminApp.controller('changeCompanyController', function($scope, $state, $ui
 
 
 colorAdminApp.controller('registerListEntriresController',
-    function($scope, $rootScope, $state, impactTypes, severities, users) {
+    function($scope, $rootScope, $state, impactTypes, severities) {
     $scope.impact_types = impactTypes;
     $scope.severities = severities;
     $scope.search = {};
     $scope.search.response = true;
     $scope.search.compliance = true;
     $scope.search.revoked = '';
-    $scope.users = users;
+    $scope.users = []; // users;
     angular.element(document).ready(function () {
 
         if ($('#risk-entry-table').length !== 0) {
@@ -3215,7 +3215,7 @@ colorAdminApp.controller('registerListEntriresController',
                     {"data": "severity"},
                     {"data": "mr"},
                     {"data": "summary"},
-                    {"data": "owner_name"},
+                    {"data": "owner_name", "name": "owner_name"},
                     {"data": "created_date"},
                     {"data": "modified_date"},
                     {"data": "evaluated"},
@@ -3236,8 +3236,13 @@ colorAdminApp.controller('registerListEntriresController',
                         }
                     }
                 ],
-
+                initComplete: function () {
+                    this.api().column(4).data().unique().sort().each( function ( d, j ) {
+                        $('#search_owner').append( '<option value="'+d+'">'+d+'</option>' )
+                    });
+                }
             });
+
             $('#search_response').change( function() {
                table.column('response:name').search($scope.search.response?1:0).draw();
             } );
@@ -3268,14 +3273,24 @@ colorAdminApp.controller('registerListEntriresController',
             $('#search_compliance').change( function() {
                table.column('compliance:name').search($scope.search.compliance?1:0).draw();
             } );
+
             $('#search_owner').change( function() {
-                if($scope.search.owner){
-                    table.column('owner_id:name').search($scope.search.owner).draw();
+                if($(this).val()){
+                    table.column('owner_name:name').search($(this).val()).draw();
                 }
                 else{
-                    table.column('owner_id:name').search('').draw();
+                    table.column('owner_name:name').search('').draw();
                 }
             } );
+
+            // $('#search_owner').change( function() {
+            //     if($scope.search.owner){
+            //         table.column('owner_id:name').search($scope.search.owner).draw();
+            //     }
+            //     else{
+            //         table.column('owner_id:name').search('').draw();
+            //     }
+            // } );
             $('#search_revoked').change( function() {
                table.column('active:name').search($scope.search.revoked?0:1).draw(); // revoked is when active is 0
             } );

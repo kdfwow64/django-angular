@@ -270,9 +270,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 severities: function(SeverityService){
                     return SeverityService.getAllSeverities();
                 },
-                users: function(UserService){
-                    return UserService.getUsers();
-                },
+                // users: function(UserService){
+                //     return UserService.getUsers();
+                // },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,
