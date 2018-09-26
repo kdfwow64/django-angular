@@ -53,6 +53,8 @@ from .company import (
     CompanyControl,
     CompanyControlMeasure,
     CompanyControlMeasurementResult,
+    CompanyControlOpex,
+    CompanyControlCapex,
     CompanyControlDependency,
     CompanyControlCost,
     CompanyControlCostType,
