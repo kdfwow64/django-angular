@@ -684,7 +684,7 @@ colorAdminApp.controller('dashboardV2Controller', function($scope, $rootScope, $
         setTimeout(function() {
             $.gritter.add({
                 title: $(".user_fullname").text(),
-                text: 'You last logged in on 09/12/2018 11:34am.  Welcome back.',
+                text: 'You last logged in on 09/12/2018 11:34am.  Welcome back!',
                 image: '/static/dashboard_assets/img/user-15.jpg',
                 sticky: false,
                 time: '',

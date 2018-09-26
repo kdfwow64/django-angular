@@ -120,6 +120,7 @@ class EntryAdmin(admin.ModelAdmin):
         'id',
         'summary',
         'desc',
+        'assumption',
         'entry_number',
         'date_created',
         'date_modified',
@@ -147,6 +148,14 @@ class EntryAdmin(admin.ModelAdmin):
         'entry_owner',
         'register',
         'response',
+    )
+    search_fields = (
+        'summary',
+        'desc',
+        'assumption',
+        'frequency_notes',
+        'impact_notes',
+        'additional_mitigation',
     )
 
 
