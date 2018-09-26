@@ -385,6 +385,10 @@ class CompanyControl(models.Model):
         'Company', on_delete=models.PROTECT, related_name='company', help_text=('The company that the control is related'),)
     control = models.ForeignKey('Control', on_delete=models.PROTECT, related_name='company_control', help_text=(
         'The control detail for the company'),)
+    company_control_opex = models.ForeignKey('CompanyControlOpex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_opex', help_text=(
+        'The control operational expenditures for the company'),)
+    company_control_capex = models.ForeignKey('CompanyControlCapex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_capex', help_text=(
+        'The control captial expenditures for the company'),)
     inline_after = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, blank=True, related_name='control_before', help_text=(
         'The upstream control id'),)  # If available, this is the control that is upstream.  This will be used for viewing a layer approach to asset secuirity.
     recovery_time_unit = models.ForeignKey(
@@ -463,6 +467,104 @@ class CompanyControlMeasurementResult(models.Model):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Control Measurement Result")
+
+
+class CompanyControlOpex(models.Model):
+    """Company Control Operational Expenditures.  This will be leveraged to determine all the operational cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
+
+    name = models.CharField(
+        max_length=45, blank=False, help_text=('Name of the operational expendure'),)  # Name of the operational expenditure for the company control.
+    detail = models.TextField(
+        blank=False, help_text=('Description of the operational expendure'),)  # Description of the operational expenditure for the company control.
+    date_purchased = models.DateTimeField(
+        blank=True, null=True, help_text=('Date the operational expendure was purchased'),)  # Date of purchase for the operational expenditure for the company control
+    amount = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Operational cost spent'),)  # The amount of money spent.
+    accounting_id = models.CharField(
+        max_length=155, blank=True, null=True, help_text=('Id of control from the company accounting system for mapping costs'),)  # Future use to map detail from the companies accounting system
+    is_active = models.BooleanField(default=True, help_text=(
+        'Designates whether this company should be treated as active'),)  # Determines if the company is active
+    was_deleted = models.BooleanField(default=False, help_text=(
+        'Designates whether this company should be treated as active'),)  # Determines if the company is active
+    date_deactivated = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the deactivated the company'),)  # Date that the company was deactivated
+    date_created = models.DateTimeField(
+        auto_now_add=True, null=True, help_text=('Timestamp the company was created'),)  # Date that the company was created
+    date_modified = models.DateTimeField(
+        auto_now_add=True, null=True, help_text=('Timestamp the company was modified'),)  # Last date the company record was modified
+    was_deleted = models.BooleanField(default=False, help_text=(
+        'Designates whether this company should be treated as active'),)  # Determines if the company is active
+    date_deleted = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the company was created'),)  # Date that the company was deleted by the Account Admin.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
+    created_by = models.ForeignKey('User', on_delete=models.PROTECT,  null=True, blank=True, related_name='created_controlopex', help_text=(
+        'User id if created by another user'),)  # User that created the company
+    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='modified_controlopex', help_text=(
+        'User id if created by another user'),)  # User that last modfied the company record
+    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deactivated_controlopex', help_text=(
+        'User id if deactivated by another user'),)  # User that deactivated the company
+    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deleted_controlopex', help_text=(
+        'User id if deleted by another user'),)   # User that deleted the company.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
+    utility_field = models.CharField(
+        max_length=30, blank=True, help_text=('Backoffice field used for queries and reporting'),)  # This field is not viewable to the Account users and is used for backoffice reporting and testing.
+    bkof_notes = models.TextField(
+        blank=True, help_text=('Backoffice notes on company'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Control Operational Expenditures")
+
+
+class CompanyControlCapex(models.Model):
+    """Company Control Capital Expenditures.  This will be leveraged to determine all the captial cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
+
+    name = models.CharField(
+        max_length=45, blank=False, help_text=('Name of the captial expendure'),)  # Name of the captial expenditure for the company control.
+    detail = models.TextField(
+        blank=False, help_text=('Description of the captial expendure'),)  # Description of the captial expenditure for the company control.
+    date_purchased = models.DateTimeField(
+        blank=True, null=True, help_text=('Date the captial expendure was purchased'),)  # Date of purchase for the captial expenditure for the company control
+    amount = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Operational cost spent'),)  # The amount of money spent.
+    accounting_id = models.CharField(
+        max_length=155, blank=True, null=True, help_text=('Id of control from the company accounting system for mapping costs'),)  # Future use to map detail from the companies accounting system
+    is_active = models.BooleanField(default=True, help_text=(
+        'Designates whether this company should be treated as active'),)  # Determines if the company is active
+    was_deleted = models.BooleanField(default=False, help_text=(
+        'Designates whether this company should be treated as active'),)  # Determines if the company is active
+    date_deactivated = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the deactivated the company'),)  # Date that the company was deactivated
+    date_created = models.DateTimeField(
+        auto_now_add=True, null=True, help_text=('Timestamp the company was created'),)  # Date that the company was created
+    date_modified = models.DateTimeField(
+        auto_now_add=True, null=True, help_text=('Timestamp the company was modified'),)  # Last date the company record was modified
+    was_deleted = models.BooleanField(default=False, help_text=(
+        'Designates whether this company should be treated as active'),)  # Determines if the company is active
+    date_deleted = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the company was created'),)  # Date that the company was deleted by the Account Admin.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
+    created_by = models.ForeignKey('User', on_delete=models.PROTECT,  null=True, blank=True, related_name='created_controlcapex', help_text=(
+        'User id if created by another user'),)  # User that created the company
+    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='modified_controlcapex', help_text=(
+        'User id if created by another user'),)  # User that last modfied the company record
+    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deactivated_controlcapex', help_text=(
+        'User id if deactivated by another user'),)  # User that deactivated the company
+    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deleted_controlcapex', help_text=(
+        'User id if deleted by another user'),)   # User that deleted the company.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
+    utility_field = models.CharField(
+        max_length=30, blank=True, help_text=('Backoffice field used for queries and reporting'),)  # This field is not viewable to the Account users and is used for backoffice reporting and testing.
+    bkof_notes = models.TextField(
+        blank=True, help_text=('Backoffice notes on company'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Control Capital Expenditures")
 
 
 class CompanyControlDependency(models.Model):

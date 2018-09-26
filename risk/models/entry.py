@@ -46,7 +46,9 @@ class Entry(models.Model):
     summary = models.CharField(
         max_length=128, blank=False, help_text=('Brief description of the risk'),)  # Brief summary of the risk to be tracked.  Specifically used when listing entries.
     desc = models.TextField(
-        blank=False, help_text=('Description broader description of the registery entry'),)  # More content to provide a better understanding of the risk.
+        blank=False, help_text=('Broader description of the registery entry'),)  # More content to provide a better understanding of the risk.
+    assumption = models.TextField(
+        blank=True, null=True, help_text=('Assumptions made when defining the entry'),)  # There may be assumptions made for the entry.  This provides more insight on how the entry will be managed.
     entry_number = models.IntegerField(
         blank=True, null=True, help_text=('The number that is displayed to the client for the register'),)  # This is the number viewable to the user.  The companies should not see the actual entry id in the application.  Logic will need to be used to identify the lastest value in the "entry_number_queue" from the Register Model.
     is_active = models.BooleanField(
@@ -146,7 +148,7 @@ class Entry(models.Model):
 
     @property
     def impact(self):
-        """Is there a response associated with this."""
+        """Is there impact associated with this."""
         try:
             impact = self.entryimpact.latest('id').impact_type_id
         except:
@@ -173,7 +175,7 @@ class Entry(models.Model):
 
     @property
     def date_evaluated(self):
-        """Date of valuation."""
+        """Date of evaluation."""
         try:
             return self.entryevaluation.order_by('-date_evaluated').first().date_evaluated
         except:

@@ -285,6 +285,42 @@ class CompanyControlMeasurementResultAdmin(admin.ModelAdmin):
     )
 
 
+class CompanyControlOpexAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'detail',
+        'date_created',
+        'date_purchased',
+        'amount',
+        'accounting_id',
+    )
+    list_filter = (
+        'detail',
+        'date_created',
+        'date_purchased',
+        'amount',
+        'accounting_id',
+    )
+
+
+class CompanyControlCapexAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'detail',
+        'date_created',
+        'date_purchased',
+        'amount',
+        'accounting_id',
+    )
+    list_filter = (
+        'detail',
+        'date_created',
+        'date_purchased',
+        'amount',
+        'accounting_id',
+    )
+
+
 class CompanyControlDependencyAdmin(admin.ModelAdmin):
 
     list_display = (

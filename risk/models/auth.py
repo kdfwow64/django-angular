@@ -78,6 +78,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Get current company."""
         return self.userprofile.current_company or self.userprofile.default_company
 
+    def get_last_login(self):
+        """Get the last time a the user logged into the system"""
+        return self.last_login
+
 
 class UserProfile(models.Model):
     """
