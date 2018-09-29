@@ -11,14 +11,15 @@ class RiskEntryBasicForm(forms.ModelForm):
     risk_types = forms.CharField(required=True)
     final_response = forms.CharField(required=True)
     entry_owner = forms.CharField(required=True)
-    frequency_multiplier = forms.CharField(required=True)
+    aro_multiplier = forms.CharField(required=True)
 
     locations = forms.CharField(required=False)
     compliances = forms.CharField(required=False)
-    frequency_notes = forms.CharField(required=False)
+    aro_notes = forms.CharField(required=False)
 
     class Meta:
         """Meta Class."""
 
         model = Entry
-        fields = ("summary", "desc", "risk_types", "final_response", "locations", "compliances", "frequency_multiplier", "frequency_notes")
+        fields = ("summary", "desc", "risk_types", "final_response",
+                  "locations", "compliances", "aro_multiplier", "aro_notes")

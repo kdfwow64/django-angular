@@ -160,14 +160,14 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group block1">
-                                                <label>Annual Frequency</label>
-                                                <input type="number" ng-model="basicinfo.frequency_multiplier" step="0.01" name="frequency_multiplier" placeholder="Annual Frequency" class="form-control" data-parsley-group="wizard-step-1" required />
+                                                <label>Annual Rate of Occurrence (ARO)</label>
+                                                <input type="number" ng-model="basicinfo.aro_multiplier" step="0.01" name="aro_multiplier" placeholder="Annual Rate of Occurrence" class="form-control" data-parsley-group="wizard-step-1" required />
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Frequency Notes</label>
-                                                <textarea rows="3" ng-model="basicinfo.frequency_notes" name="frequency_notes" placeholder="Frequency Notes" class="form-control" data-parsley-group="wizard-step-1"/></textarea>
+                                                <label>ARO Notes</label>
+                                                <textarea rows="3" ng-model="basicinfo.aro_notes" name="aro_notes" placeholder="ARO Notes" class="form-control" data-parsley-group="wizard-step-1"/></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -230,9 +230,9 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Exposure Percentage</label>
+                                                <label>Exposure Factor</label>
                                                 <div class="controls">
-                                                    <input type="number" ng-model="as.exposure_percentage" value='100' min="0" max="100" step="0.01" name="exposure_percentage" placeholder="100" class="form-control" data-parsley-group="wizard-step-3" />
+                                                    <input type="number" ng-model="as.exposure_factor" value='100' min="0" max="100" step="0.01" name="exposure_factor" placeholder="100" class="form-control" data-parsley-group="wizard-step-3" />
                                                 </div>
                                             </div>
                                         </div>
@@ -247,8 +247,8 @@
                                     <div class="row even">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Frequency Notes</label>
-                                                <textarea rows="3" ng-model="affected_assets.impact_notes" name="impact_notes" placeholder="Frequency Notes" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
+                                                <label>SLE Notes</label>
+                                                <textarea rows="3" ng-model="affected_assets.impact_notes" name="impact_notes" placeholder="Single Loss Expectancy Notes" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
                                             </div>
                                         </div>
                                     </div>

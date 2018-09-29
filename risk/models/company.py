@@ -234,12 +234,12 @@ class CompanyAsset(models.Model):
         max_length=100, blank=False, help_text=('Name of the company asset'),)  # Company to determine the name of the asset
     notes = models.TextField(
         blank=True, help_text=('Notes about the company asset'),)  # Notes regarding the asset
-    fixed_monetary_value = models.DecimalField(blank=True, max_digits=30, decimal_places=2, help_text=(
-        'The fixed annual monetary value of the asset'),)  # Asset value may be a fixed cost if monetary_value_toggle is set to False.
-    par_monetary_value = models.FloatField(blank=True, help_text=(
-        'The percentage of annual revenue value of the asset'),)  # Asset value may be a percentage of annual revenue if monetary_value_toggle is set to True.
-    monetary_value_toggle = models.BooleanField(
-        default=False, help_text=('Toggle to determine if company asset is measured by fixed=False or par =True monetary value'),)  # Toggle determines if the asset is
+    fixed_sle_value = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+        'The fixed Single Loss Expectancy of the asset'),)  # Asset value may be a fixed cost if monetary_value_toggle is set to False.
+    par_sle_value = models.FloatField(blank=True, null=True, help_text=(
+        'The percentage of Single Loss Expectancy of the asset'),)  # Asset value may be a percentage of annual revenue if monetary_value_toggle is set to True.
+    sle_value_toggle = models.BooleanField(
+        default=False, help_text=('Toggle to determine if company asset is measured by fixed=False or par =True Single Loss Expectancy'),)  # Toggle determines if the asset is
     """Application Input"""
     # Foreign Key and Relationships
     asset_owner = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='companycontact_asset', help_text=(

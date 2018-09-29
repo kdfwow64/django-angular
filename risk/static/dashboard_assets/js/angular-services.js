@@ -423,7 +423,7 @@ function WizardFormService($http){
         return {
             entry_asset_id: null,
             asset_name: null,
-            exposure_percentage: 100,
+            exposure_factor: 100,
             detail: null,
             impact_notes: null,
         }

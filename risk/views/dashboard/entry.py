@@ -276,16 +276,16 @@ def api_update_affected_assets(request, entry_id):
                             id=entry_asset_id, id_entry=risk_entry)
                         entry_asset.id_companyasset = asset
                         entry_asset.detail = request_data.get('asset_detail')
-                        entry_asset.exposure_percentage = request_data.get(
-                            'exposure_percentage')
+                        entry_asset.exposure_factor = request_data.get(
+                            'exposure_factor')
                         entry_asset.save()
                     except:
                         EntryCompanyAsset.objects.create(
                             id_entry=risk_entry,
                             id_companyasset=asset,
                             detail=request_data.get('asset_detail'),
-                            exposure_percentage=request_data.get(
-                                'exposure_percentage'),
+                            exposure_factor=request_data.get(
+                                'exposure_factor'),
                         )
                 except:
                     rv = {'status': 'error', 'code': 400,
@@ -460,8 +460,8 @@ def api_get_risk_entry(request, entry_id):
                     'locations': [loc.id_companylocation_id for loc in risk_entry.entry_companylocation.all()] or [1, ],
                     'compliances': [rec.id_compliance_id for rec in risk_entry.entrycompliance.all()],
                     'entry_owner': risk_entry.entry_owner_id or request.user.id,
-                    'frequency_multiplier': risk_entry.frequency_multiplier,
-                    'frequency_notes': risk_entry.frequency_notes,
+                    'aro_multiplier': risk_entry.aro_multiplier,
+                    'aro_notes': risk_entry.aro_notes,
                 }
             })
             try:
@@ -486,7 +486,7 @@ def api_get_risk_entry(request, entry_id):
                     affected_assets.append({
                         'entry_asset_id': entry_company_asset.id,
                         'asset_name': entry_company_asset.id_companyasset_id,
-                        'exposure_percentage': entry_company_asset.exposure_percentage,
+                        'exposure_factor': entry_company_asset.exposure_factor,
                         'asset_detail': entry_company_asset.detail,
                     })
                 rv.update({'affected_assets': {

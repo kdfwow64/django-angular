@@ -59,9 +59,9 @@ class Entry(models.Model):
         auto_now=True, null=True, blank=True, help_text=('Timestamp the individual was created'),)  # Date the risk entry was last modified
     date_deactivated = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the individual was deactivated'),)  # Date the risk was deactivated.  Should be set when the entry is revoked.
-    frequency_multiplier = models.FloatField(
+    aro_multiplier = models.FloatField(
         default=1, blank=True, null=True, help_text=('Used to multiple the number of occurrences on an annual basis to determine total frequency per year.'),)  # This used to determine the number of times annual the risk may occur.  Logic in the application will be used to set the number. IE 6 times a year = 6, every 2 years = .5
-    frequency_notes = models.TextField(
+    aro_notes = models.TextField(
         blank=True, help_text=('Additional notes from the contributor regarding the frequency calculation.'),)  # Notes regarding the frequency of the threat event
     impact_notes = models.TextField(
         blank=True, help_text=('Notes regarding the impact logic'),)  # Notes regarding the impactt of the threat event if it occurs.
@@ -364,8 +364,8 @@ class EntryCompanyAsset(models.Model):
         'The entry associated to the actor'),)  # Id of the entry
     id_companyasset = models.ForeignKey('CompanyAsset', on_delete=models.CASCADE, related_name='entry_companyasset', help_text=(
         'The asset associated to the entry'),)  # Id of the asset
-    exposure_percentage = models.FloatField(default=1, blank=True, help_text=(
-        'Maximum percentage of asset value exposed given the risk scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
+    exposure_factor = models.FloatField(default=1, blank=True, help_text=(
+        'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
     detail = models.TextField(blank=True, help_text=(
         'Additional detail the asset associated with the threat scenario.'),)  # Context to understand why the asset is tied to the entry
     is_active = models.BooleanField(
