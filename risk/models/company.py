@@ -234,11 +234,13 @@ class CompanyAsset(models.Model):
         max_length=100, blank=False, help_text=('Name of the company asset'),)  # Company to determine the name of the asset
     notes = models.TextField(
         blank=True, help_text=('Notes about the company asset'),)  # Notes regarding the asset
-    fixed_sle_value = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
-        'The fixed Single Loss Expectancy of the asset'),)  # Asset value may be a fixed cost if monetary_value_toggle is set to False.
-    par_sle_value = models.FloatField(blank=True, null=True, help_text=(
-        'The percentage of Single Loss Expectancy of the asset'),)  # Asset value may be a percentage of annual revenue if monetary_value_toggle is set to True.
-    sle_value_toggle = models.BooleanField(
+    fixed_monetary_value = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+        'The fixed monetary value of the asset in dollars'),)  # Asset value may be a fixed cost if monetary_value_toggle is set to False.
+    fixed_monetary_quantity = models.IntegerField(
+        default=1, blank=False, help_text=('The quantity of fixed_monetary_value'),)  # This will be multipled by the fixed_monetary_value to get a total value of the asset(s) defined.
+    par_monetary_value = models.FloatField(blank=True, null=True, help_text=(
+        'The percentage of monetary value of the asset to the annual revenue'),)  # Asset value may be a percentage of annual revenue if monetary_value_toggle is set to True.
+    monetary_value_toggle = models.BooleanField(
         default=False, help_text=('Toggle to determine if company asset is measured by fixed=False or par =True Single Loss Expectancy'),)  # Toggle determines if the asset is
     """Application Input"""
     # Foreign Key and Relationships
@@ -531,6 +533,8 @@ class CompanyControlCapex(models.Model):
         'Operational cost spent'),)  # The amount of money spent.
     accounting_id = models.CharField(
         max_length=155, blank=True, null=True, help_text=('Id of control from the company accounting system for mapping costs'),)  # Future use to map detail from the companies accounting system
+    invest_range = models.IntegerField(
+        default=1, blank=False, help_text=('Range in years to determine the annual investment cost of the control'),)  # This may be used if companies want to distribute the capital expenditure over years from the purchase date.
     is_active = models.BooleanField(default=True, help_text=(
         'Designates whether this company should be treated as active'),)  # Determines if the company is active
     was_deleted = models.BooleanField(default=False, help_text=(
