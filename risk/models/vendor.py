@@ -63,6 +63,12 @@ class Vendor(models.Model):
         max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
     desc_form = models.CharField(
         max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
+    evaluation_days = models.IntegerField(blank=True, null=True,
+                                          help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value that the vendor belongs too based on the company that owns the vendor.
+    evaluation_flg = models.BooleanField(
+        default=False, help_text=('Defines if an evaluation is due for the vendor'),)  # If True, evaluation is needed.
+    account_approved = models.BooleanField(
+        default=False, help_text=('Defines if a company vendor can be used at the account level'),)  # If True, all companies under the account can leverage the vendor, if False only the company that added the vendor can leverage them.
     # Foreign Key and Relationships
     transitioned_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='transitioned_vendor', help_text=(
         'User id of the user that transitioned the vendor to CORE'),)  # User that transitioned the vendor to CORE.
@@ -76,8 +82,8 @@ class Vendor(models.Model):
         'User id if deleted by another user'),)  # User that deleted the vendor.  Note: Vendors are never deleted, just removed from view of the Account Users.
     initial_account = models.ForeignKey('Account', default=1, on_delete=models.PROTECT, related_name='inital_account_vendor', help_text=(
         'Acocunt that initally created the vendor'),)  # If an Account creates a vendor that is transitioned to CORE, this will keep track of the original account creator.
-    account = models.ForeignKey('Account', default=1, on_delete=models.PROTECT, related_name='account_vendor', help_text=(
-        'Account that the vendor is associated with.  If CORE, then all accounts'),)  # Vendors are defined at the Account level instead of the company level because Vendors chosen at the Account level will more than likely be used for multiple companies under the account.  When companies create Vendors, they will create them at the account level.
+    company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, related_name='company_vendor', help_text=(
+        'Company that the vendor is associated with.  If CORE, then all accounts and companies'),)  # Vendors are defined at the Company level need to be approved by the option Vendor.account_approved at the account level for before other companies in the same account can leverage the vendor.
     vendortypes = models.ManyToManyField("VendorType", through='VendorTypeMap',
                                          through_fields=('vendor', 'vendor_type'), related_name='VendorTypeMapping', help_text=('Maps vendors to their associated type'),)  # Vendors may perform mupltiple type of functions for Accounts.
     vendorcategories = models.ManyToManyField("VendorCategory", through='VendorCategoryMap',

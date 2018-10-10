@@ -3224,7 +3224,7 @@ colorAdminApp.controller('registerListEntriresController',
                     {"data": "impact", "name":"impact", "visible": false},
                     {"data": "severity_dd", "name":"severity_dd", "visible": false},
                     {"data": "mr", "name":"mr", "visible": false},
-                    {"data": "compliance", "name":"compliance", "visible": false},
+                    {"data": "compliance", "abbrv":"compliance", "visible": false},
                     {"data": "owner_id", "name":"owner_id", "visible": false, },
                     {"data": "active", "name":"active", "visible": false},
                     {"data": "impact_notes", "name":"impact_notes", "visible": false},
@@ -3273,7 +3273,7 @@ colorAdminApp.controller('registerListEntriresController',
                 }
             } );
             $('#search_compliance').change( function() {
-               table.column('compliance:name').search($scope.search.compliance?1:0).draw();
+               table.column('compliance:abbrv').search($scope.search.compliance?1:0).draw();
             } );
 
             $('#search_owner').change( function() {

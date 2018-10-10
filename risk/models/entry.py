@@ -53,12 +53,16 @@ class Entry(models.Model):
         blank=True, null=True, help_text=('The number that is displayed to the client for the register'),)  # This is the number viewable to the user.  The companies should not see the actual entry id in the application.  Logic will need to be used to identify the lastest value in the "entry_number_queue" from the Register Model.
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the entry is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the entry has been revoked on the company.
+    is_completed = models.BooleanField(
+        default=False, help_text=('Designates whether the entry is complete'),)  # Only entries that are listed as completed can be leveraged for risk reporting.
     date_created = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the individual was created'),)  # User that created the risk entry
+        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the entry was created'),)  # User that created the risk entry
     date_modified = models.DateTimeField(
-        auto_now=True, null=True, blank=True, help_text=('Timestamp the individual was created'),)  # Date the risk entry was last modified
+        auto_now=True, null=True, blank=True, help_text=('Timestamp the entry was last modified'),)  # Date the risk entry was last modified
     date_deactivated = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the individual was deactivated'),)  # Date the risk was deactivated.  Should be set when the entry is revoked.
+        null=True, blank=True, help_text=('Timestamp the entry was deactivated'),)  # Date the risk was deactivated.  Should be set when the entry is revoked.
+    date_completed = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the entry was completed'),)  # This is the date the entry can be leveraged for risk reporting.
     aro_multiplier = models.FloatField(
         default=1, blank=True, null=True, help_text=('Used to multiple the number of occurrences on an annual basis to determine total frequency per year.'),)  # This used to determine the number of times annual the risk may occur.  Logic in the application will be used to set the number. IE 6 times a year = 6, every 2 years = .5
     aro_notes = models.TextField(
@@ -73,6 +77,10 @@ class Entry(models.Model):
         max_length=128, blank=True, help_text=('Custom defined field for the company '),)  # Used for the custom entry field that may be captured for the client.
     incident_response = models.BooleanField(default=False, help_text=(
         'Is there an incident response plan if the threat event were to happen'),)  # Used to track IR playbooks associated to the threat event.
+    evaluation_days = models.IntegerField(blank=True, null=True,
+                                          help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
+    evaluation_flg = models.BooleanField(
+        default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
     # Foreign Key and Relationships
     created_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='created_entry', help_text=(
         'User id of the user that created the field'),)  # User that created the entry
@@ -100,8 +108,6 @@ class Entry(models.Model):
         'Specifies what company locations are associated with the entry'),)  # If no locations are specified, it should be ALL locations.
     risk_types = models.ManyToManyField('RiskType', through='EntryRiskType', through_fields=('id_entry', 'id_risktype'), related_name='EntryRiskTypes', help_text=(
         'Specifies business risk types are associated with the entry'),)  # The entry can be associated to more than on risk type
-    addtional_mitigation = models.TextField(
-        blank=True, null=True, help_text=('Used to provide context on additional mitigation thoughts from the contributor'),)  # Used to provide context on additional mitigation thoughts from the contributor.
 
     class Meta:
         """Meta class."""
@@ -360,16 +366,33 @@ class EntryCompanyAsset(models.Model):
     """Entry Company Assets.  Defines the assets associated with the risk entry."""
 
     # Entry Id from the Entry table
+    STATUS_CHOICES = (
+        (1, 'Percentage of Asset Value'),
+        (2, 'Fixed Impact Value'),
+        (3, 'Time Based Impact Value'),
+    )  # Define which logic to use when generating asset value against the entry threat scenario.
     id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, related_name='companyasset_entry', help_text=(
         'The entry associated to the actor'),)  # Id of the entry
     id_companyasset = models.ForeignKey('CompanyAsset', on_delete=models.CASCADE, related_name='entry_companyasset', help_text=(
         'The asset associated to the entry'),)  # Id of the asset
     exposure_factor = models.FloatField(default=1, blank=True, help_text=(
         'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
+    fixed_exposure_factor_value = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+        'The fixed monetary value of the exposure factor dollars'),)  # The exposure factor may be a fixed cost if the threat scenario is realized.
+    timed_exposure_factor_value = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+        'The monetary value of the exposure factor per unit in dollars'),)  # The exposure factor could be time based if the asset causes an outage or degradation of the asset.
+    timed_exposure_factor_default = models.FloatField(blank=True, null=True, help_text=(
+        'Default number of units used for calucalting the exposure factor'),)  # In order to created a calculations on a timed exposure, there has to be a single value.  When reviewing timed exposure values, there will be addtional insight and communication on the exposure factor.
+    asset_exposure_factor_value = models.FloatField(default=1, blank=True, null=True, help_text=(
+        'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
+    asset_exposure_factor_toggle = models.IntegerField(choices=STATUS_CHOICES, default=1,
+                                                       help_text=('Toggle to determine which formula is used to determine the exposure factor'),)  # This toggle defaults to '1' a percent of asset value.
     detail = models.TextField(blank=True, help_text=(
         'Additional detail the asset associated with the threat scenario.'),)  # Context to understand why the asset is tied to the entry
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the asset is active in the threat scenario'),)  # When builing a threat scenario, there may be many assets that need to be considered.
+    timed_exposure_factor_unit = models.ForeignKey(
+        'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='entrycompanyassetunits', help_text=('Time units used to determine the exposure factor of the asset'),)  # This setting combined with resilience_number will define the time it takes for a control to recover.
 
     def __str__(self):
         """String."""
@@ -523,11 +546,13 @@ class EntryEvaluation(models.Model):
     date_evaluated = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the risk entry was evaluated'),)  # Date the user completed submitted the evaluation
     # Foreign Key and Relationships
-    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entryevaluation', help_text=(
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entry_evaluation', help_text=(
         'The entry the associated with the evaluation'),)  # Evaluation entry
     mitigation_adequacy = models.ForeignKey('MitigationAdequacy', on_delete=models.CASCADE, null=True, related_name='entrymitigation', help_text=(
         'Mitigation level based on infromation available'),)  # Is the control mitigation adequate for the risk based on the users perception.
-    user = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='entryevaluation', help_text=(
+    user = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='entryevaluation_evaluator', help_text=(
+        'The user that performed the evaluation'),)  # User that completed the evaluation.
+    approver = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='entryevaluation_approver', help_text=(
         'The user that performed the evaluation'),)  # User that completed the evaluation.
 
     def __str__(self):

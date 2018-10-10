@@ -11,8 +11,7 @@ from risk.models import (
 def get_all_compliances_for_dropdown(request):
     """Get all compliances for dropdown."""
     data = []
-    for compliance in Compliance.objects.order_by('name').all():
-        data.append({'id': compliance.id, 'name': compliance.name})
+    for compliance in Compliance.objects.order_by('abbrv').all():
+        data.append({'id': compliance.id, 'abbrv': compliance.abbrv})
 
     return JsonResponse(data, safe=False)
-

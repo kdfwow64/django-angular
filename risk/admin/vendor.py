@@ -39,6 +39,8 @@ class VendorAdmin(admin.ModelAdmin):
         'date_modified',
         'date_deactivated',
         'date_deleted',
+        'evaluation_days',
+        'evaluation_flg',
         'rank',
         'transitioned_by',
         'created_by',
@@ -46,7 +48,7 @@ class VendorAdmin(admin.ModelAdmin):
         'deactivated_by',
         'deleted_by',
         'initial_account',
-        'account',
+        'company',
         'keywords',
     )
     list_filter = (
@@ -59,7 +61,7 @@ class VendorAdmin(admin.ModelAdmin):
         'modified_by',
         'deactivated_by',
         'deleted_by',
-        'account',
+        'company',
         'keywords',
     )
     search_fields = ('name', 'parent', 'about', 'keywords')

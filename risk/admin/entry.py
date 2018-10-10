@@ -128,6 +128,8 @@ class EntryAdmin(admin.ModelAdmin):
         'aro_multiplier',
         'aro_notes',
         'impact_notes',
+        'evaluation_days',
+        'evaluation_flg',
         'additional_mitigation',
         'defined1',
         'defined2',
@@ -137,6 +139,8 @@ class EntryAdmin(admin.ModelAdmin):
         'entry_owner',
         'register',
         'response',
+        'is_completed',
+        'date_completed',
     )
     list_filter = (
         'date_created',
@@ -148,6 +152,7 @@ class EntryAdmin(admin.ModelAdmin):
         'entry_owner',
         'register',
         'response',
+        'is_completed',
     )
     search_fields = (
         'summary',
@@ -268,9 +273,10 @@ class EntryEvaluationAdmin(admin.ModelAdmin):
         'entry',
         'mitigation_adequacy',
         'user',
+        'approver',
     )
     list_filter = ('date_created', 'date_evaluated',
-                   'entry', 'mitigation_adequacy', 'user')
+                   'entry', 'mitigation_adequacy', 'user', 'approver',)
 
 
 class EntryImpactAdmin(admin.ModelAdmin):

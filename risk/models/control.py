@@ -19,7 +19,7 @@ class Control(models.Model):
     vendor = models.ForeignKey('Vendor', on_delete=models.PROTECT, null=True, related_name='controldetail', help_text=(
         'Vendor that produces the control '),)  # Vendor that makes or maintains the control.  If the account manages/creates the control then this should be listed as Self.
     account = models.ForeignKey(
-        'Account', on_delete=models.PROTECT, related_name='account_control', help_text=('The account that the control is related'),)  # Account associated with the control.  Controls belonging to core will be seen by all accounts.
+        'Account', default=1, on_delete=models.PROTECT, related_name='account_control', help_text=('The account that the control is related'),)  # Account associated with the control.  Controls belonging to core will be seen by all accounts.
     control_category = models.ForeignKey(
         'ControlCategory', on_delete=models.PROTECT, null=True,  related_name='controlcategory_control', help_text=('The category of the vendors control'),)  # Category the control is associated.  Used to correlate control information.
 

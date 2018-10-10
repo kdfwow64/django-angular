@@ -29,33 +29,11 @@ class Company(models.Model):
     resilience_max = models.IntegerField(blank=True, null=True, help_text=(
         'Maximum number of units any control have to recover'),)  # Resilience time is used to determine if there are controls that may not recover in an appropirate time frame.
     company_notes = models.TextField(
-        blank=True, null=True, help_text=('Company notes that the contriburtor can add'),)  # Notes about the company.  This field is mainly used if the account is a reseller or using the tool for mulitple business unites.
-    evaluation_range_toggle = models.IntegerField(
-        default=1, help_text=('Toggle to determine how the company will handle evaluation periods.  1 = Same Annual Date, 2 = Separate Annual Dates, 3 = Specific Day Range, 0 days turns evluation off'),)  # Used to determine the company will determine an evaluation time.  If no evaluation is requested, This tringer should be set to 3 and the evaluation_range set to 0 for each evaluation type.
-    evaluation_date_annual = models.DateField(
-        null=True, blank=True, help_text=('Annual date the for the evaluation period'),)  # Single date for all evaluation types.  evaluation_range_toggle = 1
-    evaluation_date_entry = models.DateField(
-        null=True, blank=True, help_text=('Annual date the for the entry evaluation period'),)  # Specific date for entry evaluations.  evaluation_range_toggle = 2
-    evaluation_date_control = models.DateField(
-        null=True, blank=True, help_text=('Annual date the for the date evaluation period'),)  # Specific date for entry evaluations.  evaluation_range_toggle = 2
-    evaluation_date_asset = models.DateField(
-        null=True, blank=True, help_text=('Annual date the for the asset evaluation period'),)  # Specific date for entry evaluations.  evaluation_range_toggle = 2
-    evaluation_date_vendor = models.DateField(
-        null=True, blank=True, help_text=('Annual date the for the vendor evaluation period'),)  # Specific date for entry evaluations.  evaluation_range_toggle = 2
-    evaluation_date_individual = models.DateField(
-        null=True, blank=True, help_text=('Annual date the for the individual evaluation period'),)  # Specific date for entry evaluations.  evaluation_range_toggle = 2
-    entry_evaluation_range = models.IntegerField(
-        default=365, blank=False, help_text=('Range in days that should trigger an evaluation reveiw of the registry entry'),)  # This will determine the number of days to trigger an evaluation review of current entries.  If set to 0 the evaluation is not used.  evaluation_range_toggle = 3
-    control_evaluation_range = models.IntegerField(
-        default=365, blank=False, help_text=('Range in days that should trigger an evaluation reveiw of the registry entry'),)  # This will determine the number of days to trigger an evaluation review of current controls.  If set to 0 the evaluation is not used.  evaluation_range_toggle = 3
-    asset_evaluation_range = models.IntegerField(
-        default=365, blank=False, help_text=('Range in days that should trigger an evaluation reveiw of the registry entry'),)  # This will determine the number of days to trigger an evaluation review of current assets.  If set to 0 the evaluation is not used.  evaluation_range_toggle = 3
-    vendor_evaluation_range = models.IntegerField(
-        default=365, blank=False, help_text=('Range in days that should trigger an evaluation reveiw of the registry entry'),)  # This will determine the number of days to trigger an evaluation review of current vendors.  If set to 0 the evaluation is not used.  evaluation_range_toggle = 3
-    individual_evaluation_range = models.IntegerField(
-        default=365, blank=False, help_text=('Range in days that should trigger an evaluation reveiw of the registry entry'),)  # This will determine the number of days to trigger an evaluation review of individuals.  If set to 0 the evaluation is not used.  evaluation_range_toggle = 3
-    evaluation_alert = models.IntegerField(
-        default=35, blank=False, help_text=('Range in days that an alert should be sent for the evaluation review process'),)  # Used to trigger an alert that the evaluation period is coming.
+        blank=True, null=True, help_text=('Company notes that the contriburtor can add'),)  # Notes about the company.  This field is mainly used if the account is a reseller or using the tool for mulitple business units.
+    evaluation_days = models.IntegerField(
+        default=365, help_text=('Defines the default number of days an evaluation should occur'),)  # Used to define the default value for all evaluation timeframes.  If no evaluations are requested, this should be set to 0.  Note:  For models that need to be evaluated such as Entries, Controls, Assets, Vendors, Individuals, etc. there is an evaluation_flg that can be set and will overide the date range.
+    evaluation_alert_days = models.IntegerField(
+        default=14, blank=False, help_text=('Range in days that an alert should be sent the evaluation is due'),)  # Used to trigger an alert that the evaluation period is coming.
     defined1_data_entry_label = models.CharField(
         max_length=128, blank=True, null=True, help_text=('Name of the custom defined1 data field name for the entry table'),)  # Not in use
     defined2_data_entry_label = models.CharField(
@@ -242,6 +220,10 @@ class CompanyAsset(models.Model):
         'The percentage of monetary value of the asset to the annual revenue'),)  # Asset value may be a percentage of annual revenue if monetary_value_toggle is set to True.
     monetary_value_toggle = models.BooleanField(
         default=False, help_text=('Toggle to determine if company asset is measured by fixed=False or par =True Single Loss Expectancy'),)  # Toggle determines if the asset is
+    evaluation_days = models.IntegerField(blank=True, null=True,
+                                          help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
+    evaluation_flg = models.BooleanField(
+        default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
     """Application Input"""
     # Foreign Key and Relationships
     asset_owner = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='companycontact_asset', help_text=(
@@ -358,7 +340,7 @@ class CompanyControl(models.Model):
         max_length=100, blank=True, help_text=('Current control version'),)  # Version used for the company control.  Could be policy version, release version,etc It depends on the control defined.
     avg_annual_upkeep = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for licensing, etc. (-dependencies)'),)  # Normally 18% of capital expendure if applicable.  Control costs are captured in the CompanyControlCost table, this field is used for future projections.
-    date_maint = models.DateTimeField(null=True, blank=True, help_text=(
+    date_maint = models.DateField(null=True, blank=True, help_text=(
         'Annual maintenance date'),)  # Used to determine annual date that maintenance is completed for the control.
     centralized = models.BooleanField(default=True, help_text=(
         'Is the company control centralized or decentralized'),)  # If True, the control is a centralized control.  If False, the control is decentralized.
@@ -366,6 +348,12 @@ class CompanyControl(models.Model):
         'The control is currently budgeted'),)  # Not in use
     recovery_integer = models.FloatField(blank=True, null=True, help_text=(
         'Number of units it takes the control to recover'),)  # This setting combined with the resilience_unit will define the time required to get the control back to an operational state.
+    recovery_time_unit = models.ForeignKey(
+        'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='controlresilienceunites', help_text=('Resilience time unit of the company control'),)  # This setting combined with resilience_number will define the time it takes for a control to recover.
+    evaluation_days = models.IntegerField(blank=True, null=True,
+                                          help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
+    evaluation_flg = models.BooleanField(
+        default=False, help_text=('Defines if an evaluation is due for the control'),)  # If True, evaluation is needed.
     defined1_data = models.CharField(max_length=128, blank=True, help_text=(
         'Custom company field for company control table -see company table'),)  # Not in use
     date_defined1 = models.DateTimeField(null=True, blank=True, help_text=(
@@ -385,16 +373,14 @@ class CompanyControl(models.Model):
     # Foreign Key and Relationships
     company = models.ForeignKey(
         'Company', on_delete=models.PROTECT, related_name='company', help_text=('The company that the control is related'),)
-    control = models.ForeignKey('Control', on_delete=models.PROTECT, related_name='company_control', help_text=(
-        'The control detail for the company'),)
+    vendor_control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, blank=True, related_name='vendor_companycontrol', help_text=(
+        'The primary control mapping for the company'),)
     company_control_opex = models.ForeignKey('CompanyControlOpex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_opex', help_text=(
         'The control operational expenditures for the company'),)
     company_control_capex = models.ForeignKey('CompanyControlCapex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_capex', help_text=(
         'The control captial expenditures for the company'),)
     inline_after = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, blank=True, related_name='control_before', help_text=(
         'The upstream control id'),)  # If available, this is the control that is upstream.  This will be used for viewing a layer approach to asset secuirity.
-    recovery_time_unit = models.ForeignKey(
-        'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='controlresilienceunites', help_text=('Resilience time unit of the company control'),)  # This setting combined with resilience_number will define the time it takes for a control to recover.
     company_locations = models.ManyToManyField('CompanyLocation', blank=True, through='CompanyControlLocation', through_fields=(
         'id_companycontrol', 'id_companylocation'), related_name='CompanyControlLocation', help_text=('Specified geo locations for the company'),)  # Locations of the company control. If 1 then ALL locations.
     company_segments = models.ManyToManyField("CompanySegment", blank=True, through='CompanyControlSegment', through_fields=(
@@ -758,6 +744,10 @@ class CompanyContact(models.Model):
         null=True, blank=True, help_text=('Timestamp the contact was deactivated'),)  # Date the contact was deactivated
     date_deleted = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the contact was created'),)  # Date the contact was deleted
+    evaluation_days = models.IntegerField(blank=True, null=True,
+                                          help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
+    evaluation_flg = models.BooleanField(
+        default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
     # Foreign Key and Relationships
     reports_to = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, blank=True, related_name='reports_to_companyindividual', help_text=(
         'Contact id of the supervisor to build a organizational hierachy'),)  # Used to define a organizational hierachy
@@ -891,6 +881,10 @@ class CompanyLocation(models.Model):
         max_length=5, blank=True, null=True, help_text=('Company Location Abbrivation -used for reporting'),)  # If specified, will be used for company location reporting.
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether this location should be treated as active'),)  # The location is active in the company.
+    evaluation_days = models.IntegerField(blank=True, null=True,
+                                          help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
+    evaluation_flg = models.BooleanField(
+        default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
     """Application Input"""
     # Foreign Key and Relationships
     company = models.ForeignKey(
