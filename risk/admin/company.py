@@ -172,9 +172,13 @@ class CompanyAssetAdmin(admin.ModelAdmin):
         'id',
         'name',
         'notes',
-        'fixed_monetary_value',
-        'par_monetary_value',
-        'monetary_value_toggle',
+        'asset_value_fixed',
+        'asset_quantity_fixed',
+        'asset_value_par',
+        'asset_value_timed',
+        'asset_timed_quantity_relative',
+        'asset_timed_quantity_avaliable',
+        'asset_value_toggle',
         'evaluation_days',
         'evaluation_flg',
         'company',
@@ -182,10 +186,10 @@ class CompanyAssetAdmin(admin.ModelAdmin):
         'asset_owner',
     )
     list_filter = (
-        'monetary_value_toggle',
         'company',
         'asset_type',
         'asset_owner',
+        'asset_value_toggle',
     )
     search_fields = ('name', 'asset_owner')
 

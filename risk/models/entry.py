@@ -192,7 +192,7 @@ class Entry(models.Model):
         """Company Assets."""
         total = 0
         for asset_entry in self.companyasset_entry.select_related('id_companyasset').all():
-            total += asset_entry.get_asset_value()
+            total += asset_entry.get_entry_asset_value()
         return total
 
     @property
@@ -369,7 +369,6 @@ class EntryCompanyAsset(models.Model):
     STATUS_CHOICES = (
         (1, 'Percentage of Asset Value'),
         (2, 'Fixed Impact Value'),
-        (3, 'Time Based Impact Value'),
     )  # Define which logic to use when generating asset value against the entry threat scenario.
     id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, related_name='companyasset_entry', help_text=(
         'The entry associated to the actor'),)  # Id of the entry
@@ -377,22 +376,16 @@ class EntryCompanyAsset(models.Model):
         'The asset associated to the entry'),)  # Id of the asset
     exposure_factor = models.FloatField(default=1, blank=True, help_text=(
         'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
-    fixed_exposure_factor_value = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+    exposure_factor_fixed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
         'The fixed monetary value of the exposure factor dollars'),)  # The exposure factor may be a fixed cost if the threat scenario is realized.
-    timed_exposure_factor_value = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
-        'The monetary value of the exposure factor per unit in dollars'),)  # The exposure factor could be time based if the asset causes an outage or degradation of the asset.
-    timed_exposure_factor_default = models.FloatField(blank=True, null=True, help_text=(
-        'Default number of units used for calucalting the exposure factor'),)  # In order to created a calculations on a timed exposure, there has to be a single value.  When reviewing timed exposure values, there will be addtional insight and communication on the exposure factor.
-    asset_exposure_factor_value = models.FloatField(default=1, blank=True, null=True, help_text=(
-        'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
-    asset_exposure_factor_toggle = models.IntegerField(choices=STATUS_CHOICES, default=1,
-                                                       help_text=('Toggle to determine which formula is used to determine the exposure factor'),)  # This toggle defaults to '1' a percent of asset value.
+    exposure_factor_percent = models.FloatField(default=1, blank=True, null=True, help_text=(
+        'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the assets in the threat scenario, this is the amount of exposed value used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review should be performed again.
+    exposure_factor_toggle = models.IntegerField(choices=STATUS_CHOICES, default=1,
+                                                 help_text=('Toggle to determine which formula is used to determine the exposure factor'),)  # This toggle defaults to '1' a percent of asset value.
     detail = models.TextField(blank=True, help_text=(
         'Additional detail the asset associated with the threat scenario.'),)  # Context to understand why the asset is tied to the entry
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the asset is active in the threat scenario'),)  # When builing a threat scenario, there may be many assets that need to be considered.
-    timed_exposure_factor_unit = models.ForeignKey(
-        'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='entrycompanyassetunits', help_text=('Time units used to determine the exposure factor of the asset'),)  # This setting combined with resilience_number will define the time it takes for a control to recover.
 
     def __str__(self):
         """String."""
@@ -403,14 +396,20 @@ class EntryCompanyAsset(models.Model):
 
         verbose_name_plural = ("Entry Company Assets")
 
-    def get_asset_value(self):
+    def get_entry_asset_value(self):
+        # This logic need to be reworked.  Toggle is not T/F now and additional
+        # logic for time based is added.  Please change name to
+        # get_entry_asset_value.  get_asset_value should be created at the
+        # companyasset model based on how the asset value is calculated.
         """Get the asset value."""
-        if self.id_companyasset.monetary_value_toggle:
-            # / 100.0
-            return (self.id_companyasset.fixed_monetary_value * self.exposure_percentage)
-        else:
-            # / 100.0
-            return (self.id_companyasset.par_monetary_value * self.exposure_percentage)
+        if self.exposure_factor_toggle == 1:
+            # The contributor has chosen a percentage of the asset value is at
+            # risk.
+            return (self.id_companyasset.get_asset_value * self.exposure_factor_percent)
+        elif self.exposure_factor_toggle == 2:
+                # The contributor has chosen the a fixed monetary amount at
+                # risk.
+            return (self.exposure_factor_fixed)
 
 
 class EntryCompanyControl(models.Model):
@@ -582,6 +581,8 @@ class EntryEventType(models.Model):
         """Meta class."""
         verbose_name_plural = ("Entry Event Types")
 
+'''
+EntryImpact values will be calculated based on the assets listed in the entry.  This model is depercatied.
 
 class EntryImpact(models.Model):
     """Entry Impact."""
@@ -607,6 +608,7 @@ class EntryImpact(models.Model):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Entry Impact")
+'''
 
 
 class EntryIndicator(models.Model):

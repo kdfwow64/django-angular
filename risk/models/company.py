@@ -207,25 +207,37 @@ class CompanyAsset(models.Model):
     This allows the company to add multiple asset types to their register
     entries.  Companies will define the asset then determine what type of asset it is, along with the ability to group assets for reporting
     """
-
+    STATUS_CHOICES = (
+        (1, 'Fixed Value'),
+        (2, 'Percent of Revenue'),
+        (3, 'Time Based Value'),
+    )  # Define which logic to use when generating asset value against the entry threat scenario.
     name = models.CharField(
         max_length=100, blank=False, help_text=('Name of the company asset'),)  # Company to determine the name of the asset
     notes = models.TextField(
         blank=True, help_text=('Notes about the company asset'),)  # Notes regarding the asset
-    fixed_monetary_value = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+    asset_value_fixed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
         'The fixed monetary value of the asset in dollars'),)  # Asset value may be a fixed cost if monetary_value_toggle is set to False.
-    fixed_monetary_quantity = models.IntegerField(
+    asset_quantity_fixed = models.IntegerField(
         default=1, blank=False, help_text=('The quantity of fixed_monetary_value'),)  # This will be multipled by the fixed_monetary_value to get a total value of the asset(s) defined.
-    par_monetary_value = models.FloatField(blank=True, null=True, help_text=(
+    asset_value_par = models.FloatField(blank=True, null=True, help_text=(
         'The percentage of monetary value of the asset to the annual revenue'),)  # Asset value may be a percentage of annual revenue if monetary_value_toggle is set to True.
-    monetary_value_toggle = models.BooleanField(
-        default=False, help_text=('Toggle to determine if company asset is measured by fixed=False or par =True Single Loss Expectancy'),)  # Toggle determines if the asset is
+    asset_value_timed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+        'The monetary value of the asset per unit of time'),)  # The monetary value for the unit of time chosen
+    asset_timed_quantity_relative = models.FloatField(blank=True, null=True, help_text=(
+        'Number of time units to be used from the avaliable pool'),)  # Based-off the asset_timed_quantity_avaliable, this is the amount of time that is relative to the asset to be used in the entry.  This value may represent a more realistic value based on the environment.  This value cannot exceed the quantity_avaliable value.
+    asset_timed_quantity_avaliable = models.FloatField(blank=True, null=True, help_text=(
+        'The amount of time units avaiable annually'),)  # This will be used to determine available pool of time units in a year.  This value cannot exceed the annual value  of the time unit in the time units model.
+    asset_value_toggle = models.IntegerField(choices=STATUS_CHOICES, default=1,
+                                             help_text=('Toggle to determine which formula is used to determine the assets value'),)  # This toggle defaults to '1' a fixed value.
     evaluation_days = models.IntegerField(blank=True, null=True,
                                           help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
     evaluation_flg = models.BooleanField(
         default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
     """Application Input"""
     # Foreign Key and Relationships
+    asset_timed_unit = models.ForeignKey(
+        'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='companyassetunits', help_text=('Time units used to determine the value of the asset'),)  # This setting combined with the relative quantitiy and asset value will define the cost of the asset.  Default "3" is set to hours as the unit of time.
     asset_owner = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='companycontact_asset', help_text=(
         ' Who owns the the information'),)  # If you own the information, you own the risk.
     company = models.ForeignKey('Company', on_delete=models.PROTECT, blank=False, related_name='companyassets', help_text=(
@@ -244,6 +256,20 @@ class CompanyAsset(models.Model):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Assets")
+
+    def get_asset_value(self):
+        if asset_value_toggle == 1:
+            # Fixed - The asset value has a fixed cost.  Total value may
+            # flucuate based on quantity
+            return (self.asset_value_fixed * self.asset_quantity_fixed)
+        elif asset_value_toggle == 2:
+            # PAR -  The asset value is based on a percentage of revenue for
+            # the company
+            return (self.asset_value_par * self.id_company.annual_revenue)
+        elif asset_value_toggle == 3:
+            # Time based  - The asset has a time based value.  The contributor
+            # must determine what is relative.
+            return (self.asset_value_timed * self.asset_timed_quantity_relative)
 
 
 class CompanyAssetType(models.Model):

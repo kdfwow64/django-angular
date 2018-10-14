@@ -100,7 +100,7 @@ from .entry import (
     EntryCompanyLocation,
     EntryCompliance,
     EntryEvaluation,
-    EntryImpact,
+    # EntryImpact,
     EntryIndicator,
     EntryResponse,
     EntryRiskType,
