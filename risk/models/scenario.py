@@ -65,7 +65,7 @@ class EventTypeCIATriad(models.Model):
         verbose_name_plural = ("CIA Triad Event Types")
 
 
-class Frequency(models.Model):
+class FrequencyCategory(models.Model):
     """
     Frequency.
 
@@ -104,14 +104,14 @@ class Frequency(models.Model):
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Frequency")
+        verbose_name_plural = ("Frequency Categories")
 
     def __str__(self):
         """String."""
         return self.name
 
 
-class Impact(models.Model):
+class ImpactCategory(models.Model):
     """
     Impact.
 
@@ -153,6 +153,10 @@ class Impact(models.Model):
     def __str__(self):
         """String."""
         return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Impact Categories")
 
 
 class ImpactType(models.Model):

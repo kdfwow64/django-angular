@@ -24,7 +24,7 @@ class EventTypeAdmin(admin.ModelAdmin):
     search_fields = ('name', 'account', )
 
 
-class FrequencyAdmin(admin.ModelAdmin):
+class FrequencyCategoryAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',
@@ -38,7 +38,7 @@ class FrequencyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class ImpactAdmin(admin.ModelAdmin):
+class ImpactCategoryAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',

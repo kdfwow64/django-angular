@@ -12,7 +12,7 @@ from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomai
 from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponse, EntryRiskType, RiskType, Response, ResponseVote, EntryUrl, MitigationAdequacy
 from ..models.feedback import Feedback, FeedbackStatus, FeedbackType, FeedbackQuestion, FeedbackAnswer, FeedbackCorrespondence
 from ..models.meeting import Meeting, TopicComment, TopicAction, MeetingTopic, MeetingType
-from ..models.scenario import EventType, Frequency, Impact, ImpactType, CIATriad, Severity
+from ..models.scenario import EventType, FrequencyCategory, ImpactCategory, ImpactType, CIATriad, Severity
 from ..models.vendor import Vendor, VendorType, VendorCategory
 from ..models.project import Project, ProjectAssumption, ProjectSuccessCriteria, ProjectBenefit, ProjectMilestone, ProjectRisk, ProjectRiskType, ProjectBudgetChange, ProjectDateChange, ProjectUAT, ProjectUpdate
 
@@ -28,7 +28,7 @@ from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, Contr
 from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
 from .feedback import FeedbackAdmin, FeedbackStatusAdmin, FeedbackTypeAdmin, FeedbackQuestionAdmin, FeedbackAnswerAdmin, FeedbackCorrespondenceAdmin
 from .meeting import MeetingAdmin, TopicCommentAdmin, TopicActionAdmin, MeetingTopicAdmin, MeetingTypeAdmin
-from .scenario import EventTypeAdmin, FrequencyAdmin, ImpactAdmin, ImpactTypeAdmin, CIATriadAdmin, SeverityAdmin
+from .scenario import EventTypeAdmin, FrequencyCategoryAdmin, ImpactCategoryAdmin, ImpactTypeAdmin, CIATriadAdmin, SeverityAdmin
 from .vendor import VendorAdmin, VendorTypeAdmin, VendorCategoryAdmin
 from .project import ProjectAdmin, ProjectAssumptionAdmin, ProjectSuccessCriteriaAdmin, ProjectBenefitAdmin, ProjectMilestoneAdmin, ProjectRiskAdmin, ProjectRiskTypeAdmin, ProjectBudgetChangeAdmin, ProjectDateChangeAdmin, ProjectUATAdmin, ProjectUpdateAdmin
 # Register your models here.
@@ -125,8 +125,8 @@ admin.site.register(TopicAction, TopicActionAdmin)
 admin.site.register(MeetingTopic, MeetingTopicAdmin)
 admin.site.register(MeetingType, MeetingTypeAdmin)
 admin.site.register(EventType, EventTypeAdmin)
-admin.site.register(Frequency, FrequencyAdmin)
-admin.site.register(Impact, ImpactAdmin)
+admin.site.register(FrequencyCategory, FrequencyCategoryAdmin)
+admin.site.register(ImpactCategory, ImpactCategoryAdmin)
 admin.site.register(ImpactType, ImpactTypeAdmin)
 admin.site.register(CIATriad, CIATriadAdmin)
 admin.site.register(Severity, SeverityAdmin)

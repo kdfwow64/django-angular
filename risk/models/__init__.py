@@ -131,8 +131,8 @@ from .meeting import (
 
 from .scenario import (
     EventType,
-    Frequency,
-    Impact,
+    FrequencyCategory,
+    ImpactCategory,
     ImpactType,
     CIATriad,
     Severity,
