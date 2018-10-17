@@ -7,19 +7,20 @@ from django.contrib.auth.forms import (
 
 class PlaybookRoleAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc', 'is_active', 'role_type', 'company',)
+    list_display = ('id', 'name', 'description',
+                    'is_active', 'role_type', 'company',)
     search_fields = ('name',)
 
 
 class PlaybookRoleTypeAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc', 'is_active', 'company',)
+    list_display = ('id', 'name', 'description', 'is_active', 'company',)
     search_fields = ('name',)
 
 
 class PlaybookActionTypeAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc', 'sort_order',
+    list_display = ('id', 'name', 'description', 'sort_order',
                     'is_active', 'company',)
     search_fields = ('name',)
 

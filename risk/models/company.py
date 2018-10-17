@@ -201,16 +201,18 @@ class CompanyMemberGrant(models.Model):
         return self.id_companymember
 
 
-class CompanyMemmberRole(models.Model):
+class CompanyMemberRole(models.Model):
     """ The role the member plays in the company."""
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Role of the member'),)  # Role of the member
-    desc = models.TextField(
-        blank=False, help_text=('Description of the role'),)  # Role description of the member
+    description = models.TextField(
+        blank=True, null=True, help_text=('Description of the role'),)  # Role description of the member
+    keywords = models.TextField(
+        blank=True, help_text=('Words used to search the role'),)  # Role description of the member
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the role is active for use'),)
-    companymemberroletype = models.ForeignKey(
+    company_member_role_type = models.ForeignKey(
         'CompanyMemberRoleType', blank=True, null=True, related_name='company_memberroletype', on_delete=models.PROTECT, help_text=('The role type that the member role is related'),)  # The type of role the member belongs to.
     company = models.ForeignKey(
         'Company', default=1, related_name='company_memberrole', on_delete=models.PROTECT, help_text=('The company that the member role is related'),)  # Companies have the ability to add their own member roles if desired.  These will be under review for addtion to CORE.  Default submission is set to Core Company.
@@ -229,10 +231,8 @@ class CompanyMemberRoleType(models.Model):
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Name of the company role type'),)  # Role type name
-    abbrv = models.CharField(
-        max_length=16, blank=True, help_text=('Abbreviation of the company role type'),)  # Role type abbreviation
-    desc = models.TextField(
-        blank=False, help_text=('Description of the company role type'),)  # Role type description
+    description = models.TextField(
+        blank=True, null=True, help_text=('Description of the company role type'),)  # Role type description
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the role is active for use'),)
     company = models.ForeignKey(
@@ -328,7 +328,7 @@ class CompanyAssetType(models.Model):
 
     name = models.CharField(
         max_length=30, help_text=('Type of asset'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the asset'),)  # Not in use
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that the asset type should be in for form selection'),)  # Not in use
@@ -400,7 +400,7 @@ class CompanyControl(models.Model):
 
     name = models.CharField(
         max_length=128, blank=True, null=True, help_text=('Name of the control details'),)  # Name of the company control. This maybe use to better describe the use of the control.  Companies may opt to segment controls of the same type, location, etc.  This allow for that ability.
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, null=True, help_text=('Description of the control detail'),)  # Description of the company control.
     abbrv = models.CharField(
         max_length=30, blank=True, help_text=('Abbreviation of the name'),)  # Abbreviation of the company control.  Will be used in reporting if present.
@@ -474,7 +474,7 @@ class CompanyControlMeasure(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the measure'),)  # Name of the measure for the control used in the entry.
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the measurment'),)  # Description of the measure used for the control based on the entry.
     formula = models.CharField(
         max_length=512, blank=True, help_text=('Formula that is used to measure the success of the control'),)  # What is the formula to define the measure.  Need to have a formula builder create for the user to create a measurement.
@@ -697,7 +697,7 @@ class CompanyControlCostType(models.Model):
 
     name = models.CharField(
         max_length=128, help_text=('Model of the control cost type'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the control cost type'),)  # Not in use
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the control cost type is active for use'),)
@@ -721,7 +721,7 @@ class CompanyObjective(models.Model):
 
     name = models.CharField(
         max_length=100, blank=False, help_text=('Name of the company objective'),)  # Company to determine the name of the objective
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, help_text=('Description about the company objective'),)  # Description of the company objective
     monetary_value_start = models.DecimalField(default=0.00, max_digits=30, decimal_places=2, help_text=(
         'The beginning monetary value of the objective'),)  # The monetary value of the objective at its start date
@@ -786,7 +786,7 @@ class CompanyContact(models.Model):
         default=False, help_text=('Is the contact a main point of contact?'),)  # Primary point of contact.  Not as relevant for employee type contacts.
     decision_maker = models.BooleanField(
         default=False, help_text=('Is the contact a decsion maker?'),)  # The contact is a decision maker for risk related items.
-    desc = models.CharField(
+    description = models.CharField(
         max_length=255, blank=True, help_text=('Description'),)  # Description of the contact
     email = models.EmailField(
         max_length=128, blank=False, unique=True, help_text=('Email address'),)  # Email of the user.  May be used to trigger alerts to Contacts
@@ -863,7 +863,7 @@ class ContactType(models.Model):
 
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the type of contact'),)  # Contacts may have different types based on the account/company they associated.  Users will also leverage ContactType at the AccountMembership table to determine the default type they will be when added to the CompanyContact record.
-    desc = models.CharField(
+    description = models.CharField(
         max_length=255, blank=False, help_text=('Description of the type of contact'),)  # Description of the contact type.
     # Foreign Key and Relationships
 
@@ -881,7 +881,7 @@ class CompanyTeam(models.Model):
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Team Name'),)  # Name of the team that is created for the company. This team will consists of multiple contacts defined in the company.
-    desc = models.CharField(
+    description = models.CharField(
         max_length=255, blank=False, help_text=('Team Description'),)  # Description of the team.
     abbrv = models.CharField(
         max_length=5, blank=True, null=True, help_text=('Team Alias'),)  # Abbreviation of the team.  If not null, will be used when reporting details on the team.
@@ -992,7 +992,7 @@ class CompanySegment(models.Model):
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Name of the comany segment'),)  # Name of the company segment
-    desc = models.CharField(
+    description = models.CharField(
         max_length=255, blank=False, help_text=('Segment Description'),)  # Description of the segment.
     abbrv = models.CharField(
         max_length=5, blank=True, null=True, help_text=('Company segment abbrivation -used for reporting'),)  # If specified, will be used for company segment reporting.
@@ -1033,7 +1033,7 @@ class CompanyControlSegment(models.Model):
 class CompanyFinding(models.Model):
     """CompanyFinding.  Should this be moved directly to the control or is it."""
 
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the finding'),)  # Not in use
     date_created = models.DateTimeField(
         auto_now_add=True, null=True, blank=True, help_text=('Timestamp the finding was created'),)  # Not in use

@@ -98,7 +98,7 @@ class VendorType(models.Model):
     """VendorType."""
     name = models.CharField(
         max_length=100, blank=False, help_text=('Name of the vendor type'),)  # The type of vendor.
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, help_text=('Decription of the vendor type'),)  # Descriptoin of the vendor type
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Keywords that would be used in searches to get to the vendor.
@@ -146,8 +146,8 @@ class VendorCategory(models.Model):
 
     name = models.CharField(
         max_length=100, blank=False, help_text=('Name of the vendor category'),)  # Name of the vendor category
-    desc = models.TextField(
-        blank=True, help_text=('Decription of the vendor category'),)  # Description of the vendor category
+    description = models.TextField(
+        blank=True, help_text=('Description of the vendor category'),)  # Description of the vendor category
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Keywords used to find like vendors or the services/products sold.
     example_title1 = models.CharField(

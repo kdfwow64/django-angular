@@ -261,7 +261,7 @@ class ProjectRiskType(models.Model):
         'Designates whether this risk should be treated as active'),)  # Determines if the risk type is active
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the risk type for the company'),)  # Summary of the risk type used for high level overview
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Additional description of the risk type'),)  # Detail of the risk type if more infromation is warranted
     date_created = models.DateTimeField(
         auto_now_add=True, null=True, blank=True,  help_text=('Timestamp the risk type was created'),)  # Timestamp the risk type was created
@@ -424,7 +424,7 @@ class ProjectUpdate(models.Model):
         'Designates whether this update should be treated as active'),)  # Determines if the update is active
     summary = models.CharField(
         max_length=600, blank=False, help_text=('Summary of the update for the project'),)  # Summary of the update used for high level overview
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Additional detail of the update'),)  # Detail of the update if more infromation is warranted
     date_created = models.DateTimeField(
         auto_now_add=True, null=True, blank=True,  help_text=('Timestamp the update was created'),)  # Timestamp the update was created

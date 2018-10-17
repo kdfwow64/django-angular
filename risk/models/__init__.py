@@ -46,6 +46,8 @@ from .common import (
 from .company import (
     Company,
     CompanyMember,
+    CompanyMemberRole,
+    CompanyMemberRoleType,
     CompanyProfile,
     CompanyAsset,
     CompanyAssetType,

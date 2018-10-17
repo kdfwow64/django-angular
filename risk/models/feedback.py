@@ -117,7 +117,7 @@ class FeedbackStatus(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the feedback status '),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the feedback status'),)  # Not in use
     # Foreign Key and Relationships
 
@@ -135,7 +135,7 @@ class FeedbackType(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the feedback type'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the feedback type'),)  # Not in use
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Not in use

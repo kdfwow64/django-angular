@@ -72,7 +72,7 @@ class VendorTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
     )
     search_fields = ('name',)
@@ -83,7 +83,7 @@ class VendorCategoryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
     )
     search_fields = ('name',)

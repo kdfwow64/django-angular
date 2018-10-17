@@ -6,7 +6,7 @@ class Compliance(models.Model):
     """Compliance."""
     name = models.CharField(
         max_length=128, blank=False, help_text=('Name of the compliance'),)  # Name of the Compliance
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, help_text=('Description of the compliance'),)  # Description of the compliance
     abbrv = models.CharField(
         max_length=30, blank=True, help_text=('Abbreviation'),)  # The compliance abbrv
@@ -47,7 +47,7 @@ class ComplianceType(models.Model):
     """ComplianceType."""
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the compliance type'),)  # The type of compliance
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, help_text=('Description of the compliance type'),)  # Description of the compliance type
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the compliance type is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the compliance type will not be visible to the company.
@@ -108,7 +108,7 @@ class ComplianceRequirement(models.Model):
         max_length=128, blank=False, help_text=('Name of the compliance identifier'),)  # Not in use
     family = models.TextField(
         blank=True, null=True, help_text=('Family grouping of the compliance detail'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, null=True, help_text=('Description of the compliance detail request'),)  # Not in use
     requirement = models.TextField(
         blank=True, null=True, help_text=('Requirement of the compliance detail'),)  # Not in use
@@ -164,7 +164,7 @@ class KillChain(models.Model):
 
     name = models.CharField(
         max_length=45, help_text=('Type of asset'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the asset'),)  # Not in use
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that the asset type should be in for form selection'),)  # Not in use
@@ -228,7 +228,7 @@ class PyramidofPain(models.Model):
 
     name = models.CharField(
         max_length=45, help_text=('Level name of PoP reference'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the PoP level'),)  # Not in use
     abbrv = models.CharField(
         max_length=30, default=None, help_text=('Abbreviation of the name'),)  # Not in use

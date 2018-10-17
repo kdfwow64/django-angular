@@ -151,7 +151,7 @@ class IntegerType(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the integer type'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the integer type'),)  # Not in use
     # Foreign Key and Relationships
 
@@ -169,7 +169,7 @@ class RAGIndicator(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the RAG indicator'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the RAG indicator'),)  # Not in use
     # Foreign Key and Relationships
 
@@ -187,7 +187,7 @@ class Cadence(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the cadence'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the  cadence'),)  # Not in use
     example_title1 = models.CharField(
         max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
@@ -217,7 +217,7 @@ class TimeUnit(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the time range'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the time range'),)  # Not in use
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Not in use
@@ -253,7 +253,7 @@ class TaskStatus(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the task status'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the task statust'),)  # Not in use
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Not in use

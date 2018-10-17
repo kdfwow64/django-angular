@@ -45,7 +45,7 @@ class Entry(models.Model):
 
     summary = models.CharField(
         max_length=128, blank=False, help_text=('Brief description of the risk'),)  # Brief summary of the risk to be tracked.  Specifically used when listing entries.
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Broader description of the registery entry'),)  # More content to provide a better understanding of the risk.
     assumption = models.TextField(
         blank=True, null=True, help_text=('Assumptions made when defining the entry'),)  # There may be assumptions made for the entry.  This provides more insight on how the entry will be managed.
@@ -210,7 +210,7 @@ class EntryTask(models.Model):
 
     summary = models.CharField(
         max_length=128, blank=False, help_text=('Brief description of the entry'),)  # Summary of the task for the entry
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description broader description of the task'),)  # More context for the task
     due_date = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp of the task due date'),)  # Used to determine when the task is due.  Due dates my trigger an alert for the user if past due.
@@ -254,7 +254,7 @@ class EntryCause(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the cause'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the cause'),)  # Not in use
     keywords = models.TextField(
         blank=True, null=True, help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
@@ -616,7 +616,7 @@ class EntryIndicator(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the indicator'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, null=True, help_text=('Description of the indicator'),)  # Not in use
     notes = models.TextField(
         blank=True, null=True,  help_text=('Notes associated wtih the indicator'),)  # Not in use
@@ -737,7 +737,7 @@ class ResponseVote(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the response'),)  # Name of the response
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the repsonse'),)  # Description of the response
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed to the user'),)  # Used when presenting a selection to contributors
@@ -756,7 +756,7 @@ class Response(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the response'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the repsonse'),)  # Not in use
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed to the user'),)  # Not in use
@@ -837,7 +837,7 @@ class RiskType(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the business risk type'),)  # The name of the risk type
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the business risk'),)  # The description of the risk type.
     results = models.TextField(
         blank=True, help_text=('Resulting behaviour'),)  # Results that occur with the risk type happens.
@@ -877,7 +877,7 @@ class MitigationAdequacy(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of how adequate the mitigation is defined'),)  # Name of the mitigation adequacy
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of how adequate the mitigation is defined'),)  # Description of the mitigation adequacy
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use

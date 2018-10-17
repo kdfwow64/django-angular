@@ -23,7 +23,7 @@ class ActorAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
         'is_active',
         'is_human',
@@ -40,7 +40,7 @@ class ActorIntentAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'is_active',
         'sort_order',
         'keywords',
@@ -56,7 +56,7 @@ class ActorMotiveAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'is_active',
         'account',
         'sort_order',

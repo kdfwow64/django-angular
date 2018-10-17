@@ -129,6 +129,6 @@ class MeetingTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
     )
     search_fields = ('name',)

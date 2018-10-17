@@ -16,7 +16,7 @@ class EventTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
         'keywords',
         'account',
@@ -29,7 +29,7 @@ class FrequencyCategoryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'measure',
         'rating',
         'minimum',
@@ -43,7 +43,7 @@ class ImpactCategoryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'measure',
         'rating',
         'minimum',
@@ -57,7 +57,7 @@ class ImpactTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
         'keywords',
         'account',
@@ -70,7 +70,7 @@ class CIATriadAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
     )
     search_fields = ('name',)
@@ -81,7 +81,7 @@ class SeverityCategoryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'minimum',
         'maximum',
         'sort_order',

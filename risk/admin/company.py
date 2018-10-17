@@ -143,6 +143,39 @@ class CompanyMemberAdmin(admin.ModelAdmin):
     ordering = ('id_company',)
 
 
+class CompanyMemberRoleAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'name',
+        'description',
+        'keywords',
+        'is_active',
+        'company_member_role_type',
+        'company',
+    )
+    list_filter = (
+        'company_member_role_type',
+        'is_active',
+        'company',
+    )
+    search_fields = ('name', 'keywords',)
+
+
+class CompanyMemberRoleTypeAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'name',
+        'description',
+        'is_active',
+        'company',
+    )
+    list_filter = (
+        'is_active',
+        'company',
+    )
+    search_fields = ('name',)
+
+
 # class CompanyMemberGrantAdmin(admin.ModelAdmin):
 #     list_display = (
 #         'id_companymember',
@@ -163,7 +196,7 @@ class CompanyAssetTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
         'keywords',
         'company',
@@ -206,7 +239,7 @@ class CompanyObjectiveAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'monetary_value_start',
         'monetary_value_end',
         'monetary_value_current',
@@ -219,11 +252,11 @@ class CompanyObjectiveAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'name',
-        'desc',
+        'description',
         'is_active',
         'objective_owner',
     )
-    search_fields = ('name', 'desc', 'objective_owner',)
+    search_fields = ('name', 'description', 'objective_owner',)
 
 
 class CompanyControlAdmin(admin.ModelAdmin):
@@ -232,7 +265,7 @@ class CompanyControlAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'abbrv',
         'alias',
         'version',
@@ -255,7 +288,7 @@ class CompanyControlAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'name',
-        'desc',
+        'description',
         'vendor_control',
         'is_active',
         'alias',
@@ -274,7 +307,7 @@ class CompanyControlMeasureAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'formula',
         'unit',
         'baseline',
@@ -383,7 +416,7 @@ class CompanyControlCostTypeAdmin(admin.ModelAdmin):
 
     list_display = (
         'name',
-        'desc',
+        'description',
         'is_active',
         'account',
     )
@@ -404,7 +437,7 @@ class CompanyContactAdmin(admin.ModelAdmin):
         'title',
         'main_poc',
         'decision_maker',
-        'desc',
+        'description',
         'email',
         'office_phone',
         'office_phone_ext',
@@ -451,14 +484,14 @@ class CompanyContactAdmin(admin.ModelAdmin):
 
 class ContactTypeAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc')
+    list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
 class CompanyTeamAdmin(admin.ModelAdmin):
 
     inlines = (CompanyTeamMemberInline,)
-    list_display = ('id', 'name', 'desc', 'abbrv',
+    list_display = ('id', 'name', 'description', 'abbrv',
                     'company', 'lead', 'is_active')
     list_filter = ('company', 'lead', 'is_active')
     search_fields = ('name',)
@@ -488,7 +521,7 @@ class CompanyFindingAdmin(admin.ModelAdmin):
     inlines = (CompanyControlFindingInline,)
     list_display = (
         'id',
-        'desc',
+        'description',
         'date_created',
         'date_modified',
         'date_start',

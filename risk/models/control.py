@@ -9,7 +9,7 @@ class Control(models.Model):
         max_length=128, help_text=('Brand name of the control details'),)  # This should be the name of the control that is specified by the vendor.  Examples would be "Cisco ASA" 2505
     model_number = models.CharField(
         max_length=128, null=True, blank=True, help_text=('Model number of the control'),)  # The model will be used to further clarify the type of control being used if it is applicable.  A combination of the control and the model number will make the record unique. IE Cisco ASA "2505".
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the vendor control detail'),)  # Description of the control. Example may be firewall
     abbrv = models.CharField(
         max_length=30, blank=True, help_text=('Abbreviation of the vendor control name'),)  # Abbrevation of the control.  Used for reporting if present.
@@ -38,7 +38,7 @@ class ControlCategory(models.Model):
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Name of the control category'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, null=True, help_text=('Description of the asset'),)  # Not in use
     abbrv = models.CharField(
         max_length=30, blank=True, null=True, help_text=('Abbreviation of the name'),)  # Not in use
@@ -105,7 +105,7 @@ class ControlCategoryType(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Type control category'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, null=True, help_text=('Description of the asset'),)  # Not in use
     abbrv = models.CharField(
         max_length=30, blank=True, null=True, help_text=('Abbreviation of the name'),)  # Not in use
@@ -144,7 +144,7 @@ class ControlFunction(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the controls function to support mitigation of the risk '),)  # Name of the control functionality
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the control function'),)  # Name of the functionality description
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Keywords used to find the correct functionality.
@@ -185,7 +185,7 @@ class ControlCategoryFunction(models.Model):
         'Category of control'),)
     id_controlfunction = models.ForeignKey('ControlFunction', on_delete=models.PROTECT, null=True, related_name='function_control_category', help_text=(
         'Functional uses of the control'),)
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the function the control performs'),)  # This field will help the user better understand how they are using the control defined.
 
     class Meta:
@@ -198,7 +198,7 @@ class ControlOperation(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the control operational level '),)  # Name of the control operational level
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the operational level'),)  # The description of the control operational level.
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that the operational level should be in for form selection'),)  # Sort order for form selection.
@@ -237,7 +237,7 @@ class ControlCategoryOperation(models.Model):
         'Category of control'),)
     id_controloperation = models.ForeignKey('ControlOperation', on_delete=models.PROTECT, null=True, related_name='operation_control_category', help_text=(
         'Opeational level of the control'),)
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the how the control would operate at the selected level'),)  # This field will help the user better understand how they are using the control defined.
 
     class Meta:
@@ -250,7 +250,7 @@ class ControlDomain(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the control domain'),)  # This is the name of the control domain.
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the control domain'),)  # The description of the control domain.
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
@@ -290,7 +290,7 @@ class ControlCsc(models.Model):
         max_length=30, blank=False, help_text=('Version of the CSC control model'),)  # Version of the CSC publication
     number = models.CharField(
         max_length=30, blank=False, help_text=('Number of the CSC'),)  # The control number for the version.
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, help_text=('Description of the CSC Control'),)  # The description of the CSC control.
     # Foreign Key and Relationships
     control_csc_family = models.ForeignKey('ControlCscFamily', on_delete=models.PROTECT, null=True, related_name='controlcsc', help_text=(
@@ -309,7 +309,7 @@ class ControlCscFamily(models.Model):
     """Control CSC Family."""
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the indicator'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, null=True, help_text=('Description of the indicator'),)  # Not in use
     notes = models.TextField(
         blank=True, null=True,  help_text=('Notes associated wtih the indicator'),)  # Not in use
@@ -323,7 +323,7 @@ class ControlCscFamily(models.Model):
         max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
     name = models.CharField(
         max_length=45, blank=False, help_text=('Family that the CSC belongs'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=True, null=True, help_text=('Description of the family'),)  # Not in use
     # Foreign Key and Relationships
 
@@ -341,7 +341,7 @@ class DependencyType(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the dependencies effort'),)  # The name of the dependency type
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the effort requried from the dependencies'),)  # Description of the dependency type.
     DEPENDENT_CHOICES = (
         ('contact', 'Contact'),
@@ -386,7 +386,7 @@ class DependencyEffort(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the dependencies effort'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the effort requried from the dependencies'),)  # Not in use
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Not in use

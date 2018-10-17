@@ -22,7 +22,7 @@ class ControlAdmin(admin.ModelAdmin):
         'id',
         'name',
         'model_number',
-        'desc',
+        'description',
         'abbrv',
         'is_active',
         'control_category',
@@ -34,13 +34,14 @@ class ControlAdmin(admin.ModelAdmin):
 
 class ControlCscAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'version', 'number', 'desc', 'control_csc_family')
+    list_display = ('id', 'version', 'number',
+                    'description', 'control_csc_family')
     list_filter = ('control_csc_family',)
 
 
 class ControlCscFamilyAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc')
+    list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
@@ -49,7 +50,7 @@ class ControlDomainAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
     )
     search_fields = ('name',)
@@ -60,7 +61,7 @@ class ControlFunctionAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
     )
     search_fields = ('name',)
@@ -71,7 +72,7 @@ class ControlOperationAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
     )
     search_fields = ('name',)
@@ -82,7 +83,7 @@ class ControlCategoryAdmin(admin.ModelAdmin):
     inlines = (ControlCategoryOperationInline, ControlCategoryFunctionInline)
     list_display = (
         'name',
-        'desc',
+        'description',
         'abbrv',
         'keywords',
         'example_title1',
@@ -105,7 +106,7 @@ class ControlCategoryTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'abbrv',
         'keywords',
     )
@@ -117,7 +118,7 @@ class DependencyEffortAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
     )
     search_fields = ('name',)
@@ -128,7 +129,7 @@ class DependencyTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'dependent',
         'keywords',
     )

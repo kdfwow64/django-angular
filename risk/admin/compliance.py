@@ -10,7 +10,7 @@ class ComplianceAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'abbrv',
         'is_active',
         'is_trademarked',
@@ -29,7 +29,7 @@ class ComplianceTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'is_active',
         'account',
         'desc_alt',
@@ -104,7 +104,7 @@ class KillChainAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
         'keywords',
         'desc_alt',
@@ -123,7 +123,7 @@ class PyramidofPainAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'abbrv',
         'sort_order',
         'keywords',

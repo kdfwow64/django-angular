@@ -7,7 +7,7 @@ class Notification(models.Model):
 
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the alert notifiication'),)  # Name of the notification
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the alert notifiication'),)  # Name of the notification group
     # Foreign Key and Relationships
     account = models.ForeignKey('Account', on_delete=models.PROTECT, default=1, blank=False, related_name='account_notification', help_text=(
@@ -27,7 +27,7 @@ class NotificationGroup(models.Model):
 
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the notifiication group'),)  # Name of the notification
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the notifiication group'),)  # Name of the notification group
     # Foreign Key and Relationships
     account = models.ForeignKey('Account', on_delete=models.PROTECT, default=1, blank=False, related_name='account_notificationgroup', help_text=(

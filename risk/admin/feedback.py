@@ -84,7 +84,7 @@ class FeedbackQuestionAdmin(admin.ModelAdmin):
 
 class FeedbackStatusAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc')
+    list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
@@ -93,7 +93,7 @@ class FeedbackTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
     )
     search_fields = ('name',)

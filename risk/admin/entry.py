@@ -119,7 +119,7 @@ class EntryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'summary',
-        'desc',
+        'description',
         'assumption',
         'entry_number',
         'date_created',
@@ -156,7 +156,7 @@ class EntryAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'summary',
-        'desc',
+        'description',
         'assumption',
         'aro_notes',
         'impact_notes',
@@ -169,7 +169,7 @@ class EntryTaskAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'summary',
-        'desc',
+        'description',
         'due_date',
         'internal_ticket',
         'date_created',
@@ -211,7 +211,7 @@ class RiskTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
         'account',
     )
@@ -224,7 +224,7 @@ class EntryCauseAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
         'entry',
     )
@@ -298,7 +298,7 @@ class EntryIndicatorAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'notes',
         'entry',
     )
@@ -337,7 +337,7 @@ class ResponseVoteAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
     )
     search_fields = ('name',)
@@ -348,7 +348,7 @@ class ResponseAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
         'keywords',
     )
@@ -375,7 +375,7 @@ class MitigationAdequacyAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'keywords',
     )
     search_fields = ('name',)

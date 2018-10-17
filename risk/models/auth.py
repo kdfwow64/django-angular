@@ -154,7 +154,7 @@ class AccountType(models.Model):
 
     name = models.CharField(
         max_length=30, blank=False, help_text=_('Name of the account type'),)  # Name of the account type
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of  the account type'),)  # Description of the account type
     annual_cost = models.DecimalField(
         default=0, help_text=('Annual cost for the account type'), decimal_places=2, max_digits=30)  # Annual cost in USD for the account type.  This will need to be paid in full before use unless the account is demo/pilot.
@@ -336,7 +336,7 @@ class UserLevel(models.Model):
 
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the user level'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the user level'),)  # Not in use
     # Foreign Keys and Relationships
 
@@ -355,7 +355,7 @@ class UserRole(models.Model):
 
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the user role'),)
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the user role'),)  # Not in use
     grants = models.ManyToManyField("UserGrant", through='DefaultRoleGrant',
                                     through_fields=('id_userrole', 'id_usergrant'), related_name='RoleGrants', help_text=('Default grants for a specific role'),)  # Roles are evaluated at both the account and company level.  This mappings specifies the default grants that the role will have for both cases.  Administrators will be able to modify the grants at the company level if needed.
@@ -375,7 +375,7 @@ class UserGrant(models.Model):
 
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the grant created to provide functionality'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the grant'),)  # Not in use
     # Foreign Key and Relationships
 
@@ -427,7 +427,7 @@ class AuthenticationType(models.Model):
 
     name = models.CharField(
         max_length=30, blank=False, help_text=('Name of the authentication type to be used during login'),)  # Users will have multiple methods of authentication based on the security requirements needed.
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the authentication type'),)  # Description of the authentication type
     # Foreign Key and Relationships
 

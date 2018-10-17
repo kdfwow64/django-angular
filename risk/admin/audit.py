@@ -13,7 +13,7 @@ class NotificationEmailDistroInline(admin.TabularInline):
 
 class NotificationAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc')
+    list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
@@ -22,7 +22,7 @@ class NotificationGroupAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'account',
     )
     list_filter = ('name', 'account')

@@ -212,7 +212,7 @@ class MeetingType(models.Model):
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Name of the meeting type'),)  # Name of the meeting type
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the meeting type'),)  # Description of the meeting type
     desc_alt = models.CharField(
         max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Text hovering discription

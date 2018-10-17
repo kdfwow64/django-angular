@@ -7,7 +7,7 @@ class Actor(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the threat actor'),)  # Name of the threat actor.
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the actor'),)  # Description of the threat actor
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct actor name'),)  # Used during searches to make sure that you are not duplicating actors.
@@ -54,7 +54,7 @@ class ActorIntent(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the theat actors intent'),)  # Name of the malicious intent the threat Actor may have on the asset.
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the threat actors intent'),)  # Name of the description
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed'),)  # This is used to determine the
@@ -118,7 +118,7 @@ class ActorMotive(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the theat actors motive'),)  # Name of the threat actor motive.
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the threat actors motive'),)  # Description of the threat actor motive
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Order used to display the threat actor motives

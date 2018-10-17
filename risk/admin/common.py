@@ -66,13 +66,13 @@ class ExpressionAdmin(admin.ModelAdmin):
 
 class IntegerTypeAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc')
+    list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
 class RAGIndicatorAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc')
+    list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
@@ -81,7 +81,7 @@ class CadenceAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
     )
     search_fields = ('name',)
 
@@ -91,7 +91,7 @@ class TimeUnitAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'desc',
+        'description',
         'sort_order',
     )
     search_fields = ('name',)
@@ -99,5 +99,5 @@ class TimeUnitAdmin(admin.ModelAdmin):
 
 class TaskStatusAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'name', 'desc', 'sort_order')
+    list_display = ('id', 'name', 'description', 'sort_order')
     search_fields = ('name',)

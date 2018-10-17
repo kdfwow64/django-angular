@@ -190,7 +190,7 @@ class ProjectRiskTypeAdmin(admin.ModelAdmin):
     list_display = (
         'is_active',
         'name',
-        'desc',
+        'description',
         'date_created',
         'date_modified',
         'date_deactivated',
@@ -204,7 +204,7 @@ class ProjectRiskTypeAdmin(admin.ModelAdmin):
     list_filter = (
         'is_active',
         'name',
-        'desc',
+        'description',
         'created_by',
         'modified_by',
         'deactivated_by',
@@ -326,7 +326,7 @@ class ProjectUpdateAdmin(admin.ModelAdmin):
     list_display = (
         'is_active',
         'summary',
-        'desc',
+        'description',
         'date_created',
         'date_modified',
         'date_deactivated',
@@ -341,7 +341,7 @@ class ProjectUpdateAdmin(admin.ModelAdmin):
     list_filter = (
         'is_active',
         'summary',
-        'desc',
+        'description',
         'created_by',
         'modified_by',
         'deactivated_by',

@@ -7,7 +7,7 @@ class EventType(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the event type'),)  # Name of the event
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the event type'),)  # Not in use
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Not in use
@@ -74,7 +74,7 @@ class FrequencyCategory(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the frequency'),)  # Name of the frequency cadence
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the frequency'),)  # Description of the frequency
     measure = models.CharField(
         max_length=45, blank=False, help_text=('Measurement of the frequency'),)  # The measurement of frequency occurences within a year
@@ -122,7 +122,7 @@ class ImpactCategory(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the impact'),)  # Name of the impact level
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the impact'),)  # Description of the impact level
     measure = models.CharField(
         max_length=45, blank=False, help_text=('Measurement of the impact'),)  # Measurement of the impact
@@ -164,7 +164,7 @@ class ImpactType(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the impact type'),)  # Name of the impact type
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the impact type'),)  # Description of the impact type
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Used for sorting the impact type
@@ -204,7 +204,7 @@ class CIATriad(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the objective'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the objective'),)  # Not in use
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
@@ -240,7 +240,7 @@ class SeverityCategory(models.Model):
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the severity'),)  # Not in use
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the serverity'),)  # Not in use
     minimum = models.FloatField(default=0, blank=True, help_text=(
         'Minimum percentage of severity'),)  # Not in use

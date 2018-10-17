@@ -24,7 +24,7 @@ class PlaybookRole(models.Model):
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Name of the company playbook role'),)  # Role type name for playbooks
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the company playbook role'),)  # Role type description for playbooks
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the role is active for use'),)
@@ -47,7 +47,7 @@ class PlaybookRoleType(models.Model):
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Name of the playbook member role type'),)  # Role type name for playbooks
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the company playbook member role type'),)  # Role type description for playbooks
     is_active = models.BooleanField(
         default=True, help_text=('Designates whether the member role type is active for use'),)
@@ -68,7 +68,7 @@ class PlaybookActionType(models.Model):
 
     name = models.CharField(
         max_length=128, blank=False, help_text=('Name of the company playbook action type'),)  # Action type name for playbooks
-    desc = models.TextField(
+    description = models.TextField(
         blank=False, help_text=('Description of the company playbook action type'),)  # Action type description for playbooks
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that the action type should be in for form selection'),)  # Not in use
