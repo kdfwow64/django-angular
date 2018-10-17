@@ -63,6 +63,10 @@ from .company import (
     ContactType,
     CompanyLocation,
     CompanyTeam,
+    CompanyPlaybook,
+    CompanyPlaybookMember,
+    CompanyPlaybookMemberResponsibility,
+    CompanyPlaybookAction,
 )
 from .compliance import (
     Compliance,
@@ -135,12 +139,19 @@ from .scenario import (
     ImpactCategory,
     ImpactType,
     CIATriad,
-    Severity,
+    SeverityCategory,
 )
 from .vendor import (
     Vendor,
     VendorCategory,
     VendorType,
+)
+
+from .response import (
+    PlaybookRole,
+    PlaybookRoleType,
+    PlaybookActionType,
+    PlaybookResponsibility,
 )
 
 from .project import (

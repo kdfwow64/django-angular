@@ -4,7 +4,7 @@ from django.http import JsonResponse
 
 from risk.models import (
     ImpactType,
-    Severity,
+    SeverityCategory,
 )
 
 
@@ -22,7 +22,8 @@ def get_all_impact_types_for_dropdown(request):
 def get_all_severities_for_dropdown(request):
     """Get all severity types for dropdown."""
     data = []
-    for severity in Severity.objects.order_by('name').all():
-        data.append({'id': severity.id, 'name': severity.name})
+    for severity_category in SeverityCategory.objects.order_by('name').all():
+        data.append({'id': severity_category.id,
+                     'name': severity_category.name})
 
     return JsonResponse(data, safe=False)

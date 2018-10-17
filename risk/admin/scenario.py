@@ -76,7 +76,7 @@ class CIATriadAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class SeverityAdmin(admin.ModelAdmin):
+class SeverityCategoryAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',

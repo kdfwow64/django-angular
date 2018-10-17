@@ -235,7 +235,7 @@ class CIATriad(models.Model):
         return self.name
 
 
-class Severity(models.Model):
+class SeverityCategory(models.Model):
     """Severity."""
 
     name = models.CharField(
@@ -269,7 +269,7 @@ class Severity(models.Model):
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Severity")
+        verbose_name_plural = ("Severity Categories")
 
     def __str__(self):
         """String."""

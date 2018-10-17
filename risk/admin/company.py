@@ -1,5 +1,5 @@
 from django.contrib import admin
-from risk.models.company import CompanyMember, CompanyProfile, CompanyMemberGrant, CompanyControlLocation, CompanyTeamMember, CompanyAssetSegment, CompanyAssetLocation, CompanyControlFinding, CompanyControlSegment, CompanyControlDependency, CompanyObjectiveRiskType
+from risk.models.company import CompanyMember, CompanyProfile, CompanyMemberGrant, CompanyControlLocation, CompanyTeamMember, CompanyAssetSegment, CompanyAssetLocation, CompanyControlFinding, CompanyControlSegment, CompanyControlDependency, CompanyObjectiveRiskType, CompanyPlaybookMember
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -69,6 +69,12 @@ class CompanyControlFindingInline(admin.TabularInline):
 class CompanyObjectiveRiskTypeInline(admin.TabularInline):
 
     model = CompanyObjectiveRiskType
+    extra = 1
+
+
+class CompanyPlaybookMemberInline(admin.TabularInline):
+
+    model = CompanyPlaybookMember
     extra = 1
 
 
@@ -504,4 +510,46 @@ class CompanyFindingAdmin(admin.ModelAdmin):
         'created_by',
         'modified_by',
         'deleted_by',
+    )
+
+
+class CompanyPlaybookAdmin(admin.ModelAdmin):
+
+    inlines = (CompanyPlaybookMemberInline,)
+    list_display = (
+        'name',
+        'summary',
+        'created_by',
+        'modified_by',
+        'deactivated_by',
+        'playbook_owner',
+        'evaluation_days',
+        'evaluation_flg',
+        'company',
+    )
+    list_filter = (
+        'playbook_owner',
+        'evaluation_flg',
+        'company',
+    )
+
+
+class CompanyPlaybookActionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'id',
+        'action',
+        'sequence_order',
+        'attest_days',
+        'attest_flg',
+        'date_last_attested',
+        'action_type',
+        'company_playbook',
+        'playbook_action_owner',
+    )
+    list_filter = (
+        'attest_flg',
+        'action_type',
+        'company_playbook',
+        'playbook_action_owner',
     )

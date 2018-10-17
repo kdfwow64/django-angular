@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 
 # Model files
 from ..models.auth import User, Account, AccountType, UserAccess, UserRole, UserGrant, RoleTracking, AuthenticationType
-from ..models.company import Company, CompanyMember, CompanyAsset, CompanyObjective, CompanyControl, CompanyControlMeasure, CompanyControlMeasurementResult, CompanyControlOpex, CompanyControlCapex, CompanyControlDependency, CompanyControlCost, CompanyControlCostType, CompanyAssetType, CompanyContact, ContactType, CompanyFinding, CompanyTeam, CompanyLocation
+from ..models.company import Company, CompanyMember, CompanyAsset, CompanyObjective, CompanyControl, CompanyControlMeasure, CompanyControlMeasurementResult, CompanyControlOpex, CompanyControlCapex, CompanyControlDependency, CompanyControlCost, CompanyControlCostType, CompanyAssetType, CompanyContact, ContactType, CompanyFinding, CompanyTeam, CompanyLocation, CompanyPlaybook, CompanyPlaybookMember, CompanyPlaybookMemberResponsibility, CompanyPlaybookAction
 from ..models.actor import ActorIntent, ActorMotive, Actor
 from ..models.audit import Notification, NotificationGroup, AuditChange, Snapshot
 from ..models.common import Calendar, CurrencyType, DataType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus
@@ -12,14 +12,15 @@ from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomai
 from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponse, EntryRiskType, RiskType, Response, ResponseVote, EntryUrl, MitigationAdequacy
 from ..models.feedback import Feedback, FeedbackStatus, FeedbackType, FeedbackQuestion, FeedbackAnswer, FeedbackCorrespondence
 from ..models.meeting import Meeting, TopicComment, TopicAction, MeetingTopic, MeetingType
-from ..models.scenario import EventType, FrequencyCategory, ImpactCategory, ImpactType, CIATriad, Severity
+from ..models.scenario import EventType, FrequencyCategory, ImpactCategory, ImpactType, CIATriad, SeverityCategory
+from ..models.response import PlaybookRole, PlaybookRoleType, PlaybookActionType, PlaybookResponsibility
 from ..models.vendor import Vendor, VendorType, VendorCategory
 from ..models.project import Project, ProjectAssumption, ProjectSuccessCriteria, ProjectBenefit, ProjectMilestone, ProjectRisk, ProjectRiskType, ProjectBudgetChange, ProjectDateChange, ProjectUAT, ProjectUpdate
 
 
 # Admin files
 from .auth import UserAdmin, AccountAdmin, AccountMembership, AccountTypeAdmin, UserAccessAdmin, UserRoleAdmin, UserGrantAdmin, RoleTrackingAdmin, AuthenticationTypeAdmin
-from .company import CompanyAdmin, CompanyMemberAdmin, CompanyAssetAdmin, CompanyObjectiveAdmin, CompanyControlAdmin, CompanyControlMeasureAdmin, CompanyControlMeasurementResultAdmin, CompanyControlOpexAdmin, CompanyControlCapexAdmin, CompanyControlDependencyAdmin, CompanyControlCostAdmin, CompanyControlCostTypeAdmin, CompanyContactAdmin, ContactTypeAdmin, CompanyTeamAdmin, CompanyAssetTypeAdmin, CompanyControlAdmin, CompanyLocationAdmin, CompanyFindingAdmin
+from .company import CompanyAdmin, CompanyMemberAdmin, CompanyAssetAdmin, CompanyObjectiveAdmin, CompanyControlAdmin, CompanyControlMeasureAdmin, CompanyControlMeasurementResultAdmin, CompanyControlOpexAdmin, CompanyControlCapexAdmin, CompanyControlDependencyAdmin, CompanyControlCostAdmin, CompanyControlCostTypeAdmin, CompanyContactAdmin, ContactTypeAdmin, CompanyTeamAdmin, CompanyAssetTypeAdmin, CompanyControlAdmin, CompanyLocationAdmin, CompanyFindingAdmin, CompanyPlaybookAdmin, CompanyPlaybookActionAdmin
 from .actor import ActorIntentAdmin, ActorMotiveAdmin, ActorAdmin
 from .audit import NotificationAdmin, NotificationGroupAdmin, AuditChangeAdmin, SnapshotAdmin
 from .common import CalendarAdmin, CurrencyTypeAdmin, DataTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin
@@ -28,7 +29,8 @@ from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, Contr
 from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
 from .feedback import FeedbackAdmin, FeedbackStatusAdmin, FeedbackTypeAdmin, FeedbackQuestionAdmin, FeedbackAnswerAdmin, FeedbackCorrespondenceAdmin
 from .meeting import MeetingAdmin, TopicCommentAdmin, TopicActionAdmin, MeetingTopicAdmin, MeetingTypeAdmin
-from .scenario import EventTypeAdmin, FrequencyCategoryAdmin, ImpactCategoryAdmin, ImpactTypeAdmin, CIATriadAdmin, SeverityAdmin
+from .scenario import EventTypeAdmin, FrequencyCategoryAdmin, ImpactCategoryAdmin, ImpactTypeAdmin, CIATriadAdmin, SeverityCategoryAdmin
+from .response import PlaybookRoleAdmin, PlaybookRoleTypeAdmin, PlaybookActionTypeAdmin, PlaybookResponsibilityAdmin
 from .vendor import VendorAdmin, VendorTypeAdmin, VendorCategoryAdmin
 from .project import ProjectAdmin, ProjectAssumptionAdmin, ProjectSuccessCriteriaAdmin, ProjectBenefitAdmin, ProjectMilestoneAdmin, ProjectRiskAdmin, ProjectRiskTypeAdmin, ProjectBudgetChangeAdmin, ProjectDateChangeAdmin, ProjectUATAdmin, ProjectUpdateAdmin
 # Register your models here.
@@ -74,6 +76,8 @@ admin.site.register(CompanyControlCapex, CompanyControlCapexAdmin)
 admin.site.register(CompanyControlDependency, CompanyControlDependencyAdmin)
 admin.site.register(CompanyControlCost, CompanyControlCostAdmin)
 admin.site.register(CompanyControlCostType, CompanyControlCostTypeAdmin)
+admin.site.register(CompanyPlaybook, CompanyPlaybookAdmin)
+admin.site.register(CompanyPlaybookAction, CompanyPlaybookActionAdmin)
 admin.site.register(CompanyContact, CompanyContactAdmin)
 admin.site.register(CompanyFinding, CompanyFindingAdmin)
 admin.site.register(ContactType, ContactTypeAdmin)
@@ -129,7 +133,11 @@ admin.site.register(FrequencyCategory, FrequencyCategoryAdmin)
 admin.site.register(ImpactCategory, ImpactCategoryAdmin)
 admin.site.register(ImpactType, ImpactTypeAdmin)
 admin.site.register(CIATriad, CIATriadAdmin)
-admin.site.register(Severity, SeverityAdmin)
+admin.site.register(SeverityCategory, SeverityCategoryAdmin)
+admin.site.register(PlaybookRoleType, PlaybookRoleTypeAdmin)
+admin.site.register(PlaybookRole, PlaybookRoleAdmin)
+admin.site.register(PlaybookActionType, PlaybookActionTypeAdmin)
+admin.site.register(PlaybookResponsibility, PlaybookResponsibilityAdmin)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(VendorType, VendorTypeAdmin)
 admin.site.register(VendorCategory, VendorCategoryAdmin)

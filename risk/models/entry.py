@@ -833,7 +833,7 @@ class EntryUrl(models.Model):
 
 
 class RiskType(models.Model):
-    """Risk Type.   The type of business risk assocated to the threat scenerio"""
+    """Risk Type.   The type of business risk associated to the threat scenerio"""
 
     name = models.CharField(
         max_length=45, blank=False, help_text=('Name of the business risk type'),)  # The name of the risk type

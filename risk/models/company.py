@@ -201,6 +201,52 @@ class CompanyMemberGrant(models.Model):
         return self.id_companymember
 
 
+class CompanyMemmberRole(models.Model):
+    """ The role the member plays in the company."""
+
+    name = models.CharField(
+        max_length=128, blank=False, help_text=('Role of the member'),)  # Role of the member
+    desc = models.TextField(
+        blank=False, help_text=('Description of the role'),)  # Role description of the member
+    is_active = models.BooleanField(
+        default=True, help_text=('Designates whether the role is active for use'),)
+    companymemberroletype = models.ForeignKey(
+        'CompanyMemberRoleType', blank=True, null=True, related_name='company_memberroletype', on_delete=models.PROTECT, help_text=('The role type that the member role is related'),)  # The type of role the member belongs to.
+    company = models.ForeignKey(
+        'Company', default=1, related_name='company_memberrole', on_delete=models.PROTECT, help_text=('The company that the member role is related'),)  # Companies have the ability to add their own member roles if desired.  These will be under review for addtion to CORE.  Default submission is set to Core Company.
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Member Roles")
+
+
+class CompanyMemberRoleType(models.Model):
+    """ The type of role of the company member"""
+
+    name = models.CharField(
+        max_length=128, blank=False, help_text=('Name of the company role type'),)  # Role type name
+    abbrv = models.CharField(
+        max_length=16, blank=True, help_text=('Abbreviation of the company role type'),)  # Role type abbreviation
+    desc = models.TextField(
+        blank=False, help_text=('Description of the company role type'),)  # Role type description
+    is_active = models.BooleanField(
+        default=True, help_text=('Designates whether the role is active for use'),)
+    company = models.ForeignKey(
+        'Company', default=1, related_name='company_roletype', on_delete=models.PROTECT, help_text=('The company that the role type is managed.'),)  # Companies have the ability to add their own role types if desired.  These will be under review for addtion to CORE.  Default submission is set to Core Company.
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Member Role Types")
+
+
 class CompanyAsset(models.Model):
     """Company Asset.
 
@@ -587,9 +633,9 @@ class CompanyControlDependency(models.Model):
     """Company Control Dependency."""
 
     id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='dependency_companycontrol', help_text=(
-        'The company control the dependency is assocated'),)
+        'The company control the dependency is associated'),)
     id_controldependency = models.ForeignKey('DependencyType', on_delete=models.PROTECT, null=True, related_name='companycontrol_dependency', help_text=(
-        'The company control the dependency is assocated'),)
+        'The company control the dependency is associated'),)
     row = models.IntegerField(blank=False, help_text=(
         'Identify the dependency type variable'),)  # Used in conjuction with the id_dependencytype selection to identify the dependent.
     is_active = models.BooleanField(
@@ -1037,6 +1083,104 @@ class CompanyControlFinding(models.Model):
         """Meta class."""
         verbose_name_plural = ("Company Control Findings")
 
+
+class CompanyPlaybook(models.Model):
+    """This table describes the incident response procedures for the company based on certain use cases.  Playbooks belonging to core company will be leveraged as examples for templates or best practice"""
+
+    name = models.CharField(
+        max_length=30, blank=False, help_text=('Name of the incident response playbook'),)  # Name of the IR Playbook
+    summary = models.TextField(
+        blank=False, help_text=('Executive summary of the incident response playbook'),)  # Description of the playbook
+    created_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='created_playbook', help_text=(
+        'User id of the user that created the playbook'),)  # User that created the playbook
+    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='modified_playbook', help_text=(
+        'User id that last modified the playbook'),)  # User that last modified the playbook
+    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='deactivated_playbook', help_text=(
+        'User id if deactivated by another user'),)  # User that deactivated the playbook
+    playbook_owner = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='owner_playbook', help_text=(
+        ' Who owns management of the incident repsonse playbook.  This should be a contributor of the system'),)  # User that currently owns and is held accountable for the incidnet response playbook
+    evaluation_days = models.IntegerField(blank=True, null=True,
+                                          help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
+    evaluation_flg = models.BooleanField(
+        default=False, help_text=('Defines if an evaluation is due for the playbook'),)  # If True, evaluation is needed.  Often used to overide a timed evaluation.
+    # Foreign Key and Relationships
+    company = models.ForeignKey('Company', on_delete=models.PROTECT, null=True, blank=True, related_name='company_playbook', help_text=(
+        'The company that the playbook belongs'),)  # When a company creates a playbook within the application.
+    playbook_company_member = models.ManyToManyField('User', through='CompanyPlaybookMember',
+                                                     through_fields=('id_company_playbook', 'id_company_member'), related_name='CompanyPlaybookMembers', help_text=('Specifies which company members have a role in the playbook'),)  # Specifies what users have acess to the company.
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Playbooks")
+
+
+class CompanyPlaybookMember(models.Model):
+    """User Responsibilities for the playbooks."""
+
+    id_company_playbook = models.ForeignKey('CompanyPlaybook', on_delete=models.CASCADE, null=True, related_name='company_playbook_user', help_text=(
+        'The company incident repsonse playbook used if the risk occurs'),)
+    id_company_member = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='user_company_playbook', help_text=(
+        'The user associated to the company incident response playbook'),)
+    member_role = models.ForeignKey('PlaybookRole', on_delete=models.PROTECT, null=True, blank=True, related_name='member_playbook_role', help_text=(
+        'The role a member will have for the playbook'),)  # When a member is added to the play book, they will have a role.
+    member_responsibilites = models.ManyToManyField('PlaybookResponsibility', through='CompanyPlaybookMemberResponsibility',
+                                                    through_fields=('id_company_playbook_member', 'id_playbook_responsibility'), related_name='CompanyPlaybookMemberResponsibilities', help_text=('Specifies which members have responsibilites in the playbook'),)  # Specifies what users have acess to the company.
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Playbook Members")
+
+
+class CompanyPlaybookMemberResponsibility(models.Model):
+    """User Responsibilities for the playbooks."""
+
+    id_playbook_responsibility = models.ForeignKey('PlaybookResponsibility', on_delete=models.CASCADE, null=True, related_name='company_playbook_responsibility', help_text=(
+        'The responsibility the member has in the playbook if the risk occurs'),)
+    id_company_playbook_member = models.ForeignKey('CompanyPlaybookMember', on_delete=models.CASCADE, null=True, related_name='member_company_playbook_responsibility', help_text=(
+        'The responsibility associated to the company member for the incident response playbook'),)
+    attest_days = models.IntegerField(default=365,
+                                      help_text=('Defines the default number of days for the assetation period'),)  # How often a user should attest to their responsibilites
+    attest_flg = models.BooleanField(
+        default=False, help_text=('Defines if an attestment is due for the playbook responsbility'),)  # If True, attestment is needed.  Often used to overide a timed attestation period.
+    date_last_attested = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the company member last attested to the responsibility'),)  # Users must attest to the responsbilities they have for incident response.
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Playbook Member Responsibilities")
+
+
+class CompanyPlaybookAction(models.Model):
+    """Actions for the playbook.  What to do in the event the risk entry is realized"""
+
+    action = models.TextField(
+        blank=False, help_text=('Description of the action a user must take for the playbook'),)  # The action the user will have for the playbook.
+    sequence_order = models.IntegerField(
+        blank=True, null=True, help_text=('Sequence the actions should be taken in the playbook.'),)  # Not in use
+    attest_days = models.IntegerField(default=365,
+                                      help_text=('Defines the default number of days for the assetation period'),)  # How often a user should attest to their actions
+    attest_flg = models.BooleanField(
+        default=False, help_text=('Defines if an attestment is due for the playbook action'),)  # If True, attestment is needed.  Often used to overide a timed attestation period.
+    date_last_attested = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the company member last attested to the responsibility'),)  # Users must attest to the actionss they have for incident response.
+    action_type = models.ForeignKey('PlaybookActionType', on_delete=models.CASCADE, null=True, blank=True, related_name='company_playbook_action', help_text=(
+        'The type of playbook action'),)  # Actions will be grouped by type and then listed in sequence order
+    company_playbook = models.ForeignKey('CompanyPlaybook', on_delete=models.CASCADE, null=True, blank=True, related_name='company_playbook_action', help_text=(
+        'The actions assigned in the company playbook'),)
+    playbook_action_owner = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='action_owner_playbook', help_text=(
+        ' Who owns the action for incident repsonse playbook.'),)  # User that currently owns and is held accountable for the incidnet response playbook action defined.
+
+    def __str__(self):
+        """String."""
+        return self.action
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Playbook Actions")
 
 '''
 class CompanyControlContact(models.Model):
