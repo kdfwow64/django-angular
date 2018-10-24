@@ -76,7 +76,7 @@ def api_list_risk_entries(request):
             'owner_id': entry.entry_owner.id,
             'active': 1 if entry.is_active else 0,
             'impact_notes': entry.impact_notes,
-            'dec': entry.desc,
+            'description': entry.description,
         })
 
     data = {
@@ -454,7 +454,7 @@ def api_get_risk_entry(request, entry_id):
                 'basicinfo': {
                     'entry_id': risk_entry.id,
                     'summary': risk_entry.summary,
-                    'desc': risk_entry.desc,
+                    'description': risk_entry.description,
                     'risk_types': [ert.id_risktype_id for ert in risk_entry.entryrisktype.all()],
                     'final_response': final_response,
                     'locations': [loc.id_companylocation_id for loc in risk_entry.entry_companylocation.all()] or [1, ],

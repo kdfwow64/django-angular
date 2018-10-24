@@ -243,9 +243,6 @@ class Account(models.Model):
     class Meta:
         """Meta Class."""
 
-        indexes = [
-            models.Index(fields=['is_active'], name='is_active_idx'), ]
-
 #    def get_members(self):
 #        return "\n".join([m.members for m in self.member.all()])
 

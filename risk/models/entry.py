@@ -68,9 +68,9 @@ class Entry(models.Model):
     aro_notes = models.TextField(
         blank=True, help_text=('Additional notes from the contributor regarding the frequency calculation.'),)  # Notes regarding the frequency of the threat event
     impact_notes = models.TextField(
-        blank=True, help_text=('Notes regarding the impact logic'),)  # Notes regarding the impactt of the threat event if it occurs.
+        blank=True, null=True, help_text=('Notes regarding the impact logic'),)  # Notes regarding the impactt of the threat event if it occurs.
     additional_mitigation = models.TextField(
-        blank=True, help_text=('Are there other opportunites to prevent the threat event'),)  # Kept to determine other areas of improvment that could performed.
+        blank=True, null=True, help_text=('Are there other opportunites to prevent the threat event'),)  # Kept to determine other areas of improvment that could performed.
     defined1 = models.CharField(
         max_length=128, blank=True, help_text=('Custom defined field for the company '),)  # Used for the custom entry field that may be captured for the client.
     defined2 = models.CharField(

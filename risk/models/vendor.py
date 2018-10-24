@@ -82,8 +82,13 @@ class Vendor(models.Model):
         'User id if deleted by another user'),)  # User that deleted the vendor.  Note: Vendors are never deleted, just removed from view of the Account Users.
     initial_account = models.ForeignKey('Account', default=1, on_delete=models.PROTECT, related_name='inital_account_vendor', help_text=(
         'Acocunt that initally created the vendor'),)  # If an Account creates a vendor that is transitioned to CORE, this will keep track of the original account creator.
-    company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, related_name='company_vendor', help_text=(
-        'Company that the vendor is associated with.  If CORE, then all accounts and companies'),)  # Vendors are defined at the Company level need to be approved by the option Vendor.account_approved at the account level for before other companies in the same account can leverage the vendor.
+    # company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, related_name='company_vendor', help_text=(
+    #     'Company that the vendor is associated with.  If CORE, then all accounts and companies'),)  # Vendors are defined at the Company level need to be approved by the option Vendor.account_approved at the account level for before other companies in the same account can leverage the vendor.
+    # Vendors are defined at the Company level need to be approved by the
+    # option Vendor.account_approved at the account level for before other
+    # companies in the same account can leverage the vendor.
+    account = models.ForeignKey('Account', default=1, on_delete=models.PROTECT, related_name='account_vendor', help_text=(
+        'Account that the vendor is associated with.  If CORE, then all accounts and companies'),)
     vendortypes = models.ManyToManyField("VendorType", through='VendorTypeMap',
                                          through_fields=('vendor', 'vendor_type'), related_name='VendorTypeMapping', help_text=('Maps vendors to their associated type'),)  # Vendors may perform mupltiple type of functions for Accounts.
     vendorcategories = models.ManyToManyField("VendorCategory", through='VendorCategoryMap',

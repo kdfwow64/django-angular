@@ -7,7 +7,7 @@ class RiskEntryBasicForm(forms.ModelForm):
     """Form for users to create new Risk Entry."""
 
     summary = forms.CharField(required=True, min_length=25, max_length=255)
-    desc = forms.CharField(required=True)
+    description = forms.CharField(required=True)
     risk_types = forms.CharField(required=True)
     final_response = forms.CharField(required=True)
     entry_owner = forms.CharField(required=True)
@@ -21,5 +21,5 @@ class RiskEntryBasicForm(forms.ModelForm):
         """Meta Class."""
 
         model = Entry
-        fields = ("summary", "desc", "risk_types", "final_response",
+        fields = ("summary", "description", "risk_types", "final_response",
                   "locations", "compliances", "aro_multiplier", "aro_notes")

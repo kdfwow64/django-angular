@@ -105,8 +105,7 @@ class Company(models.Model):
 
         ordering = ['account']
         indexes = [
-            models.Index(fields=['name'], name='name_idx'),
-            models.Index(fields=['is_active'], name='is_active_idx'), ]
+            models.Index(fields=['name'], name='name_idx'), ]
         verbose_name_plural = ("Companies")
 
     def __str__(self):
@@ -844,8 +843,7 @@ class CompanyContact(models.Model):
         """Meta class."""
 
         indexes = [
-            models.Index(fields=['email'], name='email_idx'),
-            models.Index(fields=['is_active'], name='is_active_idx'), ]
+            models.Index(fields=['email'], name='email_idx'), ]
         verbose_name_plural = ("Company Contacts")
 
     def __str__(self):
