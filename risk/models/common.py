@@ -1,5 +1,8 @@
 """Internal Maintenace, Notifications, Reporting & related models."""
 from django.db import models
+from risk.models.utility import (
+    Selector, DefaultFields, DefaultFieldsCategory, DefaultFieldsEvaluation
+)
 
 
 class Calendar(models.Model):
@@ -212,32 +215,11 @@ class Cadence(models.Model):
         return self.name
 
 
-class TimeUnit(models.Model):
+class TimeUnit(DefaultFieldsCategory):
     """Time Unit"""
 
-    name = models.CharField(
-        max_length=45, blank=False, help_text=('Name of the time range'),)  # Not in use
-    description = models.TextField(
-        blank=False, help_text=('Description of the time range'),)  # Not in use
-    sort_order = models.IntegerField(
-        blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Not in use
-    example_title1 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
-    example_title2 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 2'),)  # Not in use
-    example_content1 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 1'),)  # Not in use
-    example_content2 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
-    example_image1 = models.ImageField(
-        help_text=('Image used to support context for example 1'), null=True, blank=True,)  # Not in use
-    example_image2 = models.ImageField(
-        help_text=('Image used to support context for example 2'), null=True, blank=True,)  # Not in use
-    desc_alt = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
-    desc_form = models.CharField(
-        max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
-    # Foreign Key and Relationships
+    annual_units = models.IntegerField(null=True, blank=True, help_text=(
+        'Number of units in a year'),)  # Used to for annualization logic.
 
     def __str__(self):
         """String."""

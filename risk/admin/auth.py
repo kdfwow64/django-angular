@@ -49,7 +49,7 @@ class UserAdmin(BaseUserAdmin):
         ('Login Info', {'fields': ('email', 'password',)}),
         (('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (('Management Detail'), {
-         'fields': ('is_active',)}),
+         'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )
     add_fieldsets = (
         (None, {

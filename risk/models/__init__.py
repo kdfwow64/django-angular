@@ -149,6 +149,13 @@ from .vendor import (
     VendorType,
 )
 
+from .utility import (
+    Selector,
+    DefaultFields,
+    DefaultFieldsCategory,
+    DefaultFieldsEvaluation,
+)
+
 from .response import (
     PlaybookRole,
     PlaybookRoleType,
