@@ -32,6 +32,13 @@ class AccountMembershipInline(admin.TabularInline):
 
     model = AccountMembership
     extra = 1
+    fields = (
+        'id_user',
+        'company_role',
+        'is_active',
+        'is_admin',
+        'is_company_viewable',
+    )
 
 
 class DefaultRoleGrantInline(admin.TabularInline):
@@ -107,46 +114,26 @@ class UserAdmin(BaseUserAdmin):
 
 class AccountAdmin(admin.ModelAdmin):
     inlines = (AccountMembershipInline,)
+    readonly_fields = ('date_created',)
     list_display = (
         'id',
         'name',
-        'billing_toggle',
-        'billing_poc',
-        'billing_phone',
-        'billing_email',
-        'renewal_reminder',
         'bkof_notes',
-        'renewal_ext',
-        'strong_auth',
         'is_active',
         'is_reputable',
-        'date_deactivated',
-        'date_created',
-        'date_deleted',
-        'date_last_paid',
-        'billing_confirmation_code',
         'account_type',
         'owned_by',
-        'created_by',
-        'deleted_by',
-        'deactivated_by',
     )
     list_filter = (
         'is_active',
         'is_reputable',
-        'date_deactivated',
-        'date_created',
-        'date_deleted',
-        'date_last_paid',
         'account_type',
-        'created_by',
-        'deleted_by',
-        'deactivated_by',
     )
 
 
 class AccountTypeAdmin(admin.ModelAdmin):
 
+    readonly_fields = ('date_created',)
     list_display = (
         'id',
         'name',
@@ -166,6 +153,7 @@ class AccountTypeAdmin(admin.ModelAdmin):
 
 class UserAccessAdmin(admin.ModelAdmin):
 
+    readonly_fields = ('date_created',)
     list_display = (
         'id',
         'date_created',
@@ -204,6 +192,7 @@ class UserLevelAdmin(admin.ModelAdmin):
 
 class UserRoleAdmin(admin.ModelAdmin):
 
+    readonly_fields = ('date_created',)
     inlines = (DefaultRoleGrantInline,)
     list_display = ('id', 'name', 'description')
     search_fields = ('name',)
@@ -211,6 +200,7 @@ class UserRoleAdmin(admin.ModelAdmin):
 
 class UserGrantAdmin(admin.ModelAdmin):
 
+    readonly_fields = ('date_created',)
     list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 

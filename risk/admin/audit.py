@@ -23,9 +23,9 @@ class NotificationGroupAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
-        'account',
+        'company',
     )
-    list_filter = ('name', 'account')
+    list_filter = ('name', 'company')
 
 
 class AuditChangeAdmin(admin.ModelAdmin):

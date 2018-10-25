@@ -1,5 +1,11 @@
 """Feedback, CSM & related models."""
 from django.db import models
+from risk.models.utility import (
+    Selector,
+    DefaultFields,
+    DefaultFieldsCategory,
+    DefaultFieldsEvaluation
+)
 
 
 class Feedback(models.Model):

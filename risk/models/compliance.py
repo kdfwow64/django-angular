@@ -1,5 +1,11 @@
 """Compliance, Framworks & related models."""
 from django.db import models
+from risk.models.utility import (
+    Selector,
+    DefaultFields,
+    DefaultFieldsCategory,
+    DefaultFieldsEvaluation
+)
 
 
 class Compliance(models.Model):

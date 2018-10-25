@@ -152,6 +152,7 @@ from .vendor import (
 from .utility import (
     Selector,
     DefaultFields,
+    DefaultFieldsList,
     DefaultFieldsCategory,
     DefaultFieldsEvaluation,
 )

@@ -65,7 +65,7 @@ class DefaultFields(models.Model):
         return super(DefaultFields, self).save(*args, **kwargs)
 
 
-class DefaultFieldsCategory(DefaultFields):
+class DefaultFieldsList(DefaultFields):
     """Models that are used for categorizing data"""
 
     # Name of the field.
@@ -73,6 +73,22 @@ class DefaultFieldsCategory(DefaultFields):
                             null=True, help_text=('Name of the field'),)
     description = models.TextField(blank=True, null=True, help_text=(
         'Description of the field'),)  # Description of the field.
+    # Foreign Key and Relationships
+    company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, blank=False, related_name='%(app_label)s_%(class)s_related_company', help_text=(
+        'Company id for the company that manages the field'),)  # Company that defined the field.
+
+    class Meta:
+        """Meta class."""
+        indexes = [
+            models.Index(fields=['company']),
+        ]
+        abstract = True
+
+
+class DefaultFieldsCategory(DefaultFieldsList):
+    """Models that are used for categorizing data"""
+
+    # Name of the field.
     abbrv = models.CharField(max_length=30, null=True, blank=True, help_text=(
         'Abbreviation of the name'),)  # Abbreviation of the name field.
     sort_order = models.IntegerField(default=0, blank=True, null=True, help_text=(
@@ -85,15 +101,9 @@ class DefaultFieldsCategory(DefaultFields):
     # Used to help contributors understand the category and how it may apply.
     example2 = models.TextField(blank=True, null=True,  help_text=(
         'Pratcial example of the category'),)
-    # Foreign Key and Relationships
-    company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, blank=False, related_name='%(app_label)s_%(class)s_related_company', help_text=(
-        'Company id for the company that manages the field'),)  # Company that defined the field.
 
     class Meta:
         """Meta class."""
-        indexes = [
-            models.Index(fields=['company']),
-        ]
         abstract = True
 
 

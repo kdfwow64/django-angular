@@ -8,6 +8,13 @@ from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from risk.lib.user_manager import EmailUserManager
+from risk.models.utility import (
+    Selector,
+    DefaultFields,
+    DefaultFieldsList,
+    DefaultFieldsCategory,
+    DefaultFieldsEvaluation
+)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -146,16 +153,12 @@ post_save.connect(post_save_user_model_receiver,
                   sender=settings.AUTH_USER_MODEL)
 
 
-class AccountType(models.Model):
+class AccountType(DefaultFieldsCategory):
     """
     All accounts must be of a certain type for management and billing if applicable.  This ties the account type to the correct level of features
     they consumer has purchased.  Account types will range based on the account needs.
     """
 
-    name = models.CharField(
-        max_length=30, blank=False, help_text=_('Name of the account type'),)  # Name of the account type
-    description = models.TextField(
-        blank=False, help_text=('Description of  the account type'),)  # Description of the account type
     annual_cost = models.DecimalField(
         default=0, help_text=('Annual cost for the account type'), decimal_places=2, max_digits=30)  # Annual cost in USD for the account type.  This will need to be paid in full before use unless the account is demo/pilot.
     max_user = models.IntegerField(
@@ -172,8 +175,6 @@ class AccountType(models.Model):
         default=0, help_text=('Max number of resources per company that can be specified for the account type'),)  # Number of resources that can be used for the account type.
     max_register_entries = models.IntegerField(
         default=0, help_text=('Max number of entries per company that can be specified for the account type '),)  # Number of entries that can be used per company
-    sort_order = models.IntegerField(
-        default=0, blank=True, help_text=('Sort order of the account type selections in the UI'),)  # Sort order for viewing the account type detail.
     # Foreign Keys and Relationships
 
     class Meta:
@@ -186,7 +187,7 @@ class AccountType(models.Model):
         return self.name
 
 
-class Account(models.Model):
+class Account(DefaultFields):
     """Accounts created by a validated user .  This ties company's and user's together."""
 
     name = models.CharField(
@@ -210,16 +211,8 @@ class Account(models.Model):
     strong_auth = models.BooleanField(
         default=False, help_text=('Multi-factor authencation requirement is being used'),)  # Need to provide the option to leverage token authenication in conjuction with passwords to meet compliance requirements on the customers side.  This will be a future capability.
     """Application Input"""
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the account should be treated as active'),)  # If an account is inactive, it cannot be logged into by contributors.  Accounts are never deleted, just turned inactive if needed.
     is_reputable = models.BooleanField(default=False, help_text=(
         'Designates whether this account has been defined as reputable by backoffice'),)  # Backoffice has determined that the account is reputable and can be used for reporting and metrics of the platform.
-    date_deactivated = models.DateTimeField(
-        blank=True, null=True, help_text=('Timestamp the account was deactivated'),)  # Date of the account deactivation.  If the account is reacitvated, the deactivated date will remain until a new deactivation occurs at which time it will be overwritten by the new deactiavtion date.
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Date/Time the account was created'),)  # Date the account was created.  This should match the time of the inital users submission.
-    date_deleted = models.DateTimeField(
-        blank=True, null=True, help_text=('Timestamp the account was deleted'),)  # Date the account was deleted by the user.  Postmortem playbook should be ran to determine why a customer account has been removed.
     date_last_paid = models.DateTimeField(
         blank=True, null=True, help_text=('Last the account was paid'),)  # Most recent time of payment.  This will tie to the payment system for detail
     billing_confirmation_code = models.IntegerField(
@@ -231,12 +224,6 @@ class Account(models.Model):
         'The type of authentication used for account users'))  # This will be the default user authentication type.  It will default to "1" - PASSWORD, but can be changed on the account adminstration.  When AccountMemberships are created they will default to that authentication type specified in the account, but can be changed as needed on the AccountMembership record.
     owned_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='account_owner', help_text=(
         'User id if deactivated by another user'),)  # User that owns the acccount.  By default this will be the user that performs the inital submission, however may change. (new role in company, deligation needs, etc.)
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='created_account', help_text=(
-        'User id if created by another user'),)  # User that generated the initial submission
-    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='deleted_account', help_text=(
-        'User id if deleted by another user'),)  # User that deleted the account.  You must be an account admin to perform this task
-    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='deactivated_account', help_text=(
-        'User id if deactivated by another user'),)  # Used to temp or perm deactivate the account.  This could be for various reasons.  Account transfers, lack of payment, threats in the environment, etc.
     member = models.ManyToManyField('User', through='AccountMembership',
                                     through_fields=('id_account', 'id_user'), related_name='AccountMemeberships', help_text=('Users with relationships on the Account'),)  # Users may belong to multiple Accounts.  Users added that have existing registration should be send an email link to join the Account.  New users will need to be created.
 
@@ -251,7 +238,7 @@ class Account(models.Model):
         return self.name
 
 
-class AccountMembership(models.Model):
+class AccountMembership(DefaultFields):
     # User from the user table
     id_user = models.ForeignKey('User', on_delete=models.PROTECT)
     # Account from the account table
@@ -274,8 +261,6 @@ class AccountMembership(models.Model):
             'Temp access to the account'),)  # This allows users to be have temperoray access to the account.  If the temp date is set and past the current date, the user should not have access to the account
     invite_reason = models.CharField(max_length=64, help_text=(
         'Optional reason for adding user'))  # Optional reason for adding access.  Should be required if date_temp is set.
-    is_active = models.BooleanField(
-        default=False, help_text=('Designates whether the user / account relationship is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the user will not have access to the account.  New user accounts will not be set to True until they have accepted the invitation and have been validated.
     is_admin = models.BooleanField(
         default=False, help_text=('Designates whether the user is an administrator for the account'),)  # If True, the user has full adminstrative access to the account and any companies related to the account.  This setting will dim out any company_role options and automatically create the user into new companies as an administrator.
     is_company_viewable = models.BooleanField(
@@ -298,18 +283,10 @@ class AccountMembership(models.Model):
 # Needs to be review for useage.
 
 
-class UserAccess(models.Model):
+class UserAccess(DefaultFields):
     """Application Input."""
 
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Date the access level was applied'),)  # Not in use
-    date_modified = models.DateTimeField(
-        auto_now=True, null=True, help_text=('Date the access level was last modified'),)  # Not in use
     # Foreign Keys and Relationships
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='created_useracces', help_text=(
-        'User id of the user that created the access'),)
-    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, related_name='modified_useracces', help_text=(
-        'User id of the user that last modified the access'),)
     user = models.ForeignKey('User', on_delete=models.PROTECT, related_name='useracces', help_text=(
         'User id of the user'),)
     userrole = models.ForeignKey('UserRole', on_delete=models.PROTECT, related_name='useracces', help_text=(
@@ -347,13 +324,9 @@ class UserLevel(models.Model):
 '''
 
 
-class UserRole(models.Model):
+class UserRole(DefaultFieldsList):
     """This relates to the role the user will have within the application (View, Contribute, Adminster.)."""
 
-    name = models.CharField(
-        max_length=30, blank=False, help_text=('Name of the user role'),)
-    description = models.TextField(
-        blank=False, help_text=('Description of the user role'),)  # Not in use
     grants = models.ManyToManyField("UserGrant", through='DefaultRoleGrant',
                                     through_fields=('id_userrole', 'id_usergrant'), related_name='RoleGrants', help_text=('Default grants for a specific role'),)  # Roles are evaluated at both the account and company level.  This mappings specifies the default grants that the role will have for both cases.  Administrators will be able to modify the grants at the company level if needed.
     # Foreign Keys and Relationships
@@ -367,13 +340,9 @@ class UserRole(models.Model):
         verbose_name_plural = ("User Roles")
 
 
-class UserGrant(models.Model):
+class UserGrant(DefaultFieldsList):
     """Grant."""
 
-    name = models.CharField(
-        max_length=30, blank=False, help_text=('Name of the grant created to provide functionality'),)  # Not in use
-    description = models.TextField(
-        blank=False, help_text=('Description of the grant'),)  # Not in use
     # Foreign Key and Relationships
 
     def __str__(self):
@@ -385,7 +354,7 @@ class UserGrant(models.Model):
         verbose_name_plural = ("User Grants")
 
 
-class DefaultRoleGrant(models.Model):
+class DefaultRoleGrant(DefaultFields):
     """ This table is used to set default grants for the user role selected."""
     id_userrole = models.ForeignKey(
         'UserRole', on_delete=models.PROTECT)  # User roles that can be set at the account or company level.

@@ -1,17 +1,12 @@
 """Audit, Tracking & related models."""
 from django.db import models
+from risk.models.utility import (
+    Selector, DefaultFields, DefaultFieldsCategory, DefaultFieldsEvaluation
+)
 
 
-class Notification(models.Model):
+class Notification(DefaultFieldsCategory):
     """This table describes the notifiication."""
-
-    name = models.CharField(
-        max_length=30, blank=False, help_text=('Name of the alert notifiication'),)  # Name of the notification
-    description = models.TextField(
-        blank=False, help_text=('Description of the alert notifiication'),)  # Name of the notification group
-    # Foreign Key and Relationships
-    account = models.ForeignKey('Account', on_delete=models.PROTECT, default=1, blank=False, related_name='account_notification', help_text=(
-        'The account the notification was created under'),)  # By default all notificaitons  will belong to CORE and be used for all companies.  Companies may be able to add custom notifications in the future.  When added to the account, the notification will be available to all companies of the account. Only Account Admin can add alerts.  If Alerts are approved by CORE the will be available to all Accounts.
 
     def __str__(self):
         """String."""
@@ -22,16 +17,9 @@ class Notification(models.Model):
         verbose_name_plural = ("Notifications")
 
 
-class NotificationGroup(models.Model):
+class NotificationGroup(DefaultFieldsCategory):
     """This table describes the notifiication group."""
 
-    name = models.CharField(
-        max_length=30, blank=False, help_text=('Name of the notifiication group'),)  # Name of the notification
-    description = models.TextField(
-        blank=False, help_text=('Description of the notifiication group'),)  # Name of the notification group
-    # Foreign Key and Relationships
-    account = models.ForeignKey('Account', on_delete=models.PROTECT, default=1, blank=False, related_name='account_notificationgroup', help_text=(
-        'The account the notificaiton group was created under'),)  # By default all alerts  will belong to CORE and be used for all companies.  Companies may be able to add custom alerts in the future.  When added to the account, the alert will be available to all companies of the account. Only Account Admin can add alerts.  If Alerts are approved by CORE the will be available to all Accounts.
     members = models.ManyToManyField('User', through='NotificationEmailDistro',
                                      through_fields=('id_notificationgroup', 'id_user'), related_name='NotificationGroupMembers', help_text=('Users that belong to the notification group'),)  # There will be specific NotificationGroups setup for CORE that will be used for all clients.  This is for application notifications, marketing notifications will be handled separately.
 
@@ -44,9 +32,9 @@ class NotificationGroup(models.Model):
         verbose_name_plural = ("Notification Groups")
 
 
-class NotificationEmailDistro(models.Model):
+class NotificationEmailDistro(DefaultFields):
     """
-    Notification Email Distro.
+    Through table for NotificationGroup.  Notification Email Distro.
 
     Users that will be alerted if triggered by the email process
     Foreign Key and Relationships

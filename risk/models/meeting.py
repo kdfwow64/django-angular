@@ -1,5 +1,11 @@
 """Meeting & related models."""
 from django.db import models
+from risk.models.utility import (
+    Selector,
+    DefaultFields,
+    DefaultFieldsCategory,
+    DefaultFieldsEvaluation
+)
 
 
 class Meeting(models.Model):

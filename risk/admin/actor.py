@@ -9,17 +9,20 @@ class ThreatActorIntentInline(admin.TabularInline):
 
     model = ThreatActorIntent
     extra = 1
+    fields = ('id_actorintent', 'is_active', 'is_deleted', 'created_by')
 
 
 class ThreatActorMotiveInline(admin.TabularInline):
 
     model = ThreatActorMotive
     extra = 1
+    fields = ('id_actormotive', 'is_active', 'is_deleted', 'created_by')
 
 
 class ActorAdmin(admin.ModelAdmin):
 
     inlines = (ThreatActorIntentInline, ThreatActorMotiveInline)
+    readonly_fields = ('date_created',)
     list_display = (
         'id',
         'name',
@@ -28,9 +31,7 @@ class ActorAdmin(admin.ModelAdmin):
         'is_active',
         'is_human',
         'is_internal',
-        'account',
-        'desc_alt',
-        'desc_form',
+        'company',
     )
     search_fields = ('name',)
 
@@ -44,9 +45,7 @@ class ActorIntentAdmin(admin.ModelAdmin):
         'is_active',
         'sort_order',
         'keywords',
-        'desc_alt',
-        'desc_form',
-        'account',
+        'company',
     )
     search_fields = ('name',)
 
@@ -58,10 +57,8 @@ class ActorMotiveAdmin(admin.ModelAdmin):
         'name',
         'description',
         'is_active',
-        'account',
+        'company',
         'sort_order',
         'keywords',
-        'desc_alt',
-        'desc_form',
     )
     search_fields = ('name',)
