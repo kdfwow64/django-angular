@@ -1,7 +1,7 @@
 """Internal Maintenace, Notifications, Reporting & related models."""
 from django.db import models
 from risk.models.utility import (
-    Selector, DefaultFields, DefaultFieldsCategory, DefaultFieldsEvaluation
+    Selector, DefaultFields, DefaultFieldsList, DefaultFieldsCategory, DefaultFieldsEvaluation
 )
 
 
@@ -73,31 +73,9 @@ class CurrencyType(models.Model):
         verbose_name_plural = ("Currency Types")
 
 
-class DataType(models.Model):
-    """Data Type.  Under review"""
-
-    name = models.CharField(
-        max_length=45, blank=False, help_text=('Name of the data type '),)  # Used when companies setup custom fields
-    django_name = models.CharField(
-        max_length=45, blank=True, null=True, help_text=('Django name of the data type'),)  # Type of field being created.  Should be a foreign key in future.
-    length = models.CharField(
-        max_length=45, blank=True, null=True, help_text=('Character length of the data type '),)  # Length of field
-    # Foreign Key and Relationships
-
-    def __str__(self):
-        """String."""
-        return self.name
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Data Types")
-
-
-class EmailTemplate(models.Model):
+class EmailTemplate(DefaultFieldsList):
     """Email Template."""
 
-    name = models.CharField(
-        max_length=128, blank=False, help_text=('Name of the email template '),)  # Not in use
     subject = models.CharField(
         max_length=128, blank=False, help_text=('Subject of the email template '),)  # Not in use
     body = models.TextField(
@@ -185,30 +163,8 @@ class RAGIndicator(models.Model):
         verbose_name_plural = ("RAG Indicators")
 
 
-class Cadence(models.Model):
+class Cadence(DefaultFieldsList):
     """Cadence."""
-
-    name = models.CharField(
-        max_length=45, blank=False, help_text=('Name of the cadence'),)  # Not in use
-    description = models.TextField(
-        blank=False, help_text=('Description of the  cadence'),)  # Not in use
-    example_title1 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
-    example_title2 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 2'),)  # Not in use
-    example_content1 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 1'),)  # Not in use
-    example_content2 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
-    example_image1 = models.ImageField(
-        help_text=('Image used to support context for example 1'), null=True, blank=True,)  # Not in use
-    example_image2 = models.ImageField(
-        help_text=('Image used to support context for example 2'), null=True, blank=True,)  # Not in use
-    desc_alt = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
-    desc_form = models.CharField(
-        max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
-    # Foreign Key and Relationships
 
     def __str__(self):
         """String."""
@@ -230,21 +186,12 @@ class TimeUnit(DefaultFieldsCategory):
         verbose_name_plural = ("Time Units")
 
 
-class TaskStatus(models.Model):
+class TaskStatus(DefaultFieldsCategory):
     """Entry Task Status."""
-
-    name = models.CharField(
-        max_length=45, blank=False, help_text=('Name of the task status'),)  # Not in use
-    description = models.TextField(
-        blank=False, help_text=('Description of the task statust'),)  # Not in use
-    sort_order = models.IntegerField(
-        blank=True, null=True, help_text=('Sort order that should be displayed'),)  # Not in use
-    # Foreign Key and Relationships
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Task Status")
-        ordering = ['sort_order']
 
     def __str__(self):
         """String."""

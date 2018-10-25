@@ -4,12 +4,13 @@ from risk.models.auth import User, UserGrant
 from risk.models.utility import (
     Selector,
     DefaultFields,
+    DefaultFieldsList,
     DefaultFieldsCategory,
     DefaultFieldsEvaluation
 )
 
 
-class Company(models.Model):
+class Company(DefaultFields):
     """Company."""
 
     about = models.TextField(blank=True, help_text=(
@@ -73,28 +74,10 @@ class Company(models.Model):
     date_defined2_individual_label = models.CharField(
         max_length=128, blank=True, null=True, help_text=('Name of the custom defined2 date field name for the individual table'),)  # Not in use
     """Application Input"""
-    is_active = models.BooleanField(default=True, help_text=(
-        'Designates whether this company should be treated as active'),)  # Determines if the company is active
-    date_deactivated = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the deactivated the company'),)  # Date that the company was deactivated
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Timestamp the company was created'),)  # Date that the company was created
-    date_modified = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Timestamp the company was modified'),)  # Last date the company record was modified
-    date_deleted = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the company was created'),)  # Date that the company was deleted by the Account Admin.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
     utility_field = models.CharField(
         max_length=30, blank=True, help_text=('Backoffice field used for queries and reporting'),)  # This field is not viewable to the Account users and is used for backoffice reporting and testing.
     bkof_notes = models.TextField(
         blank=True, help_text=('Backoffice notes on company'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT,  null=True, blank=True, related_name='created_company', help_text=(
-        'User id if created by another user'),)  # User that created the company
-    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='modified_company', help_text=(
-        'User id if created by another user'),)  # User that last modfied the company record
-    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deactivated_company', help_text=(
-        'User id if deactivated by another user'),)  # User that deactivated the company
-    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deleted_company', help_text=(
-        'User id if deleted by another user'),)   # User that deleted the company.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
     account = models.ForeignKey('Account', on_delete=models.PROTECT, blank=False, related_name='account_company', help_text=(
         'The account the company was created under'),)  # The account the company was created from.
     naics = models.ForeignKey('Naics', on_delete=models.PROTECT, null=True, blank=True, related_name='naics_company', help_text=(
@@ -110,8 +93,6 @@ class Company(models.Model):
         """Meta class."""
 
         ordering = ['account']
-        indexes = [
-            models.Index(fields=['name'], name='name_idx'), ]
         verbose_name_plural = ("Companies")
 
     def __str__(self):
@@ -155,22 +136,12 @@ class CompanyProfile(models.Model):
         return str(self.company.name)
 
 
-class CompanyMember(models.Model):
+class CompanyMember(DefaultFields):
     ''' This table is used to tie users to a specific company.  '''
     id_user = models.ForeignKey(
         'User', on_delete=models.PROTECT)  # User Id from the User table
     # Company Id from the Company table
     id_company = models.ForeignKey('Company', on_delete=models.PROTECT)
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company user grant relationship is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the user will not have grant on the company.
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Date the company grant was applied'),)  # Not in use
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='UserCreatedGrant', help_text=(
-        'User id of the user that created the access'),)
-    date_revoked = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the company grant was revoked, if applicable'),)  # Date company grant was revoked.
-    revoked_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='UserRevokedGrant', help_text=(
-        'User id if revoked by another user'),)  # User id of the admin that revoked the company grant
     user_grants = models.ManyToManyField("UserGrant", through='CompanyMemberGrant',
                                          through_fields=('id_companymember', 'id_usergrant'), related_name='CompanyMemberGrants', help_text=('Specifies what users have access to the company'),)  # Specifies what users have acess to the company.
 
@@ -185,7 +156,7 @@ class CompanyMember(models.Model):
         return self.id_company.name + " - " + self.id_user.full_name
 
 
-class CompanyMemberGrant(models.Model):
+class CompanyMemberGrant(DefaultFields):
     """Company Member Grant."""
 
     # Foreign Key and Relationships
@@ -193,8 +164,6 @@ class CompanyMemberGrant(models.Model):
         'The company member that gets a grant'),)  # Id of the company member
     id_usergrant = models.ForeignKey('UserGrant', on_delete=models.PROTECT, related_name='member_usergrant', help_text=(
         'The grant assigned to the company member'),)  # Id of the grant assigned to the company member.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the grant for the member is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the grant will not be active for the user.
 
     class Meta:
         """Meta class."""
@@ -206,21 +175,11 @@ class CompanyMemberGrant(models.Model):
         return self.id_companymember
 
 
-class CompanyMemberRole(models.Model):
+class CompanyMemberRole(DefaultFieldsList):
     """ The role the member plays in the company."""
 
-    name = models.CharField(
-        max_length=128, blank=False, help_text=('Role of the member'),)  # Role of the member
-    description = models.TextField(
-        blank=True, null=True, help_text=('Description of the role'),)  # Role description of the member
-    keywords = models.TextField(
-        blank=True, help_text=('Words used to search the role'),)  # Role description of the member
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the role is active for use'),)
     company_member_role_type = models.ForeignKey(
         'CompanyMemberRoleType', blank=True, null=True, related_name='company_memberroletype', on_delete=models.PROTECT, help_text=('The role type that the member role is related'),)  # The type of role the member belongs to.
-    company = models.ForeignKey(
-        'Company', default=1, related_name='company_memberrole', on_delete=models.PROTECT, help_text=('The company that the member role is related'),)  # Companies have the ability to add their own member roles if desired.  These will be under review for addtion to CORE.  Default submission is set to Core Company.
 
     def __str__(self):
         """String."""
@@ -231,17 +190,8 @@ class CompanyMemberRole(models.Model):
         verbose_name_plural = ("Company Member Roles")
 
 
-class CompanyMemberRoleType(models.Model):
+class CompanyMemberRoleType(DefaultFieldsList):
     """ The type of role of the company member"""
-
-    name = models.CharField(
-        max_length=128, blank=False, help_text=('Name of the company role type'),)  # Role type name
-    description = models.TextField(
-        blank=True, null=True, help_text=('Description of the company role type'),)  # Role type description
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the role is active for use'),)
-    company = models.ForeignKey(
-        'Company', default=1, related_name='company_roletype', on_delete=models.PROTECT, help_text=('The company that the role type is managed.'),)  # Companies have the ability to add their own role types if desired.  These will be under review for addtion to CORE.  Default submission is set to Core Company.
 
     def __str__(self):
         """String."""
@@ -252,7 +202,7 @@ class CompanyMemberRoleType(models.Model):
         verbose_name_plural = ("Company Member Role Types")
 
 
-class CompanyAsset(models.Model):
+class CompanyAsset(DefaultFieldsList):
     """Company Asset.
 
     This allows the company to add multiple asset types to their register
@@ -263,10 +213,6 @@ class CompanyAsset(models.Model):
         (2, 'Percent of Revenue'),
         (3, 'Time Based Value'),
     )  # Define which logic to use when generating asset value against the entry threat scenario.
-    name = models.CharField(
-        max_length=100, blank=False, help_text=('Name of the company asset'),)  # Company to determine the name of the asset
-    notes = models.TextField(
-        blank=True, help_text=('Notes about the company asset'),)  # Notes regarding the asset
     asset_value_fixed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
         'The fixed monetary value of the asset in dollars'),)  # Asset value may be a fixed cost if monetary_value_toggle is set to False.
     asset_quantity_fixed = models.IntegerField(
@@ -291,8 +237,6 @@ class CompanyAsset(models.Model):
         'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='companyassetunits', help_text=('Time units used to determine the value of the asset'),)  # This setting combined with the relative quantitiy and asset value will define the cost of the asset.  Default "3" is set to hours as the unit of time.
     asset_owner = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='companycontact_asset', help_text=(
         ' Who owns the the information'),)  # If you own the information, you own the risk.
-    company = models.ForeignKey('Company', on_delete=models.PROTECT, blank=False, related_name='companyassets', help_text=(
-        'Company id for the company that was changed'),)  # Company that defined the asset
     asset_type = models.ForeignKey('CompanyAssetType', on_delete=models.PROTECT, blank=False, related_name='companyassettype', help_text=(
         'Type of asset being specified'),)  # The type of asset that was defined by CORE
     company_locations = models.ManyToManyField('CompanyLocation', blank=True, through='CompanyAssetLocation', through_fields=(
@@ -323,41 +267,13 @@ class CompanyAsset(models.Model):
             return (self.asset_value_timed * self.asset_timed_quantity_relative)
 
 
-class CompanyAssetType(models.Model):
+class CompanyAssetType(DefaultFieldsCategory):
     """
     Asset Type.
 
     Assets may come in many types both tangable (physical device)and
     intangable (business process).  This table describes the asset type.
     """
-
-    name = models.CharField(
-        max_length=30, help_text=('Type of asset'),)  # Not in use
-    description = models.TextField(
-        blank=False, help_text=('Description of the asset'),)  # Not in use
-    sort_order = models.IntegerField(
-        blank=True, null=True, help_text=('Sort order that the asset type should be in for form selection'),)  # Not in use
-    keywords = models.TextField(
-        blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
-    example_title1 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
-    example_title2 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 2'),)  # Not in use
-    example_content1 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 1'),)  # Not in use
-    example_content2 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
-    example_image1 = models.ImageField(
-        help_text=('Image used to support context for example 1'), null=True, blank=True,)  # Not in use
-    example_image2 = models.ImageField(
-        help_text=('Image used to support context for example 2'), null=True, blank=True,)  # Not in use
-    desc_alt = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
-    desc_form = models.CharField(
-        max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
-    # Foreign Key and Relationships
-    company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, blank=False, related_name='companyassettype', help_text=(
-        'Company id for the company that created the assettype'),)  # Company that defined the asset.
 
     def __str__(self):
         """String."""
@@ -368,7 +284,7 @@ class CompanyAssetType(models.Model):
         verbose_name_plural = ("Company Asset Types")
 
 
-class CompanyAssetSegment(models.Model):
+class CompanyAssetSegment(DefaultFields):
     """Company Asset Segment."""
 
     # Foreign Key and Relationships
@@ -376,15 +292,13 @@ class CompanyAssetSegment(models.Model):
         'The company and asset'),)  # Id of the company control
     id_companysegment = models.ForeignKey('CompanySegment', on_delete=models.PROTECT, related_name='segment_companyasset', help_text=(
         'The company segment that the asset is used'),)  # Id of the company segment.  If 1 is used, this means All locations.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company asset segment is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the user will not be able to select the asset segment.
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Asset Segments")
 
 
-class CompanyAssetLocation(models.Model):
+class CompanyAssetLocation(DefaultFields):
     """Company Asset Location."""
 
     # Foreign Key and Relationships
@@ -392,27 +306,19 @@ class CompanyAssetLocation(models.Model):
         'The company and control'),)  # Id of the company control
     id_companylocation = models.ForeignKey('CompanyLocation', on_delete=models.PROTECT, related_name='location_companyasset', help_text=(
         'The company location that the asset is located'),)  # Id of the company location.  If 1 is used, this means All locations.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company asset location is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the user will not be able to select the asset location.
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Asset Locations")
 
 
-class CompanyControl(models.Model):
+class CompanyControl(DefaultFieldsList):
     """Company Control.  This table will tie companies to the available controls in the Control table"""
 
-    name = models.CharField(
-        max_length=128, blank=True, null=True, help_text=('Name of the control details'),)  # Name of the company control. This maybe use to better describe the use of the control.  Companies may opt to segment controls of the same type, location, etc.  This allow for that ability.
-    description = models.TextField(
-        blank=True, null=True, help_text=('Description of the control detail'),)  # Description of the company control.
     abbrv = models.CharField(
         max_length=30, blank=True, help_text=('Abbreviation of the name'),)  # Abbreviation of the company control.  Will be used in reporting if present.
     alias = models.CharField(
         max_length=128, blank=True, help_text=('Control alias'),)  # Alias used for the company control.  Will be used for reporting if present.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company control is active'),)  # The only active controls should be viewed by Account Users.
     version = models.CharField(
         max_length=100, blank=True, help_text=('Current control version'),)  # Version used for the company control.  Could be policy version, release version,etc It depends on the control defined.
     avg_annual_upkeep = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
@@ -439,17 +345,6 @@ class CompanyControl(models.Model):
         'Custom company field for company control table -see company table'),)  # Not in use
     date_defined2 = models.DateTimeField(null=True, blank=True, help_text=(
         'Custom company field for company control table -see company table'),)
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Date the company grant was applied'),)  # Not in use
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='UserCreatedCompanyControl', help_text=(
-        'User id of the user that created the access'),)
-    date_revoked = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the company grant was revoked, if applicable'),)  # Date company grant was revoked.
-    revoked_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='UserRevokedCompanyControl', help_text=(
-        'User id if revoked by another user'),)  # User id of the admin that revoked the company grant
-    # Foreign Key and Relationships
-    company = models.ForeignKey(
-        'Company', on_delete=models.PROTECT, related_name='company', help_text=('The company that the control is related'),)
     vendor_control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, blank=True, related_name='vendor_companycontrol', help_text=(
         'The primary control mapping for the company'),)
     company_control_opex = models.ForeignKey('CompanyControlOpex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_opex', help_text=(
@@ -474,13 +369,9 @@ class CompanyControl(models.Model):
         verbose_name_plural = ("Company Controls")
 
 
-class CompanyControlMeasure(models.Model):
+class CompanyControlMeasure(DefaultFieldsList):
     """Company Control Measure.  This will be leveraged to determine all the measurements that are reviewed for the controls effectiveness.  Specific control meausres should be tied to the entry based on the threat scenario"""
 
-    name = models.CharField(
-        max_length=45, blank=False, help_text=('Name of the measure'),)  # Name of the measure for the control used in the entry.
-    description = models.TextField(
-        blank=False, help_text=('Description of the measurment'),)  # Description of the measure used for the control based on the entry.
     formula = models.CharField(
         max_length=512, blank=True, help_text=('Formula that is used to measure the success of the control'),)  # What is the formula to define the measure.  Need to have a formula builder create for the user to create a measurement.
     unit = models.CharField(
@@ -512,15 +403,11 @@ class CompanyControlMeasure(models.Model):
         verbose_name_plural = ("Company Control Measures")
 
 
-class CompanyControlMeasurementResult(models.Model):
+class CompanyControlMeasurementResult(DefaultFields):
     """Company Control Measure.  Used to trend results for a company control measurement.  May be used to trigger alerts if results are not within the tolerance level"""
 
     result = models.CharField(
         max_length=128, blank=True, help_text=('The current result of the measurement'),)  # Not in use
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Date the measurement was taken'),)  # Not in use
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='MeasurementUser', help_text=(
-        'User id of the user that input the result'),)
     # Foreign Key and Relationships
     measurement = models.ForeignKey('CompanyControlMeasure', on_delete=models.PROTECT, null=True, related_name='companycontrolmeasure', help_text=(
         'The measure the associated with the company control'),)
@@ -534,41 +421,15 @@ class CompanyControlMeasurementResult(models.Model):
         verbose_name_plural = ("Company Control Measurement Result")
 
 
-class CompanyControlOpex(models.Model):
+class CompanyControlOpex(DefaultFieldsList):
     """Company Control Operational Expenditures.  This will be leveraged to determine all the operational cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
 
-    name = models.CharField(
-        max_length=45, blank=False, help_text=('Name of the operational expendure'),)  # Name of the operational expenditure for the company control.
-    detail = models.TextField(
-        blank=False, help_text=('Description of the operational expendure'),)  # Description of the operational expenditure for the company control.
     date_purchased = models.DateTimeField(
         blank=True, null=True, help_text=('Date the operational expendure was purchased'),)  # Date of purchase for the operational expenditure for the company control
     amount = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
         'Operational cost spent'),)  # The amount of money spent.
     accounting_id = models.CharField(
         max_length=155, blank=True, null=True, help_text=('Id of control from the company accounting system for mapping costs'),)  # Future use to map detail from the companies accounting system
-    is_active = models.BooleanField(default=True, help_text=(
-        'Designates whether this company should be treated as active'),)  # Determines if the company is active
-    was_deleted = models.BooleanField(default=False, help_text=(
-        'Designates whether this company should be treated as active'),)  # Determines if the company is active
-    date_deactivated = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the deactivated the company'),)  # Date that the company was deactivated
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Timestamp the company was created'),)  # Date that the company was created
-    date_modified = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Timestamp the company was modified'),)  # Last date the company record was modified
-    was_deleted = models.BooleanField(default=False, help_text=(
-        'Designates whether this company should be treated as active'),)  # Determines if the company is active
-    date_deleted = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the company was created'),)  # Date that the company was deleted by the Account Admin.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT,  null=True, blank=True, related_name='created_controlopex', help_text=(
-        'User id if created by another user'),)  # User that created the company
-    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='modified_controlopex', help_text=(
-        'User id if created by another user'),)  # User that last modfied the company record
-    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deactivated_controlopex', help_text=(
-        'User id if deactivated by another user'),)  # User that deactivated the company
-    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deleted_controlopex', help_text=(
-        'User id if deleted by another user'),)   # User that deleted the company.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
     utility_field = models.CharField(
         max_length=30, blank=True, help_text=('Backoffice field used for queries and reporting'),)  # This field is not viewable to the Account users and is used for backoffice reporting and testing.
     bkof_notes = models.TextField(
@@ -583,13 +444,9 @@ class CompanyControlOpex(models.Model):
         verbose_name_plural = ("Company Control Operational Expenditures")
 
 
-class CompanyControlCapex(models.Model):
+class CompanyControlCapex(DefaultFieldsList):
     """Company Control Capital Expenditures.  This will be leveraged to determine all the captial cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
 
-    name = models.CharField(
-        max_length=45, blank=False, help_text=('Name of the captial expendure'),)  # Name of the captial expenditure for the company control.
-    detail = models.TextField(
-        blank=False, help_text=('Description of the captial expendure'),)  # Description of the captial expenditure for the company control.
     date_purchased = models.DateTimeField(
         blank=True, null=True, help_text=('Date the captial expendure was purchased'),)  # Date of purchase for the captial expenditure for the company control
     amount = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
@@ -598,28 +455,6 @@ class CompanyControlCapex(models.Model):
         max_length=155, blank=True, null=True, help_text=('Id of control from the company accounting system for mapping costs'),)  # Future use to map detail from the companies accounting system
     invest_range = models.IntegerField(
         default=1, blank=False, help_text=('Range in years to determine the annual investment cost of the control'),)  # This may be used if companies want to distribute the capital expenditure over years from the purchase date.
-    is_active = models.BooleanField(default=True, help_text=(
-        'Designates whether this company should be treated as active'),)  # Determines if the company is active
-    was_deleted = models.BooleanField(default=False, help_text=(
-        'Designates whether this company should be treated as active'),)  # Determines if the company is active
-    date_deactivated = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the deactivated the company'),)  # Date that the company was deactivated
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Timestamp the company was created'),)  # Date that the company was created
-    date_modified = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('Timestamp the company was modified'),)  # Last date the company record was modified
-    was_deleted = models.BooleanField(default=False, help_text=(
-        'Designates whether this company should be treated as active'),)  # Determines if the company is active
-    date_deleted = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the company was created'),)  # Date that the company was deleted by the Account Admin.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT,  null=True, blank=True, related_name='created_controlcapex', help_text=(
-        'User id if created by another user'),)  # User that created the company
-    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='modified_controlcapex', help_text=(
-        'User id if created by another user'),)  # User that last modfied the company record
-    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deactivated_controlcapex', help_text=(
-        'User id if deactivated by another user'),)  # User that deactivated the company
-    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deleted_controlcapex', help_text=(
-        'User id if deleted by another user'),)   # User that deleted the company.  Note: Company will not be permenantly deleted.  It will not be viewable to the Account users.
     utility_field = models.CharField(
         max_length=30, blank=True, help_text=('Backoffice field used for queries and reporting'),)  # This field is not viewable to the Account users and is used for backoffice reporting and testing.
     bkof_notes = models.TextField(
@@ -634,7 +469,7 @@ class CompanyControlCapex(models.Model):
         verbose_name_plural = ("Company Control Capital Expenditures")
 
 
-class CompanyControlDependency(models.Model):
+class CompanyControlDependency(DefaultFields):
     """Company Control Dependency."""
 
     id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='dependency_companycontrol', help_text=(
@@ -643,8 +478,6 @@ class CompanyControlDependency(models.Model):
         'The company control the dependency is associated'),)
     row = models.IntegerField(blank=False, help_text=(
         'Identify the dependency type variable'),)  # Used in conjuction with the id_dependencytype selection to identify the dependent.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the control dependency is active'),)  # The only active dependencies should be viewed by Account Users.
     has_contingency = models.BooleanField(
         default=False, help_text=('Designates whether there is a contingency plan in place for the dependency'),)  # Used to determine where gaps may be with control dependencies.
     contingency_plan = models.TextField(
@@ -662,7 +495,7 @@ class CompanyControlDependency(models.Model):
         verbose_name_plural = ("Company Control Dependencies")
 
 
-class CompanyControlCost(models.Model):
+class CompanyControlCost(DefaultFields):
     """Control Cost.  This table will help determine the current and continued cost of the control at the company level.  It will be used to tie the company control with the cost of the control via the company_control field"""
 
     amount_paid = models.DecimalField(default=0, blank=True, max_digits=12, decimal_places=2, help_text=(
@@ -679,10 +512,6 @@ class CompanyControlCost(models.Model):
         blank=False, help_text=('Description of the control cost'),)  # Notes associated with the control payment.
     date_paid = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the individual was created'),)  # Date the payment was made
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the individual was created'),)  # Date the payment was submitted
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the control cost is active.'),)  #
     company_control = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='company_control', help_text=(
         'Type of control cost associated with the entry'),)
     cost_type = models.ForeignKey('CompanyControlCostType', on_delete=models.PROTECT, null=True, related_name='control_costtype', help_text=(
@@ -697,17 +526,8 @@ class CompanyControlCost(models.Model):
         verbose_name_plural = ("Company Control Costs")
 
 
-class CompanyControlCostType(models.Model):
+class CompanyControlCostType(DefaultFieldsList):
     """Control Cost Type."""
-
-    name = models.CharField(
-        max_length=128, help_text=('Model of the control cost type'),)  # Not in use
-    description = models.TextField(
-        blank=False, help_text=('Description of the control cost type'),)  # Not in use
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the control cost type is active for use'),)
-    account = models.ForeignKey(
-        'Account', related_name='account_controlcosttype', on_delete=models.PROTECT, help_text=('The account that the control cost type is related'),)  # Companies have the ability to add their own control cost types name.  These will be under review for addtion to CORE.
 
     def __str__(self):
         """String."""
@@ -718,16 +538,12 @@ class CompanyControlCostType(models.Model):
         verbose_name_plural = ("Company Control Cost Types")
 
 
-class CompanyObjective(models.Model):
+class CompanyObjective(DefaultFieldsList):
     """Company Objective.
 
     This allows the company to track objectives that support a path to continued profitability.  Company objectives are future state outcomes the company would like to achieve.  Threats that affect these objectives are handled with enablers.
     """
 
-    name = models.CharField(
-        max_length=100, blank=False, help_text=('Name of the company objective'),)  # Company to determine the name of the objective
-    description = models.TextField(
-        blank=True, help_text=('Description about the company objective'),)  # Description of the company objective
     monetary_value_start = models.DecimalField(default=0.00, max_digits=30, decimal_places=2, help_text=(
         'The beginning monetary value of the objective'),)  # The monetary value of the objective at its start date
     monetary_value_end = models.DecimalField(default=0.00, max_digits=30, decimal_places=2, help_text=(
@@ -738,16 +554,10 @@ class CompanyObjective(models.Model):
         null=True, blank=True, help_text=('Date the objective will start'),)  # Dates used to determine current state  and benchmark of the objective
     date_end = models.DateField(
         null=True, blank=True, help_text=('Date the objective will end'),)  # Dates used to determine current state and benchmark of the objective
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the objective was created'),)  # Date the objective was added
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company objective is active.'),)  #
     """Application Input"""
     # Foreign Key and Relationships
     objective_owner = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='companycontact_objective', help_text=(
         ' Who owns the requirement and detail of the objective'),)  # Who leads the objective effort.
-    company = models.ForeignKey('Company', on_delete=models.PROTECT, blank=False, related_name='companyobjective', help_text=(
-        'Company id for the company has defined the objective'),)  # Company that defined the objective
     risk_types = models.ManyToManyField('RiskType', through='CompanyObjectiveRiskType', through_fields=('id_companyobjective', 'id_risktype'), related_name='CompanyObjectiveRiskTypes', help_text=(
         'Specifies business sector the objective is related'),)  # The objectives can be tied to more than on sector.
 
@@ -760,7 +570,7 @@ class CompanyObjective(models.Model):
         verbose_name_plural = ("Company Objectives")
 
 
-class CompanyObjectiveRiskType(models.Model):
+class CompanyObjectiveRiskType(DefaultFields):
     """Entry Risk Type."""
 
     # Foreign Key and Relationships
@@ -778,7 +588,7 @@ class CompanyObjectiveRiskType(models.Model):
         verbose_name_plural = ("Company Objective Risk Types")
 
 
-class CompanyContact(models.Model):
+class CompanyContact(DefaultFields):
     """Company Contacts.  Contacts are identifed at the Company level.  When listing POC for a company"""
 
     first_name = models.CharField(
@@ -803,8 +613,6 @@ class CompanyContact(models.Model):
         max_length=30, blank=True, help_text=('Cell phone'),)  # Cell phone of Individual
     notes = models.TextField(
         blank=True, help_text=('Notes'),)  # Notes related to the contact
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether this contact should be treated as active'),)  # The contact is active in the account.
     defined1_data = models.CharField(max_length=128, null=True, blank=True, help_text=(
         'Custom company field for company contact table -see company table'),)  # Company defined field
     date_defined1 = models.DateTimeField(null=True, blank=True, help_text=(
@@ -813,14 +621,6 @@ class CompanyContact(models.Model):
         'Custom company field for company contact table -see company table'),)  # Company defined field
     date_defined2 = models.DateTimeField(null=True, blank=True, help_text=(
         'Custom company field for company contact table -see company table'),)  # Company defined field
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the contact was created'),)  # Date that the contact was created
-    date_modified = models.DateTimeField(
-        auto_now=True, null=True, blank=True, help_text=('Timestamp the contact was created'),)  # Date that the contact was last modified
-    date_deactivated = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the contact was deactivated'),)  # Date the contact was deactivated
-    date_deleted = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the contact was created'),)  # Date the contact was deleted
     evaluation_days = models.IntegerField(blank=True, null=True,
                                           help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
     evaluation_flg = models.BooleanField(
@@ -830,14 +630,6 @@ class CompanyContact(models.Model):
         'Contact id of the supervisor to build a organizational hierachy'),)  # Used to define a organizational hierachy
     user_contact = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='user_contact', help_text=(
         'Used when an account user is added to the company as a contact'),)  # Used to tie an account user to the contact table.  If this populated, there is special logic to align the user_id and the company_contact_id.
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='created_companyindividual', help_text=(
-        'User id of the user that created the field'),)  # User id that created the contact
-    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='modified_companyindividual', help_text=(
-        'User id that last modified the field'),)  # User id that modified the contact
-    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deactivated_companyindividual', help_text=(
-        'User id if deactivated by another user'),)  # User id that deactivated the contact
-    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='deleted_companyindividual', help_text=(
-        'User id if deleted by another user'),)  # User id that deleted the contact
     company = models.ForeignKey(
         'Company', on_delete=models.PROTECT, related_name='company_contact', help_text=('The company that the control is related'),)  # Company the contact is associated
     contact_type = models.ForeignKey(
@@ -862,13 +654,9 @@ class CompanyContact(models.Model):
 '''
 
 
-class ContactType(models.Model):
+class ContactType(DefaultFieldsList):
     """Contact Type."""
 
-    name = models.CharField(
-        max_length=30, blank=False, help_text=('Name of the type of contact'),)  # Contacts may have different types based on the account/company they associated.  Users will also leverage ContactType at the AccountMembership table to determine the default type they will be when added to the CompanyContact record.
-    description = models.CharField(
-        max_length=255, blank=False, help_text=('Description of the type of contact'),)  # Description of the contact type.
     # Foreign Key and Relationships
 
     def __str__(self):
@@ -880,20 +668,11 @@ class ContactType(models.Model):
         verbose_name_plural = ("Contact Types")
 
 
-class CompanyTeam(models.Model):
+class CompanyTeam(DefaultFieldsList):
     """Company Team."""
 
-    name = models.CharField(
-        max_length=128, blank=False, help_text=('Team Name'),)  # Name of the team that is created for the company. This team will consists of multiple contacts defined in the company.
-    description = models.CharField(
-        max_length=255, blank=False, help_text=('Team Description'),)  # Description of the team.
     abbrv = models.CharField(
         max_length=5, blank=True, null=True, help_text=('Team Alias'),)  # Abbreviation of the team.  If not null, will be used when reporting details on the team.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether this company team should be treated as active'),)  # The company team is active in the company.
-    # Foreign Key and Relationships
-    company = models.ForeignKey(
-        'Company', on_delete=models.PROTECT, related_name='company_team', help_text=('The company that the team is related'),)  # Company the team is created
     lead = models.ForeignKey(
         'CompanyContact', on_delete=models.PROTECT, null=True, related_name='company_lead', help_text=('The team lead'),)  # Lead that is associated to the company team.
     member = models.ManyToManyField("CompanyContact", through='CompanyTeamMember',
@@ -908,24 +687,13 @@ class CompanyTeam(models.Model):
         verbose_name_plural = ("Company Teams")
 
 
-class CompanyTeamMember(models.Model):
+class CompanyTeamMember(DefaultFields):
     """Company Team Members."""
 
     id_companyteam = models.ForeignKey(
         'CompanyTeam', on_delete=models.PROTECT, related_name='companyteam', help_text=('The company that the team is related'),)  # Company team that the contact is appart.
     id_companycontact = models.ForeignKey(
         'CompanyContact', on_delete=models.PROTECT, related_name='companyteammember', help_text=('The member of the team'),)  # Contact this is a part of the team.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether this comany team member should be treated as active'),)  # The team member is active in the company team.
-    date_added = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the member was added'),)  # Date that the member joined the team.
-    removed_date = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the individual was removed'),)  # Date the member was removed from the team.
-    # Foreign Key and Relationships
-    added_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='added_companyteammembers', help_text=(
-        'User id of the user that added the member'),)  # User that added the contact as a member of the team.
-    removed_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='removed_companyteammembers', help_text=(
-        'User id if removed by another user'),)  # User that removed the contact as a member of the team.
 
     def __str__(self):
         """String."""
@@ -936,11 +704,9 @@ class CompanyTeamMember(models.Model):
         verbose_name_plural = ("Company Team Members")
 
 
-class CompanyLocation(models.Model):
+class CompanyLocation(DefaultFieldsList):
     """Company Location.  In the future this will be tied to a Geo-Service.  Companies will need to specific at least on location before creating entries.  Assets, entries, contacts, etc. will all have a companylocation association.  This helps break down location specific cost models and risk impact measurements."""
 
-    name = models.CharField(
-        max_length=128, blank=False, help_text=('Name of the comany location'),)  # Name of the company location
     countrycode = models.CharField(
         max_length=3, blank=False, help_text=('Country code for the company location'),)  # Country code used for the location.  Should use 3 character country code.
     state = models.CharField(
@@ -955,16 +721,12 @@ class CompanyLocation(models.Model):
         max_length=30, blank=True, null=True, help_text=('Longitude coord of the company location'),)  # Longitude of the company location.
     abbrv = models.CharField(
         max_length=5, blank=True, null=True, help_text=('Company Location Abbrivation -used for reporting'),)  # If specified, will be used for company location reporting.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether this location should be treated as active'),)  # The location is active in the company.
     evaluation_days = models.IntegerField(blank=True, null=True,
                                           help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
     evaluation_flg = models.BooleanField(
         default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
     """Application Input"""
     # Foreign Key and Relationships
-    company = models.ForeignKey(
-        'Company', on_delete=models.PROTECT, related_name='companylocation', help_text=('The company that the location is related'),)  # Company the company location belongs to.
 
     def __str__(self):
         """String."""
@@ -975,7 +737,7 @@ class CompanyLocation(models.Model):
         verbose_name_plural = ("Company Locations")
 
 
-class CompanyControlLocation(models.Model):
+class CompanyControlLocation(DefaultFields):
     """Company Control Location."""
 
     # Foreign Key and Relationships
@@ -983,31 +745,17 @@ class CompanyControlLocation(models.Model):
         'The company and control'),)  # Id of the company control
     id_companylocation = models.ForeignKey('CompanyLocation', on_delete=models.PROTECT, related_name='location_companycontrol', help_text=(
         'The company location that the control is used'),)  # Id of the company location.  If 1 is used, this means All locations.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company control location is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the user will not have grant on the company.
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Control Locations")
 
 
-class CompanySegment(models.Model):
+class CompanySegment(DefaultFieldsList):
     """Company Segment. This will allow companies to segment risk areas.  Assets, entries, contacts, etc. will all have ability to tie to a segment.  This helps break down segment specific cost models and risk impact measurements."""
 
-    name = models.CharField(
-        max_length=128, blank=False, help_text=('Name of the comany segment'),)  # Name of the company segment
-    description = models.CharField(
-        max_length=255, blank=False, help_text=('Segment Description'),)  # Description of the segment.
-    abbrv = models.CharField(
-        max_length=5, blank=True, null=True, help_text=('Company segment abbrivation -used for reporting'),)  # If specified, will be used for company segment reporting.
     is_physical = models.BooleanField(
         default=False, help_text=('Designates whether this segment should be treated as physical'),)  # It is assumed the segementation is logical unless this is set to True.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether this segment should be treated as active'),)  # The segment is active in the company.
-    """Application Input"""
-    # Foreign Key and Relationships
-    company = models.ForeignKey(
-        'Company', on_delete=models.PROTECT, related_name='companysegment', help_text=('The company that the segment is related'),)  # Company the company segment belongs to.
 
     def __str__(self):
         """String."""
@@ -1018,7 +766,7 @@ class CompanySegment(models.Model):
         verbose_name_plural = ("Company Segments")
 
 
-class CompanyControlSegment(models.Model):
+class CompanyControlSegment(DefaultFields):
     """Company Control Segment."""
 
     # Foreign Key and Relationships
@@ -1026,40 +774,26 @@ class CompanyControlSegment(models.Model):
         'The company and control'),)  # Id of the company control
     id_companysegment = models.ForeignKey('CompanySegment', on_delete=models.PROTECT, related_name='segment_companycontrol', help_text=(
         'The company segment that the control is used'),)  # Id of the company segment.  If 1 is used, this means All locations.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company control segment is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the user will not have grant on the company.
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Control Segments")
 
 
-class CompanyFinding(models.Model):
+class CompanyFinding(DefaultFields):
     """CompanyFinding.  Should this be moved directly to the control or is it."""
 
     description = models.TextField(
         blank=False, help_text=('Description of the finding'),)  # Not in use
-    date_created = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the finding was created'),)  # Not in use
-    date_modified = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True, help_text=('Timestamp the findingl was modified'),)  # Not in use
     date_start = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the finding started'),)  # Not in use
     date_stop = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the finding stopped'),)  # Not in use
-    date_deleted = models.DateTimeField(
-        null=True, blank=True, help_text=('Timestamp the finding was deleted'),)  # Not in use
     effective_impact = models.FloatField(
         null=True, blank=True, help_text=('What percentage of impact to the effectiveness'),)
     # Foreign Key and Relationships
     owner = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='entrycontrolfinding', help_text=(
         ' Who owns the task'),)
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='created_finding', help_text=(
-        'User id of the user that created the field'),)
-    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='modified_finding', help_text=(
-        'User id that last modified the field'),)
-    deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='deleted_finding', help_text=(
-        'User id if deleted by another user'),)
     effected_controls = models.ManyToManyField('CompanyControl', blank=True, through='CompanyControlFinding', through_fields=(
         'id_companyfinding', 'id_companycontrol'), related_name='CompanyControlFindings', help_text=('Control or controls the finding impacted'),)  # Company findings may be applied to multiple findings.
 
@@ -1072,7 +806,7 @@ class CompanyFinding(models.Model):
         verbose_name_plural = ("Company Findings")
 
 
-class CompanyControlFinding(models.Model):
+class CompanyControlFinding(DefaultFields):
     """Company Control Contact."""
 
     # Foreign Key and Relationships
@@ -1080,27 +814,15 @@ class CompanyControlFinding(models.Model):
         'The company finding'),)  # Id of the company finding
     id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, related_name='finding_companycontrol', help_text=(
         'The company control that had the finding'),)  # Id of the company control.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company control finding is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the finding will not be applied to the control.
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Control Findings")
 
 
-class CompanyPlaybook(models.Model):
+class CompanyPlaybook(DefaultFieldsList):
     """This table describes the incident response procedures for the company based on certain use cases.  Playbooks belonging to core company will be leveraged as examples for templates or best practice"""
 
-    name = models.CharField(
-        max_length=30, blank=False, help_text=('Name of the incident response playbook'),)  # Name of the IR Playbook
-    summary = models.TextField(
-        blank=False, help_text=('Executive summary of the incident response playbook'),)  # Description of the playbook
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='created_playbook', help_text=(
-        'User id of the user that created the playbook'),)  # User that created the playbook
-    modified_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='modified_playbook', help_text=(
-        'User id that last modified the playbook'),)  # User that last modified the playbook
-    deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='deactivated_playbook', help_text=(
-        'User id if deactivated by another user'),)  # User that deactivated the playbook
     playbook_owner = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='owner_playbook', help_text=(
         ' Who owns management of the incident repsonse playbook.  This should be a contributor of the system'),)  # User that currently owns and is held accountable for the incidnet response playbook
     evaluation_days = models.IntegerField(blank=True, null=True,
@@ -1108,8 +830,6 @@ class CompanyPlaybook(models.Model):
     evaluation_flg = models.BooleanField(
         default=False, help_text=('Defines if an evaluation is due for the playbook'),)  # If True, evaluation is needed.  Often used to overide a timed evaluation.
     # Foreign Key and Relationships
-    company = models.ForeignKey('Company', on_delete=models.PROTECT, null=True, blank=True, related_name='company_playbook', help_text=(
-        'The company that the playbook belongs'),)  # When a company creates a playbook within the application.
     playbook_company_member = models.ManyToManyField('User', through='CompanyPlaybookMember',
                                                      through_fields=('id_company_playbook', 'id_company_member'), related_name='CompanyPlaybookMembers', help_text=('Specifies which company members have a role in the playbook'),)  # Specifies what users have acess to the company.
 
@@ -1122,7 +842,7 @@ class CompanyPlaybook(models.Model):
         verbose_name_plural = ("Company Playbooks")
 
 
-class CompanyPlaybookMember(models.Model):
+class CompanyPlaybookMember(DefaultFields):
     """User Responsibilities for the playbooks."""
 
     id_company_playbook = models.ForeignKey('CompanyPlaybook', on_delete=models.CASCADE, null=True, related_name='company_playbook_user', help_text=(
@@ -1139,7 +859,7 @@ class CompanyPlaybookMember(models.Model):
         verbose_name_plural = ("Company Playbook Members")
 
 
-class CompanyPlaybookMemberResponsibility(models.Model):
+class CompanyPlaybookMemberResponsibility(DefaultFields):
     """User Responsibilities for the playbooks."""
 
     id_playbook_responsibility = models.ForeignKey('PlaybookResponsibility', on_delete=models.CASCADE, null=True, related_name='company_playbook_responsibility', help_text=(
@@ -1158,7 +878,7 @@ class CompanyPlaybookMemberResponsibility(models.Model):
         verbose_name_plural = ("Company Playbook Member Responsibilities")
 
 
-class CompanyPlaybookAction(models.Model):
+class CompanyPlaybookAction(DefaultFields):
     """Actions for the playbook.  What to do in the event the risk entry is realized"""
 
     action = models.TextField(

@@ -34,7 +34,6 @@ from .common import (
     Cadence,
     Calendar,
     CurrencyType,
-    DataType,
     RAGIndicator,
     EmailTemplate,
     Expression,

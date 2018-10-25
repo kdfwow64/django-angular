@@ -16,6 +16,7 @@ class CompanyMemberInline(admin.TabularInline):
 
     model = CompanyMember
     extra = 1
+    fields = ('id_user', 'is_active', 'is_deleted', 'created_by')
 
 
 class CompanyMemberGrantInline(admin.TabularInline):
@@ -84,42 +85,12 @@ class CompanyAdmin(admin.ModelAdmin):
         'id',
         'name',
         'account',
-        'fixed_max_loss',
-        'par_max_loss',
-        'monetary_value_toggle',
-        'annual_revenue',
-        'weight_frequency',
-        'weight_impact',
-        'resilience_max',
-        'evaluation_days',
-        'evaluation_alert_days',
         'is_active',
-        'date_deactivated',
-        'date_created',
-        'date_modified',
-        'date_deleted',
-        'utility_field',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'deleted_by',
-        'account',
-        'naics',
-        'currencytype',
+        'is_deleted',
     )
     list_filter = (
-        'monetary_value_toggle',
         'is_active',
-        'date_deactivated',
-        'date_created',
-        'date_modified',
-        'date_deleted',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'deleted_by',
         'account',
-        'currencytype',
     )
     raw_id_fields = ('naics',)
     search_fields = ('name',)
@@ -148,7 +119,6 @@ class CompanyMemberRoleAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
-        'keywords',
         'is_active',
         'company_member_role_type',
         'company',
@@ -158,7 +128,7 @@ class CompanyMemberRoleAdmin(admin.ModelAdmin):
         'is_active',
         'company',
     )
-    search_fields = ('name', 'keywords',)
+    search_fields = ('name',)
 
 
 class CompanyMemberRoleTypeAdmin(admin.ModelAdmin):
@@ -210,16 +180,6 @@ class CompanyAssetAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'notes',
-        'asset_value_fixed',
-        'asset_quantity_fixed',
-        'asset_value_par',
-        'asset_value_timed',
-        'asset_timed_quantity_relative',
-        'asset_timed_quantity_avaliable',
-        'asset_value_toggle',
-        'evaluation_days',
-        'evaluation_flg',
         'company',
         'asset_type',
         'asset_owner',
@@ -228,7 +188,6 @@ class CompanyAssetAdmin(admin.ModelAdmin):
         'company',
         'asset_type',
         'asset_owner',
-        'asset_value_toggle',
     )
     search_fields = ('name', 'asset_owner')
 
@@ -240,12 +199,6 @@ class CompanyObjectiveAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
-        'monetary_value_start',
-        'monetary_value_end',
-        'monetary_value_current',
-        'date_start',
-        'date_end',
-        'date_created',
         'is_active',
         'objective_owner',
         'company',
@@ -266,21 +219,6 @@ class CompanyControlAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
-        'abbrv',
-        'alias',
-        'version',
-        'avg_annual_upkeep',
-        'recovery_integer',
-        'recovery_time_unit',
-        'date_maint',
-        'centralized',
-        'budgeted',
-        'evaluation_days',
-        'evaluation_flg',
-        'defined1_data',
-        'date_defined1',
-        'defined2_data',
-        'date_defined2',
         'is_active',
         'vendor_control',
         'inline_after',
@@ -290,14 +228,6 @@ class CompanyControlAdmin(admin.ModelAdmin):
         'name',
         'description',
         'vendor_control',
-        'is_active',
-        'alias',
-        'version',
-        'avg_annual_upkeep',
-        'date_maint',
-        'inline_after',
-        'centralized',
-        'budgeted',
         'company',
     )
 
@@ -324,9 +254,6 @@ class CompanyControlMeasurementResultAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',
-        'result',
-        'date_created',
-        'created_by',
         'measurement',
     )
     list_filter = (
@@ -337,15 +264,12 @@ class CompanyControlMeasurementResultAdmin(admin.ModelAdmin):
 class CompanyControlOpexAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'detail',
-        'date_created',
-        'date_purchased',
-        'amount',
-        'accounting_id',
+        'name',
+        'description',
     )
     list_filter = (
-        'detail',
-        'date_created',
+        'name',
+        'description',
         'date_purchased',
         'amount',
         'accounting_id',
@@ -355,18 +279,15 @@ class CompanyControlOpexAdmin(admin.ModelAdmin):
 class CompanyControlCapexAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'detail',
-        'date_created',
+        'name',
+        'description',
         'date_purchased',
         'amount',
-        'accounting_id',
     )
     list_filter = (
-        'detail',
-        'date_created',
+        'name',
+        'description',
         'date_purchased',
-        'amount',
-        'accounting_id',
     )
 
 
@@ -376,11 +297,8 @@ class CompanyControlDependencyAdmin(admin.ModelAdmin):
         'id',
         'id_companycontrol',
         'id_controldependency',
-        'row',
         'is_active',
-        'has_contingency',
-        'contingency_plan',
-        'notes',
+        'is_deleted',
 
     )
     list_filter = (
@@ -399,12 +317,10 @@ class CompanyControlCostAdmin(admin.ModelAdmin):
         'expenditure',
         'notes',
         'date_paid',
-        'date_created',
         'is_active',
     )
     list_filter = (
         'company_control',
-        'date_paid',
         'is_active',
         'cost_type',
         'expenditure',
@@ -418,12 +334,10 @@ class CompanyControlCostTypeAdmin(admin.ModelAdmin):
         'name',
         'description',
         'is_active',
-        'account',
     )
     list_filter = (
         'name',
         'is_active',
-        'account',
     )
     search_fields = ('name',)
 
@@ -439,24 +353,6 @@ class CompanyContactAdmin(admin.ModelAdmin):
         'decision_maker',
         'description',
         'email',
-        'office_phone',
-        'office_phone_ext',
-        'cell_phone',
-        'notes',
-        'is_active',
-        'defined1_data',
-        'date_defined1',
-        'defined2_data',
-        'date_defined2',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
-        'reports_to',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'deleted_by',
         'company',
         'contact_type',
         'vendor',
@@ -465,17 +361,6 @@ class CompanyContactAdmin(admin.ModelAdmin):
         'main_poc',
         'decision_maker',
         'is_active',
-        'date_defined1',
-        'date_defined2',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
-        'reports_to',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'deleted_by',
         'company',
         'contact_type',
         'vendor',
@@ -522,27 +407,15 @@ class CompanyFindingAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'description',
-        'date_created',
-        'date_modified',
         'date_start',
         'date_stop',
-        'date_deleted',
         'effective_impact',
         'owner',
-        'created_by',
-        'modified_by',
-        'deleted_by',
     )
     list_filter = (
-        'date_created',
-        'date_modified',
         'date_start',
         'date_stop',
-        'date_deleted',
         'owner',
-        'created_by',
-        'modified_by',
-        'deleted_by',
     )
 
 
@@ -551,10 +424,7 @@ class CompanyPlaybookAdmin(admin.ModelAdmin):
     inlines = (CompanyPlaybookMemberInline,)
     list_display = (
         'name',
-        'summary',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
+        'description',
         'playbook_owner',
         'evaluation_days',
         'evaluation_flg',

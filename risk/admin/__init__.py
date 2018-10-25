@@ -6,7 +6,7 @@ from ..models.auth import User, Account, AccountType, UserAccess, UserRole, User
 from ..models.company import Company, CompanyMember, CompanyMemberRole, CompanyMemberRoleType, CompanyAsset, CompanyObjective, CompanyControl, CompanyControlMeasure, CompanyControlMeasurementResult, CompanyControlOpex, CompanyControlCapex, CompanyControlDependency, CompanyControlCost, CompanyControlCostType, CompanyAssetType, CompanyContact, ContactType, CompanyFinding, CompanyTeam, CompanyLocation, CompanyPlaybook, CompanyPlaybookMember, CompanyPlaybookMemberResponsibility, CompanyPlaybookAction
 from ..models.actor import ActorIntent, ActorMotive, Actor
 from ..models.audit import Notification, NotificationGroup, AuditChange, Snapshot
-from ..models.common import Calendar, CurrencyType, DataType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus
+from ..models.common import Calendar, CurrencyType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus
 from ..models.compliance import Compliance, ComplianceType, ComplianceRequirement, ComplianceVersion, KillChain, Naics, PyramidofPain
 from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomain, ControlFunction, ControlOperation, ControlCategory, ControlCategoryType, DependencyEffort, DependencyType
 from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponse, EntryRiskType, RiskType, Response, ResponseVote, EntryUrl, MitigationAdequacy
@@ -23,7 +23,7 @@ from .auth import UserAdmin, AccountAdmin, AccountMembership, AccountTypeAdmin, 
 from .company import CompanyAdmin, CompanyMemberAdmin, CompanyMemberRoleAdmin, CompanyMemberRoleTypeAdmin, CompanyAssetAdmin, CompanyObjectiveAdmin, CompanyControlAdmin, CompanyControlMeasureAdmin, CompanyControlMeasurementResultAdmin, CompanyControlOpexAdmin, CompanyControlCapexAdmin, CompanyControlDependencyAdmin, CompanyControlCostAdmin, CompanyControlCostTypeAdmin, CompanyContactAdmin, ContactTypeAdmin, CompanyTeamAdmin, CompanyAssetTypeAdmin, CompanyControlAdmin, CompanyLocationAdmin, CompanyFindingAdmin, CompanyPlaybookAdmin, CompanyPlaybookActionAdmin
 from .actor import ActorIntentAdmin, ActorMotiveAdmin, ActorAdmin
 from .audit import NotificationAdmin, NotificationGroupAdmin, AuditChangeAdmin, SnapshotAdmin
-from .common import CalendarAdmin, CurrencyTypeAdmin, DataTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin
+from .common import CalendarAdmin, CurrencyTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin
 from .compliance import ComplianceAdmin, ComplianceTypeAdmin, ComplianceVersionAdmin, ComplianceRequirementAdmin, KillChainAdmin, NaicsAdmin, PyramidofPainAdmin
 from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, ControlDomainAdmin, ControlFunctionAdmin, ControlOperationAdmin, ControlCategoryAdmin, ControlCategoryTypeAdmin, DependencyEffortAdmin, DependencyTypeAdmin
 from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
@@ -53,7 +53,6 @@ admin.site.register(UserGrant, UserGrantAdmin)
 admin.site.register(RoleTracking, RoleTrackingAdmin)
 admin.site.register(Calendar, CalendarAdmin)
 admin.site.register(CurrencyType, CurrencyTypeAdmin)
-admin.site.register(DataType, DataTypeAdmin)
 admin.site.register(RAGIndicator, RAGIndicatorAdmin)
 admin.site.register(EmailTemplate, EmailTemplateAdmin)
 admin.site.register(Expression, ExpressionAdmin)

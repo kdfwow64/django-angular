@@ -34,12 +34,6 @@ class CurrencyTypeAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class DataTypeAdmin(admin.ModelAdmin):
-
-    list_display = ('id', 'name', 'django_name', 'length')
-    search_fields = ('name',)
-
-
 class EmailTemplateAdmin(admin.ModelAdmin):
 
     list_display = (
