@@ -3,79 +3,28 @@ from django.db import models
 from risk.models.utility import (
     Selector,
     DefaultFields,
+    DefaultFieldsEntry,
+    DefaultFieldsCompany,
     DefaultFieldsCategory,
-    DefaultFieldsEvaluation
 )
 
 
-class Compliance(models.Model):
+class Compliance(DefaultFieldsCategory):
     """Compliance."""
-    name = models.CharField(
-        max_length=128, blank=False, help_text=('Name of the compliance'),)  # Name of the Compliance
-    description = models.TextField(
-        blank=True, help_text=('Description of the compliance'),)  # Description of the compliance
-    abbrv = models.CharField(
-        max_length=30, blank=True, help_text=('Abbreviation'),)  # The compliance abbrv
-    keywords = models.TextField(
-        blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Keywords used when trying to find the compliance type.
-    example_title1 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
-    example_title2 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 2'),)  # Not in use
-    example_content1 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 1'),)  # Not in use
-    example_content2 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
-    example_image1 = models.ImageField(
-        help_text=('Image used to support context for example 1'), null=True, blank=True,)  # Not in use
-    example_image2 = models.ImageField(
-        help_text=('Image used to support context for example 2'), null=True, blank=True,)  # Not in use
-    desc_alt = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
-    desc_form = models.CharField(
-        max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the compliance is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the compliance will not be visible to the company.
+
     is_trademarked = models.BooleanField(default=False, help_text=(
         'Designates whether the compliance is trademarked'),)  # If True, the TM symbol will be added to the compliance name.
     # Foreign Key and Relationships
     compliance_type = models.ForeignKey('ComplianceType', on_delete=models.PROTECT, blank=True, null=True, related_name='compliance_type', help_text=(
         'Type of compliance'),)  # This will determine the type of compliance.
-    account = models.ForeignKey(
-        'Account', on_delete=models.PROTECT, default=1, related_name='account_compliance', help_text=('The account that the compliance is related'),)  # Companies have the ability to add their own compliance name.  These will be under review for addtion to CORE.
 
     def __str__(self):
         """String."""
         return self.abbrv
 
 
-class ComplianceType(models.Model):
+class ComplianceType(DefaultFieldsCompany):
     """ComplianceType."""
-    name = models.CharField(
-        max_length=30, blank=False, help_text=('Name of the compliance type'),)  # The type of compliance
-    description = models.TextField(
-        blank=True, help_text=('Description of the compliance type'),)  # Description of the compliance type
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the compliance type is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the compliance type will not be visible to the company.
-    example_title1 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
-    example_title2 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 2'),)  # Not in use
-    example_content1 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 1'),)  # Not in use
-    example_content2 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
-    example_image1 = models.ImageField(
-        help_text=('Image used to support context for example 1'), null=True, blank=True,)  # Not in use
-    example_image2 = models.ImageField(
-        help_text=('Image used to support context for example 2'), null=True, blank=True,)  # Not in use
-    desc_alt = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
-    desc_form = models.CharField(
-        max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
-    # Foreign Key and Relationships
-    account = models.ForeignKey(
-        'Account', on_delete=models.PROTECT, default=1, related_name='account_compliancetype', help_text=('The account that the compliance type is related'),)  # Compliance types should be static and belong to CORE.  Companies will need to request addtional compliance types to be added.
 
     def __str__(self):
         """String."""
@@ -86,7 +35,7 @@ class ComplianceType(models.Model):
         verbose_name_plural = ("Compliance Types")
 
 
-class ComplianceVersion(models.Model):
+class ComplianceVersion(DefaultFields):
     """ComplianceVersion."""
 
     version_number = models.CharField(max_length=30, blank=False, help_text=(
@@ -106,7 +55,7 @@ class ComplianceVersion(models.Model):
         verbose_name_plural = ("Compliance Versions")
 
 
-class ComplianceRequirement(models.Model):
+class ComplianceRequirement(DefaultFields):
     """Compliance."""
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order of the compliance '),)  # Not in use
@@ -136,22 +85,6 @@ class ComplianceRequirement(models.Model):
         max_length=30, blank=True, null=True, help_text=('Abbreviation of the compliance detail'),)  # Not in use
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
-    example_title1 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
-    example_title2 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 2'),)  # Not in use
-    example_content1 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 1'),)  # Not in use
-    example_content2 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
-    example_image1 = models.ImageField(
-        help_text=('Image used to support context for example 1'), null=True, blank=True,)  # Not in use
-    example_image2 = models.ImageField(
-        help_text=('Image used to support context for example 2'), null=True, blank=True,)  # Not in use
-    desc_alt = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
-    desc_form = models.CharField(
-        max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
     # Foreign Key and Relationships
     compliance_version = models.ForeignKey('ComplianceVersion', on_delete=models.PROTECT, blank=False, related_name='compliance_version', help_text=(
         'Compliance.  May have multiple versions'),)  # Compliance requirements for this version.
@@ -165,34 +98,8 @@ class ComplianceRequirement(models.Model):
         verbose_name_plural = ("Compliance Requirements")
 
 
-class KillChain(models.Model):
+class KillChain(DefaultFieldsCategory):
     """Kill Chain."""
-
-    name = models.CharField(
-        max_length=45, help_text=('Type of asset'),)  # Not in use
-    description = models.TextField(
-        blank=False, help_text=('Description of the asset'),)  # Not in use
-    sort_order = models.IntegerField(
-        blank=True, null=True, help_text=('Sort order that the asset type should be in for form selection'),)  # Not in use
-    keywords = models.TextField(
-        blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
-    example_title1 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
-    example_title2 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 2'),)  # Not in use
-    example_content1 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 1'),)  # Not in use
-    example_content2 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
-    example_image1 = models.ImageField(
-        help_text=('Image used to support context for example 1'), null=True, blank=True,)  # Not in use
-    example_image2 = models.ImageField(
-        help_text=('Image used to support context for example 2'), null=True, blank=True,)  # Not in use
-    desc_alt = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
-    desc_form = models.CharField(
-        max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
-    # Foreign Key and Relationships
 
     def __str__(self):
         """String."""
@@ -229,36 +136,8 @@ class Naics(models.Model):
         return self.title
 
 
-class PyramidofPain(models.Model):
+class PyramidofPain(DefaultFieldsCategory):
     """Pyramid of Pain."""
-
-    name = models.CharField(
-        max_length=45, help_text=('Level name of PoP reference'),)  # Not in use
-    description = models.TextField(
-        blank=False, help_text=('Description of the PoP level'),)  # Not in use
-    abbrv = models.CharField(
-        max_length=30, default=None, help_text=('Abbreviation of the name'),)  # Not in use
-    sort_order = models.IntegerField(
-        blank=True, null=True, help_text=('Sort order that the name should be displayed'),)  # Not in use
-    keywords = models.TextField(
-        blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
-    example_title1 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 1'),)  # Not in use
-    example_title2 = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Title used to support the example 2'),)  # Not in use
-    example_content1 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 1'),)  # Not in use
-    example_content2 = models.CharField(
-        max_length=255, blank=True, null=True, help_text=('Verbaige used to describe example 2'),)  # Not in use
-    example_image1 = models.ImageField(
-        help_text=('Image used to support context for example 1'), null=True, blank=True,)  # Not in use
-    example_image2 = models.ImageField(
-        help_text=('Image used to support context for example 2'), null=True, blank=True,)  # Not in use
-    desc_alt = models.CharField(
-        max_length=100, blank=True, null=True, help_text=('Alternate description used for image and text hover'),)  # Not in use
-    desc_form = models.CharField(
-        max_length=200, blank=True, null=True, help_text=('Form verbiage used for form inputs by the user'),)  # Not in use
-    # Foreign Key and Relationships
 
     class Meta:
         """Meta class."""

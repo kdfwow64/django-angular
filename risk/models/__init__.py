@@ -107,7 +107,7 @@ from .entry import (
     EntryEvaluation,
     # EntryImpact,
     EntryIndicator,
-    EntryResponse,
+    EntryResponseSubmission,
     EntryRiskType,
     EntryTask,
     EntryUrl,
@@ -151,9 +151,9 @@ from .vendor import (
 from .utility import (
     Selector,
     DefaultFields,
-    DefaultFieldsList,
+    DefaultFieldsEntry,
+    DefaultFieldsCompany,
     DefaultFieldsCategory,
-    DefaultFieldsEvaluation,
 )
 
 from .response import (

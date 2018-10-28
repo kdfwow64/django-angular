@@ -24,7 +24,7 @@ from risk.models import (
     EntryCompanyControlMeasure,
     EntryCompanyLocation,
     EntryCompliance,
-    EntryResponse,
+    EntryResponseSubmission,
     EntryRiskType,
     Response,
     RiskType,

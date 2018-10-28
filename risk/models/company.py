@@ -4,9 +4,9 @@ from risk.models.auth import User, UserGrant
 from risk.models.utility import (
     Selector,
     DefaultFields,
-    DefaultFieldsList,
+    DefaultFieldsEntry,
+    DefaultFieldsCompany,
     DefaultFieldsCategory,
-    DefaultFieldsEvaluation
 )
 
 
@@ -175,7 +175,7 @@ class CompanyMemberGrant(DefaultFields):
         return self.id_companymember
 
 
-class CompanyMemberRole(DefaultFieldsList):
+class CompanyMemberRole(DefaultFieldsCompany):
     """ The role the member plays in the company."""
 
     company_member_role_type = models.ForeignKey(
@@ -190,7 +190,7 @@ class CompanyMemberRole(DefaultFieldsList):
         verbose_name_plural = ("Company Member Roles")
 
 
-class CompanyMemberRoleType(DefaultFieldsList):
+class CompanyMemberRoleType(DefaultFieldsCompany):
     """ The type of role of the company member"""
 
     def __str__(self):
@@ -202,7 +202,7 @@ class CompanyMemberRoleType(DefaultFieldsList):
         verbose_name_plural = ("Company Member Role Types")
 
 
-class CompanyAsset(DefaultFieldsList):
+class CompanyAsset(DefaultFieldsCompany):
     """Company Asset.
 
     This allows the company to add multiple asset types to their register
@@ -312,7 +312,7 @@ class CompanyAssetLocation(DefaultFields):
         verbose_name_plural = ("Company Asset Locations")
 
 
-class CompanyControl(DefaultFieldsList):
+class CompanyControl(DefaultFieldsCompany):
     """Company Control.  This table will tie companies to the available controls in the Control table"""
 
     abbrv = models.CharField(
@@ -346,7 +346,7 @@ class CompanyControl(DefaultFieldsList):
     date_defined2 = models.DateTimeField(null=True, blank=True, help_text=(
         'Custom company field for company control table -see company table'),)
     vendor_control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, blank=True, related_name='vendor_companycontrol', help_text=(
-        'The primary control mapping for the company'),)
+        'The vendor control mapping the control belongs'),)
     company_control_opex = models.ForeignKey('CompanyControlOpex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_opex', help_text=(
         'The control operational expenditures for the company'),)
     company_control_capex = models.ForeignKey('CompanyControlCapex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_capex', help_text=(
@@ -369,7 +369,7 @@ class CompanyControl(DefaultFieldsList):
         verbose_name_plural = ("Company Controls")
 
 
-class CompanyControlMeasure(DefaultFieldsList):
+class CompanyControlMeasure(DefaultFieldsCompany):
     """Company Control Measure.  This will be leveraged to determine all the measurements that are reviewed for the controls effectiveness.  Specific control meausres should be tied to the entry based on the threat scenario"""
 
     formula = models.CharField(
@@ -421,7 +421,7 @@ class CompanyControlMeasurementResult(DefaultFields):
         verbose_name_plural = ("Company Control Measurement Result")
 
 
-class CompanyControlOpex(DefaultFieldsList):
+class CompanyControlOpex(DefaultFieldsCompany):
     """Company Control Operational Expenditures.  This will be leveraged to determine all the operational cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
 
     date_purchased = models.DateTimeField(
@@ -444,7 +444,7 @@ class CompanyControlOpex(DefaultFieldsList):
         verbose_name_plural = ("Company Control Operational Expenditures")
 
 
-class CompanyControlCapex(DefaultFieldsList):
+class CompanyControlCapex(DefaultFieldsCompany):
     """Company Control Capital Expenditures.  This will be leveraged to determine all the captial cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
 
     date_purchased = models.DateTimeField(
@@ -526,7 +526,7 @@ class CompanyControlCost(DefaultFields):
         verbose_name_plural = ("Company Control Costs")
 
 
-class CompanyControlCostType(DefaultFieldsList):
+class CompanyControlCostType(DefaultFieldsCompany):
     """Control Cost Type."""
 
     def __str__(self):
@@ -538,7 +538,7 @@ class CompanyControlCostType(DefaultFieldsList):
         verbose_name_plural = ("Company Control Cost Types")
 
 
-class CompanyObjective(DefaultFieldsList):
+class CompanyObjective(DefaultFieldsCompany):
     """Company Objective.
 
     This allows the company to track objectives that support a path to continued profitability.  Company objectives are future state outcomes the company would like to achieve.  Threats that affect these objectives are handled with enablers.
@@ -654,7 +654,7 @@ class CompanyContact(DefaultFields):
 '''
 
 
-class ContactType(DefaultFieldsList):
+class ContactType(DefaultFieldsCompany):
     """Contact Type."""
 
     # Foreign Key and Relationships
@@ -668,7 +668,7 @@ class ContactType(DefaultFieldsList):
         verbose_name_plural = ("Contact Types")
 
 
-class CompanyTeam(DefaultFieldsList):
+class CompanyTeam(DefaultFieldsCompany):
     """Company Team."""
 
     abbrv = models.CharField(
@@ -704,7 +704,7 @@ class CompanyTeamMember(DefaultFields):
         verbose_name_plural = ("Company Team Members")
 
 
-class CompanyLocation(DefaultFieldsList):
+class CompanyLocation(DefaultFieldsCompany):
     """Company Location.  In the future this will be tied to a Geo-Service.  Companies will need to specific at least on location before creating entries.  Assets, entries, contacts, etc. will all have a companylocation association.  This helps break down location specific cost models and risk impact measurements."""
 
     countrycode = models.CharField(
@@ -751,7 +751,7 @@ class CompanyControlLocation(DefaultFields):
         verbose_name_plural = ("Company Control Locations")
 
 
-class CompanySegment(DefaultFieldsList):
+class CompanySegment(DefaultFieldsCompany):
     """Company Segment. This will allow companies to segment risk areas.  Assets, entries, contacts, etc. will all have ability to tie to a segment.  This helps break down segment specific cost models and risk impact measurements."""
 
     is_physical = models.BooleanField(
@@ -820,7 +820,7 @@ class CompanyControlFinding(DefaultFields):
         verbose_name_plural = ("Company Control Findings")
 
 
-class CompanyPlaybook(DefaultFieldsList):
+class CompanyPlaybook(DefaultFieldsCompany):
     """This table describes the incident response procedures for the company based on certain use cases.  Playbooks belonging to core company will be leveraged as examples for templates or best practice"""
 
     playbook_owner = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='owner_playbook', help_text=(

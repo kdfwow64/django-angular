@@ -27,7 +27,6 @@ class ControlAdmin(admin.ModelAdmin):
         'is_active',
         'control_category',
         'vendor',
-        'account',
     )
     search_fields = ('name',)
 
@@ -86,17 +85,11 @@ class ControlCategoryAdmin(admin.ModelAdmin):
         'description',
         'abbrv',
         'keywords',
-        'example_title1',
-        'example_title2',
-        'example_content1',
-        'example_content2',
         'control_category_type',
-        'account',
     )
     list_filter = (
         'date_created',
         'control_category_type',
-        'account',
     )
     search_fields = ('name',)
 
@@ -119,7 +112,6 @@ class DependencyEffortAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
-        'sort_order',
     )
     search_fields = ('name',)
 
@@ -131,7 +123,6 @@ class DependencyTypeAdmin(admin.ModelAdmin):
         'name',
         'description',
         'dependent',
-        'keywords',
     )
     list_filter = (
         'dependent',

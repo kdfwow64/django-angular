@@ -15,10 +15,8 @@ class ComplianceAdmin(admin.ModelAdmin):
         'is_active',
         'is_trademarked',
         'compliance_type',
-        'account',
         'keywords',
-        'desc_alt',
-        'desc_form',
+
     )
     list_filter = ('is_active', 'is_trademarked', 'compliance_type')
     search_fields = ('name',)
@@ -31,9 +29,6 @@ class ComplianceTypeAdmin(admin.ModelAdmin):
         'name',
         'description',
         'is_active',
-        'account',
-        'desc_alt',
-        'desc_form',
     )
     search_fields = ('name',)
 
@@ -64,7 +59,7 @@ class ComplianceRequirementAdmin(admin.ModelAdmin):
         return [('sort_order')]
 
     def admin_desc(self, obj):
-        return linebreaks(obj.desc)
+        return linebreaks(obj.description)
     admin_desc.allow_tags = True
     admin_desc.short_description = 'Description'
 
@@ -107,8 +102,6 @@ class KillChainAdmin(admin.ModelAdmin):
         'description',
         'sort_order',
         'keywords',
-        'desc_alt',
-        'desc_form',
     )
     search_fields = ('name',)
 
@@ -127,7 +120,5 @@ class PyramidofPainAdmin(admin.ModelAdmin):
         'abbrv',
         'sort_order',
         'keywords',
-        'desc_alt',
-        'desc_form',
     )
     search_fields = ('name',)

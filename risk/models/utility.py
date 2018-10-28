@@ -13,9 +13,12 @@ class Selector(models.Model):
     HIGH = 'H'
     MEDIUM = 'M'
     LOW = 'L'
+    PERCENT = 'P'
+    FIXED = 'F'
     YES_NO = (('Y', 'Yes'), ('N', 'No'))
     RAG = (('R', 'Red'), ('A', 'Amber'), ('G', 'Green'))
     HML = (('H', 'High'), ('M', 'Medium'), ('L', 'Low'))
+    EF = (('P', 'Percentage of Asset Value'), ('F', 'Fixed Impact Value'))
 
 
 class DefaultFields(models.Model):
@@ -65,7 +68,7 @@ class DefaultFields(models.Model):
         return super(DefaultFields, self).save(*args, **kwargs)
 
 
-class DefaultFieldsList(DefaultFields):
+class DefaultFieldsCompany(DefaultFields):
     """Models that are used for categorizing data"""
 
     # Name of the field.
@@ -85,7 +88,27 @@ class DefaultFieldsList(DefaultFields):
         abstract = True
 
 
-class DefaultFieldsCategory(DefaultFieldsList):
+class DefaultFieldsEntry(DefaultFields):
+    """Models that are used for categorizing data"""
+
+    # Name of the field.
+    name = models.CharField(max_length=225, blank=True,
+                            null=True, help_text=('Summary of the %(class)s'),)
+    description = models.TextField(blank=True, null=True, help_text=(
+        'Description of the field'),)  # Description of the field.
+    # Foreign Key and Relationships
+    entry = models.ForeignKey('Entry', default=1, on_delete=models.PROTECT, blank=False, related_name='%(app_label)s_%(class)s_related_entry', help_text=(
+        'Entry id for the company that manages the field'),)  # Entry that defined the field.
+
+    class Meta:
+        """Meta class."""
+        indexes = [
+            models.Index(fields=['company']),
+        ]
+        abstract = True
+
+
+class DefaultFieldsCategory(DefaultFieldsCompany):
     """Models that are used for categorizing data"""
 
     # Name of the field.

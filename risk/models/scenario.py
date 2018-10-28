@@ -3,8 +3,9 @@ from django.db import models
 from risk.models.utility import (
     Selector,
     DefaultFields,
+    DefaultFieldsEntry,
+    DefaultFieldsCompany,
     DefaultFieldsCategory,
-    DefaultFieldsEvaluation
 )
 
 

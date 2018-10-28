@@ -11,9 +11,9 @@ from risk.lib.user_manager import EmailUserManager
 from risk.models.utility import (
     Selector,
     DefaultFields,
-    DefaultFieldsList,
+    DefaultFieldsEntry,
+    DefaultFieldsCompany,
     DefaultFieldsCategory,
-    DefaultFieldsEvaluation
 )
 
 
@@ -324,7 +324,7 @@ class UserLevel(models.Model):
 '''
 
 
-class UserRole(DefaultFieldsList):
+class UserRole(DefaultFieldsCompany):
     """This relates to the role the user will have within the application (View, Contribute, Adminster.)."""
 
     grants = models.ManyToManyField("UserGrant", through='DefaultRoleGrant',
@@ -340,7 +340,7 @@ class UserRole(DefaultFieldsList):
         verbose_name_plural = ("User Roles")
 
 
-class UserGrant(DefaultFieldsList):
+class UserGrant(DefaultFieldsCompany):
     """Grant."""
 
     # Foreign Key and Relationships

@@ -1,7 +1,11 @@
 """Internal Maintenace, Notifications, Reporting & related models."""
 from django.db import models
 from risk.models.utility import (
-    Selector, DefaultFields, DefaultFieldsList, DefaultFieldsCategory, DefaultFieldsEvaluation
+    Selector,
+    DefaultFields,
+    DefaultFieldsEntry,
+    DefaultFieldsCompany,
+    DefaultFieldsCategory,
 )
 
 
@@ -73,7 +77,7 @@ class CurrencyType(models.Model):
         verbose_name_plural = ("Currency Types")
 
 
-class EmailTemplate(DefaultFieldsList):
+class EmailTemplate(DefaultFieldsCompany):
     """Email Template."""
 
     subject = models.CharField(
@@ -163,7 +167,7 @@ class RAGIndicator(models.Model):
         verbose_name_plural = ("RAG Indicators")
 
 
-class Cadence(DefaultFieldsList):
+class Cadence(DefaultFieldsCompany):
     """Cadence."""
 
     def __str__(self):

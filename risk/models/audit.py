@@ -1,7 +1,11 @@
 """Audit, Tracking & related models."""
 from django.db import models
 from risk.models.utility import (
-    Selector, DefaultFields, DefaultFieldsCategory, DefaultFieldsEvaluation
+    Selector,
+    DefaultFields,
+    DefaultFieldsEntry,
+    DefaultFieldsCompany,
+    DefaultFieldsCategory,
 )
 
 

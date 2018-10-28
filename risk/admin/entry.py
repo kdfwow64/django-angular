@@ -89,24 +89,11 @@ class RegisterAdmin(admin.ModelAdmin):
         'id',
         'name',
         'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
-        'deleted_by',
         'company',
     )
     list_filter = (
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
-        'deleted_by',
         'company',
     )
     search_fields = ('name',)
@@ -122,33 +109,12 @@ class EntryAdmin(admin.ModelAdmin):
         'description',
         'assumption',
         'entry_number',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
         'aro_multiplier',
-        'aro_notes',
-        'impact_notes',
-        'evaluation_days',
-        'evaluation_flg',
-        'additional_mitigation',
-        'defined1',
-        'defined2',
         'incident_response',
-        'created_by',
-        'modified_by',
-        'entry_owner',
-        'register',
         'response',
         'is_completed',
-        'date_completed',
     )
     list_filter = (
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'incident_response',
-        'created_by',
-        'modified_by',
         'entry_owner',
         'register',
         'response',
@@ -176,18 +142,11 @@ class EntryTaskAdmin(admin.ModelAdmin):
         'date_completed',
         'date_acknowledged',
         'task_owner',
-        'created_by',
-        'closed_by',
-        'deleted_by',
         'task_status',
         'entry',
     )
     list_filter = (
-        'due_date',
         'task_owner',
-        'created_by',
-        'closed_by',
-        'deleted_by',
         'task_status',
         'entry',
     )
@@ -213,7 +172,7 @@ class RiskTypeAdmin(admin.ModelAdmin):
         'name',
         'description',
         'keywords',
-        'account',
+        'company',
     )
     list_filter = ('name',)
     search_fields = ('name',)
@@ -272,11 +231,11 @@ class EntryEvaluationAdmin(admin.ModelAdmin):
         'date_evaluated',
         'entry',
         'mitigation_adequacy',
-        'user',
+        'evaluator',
         'approver',
     )
     list_filter = ('date_created', 'date_evaluated',
-                   'entry', 'mitigation_adequacy', 'user', 'approver',)
+                   'entry', 'mitigation_adequacy', 'evaluator', 'approver',)
 
 
 class EntryImpactAdmin(admin.ModelAdmin):
@@ -311,7 +270,7 @@ class EntryCompanyLocationAdmin(admin.ModelAdmin):
     list_filter = ('id_entry', 'id_companylocation')
 
 
-class EntryResponseAdmin(admin.ModelAdmin):
+class EntryResponseSubmissionAdmin(admin.ModelAdmin):
     inlines = (EntryResponseResultInline,)
     list_display = (
         'id',
