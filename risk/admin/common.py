@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
 
 class CalendarAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'date',
@@ -30,12 +31,14 @@ class CalendarAdmin(admin.ModelAdmin):
 
 class CurrencyTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'name', 'abbrv', 'symbol', 'unit', 'exchange_rate')
     search_fields = ('name',)
 
 
 class EmailTemplateAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -50,6 +53,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
 
 class ExpressionAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -60,18 +64,21 @@ class ExpressionAdmin(admin.ModelAdmin):
 
 class IntegerTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
 class RAGIndicatorAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
 class CadenceAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -82,6 +89,7 @@ class CadenceAdmin(admin.ModelAdmin):
 
 class TimeUnitAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -93,5 +101,6 @@ class TimeUnitAdmin(admin.ModelAdmin):
 
 class TaskStatusAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'name', 'description', 'sort_order')
     search_fields = ('name',)

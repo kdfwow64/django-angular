@@ -1,68 +1,42 @@
 from django.contrib import admin
-from risk.models.meeting import MeetingAttendeeMap, MeetingEntryMap, MeetingTopicMap, TopicActionMap, TopicCommentMap
+from risk.models.meeting import MeetingAttendee, MeetingEntry
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
 
 
-class MeetingAttendeeMapInline(admin.TabularInline):
+class MeetingAttendeeInline(admin.TabularInline):
 
-    model = MeetingAttendeeMap
+    model = MeetingAttendee
     extra = 1
 
 
-class MeetingEntryMapInline(admin.TabularInline):
+class MeetingEntryInline(admin.TabularInline):
 
-    model = MeetingEntryMap
-    extra = 1
-
-
-class MeetingTopicMapInline(admin.TabularInline):
-
-    model = MeetingTopicMap
-    extra = 1
-
-
-class TopicCommentMapInline(admin.TabularInline):
-
-    model = TopicCommentMap
-    extra = 1
-
-
-class TopicActionMapInline(admin.TabularInline):
-
-    model = TopicActionMap
+    model = MeetingEntry
     extra = 1
 
 
 class MeetingAdmin(admin.ModelAdmin):
 
-    inlines = (MeetingAttendeeMapInline,
-               MeetingTopicMapInline, MeetingEntryMapInline)
+    inlines = (MeetingAttendeeInline, MeetingEntryInline)
+    list_select_related = []
     list_display = (
         'id',
         'is_active',
         'name',
         'executive_summary',
         'date_created',
-        'date_modified',
-        'date_start',
-        'date_close',
-        'was_cancelled',
-        'reason_cancelled',
         'cadence',
         'company',
         'meeting_type',
         'organizer',
     )
     list_filter = (
+        'name',
+        'executive_summary',
         'is_active',
-        'date_created',
-        'date_modified',
-        'date_start',
-        'date_close',
-        'was_cancelled',
-        'cadence',
+        'is_deleted',
         'company',
         'meeting_type',
         'organizer',
@@ -72,60 +46,52 @@ class MeetingAdmin(admin.ModelAdmin):
 
 class MeetingTopicAdmin(admin.ModelAdmin):
 
-    inlines = (TopicCommentMapInline, TopicActionMapInline,)
+    list_select_related = []
     list_display = (
         'id',
         'topic',
         'date_created',
-        'date_modified',
-        'date_completed',
         'inital_meeting',
-
+        'current_meeting',
     )
     list_filter = (
-        'date_created',
-        'date_modified',
-        'date_completed',
         'inital_meeting',
+        'current_meeting',
     )
 
 
-class TopicCommentAdmin(admin.ModelAdmin):
+class MeetingTopicCommentAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'comment',
         'date_created',
-        'date_modified',
-        'date_completed',
+        'meeting_topic',
     )
     list_filter = (
-        'date_created',
-        'date_modified',
-        'date_completed',
+        'meeting_topic',
     )
 
 
-class TopicActionAdmin(admin.ModelAdmin):
+class MeetingTopicActionAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'action',
         'date_created',
-        'date_modified',
-        'date_completed',
         'action_owner',
+        'meeting_topic',
     )
     list_filter = (
-        'date_created',
-        'date_modified',
-        'date_completed',
-        'action_owner',
+        'meeting_topic',
     )
 
 
 class MeetingTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',

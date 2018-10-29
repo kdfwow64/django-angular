@@ -81,6 +81,7 @@ class CompanyPlaybookMemberInline(admin.TabularInline):
 
 class CompanyAdmin(admin.ModelAdmin):
     inlines = (CompanyProfileInline, CompanyMemberInline,)
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -100,6 +101,7 @@ class CompanyAdmin(admin.ModelAdmin):
 class CompanyMemberAdmin(admin.ModelAdmin):
     inlines = (CompanyMemberGrantInline,)
     readonly_fields = ('id_company', 'id_user')
+    list_select_related = []
     list_display = (
         'id_company',
         'id_user',
@@ -115,6 +117,8 @@ class CompanyMemberAdmin(admin.ModelAdmin):
 
 
 class CompanyMemberRoleAdmin(admin.ModelAdmin):
+
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -132,6 +136,8 @@ class CompanyMemberRoleAdmin(admin.ModelAdmin):
 
 
 class CompanyMemberRoleTypeAdmin(admin.ModelAdmin):
+
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -163,6 +169,7 @@ class CompanyMemberRoleTypeAdmin(admin.ModelAdmin):
 
 class CompanyAssetTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -177,6 +184,7 @@ class CompanyAssetTypeAdmin(admin.ModelAdmin):
 class CompanyAssetAdmin(admin.ModelAdmin):
 
     inlines = (CompanyAssetLocationInline, CompanyAssetSegmentInline)
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -195,6 +203,7 @@ class CompanyAssetAdmin(admin.ModelAdmin):
 class CompanyObjectiveAdmin(admin.ModelAdmin):
 
     inlines = (CompanyObjectiveRiskTypeInline,)
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -215,6 +224,7 @@ class CompanyObjectiveAdmin(admin.ModelAdmin):
 class CompanyControlAdmin(admin.ModelAdmin):
     inlines = (CompanyControlLocationInline,
                CompanyControlSegmentInline, CompanyControlDependencyInline)
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -234,6 +244,7 @@ class CompanyControlAdmin(admin.ModelAdmin):
 
 class CompanyControlMeasureAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -252,6 +263,7 @@ class CompanyControlMeasureAdmin(admin.ModelAdmin):
 
 class CompanyControlMeasurementResultAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'measurement',
@@ -262,6 +274,8 @@ class CompanyControlMeasurementResultAdmin(admin.ModelAdmin):
 
 
 class CompanyControlOpexAdmin(admin.ModelAdmin):
+
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -277,6 +291,8 @@ class CompanyControlOpexAdmin(admin.ModelAdmin):
 
 
 class CompanyControlCapexAdmin(admin.ModelAdmin):
+
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -293,6 +309,7 @@ class CompanyControlCapexAdmin(admin.ModelAdmin):
 
 class CompanyControlDependencyAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'id_companycontrol',
@@ -310,6 +327,7 @@ class CompanyControlDependencyAdmin(admin.ModelAdmin):
 
 class CompanyControlCostAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'company_control',
         'amount_paid',
@@ -330,6 +348,7 @@ class CompanyControlCostAdmin(admin.ModelAdmin):
 
 class CompanyControlCostTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'name',
         'description',
@@ -344,6 +363,7 @@ class CompanyControlCostTypeAdmin(admin.ModelAdmin):
 
 class CompanyContactAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'first_name',
@@ -369,6 +389,7 @@ class CompanyContactAdmin(admin.ModelAdmin):
 
 class ContactTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
@@ -376,6 +397,7 @@ class ContactTypeAdmin(admin.ModelAdmin):
 class CompanyTeamAdmin(admin.ModelAdmin):
 
     inlines = (CompanyTeamMemberInline,)
+    list_select_related = []
     list_display = ('id', 'name', 'description', 'abbrv',
                     'company', 'lead', 'is_active')
     list_filter = ('company', 'lead', 'is_active')
@@ -384,6 +406,7 @@ class CompanyTeamAdmin(admin.ModelAdmin):
 
 class CompanyLocationAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -404,6 +427,7 @@ class CompanyLocationAdmin(admin.ModelAdmin):
 class CompanyFindingAdmin(admin.ModelAdmin):
 
     inlines = (CompanyControlFindingInline,)
+    list_select_related = []
     list_display = (
         'id',
         'description',
@@ -422,6 +446,7 @@ class CompanyFindingAdmin(admin.ModelAdmin):
 class CompanyPlaybookAdmin(admin.ModelAdmin):
 
     inlines = (CompanyPlaybookMemberInline,)
+    list_select_related = []
     list_display = (
         'name',
         'description',
@@ -439,6 +464,7 @@ class CompanyPlaybookAdmin(admin.ModelAdmin):
 
 class CompanyPlaybookActionAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'action',

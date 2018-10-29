@@ -18,6 +18,8 @@ class ControlCategoryFunctionInline(admin.TabularInline):
 
 
 class ControlAdmin(admin.ModelAdmin):
+
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -33,6 +35,7 @@ class ControlAdmin(admin.ModelAdmin):
 
 class ControlCscAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'version', 'number',
                     'description', 'control_csc_family')
     list_filter = ('control_csc_family',)
@@ -40,12 +43,14 @@ class ControlCscAdmin(admin.ModelAdmin):
 
 class ControlCscFamilyAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
 
 class ControlDomainAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -57,6 +62,7 @@ class ControlDomainAdmin(admin.ModelAdmin):
 
 class ControlFunctionAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -68,6 +74,7 @@ class ControlFunctionAdmin(admin.ModelAdmin):
 
 class ControlOperationAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -80,6 +87,7 @@ class ControlOperationAdmin(admin.ModelAdmin):
 class ControlCategoryAdmin(admin.ModelAdmin):
 
     inlines = (ControlCategoryOperationInline, ControlCategoryFunctionInline)
+    list_select_related = []
     list_display = (
         'name',
         'description',
@@ -96,6 +104,7 @@ class ControlCategoryAdmin(admin.ModelAdmin):
 
 class ControlCategoryTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -108,6 +117,7 @@ class ControlCategoryTypeAdmin(admin.ModelAdmin):
 
 class DependencyEffortAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -118,6 +128,7 @@ class DependencyEffortAdmin(admin.ModelAdmin):
 
 class DependencyTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',

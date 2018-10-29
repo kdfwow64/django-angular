@@ -22,6 +22,7 @@ class ThreatActorMotiveInline(admin.TabularInline):
 class ActorAdmin(admin.ModelAdmin):
 
     inlines = (ThreatActorIntentInline, ThreatActorMotiveInline)
+    list_select_related = []
     readonly_fields = ('date_created',)
     list_display = (
         'id',
@@ -38,6 +39,7 @@ class ActorAdmin(admin.ModelAdmin):
 
 class ActorIntentAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -52,6 +54,7 @@ class ActorIntentAdmin(admin.ModelAdmin):
 
 class ActorMotiveAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',

@@ -19,7 +19,7 @@ class VendorCategoryMapInline(admin.TabularInline):
 
 class VendorAdmin(admin.ModelAdmin):
     inlines = (VendorTypeMapInline, VendorCategoryMapInline,)
-    ordering = ('id',)
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -34,39 +34,19 @@ class VendorAdmin(admin.ModelAdmin):
         'url_product',
         'url_service',
         'url_support',
-        'date_transitioned',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
-        'evaluation_days',
-        'evaluation_flg',
         'rank',
-        'transitioned_by',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'deleted_by',
         'initial_account',
         'keywords',
     )
     list_filter = (
         'is_active',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'deleted_by',
-        'keywords',
     )
-    search_fields = ('name', 'parent', 'about', 'keywords')
+    search_fields = ('name', 'parent', 'about', 'keywords',)
 
 
 class VendorTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -78,6 +58,7 @@ class VendorTypeAdmin(admin.ModelAdmin):
 
 class VendorCategoryAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',

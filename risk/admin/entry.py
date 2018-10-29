@@ -85,6 +85,7 @@ class EntryResponseResultInline(admin.TabularInline):
 
 class RegisterAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -103,6 +104,7 @@ class EntryAdmin(admin.ModelAdmin):
 
     inlines = (EntryActorInline, EntryCompanyAssetInline,
                EntryCompanyControlInline, EntryComplianceInline, EntryEventTypeInline, EntryCompanyLocationInline, EntryRiskTypeInline)
+    list_select_related = []
     list_display = (
         'id',
         'summary',
@@ -132,6 +134,7 @@ class EntryAdmin(admin.ModelAdmin):
 
 class EntryTaskAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'summary',
@@ -155,6 +158,7 @@ class EntryTaskAdmin(admin.ModelAdmin):
 class EntryActorAdmin(admin.ModelAdmin):
 
     inlines = (EntryActorIntentInline, EntryActorMotiveInline,)
+    list_select_related = []
     list_display = (
         'id_entry',
         'id_actor',
@@ -167,6 +171,7 @@ class EntryActorAdmin(admin.ModelAdmin):
 
 class RiskTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -180,6 +185,7 @@ class RiskTypeAdmin(admin.ModelAdmin):
 
 class EntryCauseAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -206,12 +212,14 @@ class EntryCompanyControlAdmin(admin.ModelAdmin):
 
 class EntryComplianceAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'id_compliance', 'id_entry')
     list_filter = ('id_compliance', 'id_entry')
 
 
 class EntryDependencyEffortAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'percent',
@@ -224,6 +232,7 @@ class EntryDependencyEffortAdmin(admin.ModelAdmin):
 
 class EntryEvaluationAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'update',
@@ -240,6 +249,7 @@ class EntryEvaluationAdmin(admin.ModelAdmin):
 
 class EntryImpactAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'fixed_cost',
@@ -254,6 +264,7 @@ class EntryImpactAdmin(admin.ModelAdmin):
 
 class EntryIndicatorAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -266,12 +277,14 @@ class EntryIndicatorAdmin(admin.ModelAdmin):
 
 class EntryCompanyLocationAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'id_entry', 'id_companylocation')
     list_filter = ('id_entry', 'id_companylocation')
 
 
 class EntryResponseSubmissionAdmin(admin.ModelAdmin):
     inlines = (EntryResponseResultInline,)
+    list_select_related = []
     list_display = (
         'id',
         'date_presented',
@@ -293,6 +306,7 @@ class EntryResponseSubmissionAdmin(admin.ModelAdmin):
 
 class ResponseVoteAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -304,6 +318,7 @@ class ResponseVoteAdmin(admin.ModelAdmin):
 
 class ResponseAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -316,6 +331,7 @@ class ResponseAdmin(admin.ModelAdmin):
 
 class EntryUrlAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -331,6 +347,7 @@ class EntryUrlAdmin(admin.ModelAdmin):
 
 class MitigationAdequacyAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',

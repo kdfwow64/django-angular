@@ -115,6 +115,7 @@ class UserAdmin(BaseUserAdmin):
 class AccountAdmin(admin.ModelAdmin):
     inlines = (AccountMembershipInline,)
     readonly_fields = ('date_created',)
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -134,6 +135,7 @@ class AccountAdmin(admin.ModelAdmin):
 class AccountTypeAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created',)
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -154,6 +156,7 @@ class AccountTypeAdmin(admin.ModelAdmin):
 class UserAccessAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created',)
+    list_select_related = []
     list_display = (
         'id',
         'date_created',
@@ -179,6 +182,7 @@ class UserAccessAdmin(admin.ModelAdmin):
 
 class AuthenticationTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'name', 'description',)
     search_fields = ('name',)
 
@@ -194,6 +198,7 @@ class UserRoleAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created',)
     inlines = (DefaultRoleGrantInline,)
+    list_select_related = []
     list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
@@ -201,6 +206,7 @@ class UserRoleAdmin(admin.ModelAdmin):
 class UserGrantAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created',)
+    list_select_related = []
     list_display = ('id', 'name', 'description')
     search_fields = ('name',)
 
@@ -215,6 +221,7 @@ class UserRoleGrantAdmin(admin.ModelAdmin):
 
 class RoleTrackingAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'modifed_date',

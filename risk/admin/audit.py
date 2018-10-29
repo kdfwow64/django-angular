@@ -19,6 +19,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
 class NotificationGroupAdmin(admin.ModelAdmin):
     inlines = (NotificationEmailDistroInline,)
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -30,6 +31,7 @@ class NotificationGroupAdmin(admin.ModelAdmin):
 
 class AuditChangeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'date_modified',
@@ -46,6 +48,7 @@ class AuditChangeAdmin(admin.ModelAdmin):
 
 class SnapshotAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'date_created',

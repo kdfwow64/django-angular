@@ -1,28 +1,26 @@
 from django.contrib import admin
-from risk.models.project import ProjectEntryMap
+from risk.models.project import ProjectEntry
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
 
 
-class ProjectEntryMapInline(admin.TabularInline):
+class ProjectEntryInline(admin.TabularInline):
 
-    model = ProjectEntryMap
+    model = ProjectEntry
     extra = 1
 
 
 class ProjectAdmin(admin.ModelAdmin):
 
-    inlines = (ProjectEntryMapInline,)
+    inlines = (ProjectEntryInline,)
+    list_select_related = []
     list_display = (
         'id',
         'is_active',
         'name',
-        'executive_summary',
-        'date_created',
-        'date_modified',
-        'date_start',
-        'date_close',
+        'description',
+        'estimated_days',
         'was_cancelled',
         'reason_cancelled',
         'company',
@@ -30,10 +28,6 @@ class ProjectAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'is_active',
-        'date_created',
-        'date_modified',
-        'date_start',
-        'date_close',
         'was_cancelled',
         'company',
         'organizer',
@@ -43,27 +37,16 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class ProjectAssumptionAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
         'summary',
         'detail',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'summary',
-        'detail',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
     search_fields = ('summary',)
@@ -71,27 +54,19 @@ class ProjectAssumptionAdmin(admin.ModelAdmin):
 
 class ProjectSuccessCriteriaAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
+        'is_deleted',
         'summary',
         'detail',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
         'modified_by',
-        'deactivated_by',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'summary',
-        'detail',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
     search_fields = ('summary',)
@@ -99,27 +74,19 @@ class ProjectSuccessCriteriaAdmin(admin.ModelAdmin):
 
 class ProjectBenefitAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
         'summary',
         'detail',
         'date_created',
-        'date_modified',
-        'date_deactivated',
         'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'summary',
-        'detail',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
     search_fields = ('summary',)
@@ -127,29 +94,19 @@ class ProjectBenefitAdmin(admin.ModelAdmin):
 
 class ProjectMilestoneAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
         'summary',
         'detail',
         'date_start',
-        'date_complete',
         'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'summary',
-        'detail',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
     search_fields = ('summary',)
@@ -157,29 +114,20 @@ class ProjectMilestoneAdmin(admin.ModelAdmin):
 
 class ProjectRiskAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
         'summary',
         'detail',
         'date_created',
-        'date_modified',
-        'date_deactivated',
         'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
         'risk_type',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'summary',
-        'detail',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'risk_type',
         'project',
     )
     search_fields = ('summary', 'risk_type',)
@@ -187,34 +135,26 @@ class ProjectRiskAdmin(admin.ModelAdmin):
 
 class ProjectRiskTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
         'name',
         'description',
         'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
-        'account',
+        'company',
     )
 
     list_filter = (
         'is_active',
-        'name',
-        'description',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'account',
+        'company',
     )
     search_fields = ('name',)
 
 
 class ProjectBudgetChangeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
         'amount',
@@ -222,30 +162,14 @@ class ProjectBudgetChangeAdmin(admin.ModelAdmin):
         'reason',
         'is_capex',
         'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
         'risk_type',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'amount',
         'is_increase',
-        'reason',
-        'is_capex',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'risk_type',
         'project',
     )
     search_fields = ('reason',)
@@ -253,35 +177,22 @@ class ProjectBudgetChangeAdmin(admin.ModelAdmin):
 
 class ProjectDateChangeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
-        'day',
+        'days',
         'is_added',
         'reason',
         'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
         'risk_type',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'day',
+        'days',
         'is_added',
-        'reason',
-        'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
-        'risk_type',
         'project',
     )
     search_fields = ('reason',)
@@ -289,6 +200,7 @@ class ProjectDateChangeAdmin(admin.ModelAdmin):
 
 class ProjectUATAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
         'summary',
@@ -298,24 +210,12 @@ class ProjectUATAdmin(admin.ModelAdmin):
         'date_start',
         'date_complete',
         'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'summary',
-        'detail',
-        'result',
-        'is_acceptable',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
         'project',
     )
     search_fields = ('summary',)
@@ -323,28 +223,19 @@ class ProjectUATAdmin(admin.ModelAdmin):
 
 class ProjectUpdateAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'is_active',
         'summary',
         'description',
         'date_created',
-        'date_modified',
-        'date_deactivated',
-        'date_deleted',
         'created_by',
-        'modified_by',
-        'deactivated_by',
         'indicator',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'summary',
-        'description',
-        'created_by',
-        'modified_by',
-        'deactivated_by',
         'indicator',
         'project',
     )

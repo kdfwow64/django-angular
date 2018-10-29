@@ -11,9 +11,9 @@ from ..models.compliance import Compliance, ComplianceType, ComplianceRequiremen
 from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomain, ControlFunction, ControlOperation, ControlCategory, ControlCategoryType, DependencyEffort, DependencyType
 from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponseSubmission, EntryRiskType, RiskType, Response, ResponseVote, EntryUrl, MitigationAdequacy
 from ..models.feedback import Feedback, FeedbackStatus, FeedbackType, FeedbackQuestion, FeedbackAnswer, FeedbackCorrespondence
-from ..models.meeting import Meeting, TopicComment, TopicAction, MeetingTopic, MeetingType
+from ..models.meeting import Meeting, MeetingTopicComment, MeetingTopicAction, MeetingTopic, MeetingType
 from ..models.scenario import EventType, FrequencyCategory, ImpactCategory, ImpactType, CIATriad, SeverityCategory
-from ..models.response import PlaybookRole, PlaybookRoleType, PlaybookActionType, PlaybookResponsibility
+from ..models.ir import PlaybookRole, PlaybookRoleType, PlaybookActionType, PlaybookResponsibility
 from ..models.vendor import Vendor, VendorType, VendorCategory
 from ..models.project import Project, ProjectAssumption, ProjectSuccessCriteria, ProjectBenefit, ProjectMilestone, ProjectRisk, ProjectRiskType, ProjectBudgetChange, ProjectDateChange, ProjectUAT, ProjectUpdate
 
@@ -28,9 +28,9 @@ from .compliance import ComplianceAdmin, ComplianceTypeAdmin, ComplianceVersionA
 from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, ControlDomainAdmin, ControlFunctionAdmin, ControlOperationAdmin, ControlCategoryAdmin, ControlCategoryTypeAdmin, DependencyEffortAdmin, DependencyTypeAdmin
 from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseSubmissionAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
 from .feedback import FeedbackAdmin, FeedbackStatusAdmin, FeedbackTypeAdmin, FeedbackQuestionAdmin, FeedbackAnswerAdmin, FeedbackCorrespondenceAdmin
-from .meeting import MeetingAdmin, TopicCommentAdmin, TopicActionAdmin, MeetingTopicAdmin, MeetingTypeAdmin
+from .meeting import MeetingAdmin, MeetingTopicCommentAdmin, MeetingTopicActionAdmin, MeetingTopicAdmin, MeetingTypeAdmin
 from .scenario import EventTypeAdmin, FrequencyCategoryAdmin, ImpactCategoryAdmin, ImpactTypeAdmin, CIATriadAdmin, SeverityCategoryAdmin
-from .response import PlaybookRoleAdmin, PlaybookRoleTypeAdmin, PlaybookActionTypeAdmin, PlaybookResponsibilityAdmin
+from .ir import PlaybookRoleAdmin, PlaybookRoleTypeAdmin, PlaybookActionTypeAdmin, PlaybookResponsibilityAdmin
 from .vendor import VendorAdmin, VendorTypeAdmin, VendorCategoryAdmin
 from .project import ProjectAdmin, ProjectAssumptionAdmin, ProjectSuccessCriteriaAdmin, ProjectBenefitAdmin, ProjectMilestoneAdmin, ProjectRiskAdmin, ProjectRiskTypeAdmin, ProjectBudgetChangeAdmin, ProjectDateChangeAdmin, ProjectUATAdmin, ProjectUpdateAdmin
 # Register your models here.
@@ -125,8 +125,8 @@ admin.site.register(FeedbackCorrespondence, FeedbackCorrespondenceAdmin)
 admin.site.register(FeedbackStatus, FeedbackStatusAdmin)
 admin.site.register(FeedbackType, FeedbackTypeAdmin)
 admin.site.register(Meeting, MeetingAdmin)
-admin.site.register(TopicComment, TopicCommentAdmin)
-admin.site.register(TopicAction, TopicActionAdmin)
+admin.site.register(MeetingTopicComment, MeetingTopicCommentAdmin)
+admin.site.register(MeetingTopicAction, MeetingTopicActionAdmin)
 admin.site.register(MeetingTopic, MeetingTopicAdmin)
 admin.site.register(MeetingType, MeetingTypeAdmin)
 admin.site.register(EventType, EventTypeAdmin)

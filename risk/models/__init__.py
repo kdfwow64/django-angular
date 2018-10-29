@@ -128,10 +128,12 @@ from .feedback import (
 
 from .meeting import (
     Meeting,
-    TopicComment,
-    TopicAction,
+    MeetingTopicComment,
+    MeetingTopicAction,
     MeetingTopic,
     MeetingType,
+    MeetingEntry,
+    MeetingAttendee
 )
 
 from .scenario import (
@@ -156,7 +158,7 @@ from .utility import (
     DefaultFieldsCategory,
 )
 
-from .response import (
+from .ir import (
     PlaybookRole,
     PlaybookRoleType,
     PlaybookActionType,

@@ -13,19 +13,21 @@ class EventTypeCIATriadInline(admin.TabularInline):
 
 class EventTypeAdmin(admin.ModelAdmin):
     inlines = (EventTypeCIATriadInline,)
+    list_select_related = []
     list_display = (
         'id',
         'name',
         'description',
         'sort_order',
         'keywords',
-        'account',
+        'company',
     )
     search_fields = ('name', 'account', )
 
 
 class FrequencyCategoryAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -40,6 +42,7 @@ class FrequencyCategoryAdmin(admin.ModelAdmin):
 
 class ImpactCategoryAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -54,19 +57,21 @@ class ImpactCategoryAdmin(admin.ModelAdmin):
 
 class ImpactTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
         'description',
         'sort_order',
         'keywords',
-        'account',
+        'company',
     )
     search_fields = ('name',)
 
 
 class CIATriadAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -78,6 +83,7 @@ class CIATriadAdmin(admin.ModelAdmin):
 
 class SeverityCategoryAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',

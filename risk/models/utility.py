@@ -10,14 +10,15 @@ class Selector(models.Model):
     RED = 'R'
     AMBER = 'A'
     GREEN = 'G'
+    UNKNOWN = 'U'
     HIGH = 'H'
     MEDIUM = 'M'
     LOW = 'L'
     PERCENT = 'P'
     FIXED = 'F'
     YES_NO = (('Y', 'Yes'), ('N', 'No'))
-    RAG = (('R', 'Red'), ('A', 'Amber'), ('G', 'Green'))
-    HML = (('H', 'High'), ('M', 'Medium'), ('L', 'Low'))
+    RAG = (('R', 'Red'), ('A', 'Amber'), ('G', 'Green'), ('U', 'Unknown'))
+    HML = (('H', 'High'), ('M', 'Medium'), ('L', 'Low'), ('U', 'Unknown'))
     EF = (('P', 'Percentage of Asset Value'), ('F', 'Fixed Impact Value'))
 
 

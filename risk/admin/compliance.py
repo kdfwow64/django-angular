@@ -7,6 +7,7 @@ from django.contrib.auth.forms import (
 
 class ComplianceAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -24,6 +25,7 @@ class ComplianceAdmin(admin.ModelAdmin):
 
 class ComplianceTypeAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -35,12 +37,14 @@ class ComplianceTypeAdmin(admin.ModelAdmin):
 
 class ComplianceVersionAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'compliance', 'version_number', 'year')
     list_filter = ('compliance',)
 
 
 class ComplianceRequirementAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'compliance_version',
         'cid',
@@ -96,6 +100,7 @@ class ComplianceRequirementAdmin(admin.ModelAdmin):
 
 class KillChainAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
@@ -108,11 +113,13 @@ class KillChainAdmin(admin.ModelAdmin):
 
 class NaicsAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = ('id', 'version', 'code', 'title', 'level')
 
 
 class PyramidofPainAdmin(admin.ModelAdmin):
 
+    list_select_related = []
     list_display = (
         'id',
         'name',
