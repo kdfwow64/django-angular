@@ -45,12 +45,12 @@ class ControlCategory(DefaultFieldsCategory):
     available_function = models.ManyToManyField("ControlFunction", through='ControlCategoryFunction', through_fields=('id_controlcategory', 'id_controlfunction'), related_name='ControlFunctionalLevel', help_text=(
         'The level at which the control category functions'),)  # Control categories can have multiple functions.  This field is used show what may be available for the control.
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Control Categories")
+
+    def __str__(self):
+        return self.name
 
 
 class ControlCategoryType(DefaultFieldsCategory):
@@ -171,26 +171,26 @@ class ControlCscFamily(DefaultFieldsCompany):
         verbose_name_plural = ("Control CSC Families")
 
 
-class DependencyType(DefaultFieldsCompany):
-    """Dependency Type"""
+# class DependencyType(DefaultFieldsCompany):
+#     """Dependency Type"""
 
-    DEPENDENT_CHOICES = (
-        ('contact', 'Contact'),
-        ('team', 'Team'),
-        ('vendor', 'Vendor'),
-    )
-    # Used to separate dependency types for select options for CompanyControl
-    # m2m dependents.
-    dependent = models.CharField(
-        max_length=7, choices=DEPENDENT_CHOICES, default='CONTACT')
+#     DEPENDENT_CHOICES = (
+#         ('contact', 'Contact'),
+#         ('team', 'Team'),
+#         ('vendor', 'Vendor'),
+#     )
+#     # Used to separate dependency types for select options for CompanyControl
+#     # m2m dependents.
+#     dependent = models.CharField(
+#         max_length=7, choices=DEPENDENT_CHOICES, default='CONTACT')
 
-    def __str__(self):
-        """String."""
-        return self.name
+#     def __str__(self):
+#         """String."""
+#         return self.name
 
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Dependency Types")
+#     class Meta:
+#         """Meta class."""
+#         verbose_name_plural = ("Dependency Types")
 
 
 class DependencyEffort(DefaultFieldsCompany):

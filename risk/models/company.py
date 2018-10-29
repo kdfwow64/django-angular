@@ -23,8 +23,10 @@ class Company(DefaultFields):
         'Maximum fixed monetary loss the company can sustain'),)  # This is fixed cost of the maximum amount of annual monetary loss a company can sustain without going bankrupt.  Monetary_value_toggle = False.  Used determine logic regarding impact and cost.  This value can be greater than annual revenue
     par_max_loss = models.FloatField(default=0, blank=True, help_text=(
         'Maximum percentage of annual revenue loss the company can sustain'),)  # This is the percentage of annual revenue loss a company can sustain without going bankrupt.  Monetary_value_toggle = True.  Used determine logic regarding impact and cost.  This value can be greater than annual revenue
-    monetary_value_toggle = models.BooleanField(
-        default=False, help_text=('Toggle to determine if company max loss is measured by fixed=False or par =True monetary value'),)  # If False, use Fixed Loss for calculations.  If True, use PAR loss for calculations.
+    # If False, use Fixed Loss for calculations.  If True, use PAR loss for
+    # calculations.
+    monetary_value_toggle = models.CharField(choices=Selector.LOSS, default='F', max_length=1, help_text=(
+        'Toggle to determine if company max loss is measured by fixed=False or par =True monetary value'),)
     annual_revenue = models.DecimalField(blank=True, default=0, max_digits=30, decimal_places=2, help_text=(
         'Annual revenue of the company. Requred if the toggle is set to par_max_loss'),)  # Annual revenue of the company.  Carried to 2 decimal places in case this is written via API from other system.
     weight_frequency = models.FloatField(default=1, help_text=(
@@ -91,7 +93,6 @@ class Company(DefaultFields):
 
     class Meta:
         """Meta class."""
-
         ordering = ['account']
         verbose_name_plural = ("Companies")
 
@@ -103,6 +104,15 @@ class Company(DefaultFields):
         """Get active register for this company."""
         # Return first for timebeing.
         return self.company_register.first()
+
+    def get_company_max_loss(self):
+        """Get the company's max loss value."""
+        if self.exposure_factor_toggle == 'P':
+            # The contributor has chosen a percentage of the annual revenue
+            return (self.annual_revenue * self.par_max_loss)
+        elif self.monetary_value_togglee == 'F':
+                # The contributor has chosen the a fixed monetary amount
+            return (self.fixed_max_loss)
 
 
 class CompanyProfile(models.Model):
@@ -208,11 +218,6 @@ class CompanyAsset(DefaultFieldsCompany):
     This allows the company to add multiple asset types to their register
     entries.  Companies will define the asset then determine what type of asset it is, along with the ability to group assets for reporting
     """
-    STATUS_CHOICES = (
-        (1, 'Fixed Value'),
-        (2, 'Percent of Revenue'),
-        (3, 'Time Based Value'),
-    )  # Define which logic to use when generating asset value against the entry threat scenario.
     asset_value_fixed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
         'The fixed monetary value of the asset in dollars'),)  # Asset value may be a fixed cost if monetary_value_toggle is set to False.
     asset_quantity_fixed = models.IntegerField(
@@ -225,8 +230,8 @@ class CompanyAsset(DefaultFieldsCompany):
         'Number of time units to be used from the avaliable pool'),)  # Based-off the asset_timed_quantity_avaliable, this is the amount of time that is relative to the asset to be used in the entry.  This value may represent a more realistic value based on the environment.  This value cannot exceed the quantity_avaliable value.
     asset_timed_quantity_avaliable = models.FloatField(blank=True, null=True, help_text=(
         'The amount of time units avaiable annually'),)  # This will be used to determine available pool of time units in a year.  This value cannot exceed the annual value  of the time unit in the time units model.
-    asset_value_toggle = models.IntegerField(choices=STATUS_CHOICES, default=1,
-                                             help_text=('Toggle to determine which formula is used to determine the assets value'),)  # This toggle defaults to '1' a fixed value.
+    asset_value_toggle = models.CharField(choices=Selector.ASSET, default='F', max_length=1,
+                                          help_text=('Toggle to determine which formula is used to determine the assets value'),)  # This toggle defaults to '1' a fixed value.
     evaluation_days = models.IntegerField(blank=True, null=True,
                                           help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
     evaluation_flg = models.BooleanField(
@@ -253,15 +258,15 @@ class CompanyAsset(DefaultFieldsCompany):
         verbose_name_plural = ("Company Assets")
 
     def get_asset_value(self):
-        if asset_value_toggle == 1:
+        if asset_value_toggle == 'F':
             # Fixed - The asset value has a fixed cost.  Total value may
             # flucuate based on quantity
             return (self.asset_value_fixed * self.asset_quantity_fixed)
-        elif asset_value_toggle == 2:
+        elif asset_value_toggle == 'P':
             # PAR -  The asset value is based on a percentage of revenue for
             # the company
             return (self.asset_value_par * self.id_company.annual_revenue)
-        elif asset_value_toggle == 3:
+        elif asset_value_toggle == 'T':
             # Time based  - The asset has a time based value.  The contributor
             # must determine what is relative.
             return (self.asset_value_timed * self.asset_timed_quantity_relative)
@@ -321,8 +326,8 @@ class CompanyControl(DefaultFieldsCompany):
         max_length=128, blank=True, help_text=('Control alias'),)  # Alias used for the company control.  Will be used for reporting if present.
     version = models.CharField(
         max_length=100, blank=True, help_text=('Current control version'),)  # Version used for the company control.  Could be policy version, release version,etc It depends on the control defined.
-    avg_annual_upkeep = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
-        'Annual cost for licensing, etc. (-dependencies)'),)  # Normally 18% of capital expendure if applicable.  Control costs are captured in the CompanyControlCost table, this field is used for future projections.
+    estimated_opex = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual cost for the control. subscription, licensing, etc. (-dependencies)'),)  # Normally 18% of capital expendure if applicable.  Control costs are captured in the CompanyControlCost table, this field is used for future projections.
     date_maint = models.DateField(null=True, blank=True, help_text=(
         'Annual maintenance date'),)  # Used to determine annual date that maintenance is completed for the control.
     centralized = models.BooleanField(default=True, help_text=(
@@ -347,18 +352,24 @@ class CompanyControl(DefaultFieldsCompany):
         'Custom company field for company control table -see company table'),)
     vendor_control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, blank=True, related_name='vendor_companycontrol', help_text=(
         'The vendor control mapping the control belongs'),)
-    company_control_opex = models.ForeignKey('CompanyControlOpex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_opex', help_text=(
-        'The control operational expenditures for the company'),)
     company_control_capex = models.ForeignKey('CompanyControlCapex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_capex', help_text=(
         'The control captial expenditures for the company'),)
     inline_after = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, blank=True, related_name='control_before', help_text=(
         'The upstream control id'),)  # If available, this is the control that is upstream.  This will be used for viewing a layer approach to asset secuirity.
     company_locations = models.ManyToManyField('CompanyLocation', blank=True, through='CompanyControlLocation', through_fields=(
         'id_companycontrol', 'id_companylocation'), related_name='CompanyControlLocation', help_text=('Specified geo locations for the company'),)  # Locations of the company control. If 1 then ALL locations.
-    company_segments = models.ManyToManyField("CompanySegment", blank=True, through='CompanyControlSegment', through_fields=(
+    company_segments = models.ManyToManyField('CompanySegment', blank=True, through='CompanyControlSegment', through_fields=(
         'id_companycontrol', 'id_companysegment'), related_name='CompanyControlSegment', help_text=('Specified logical segments for the company'),)  # Segments of the company control. If 1 then ALL segments.
-    dependencies = models.ManyToManyField("DependencyType", blank=True, through='CompanyControlDependency', through_fields=(
-        'id_companycontrol', 'id_controldependency'), related_name='CompanyControlDependents', help_text=('Items the control is dependent on to function effectively.'),)  # Company controls may be dependent on multiple items to function effectively. // Need to figure out how to account for other types of dependencies.  IE Procedural, Distribution, etc....
+    cost_contact = models.ManyToManyField('CompanyContact', blank=True, through='CompanyControlContactCost', through_fields=(
+        'id_companycontrol', 'id_companycontact'), related_name='CompanyControl_ContactCost', help_text=('Staff or consultants cost required for the control to function effectively'),)  # Staff or consultants may be required to configure or maintain the control
+    cost_vendor = models.ManyToManyField('Vendor', blank=True, through='CompanyControlVendorCost', through_fields=(
+        'id_companycontrol', 'id_vendor'), related_name='CompanyControl_VendorCost', help_text=('Vendor cost required for the control to function effectively'),)  # This should default to the vendor for the control, however there may be a dependancy from other vendors for the control to function correctly.  IE.  Electric, Data Center, Control Vendor, etc.
+    process_contact = models.ManyToManyField('CompanyContact', blank=True, through='CompanyControlContactProcess', through_fields=(
+        'id_companycontrol', 'id_companycontact'), related_name='CompanyControl_ContactProcess', help_text=('Staff or consultant processes that are required for the control to function effectively'),)  # Staff or consultants may be required to configure or maintain the control
+    process_vendor = models.ManyToManyField('Vendor', blank=True, through='CompanyControlVendorProcess', through_fields=(
+        'id_companycontrol', 'id_vendor'), related_name='CompanyControl_VendorProcess', help_text=('Vendor processes that are required for the control to function effectively'),)  # This should default to the vendor for the control, however there may be a dependancy from other vendors for the control to function correctly.  IE.  Electric, Data Center, Control Vendor, etc.
+    process_team = models.ManyToManyField('CompanyTeam', blank=True, through='CompanyControlTeamProcess', through_fields=(
+        'id_companycontrol', 'id_companyteam'), related_name='CompanyControl_TeamProcess', help_text=('Team processes that are required for the control to function effectively'),)  # Company controls may be dependent on other teams to function effectively.  For example, this could be a workflow process or a required task...
 
     def __str__(self):
         """String."""
@@ -421,29 +432,6 @@ class CompanyControlMeasurementResult(DefaultFields):
         verbose_name_plural = ("Company Control Measurement Result")
 
 
-class CompanyControlOpex(DefaultFieldsCompany):
-    """Company Control Operational Expenditures.  This will be leveraged to determine all the operational cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
-
-    date_purchased = models.DateTimeField(
-        blank=True, null=True, help_text=('Date the operational expendure was purchased'),)  # Date of purchase for the operational expenditure for the company control
-    amount = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
-        'Operational cost spent'),)  # The amount of money spent.
-    accounting_id = models.CharField(
-        max_length=155, blank=True, null=True, help_text=('Id of control from the company accounting system for mapping costs'),)  # Future use to map detail from the companies accounting system
-    utility_field = models.CharField(
-        max_length=30, blank=True, help_text=('Backoffice field used for queries and reporting'),)  # This field is not viewable to the Account users and is used for backoffice reporting and testing.
-    bkof_notes = models.TextField(
-        blank=True, help_text=('Backoffice notes on company'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
-
-    def __str__(self):
-        """String."""
-        return self.name
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Company Control Operational Expenditures")
-
-
 class CompanyControlCapex(DefaultFieldsCompany):
     """Company Control Capital Expenditures.  This will be leveraged to determine all the captial cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
 
@@ -460,39 +448,128 @@ class CompanyControlCapex(DefaultFieldsCompany):
     bkof_notes = models.TextField(
         blank=True, help_text=('Backoffice notes on company'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
 
-    def __str__(self):
-        """String."""
-        return self.name
-
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Control Capital Expenditures")
 
+    def __str__(self):
+        """String."""
+        return self.name
 
-class CompanyControlDependency(DefaultFields):
+    def get_annual_capex(self):
+        """Get active register for this company."""
+        # Return first for timebeing.
+        return (self.amount / self.invest_range)
+
+
+class CompanyControlContactCost(DefaultFields):
     """Company Control Dependency."""
 
-    id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='dependency_companycontrol', help_text=(
-        'The company control the dependency is associated'),)
-    id_controldependency = models.ForeignKey('DependencyType', on_delete=models.PROTECT, null=True, related_name='companycontrol_dependency', help_text=(
-        'The company control the dependency is associated'),)
-    row = models.IntegerField(blank=False, help_text=(
-        'Identify the dependency type variable'),)  # Used in conjuction with the id_dependencytype selection to identify the dependent.
+    id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='companycontactcost_companycontrol', help_text=(
+        'The company contact the company control is dependent to function effectively'),)
+    id_companycontact = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='companycontrol_companycontactcost', help_text=(
+        'The company contact that the control depends on to work effectively'),)
+    time_allocation = models.FloatField(
+        blank=True, null=True, help_text=('Annual percentage of time dedicated by the contact'),)  # This is the time that a contact is dedicated to the control.  It will be used to allot a percentage of the CompanyContact.get_contact_cost.  Logic needs to be built that prevents a contact from allocating more than 100% of their time between multiple controls.
     has_contingency = models.BooleanField(
         default=False, help_text=('Designates whether there is a contingency plan in place for the dependency'),)  # Used to determine where gaps may be with control dependencies.
     contingency_plan = models.TextField(
-        blank=False, help_text=('Defined contingency plan for the dependency'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
+        blank=True, null=True, help_text=('Defined contingency plan for the dependency'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
     notes = models.TextField(
-        blank=False, help_text=('Notes regarding the dependency'),)  # Notes to specify dependency details
+        blank=True, null=True, help_text=('Notes regarding the dependency costs'),)  # Notes to specify dependency details
     # Foreign Key and Relationships
-
-    def __str__(self):
-        """String."""
-        return self.id_dependencytype
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Company Control Dependencies")
+        verbose_name_plural = ("Company Control Contact Costs")
+
+
+class CompanyControlVendorCost(DefaultFields):
+    """Company Control Dependency."""
+
+    id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='vendorcost_companycontrol', help_text=(
+        'The company control the dependency is associated'),)
+    id_vendor = models.ForeignKey('Vendor', on_delete=models.PROTECT, null=True, related_name='companycontrol_vendorcost', help_text=(
+        'The vendor the company control is dependent on to function effectively'),)
+    allocated_cost = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual allocated vendor cost to support the control.'),)  # This could be an annualized cost to support the control.
+    has_contingency = models.BooleanField(
+        default=False, help_text=('Designates whether there is a contingency plan in place for the dependency'),)  # Used to determine where gaps may be with control dependencies.
+    contingency_plan = models.TextField(
+        blank=True, null=True, help_text=('Defined contingency plan for the dependency'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
+    notes = models.TextField(
+        blank=True, null=True, help_text=('Notes regarding the dependency costs'),)  # Notes to specify dependency details
+    # Foreign Key and Relationships
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Control Vendor Costs")
+
+
+class CompanyControlContactProcess(DefaultFields):
+    """Company Control Dependency."""
+
+    id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True,
+                                          related_name='contactprocess_companycontrol', help_text=('The company control the dependency is associated'),)
+    id_companycontact = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, related_name='companycontrol_contactprocess', help_text=(
+        'The company contact that completes the process for the control to work effectively'),)
+    process = models.TextField(
+        blank=True, null=True, help_text=('Summary of the process that should occur for the control to work effectively'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
+    has_contingency = models.BooleanField(
+        default=False, help_text=('Designates whether there is a contingency plan in place for the dependency'),)  # Used to determine where gaps may be with control dependencies.
+    contingency_plan = models.TextField(
+        blank=True, null=True, help_text=('Defined contingency plan for the dependency'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
+    notes = models.TextField(
+        blank=True, null=True, help_text=('Notes regarding the dependency'),)  # Notes to specify dependency details
+    # Foreign Key and Relationships
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Control Contact Processes")
+
+
+class CompanyControlVendorProcess(DefaultFields):
+    """Company Control Dependency."""
+
+    id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True,
+                                          related_name='vendorprocess_companycontrol', help_text=('The company control the dependency is associated'),)
+    id_vendor = models.ForeignKey('Vendor', on_delete=models.PROTECT, null=True, related_name='companycontrol_vendorprocess', help_text=(
+        'The vendor the company control is dependent on to function effectively'),)
+    process = models.TextField(
+        blank=True, null=True, help_text=('Summary of the process that should occur for the control to work effectively'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
+    has_contingency = models.BooleanField(
+        default=False, help_text=('Designates whether there is a contingency plan in place for the dependency'),)  # Used to determine where gaps may be with control dependencies.
+    contingency_plan = models.TextField(
+        blank=True, null=True, help_text=('Defined contingency plan for the dependency'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
+    notes = models.TextField(
+        blank=True, null=True, help_text=('Notes regarding the dependency'),)  # Notes to specify dependency details
+    # Foreign Key and Relationships
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Control Vendor Processes")
+
+
+class CompanyControlTeamProcess(DefaultFields):
+    """Company Control Dependency."""
+
+    id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True,
+                                          related_name='teamprocess_companycontrol', help_text=('The company control the dependency is associated'),)
+    id_companyteam = models.ForeignKey('CompanyTeam', on_delete=models.PROTECT, null=True, related_name='companycontrol_teamprocess', help_text=(
+        'The company control the dependency is associated'),)
+    process = models.TextField(
+        blank=True, null=True, help_text=('Summary of the process that should occur for the control to work effectively'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
+    has_contingency = models.BooleanField(
+        default=False, help_text=('Designates whether there is a contingency plan in place for the dependency'),)  # Used to determine where gaps may be with control dependencies.
+    contingency_plan = models.TextField(
+        blank=True, null=True, help_text=('Defined contingency plan for the dependency'),)  # This may be moved to its own contingency table.  Can only be populated if has_contingency is set to True.
+    notes = models.TextField(
+        blank=True, null=True, help_text=('Notes regarding the dependency'),)  # Notes to specify dependency details
+    # Foreign Key and Relationships
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Company Control Team Processes")
 
 
 class CompanyControlCost(DefaultFields):
@@ -625,15 +702,31 @@ class CompanyContact(DefaultFields):
                                           help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
     evaluation_flg = models.BooleanField(
         default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
+    cost_base_salary = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual base salary of the contact'),)  # This will be used to determine dependancy control costs.  Avg. 70k
+    # FICA 6.2%, Medicare 1.45%, Workmans Comp .03%-7.5%, etc  Should be
+    # multiplied by cost_base_salary. Avg. 8%
+    cost_employee_tax = models.FloatField(
+        blank=True, null=True, help_text=('Corporate annual tax costs if employee'),)
+    cost_employee_benefits = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual cost for benefits'),)  # Cost for company benefits.  IE Insurance, 401k, Dental, Vision  Avg. $5000
+    cost_equipment = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual cost for employee equipment'),)  # This value should take a refresh rate into account for tangible assets. IE laptop value / 5yrs.  Avg. $3500
+    cost_space = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual cost for the space to house the employee'),)  # Annual cost of sqft should calculated.  Avg. $2000
+    cost_travel = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual cost for travel'),)  # Average cost for travel realted to controls
+    cost_training = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual cost for training and education'),)  # Estimated cost for training and education
     # Foreign Key and Relationships
     reports_to = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, blank=True, related_name='reports_to_companyindividual', help_text=(
         'Contact id of the supervisor to build a organizational hierachy'),)  # Used to define a organizational hierachy
     user_contact = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='user_contact', help_text=(
         'Used when an account user is added to the company as a contact'),)  # Used to tie an account user to the contact table.  If this populated, there is special logic to align the user_id and the company_contact_id.
     company = models.ForeignKey(
-        'Company', on_delete=models.PROTECT, related_name='company_contact', help_text=('The company that the control is related'),)  # Company the contact is associated
+        'Company', on_delete=models.PROTECT, related_name='companycontact', help_text=('The company that the control is related'),)  # Company the contact is associated
     contact_type = models.ForeignKey(
-        'ContactType', on_delete=models.PROTECT, related_name='companycontact', help_text=('The type of contact being described'),)  # Contact could be of type vendor, contractor, or employee.
+        'ContactType', on_delete=models.PROTECT, related_name='companycontacttype', help_text=('The type of contact being described'),)  # Contact could be of type vendor, contractor, or employee.
     vendor = models.ForeignKey(
         'Vendor', on_delete=models.PROTECT, related_name='vendorcontact', null=True, blank=True, help_text=('If vendor is chosen for contact type, which vendor'),)  # If contact is of type contractor or vendor the tie them to the a vendor.
 
@@ -647,11 +740,16 @@ class CompanyContact(DefaultFields):
     def __str__(self):
         """String."""
         return self.first_name
-'''
+
+    # def get_contact_cost(self):
+
+    # return (self.cost_base_salary + (cost_base_salary * cost_employee_tax) +
+    # cost_employee_benefits + cost_equipment + cost_space + cost_travel +
+    # cost_training)
+
     def get_full_name(self):
         """Get full name."""
         return "{} {}" .format(self.first_name, self.last_name)
-'''
 
 
 class ContactType(DefaultFieldsCompany):
@@ -659,13 +757,13 @@ class ContactType(DefaultFieldsCompany):
 
     # Foreign Key and Relationships
 
-    def __str__(self):
-        """String."""
-        return self.name
-
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Contact Types")
+
+    def __str__(self):
+        """String."""
+        return self.name
 
 
 class CompanyTeam(DefaultFieldsCompany):
@@ -678,13 +776,13 @@ class CompanyTeam(DefaultFieldsCompany):
     member = models.ManyToManyField("CompanyContact", through='CompanyTeamMember',
                                     through_fields=('id_companyteam', 'id_companycontact'), related_name='CompanyTeamMemeberships', help_text=('Contacts that belong to the Company Team'),)  # Contacts may belong to multiple Company Teams.
 
-    def __str__(self):
-        """String."""
-        return self.name
-
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Teams")
+
+    def __str__(self):
+        """String."""
+        return self.name
 
 
 class CompanyTeamMember(DefaultFields):
@@ -695,13 +793,13 @@ class CompanyTeamMember(DefaultFields):
     id_companycontact = models.ForeignKey(
         'CompanyContact', on_delete=models.PROTECT, related_name='companyteammember', help_text=('The member of the team'),)  # Contact this is a part of the team.
 
-    def __str__(self):
-        """String."""
-        return self.member
-
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Team Members")
+
+    def __str__(self):
+        """String."""
+        return self.member
 
 
 class CompanyLocation(DefaultFieldsCompany):
@@ -728,13 +826,13 @@ class CompanyLocation(DefaultFieldsCompany):
     """Application Input"""
     # Foreign Key and Relationships
 
-    def __str__(self):
-        """String."""
-        return self.name
-
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Locations")
+
+    def __str__(self):
+        """String."""
+        return self.name
 
 
 class CompanyControlLocation(DefaultFields):
@@ -905,52 +1003,3 @@ class CompanyPlaybookAction(DefaultFields):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Playbook Actions")
-
-'''
-class CompanyControlContact(models.Model):
-    """Company Control Contact."""
-
-    # Foreign Key and Relationships
-    id_companycontrol = models.ForeignKey('CompanyControl', related_name='control_companycontact', help_text=(
-        'The company and control'),)  # Id of the company control
-    id_companycontact = models.ForeignKey('CompanyContact', related_name='contact_companycontrol', help_text=(
-        'The company contact that the control is dependent on'),)  # Id of the company contact.  If 1 is used, this means All locations.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company control contact is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the user will not be a dependent for the control effectiveness.
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Company Control Dependent Contacts")
-
-
-class CompanyControlTeam(models.Model):
-    """Company Control Team."""
-
-    # Foreign Key and Relationships
-    id_companycontrol = models.ForeignKey('CompanyControl', related_name='control_companyteam', help_text=(
-        'The company and control'),)  # Id of the company control
-    id_companyteam = models.ForeignKey('CompanyTeam', related_name='contact_companycontrol', help_text=(
-        'The company team that the control is dependent on'),)  # Id of the company team.  If 1 is used, this means All locations.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company control team is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the team will not be a dependent for the control effectiveness.
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Company Control Dependent Teams")
-
-
-class CompanyControlVendor(models.Model):
-    """Company Control Vendor."""
-
-    # Foreign Key and Relationships
-    id_companycontrol = models.ForeignKey('CompanyControl', related_name='control_companyvendor', help_text=(
-        'The company and control'),)  # Id of the company control
-    id_companyvendor = models.ForeignKey('Vendor', related_name='vendor_companycontrol', help_text=(
-        'The vendor that the control is dependent on'),)  # Id of the company vendor.  If 1 is used, this means All locations.
-    is_active = models.BooleanField(
-        default=True, help_text=('Designates whether the company control vendor is active'),)  # Relationships will never be deleted for auditing purposes.  If is_active is set to False the vendor will be a dependent for the control effectiveness.
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Company Control Dependent Vendors")
-'''

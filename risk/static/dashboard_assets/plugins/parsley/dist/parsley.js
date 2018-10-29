@@ -1215,7 +1215,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     // Performs validation on fields while triggering events.
     // @returns `true` if all validations succeeds, `false`
     // if a failure is immediately detected, or `null`
-    // if dependant on a promise.
+    // if dependent on a promise.
     // Consider using `whenValidate` instead.
     validate: function validate(options) {
       if (arguments.length >= 1 && !$.isPlainObject(options)) {

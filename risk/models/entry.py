@@ -45,7 +45,7 @@ class Entry(DefaultFields):
         default=False, help_text=('Designates whether the entry is complete'),)  # Only entries that are listed as completed can be leveraged for risk reporting.
     date_completed = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the entry was completed'),)  # This is the date the entry can be leveraged for risk reporting.
-    aro_multiplier = models.FloatField(
+    annual_rate_of_occurence = models.FloatField(
         default=1, blank=True, null=True, help_text=('Used to multiply the number of occurrences on an annual basis to determine total frequency per year.'),)  # This used to determine the number of times annual the risk may occur.  Logic in the application will be used to set the number. IE 6 times a year = 6, every 2 years = .5
     aro_notes = models.TextField(
         blank=True, help_text=('Additional notes from the contributor regarding the frequency calculation.'),)  # Notes regarding the frequency of the threat event
@@ -297,11 +297,11 @@ class EntryCompanyAsset(DefaultFields):
         'The asset associated to the entry'),)  # Id of the asset
     exposure_factor = models.FloatField(default=1, blank=True, help_text=(
         'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
-    exposure_factor_fixed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+    exposure_factor_fixed = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'The fixed monetary value of the exposure factor dollars'),)  # The exposure factor may be a fixed cost if the threat scenario is realized.
     exposure_factor_percent = models.FloatField(default=1, blank=True, null=True, help_text=(
         'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the assets in the threat scenario, this is the amount of exposed value used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review should be performed again.
-    exposure_factor_toggle = models.CharField(choices=Selector.EF, default='P', max_length=1,
+    exposure_factor_toggle = models.CharField(choices=Selector.EF, default='F', max_length=1,
                                               help_text=('Toggle to determine which formula is used to determine the exposure factor'),)  # Defines which logic to use when generating asset value against the entry threat scenario. This toggle defaults to '1' a percent of asset value.
     detail = models.TextField(blank=True, help_text=(
         'Additional detail the asset associated with the threat scenario.'),)  # Context to understand why the asset is tied to the entry
@@ -316,10 +316,6 @@ class EntryCompanyAsset(DefaultFields):
         return self.id_companyasset.name
 
     def get_entry_asset_value(self):
-        # This logic need to be reworked.  Toggle is not T/F now and additional
-        # logic for time based is added.  Please change name to
-        # get_entry_asset_value.  get_asset_value should be created at the
-        # companyasset model based on how the asset value is calculated.
         """Get the asset value."""
         if self.exposure_factor_toggle == 'P':
             # The contributor has chosen a percentage of the asset value is at
@@ -352,8 +348,6 @@ class EntryCompanyControl(DefaultFields):
         'The level at which the control functions for the entry'),)  # Control categories can have multiple functions.  This field is used show what may be available for the control.
     measurements = models.ManyToManyField("CompanyControlMeasure", through='EntryCompanyControlMeasure', through_fields=('id_entrycompanycontrol', 'id_companycontrolmeasure'), related_name='EntryCompanyControlMeasurements', help_text=(
         'The measurements related to the threat scenario for this entry'),)  # This will be all or a subset of the measurements for the company control.
-    dependencies = models.ManyToManyField("CompanyControlDependency", through='EntryCompanyControlDependency', through_fields=('id_entrycompanycontrol', 'id_companycontroldependency'), related_name='EntryCompanyControlDependencies', help_text=(
-        'The dependencies of the control for the entry'),)  # This will be all or a subset of the dependencies for the company control.
 
     class Meta:
         """Meta class."""
@@ -434,24 +428,6 @@ class EntryCompanyControlMeasure(DefaultFields):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Entry Company Control Measures")
-
-
-class EntryCompanyControlDependency(DefaultFields):
-    """Through table for EntryCompanyControl. Entry Control Dependency."""
-
-    # Foreign Key and Relationships
-    id_companycontroldependency = models.ForeignKey('CompanyControlDependency', on_delete=models.CASCADE, null=True, related_name='entry_companycontroldependency', help_text=(
-        'The dependency for the company control used on the threat scenario'),)
-    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.CASCADE, null=True, related_name='companycontroldependency_entry', help_text=(
-        'The entry associated with the company control'),)
-
-    def __str__(self):
-        """String."""
-        return self.id_companycontroldependency.name
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Entry Company Control Dependencies")
 
 
 class EntryEvaluation(DefaultFields):

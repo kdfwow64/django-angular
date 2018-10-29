@@ -69,7 +69,7 @@ ParsleyForm.prototype = {
   // Performs validation on fields while triggering events.
   // @returns `true` if all validations succeeds, `false`
   // if a failure is immediately detected, or `null`
-  // if dependant on a promise.
+  // if dependent on a promise.
   // Consider using `whenValidate` instead.
   validate: function (options) {
     if (arguments.length >= 1 && !$.isPlainObject(options)) {

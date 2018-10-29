@@ -11,8 +11,7 @@ class RiskEntryBasicForm(forms.ModelForm):
     risk_types = forms.CharField(required=True)
     final_response = forms.CharField(required=True)
     entry_owner = forms.CharField(required=True)
-    aro_multiplier = forms.CharField(required=True)
-
+    annual_rate_of_occurence = forms.CharField(required=True)
     locations = forms.CharField(required=False)
     compliances = forms.CharField(required=False)
     aro_notes = forms.CharField(required=False)
@@ -22,4 +21,4 @@ class RiskEntryBasicForm(forms.ModelForm):
 
         model = Entry
         fields = ("summary", "description", "risk_types", "final_response",
-                  "locations", "compliances", "aro_multiplier", "aro_notes")
+                  "locations", "compliances", "annual_rate_of_occurence", "aro_notes")

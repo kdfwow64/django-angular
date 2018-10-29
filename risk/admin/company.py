@@ -1,5 +1,22 @@
 from django.contrib import admin
-from risk.models.company import CompanyMember, CompanyProfile, CompanyMemberGrant, CompanyControlLocation, CompanyTeamMember, CompanyAssetSegment, CompanyAssetLocation, CompanyControlFinding, CompanyControlSegment, CompanyControlDependency, CompanyObjectiveRiskType, CompanyPlaybookMember
+from risk.models.company import (
+    CompanyMember,
+    CompanyProfile,
+    CompanyMemberGrant,
+    CompanyControlLocation,
+    CompanyTeamMember,
+    CompanyAssetSegment,
+    CompanyAssetLocation,
+    CompanyControlFinding,
+    CompanyControlSegment,
+    CompanyControlContactCost,
+    CompanyControlVendorCost,
+    CompanyControlContactProcess,
+    CompanyControlVendorProcess,
+    CompanyControlTeamProcess,
+    CompanyObjectiveRiskType,
+    CompanyPlaybookMember
+)
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -49,9 +66,33 @@ class CompanyControlLocationInline(admin.TabularInline):
     extra = 1
 
 
-class CompanyControlDependencyInline(admin.TabularInline):
+class CompanyControlContactCostInline(admin.TabularInline):
 
-    model = CompanyControlDependency
+    model = CompanyControlContactCost
+    extra = 1
+
+
+class CompanyControlVendorCostInline(admin.TabularInline):
+
+    model = CompanyControlVendorCost
+    extra = 1
+
+
+class CompanyControlContactProcessInline(admin.TabularInline):
+
+    model = CompanyControlContactProcess
+    extra = 1
+
+
+class CompanyControlVendorProcessInline(admin.TabularInline):
+
+    model = CompanyControlVendorProcess
+    extra = 1
+
+
+class CompanyControlTeamProcessInline(admin.TabularInline):
+
+    model = CompanyControlTeamProcess
     extra = 1
 
 
@@ -222,8 +263,15 @@ class CompanyObjectiveAdmin(admin.ModelAdmin):
 
 
 class CompanyControlAdmin(admin.ModelAdmin):
-    inlines = (CompanyControlLocationInline,
-               CompanyControlSegmentInline, CompanyControlDependencyInline)
+    inlines = (
+        CompanyControlLocationInline,
+        CompanyControlSegmentInline,
+        CompanyControlContactCostInline,
+        CompanyControlVendorCostInline,
+        CompanyControlContactProcessInline,
+        CompanyControlVendorProcessInline,
+        CompanyControlTeamProcessInline,
+    )
     list_select_related = []
     list_display = (
         'id',

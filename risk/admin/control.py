@@ -124,18 +124,3 @@ class DependencyEffortAdmin(admin.ModelAdmin):
         'description',
     )
     search_fields = ('name',)
-
-
-class DependencyTypeAdmin(admin.ModelAdmin):
-
-    list_select_related = []
-    list_display = (
-        'id',
-        'name',
-        'description',
-        'dependent',
-    )
-    list_filter = (
-        'dependent',
-    )
-    search_fields = ('name',)

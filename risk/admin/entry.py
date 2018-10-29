@@ -1,5 +1,5 @@
 from django.contrib import admin
-from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlFunction, EntryCompanyControlMeasure, EntryCompanyLocation, EntryCompanyControlDependency, EntryResponseResult, EntryRiskType
+from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlFunction, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -65,12 +65,6 @@ class EntryCompanyControlMeasureInline(admin.TabularInline):
     extra = 1
 
 
-class EntryCompanyControlDependencyInline(admin.TabularInline):
-
-    model = EntryCompanyControlDependency
-    extra = 1
-
-
 class EntryCompanyLocationInline(admin.TabularInline):
 
     model = EntryCompanyLocation
@@ -111,7 +105,7 @@ class EntryAdmin(admin.ModelAdmin):
         'description',
         'assumption',
         'entry_number',
-        'aro_multiplier',
+        'annual_rate_of_occurence',
         'incident_response',
         'response',
         'is_completed',
@@ -199,7 +193,7 @@ class EntryCauseAdmin(admin.ModelAdmin):
 
 class EntryCompanyControlAdmin(admin.ModelAdmin):
     inlines = (EntryCompanyControlFunctionInline,
-               EntryCompanyControlMeasureInline, EntryCompanyControlDependencyInline,)
+               EntryCompanyControlMeasureInline,)
     list_display = ('id',
                     'id_companycontrol',
                     'id_entry',

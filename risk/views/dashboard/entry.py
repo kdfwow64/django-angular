@@ -460,7 +460,7 @@ def api_get_risk_entry(request, entry_id):
                     'locations': [loc.id_companylocation_id for loc in risk_entry.entry_companylocation.all()] or [1, ],
                     'compliances': [rec.id_compliance_id for rec in risk_entry.entrycompliance.all()],
                     'entry_owner': risk_entry.entry_owner_id or request.user.id,
-                    'aro_multiplier': risk_entry.aro_multiplier,
+                    'annual_rate_of_occurence': risk_entry.annual_rate_of_occurence,
                     'aro_notes': risk_entry.aro_notes,
                 }
             })
