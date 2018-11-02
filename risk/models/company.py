@@ -321,20 +321,20 @@ class CompanyControl(DefaultFieldsCompany):
     """Company Control.  This table will tie companies to the available controls in the Control table"""
 
     abbrv = models.CharField(
-        max_length=30, blank=True, help_text=('Abbreviation of the name'),)  # Abbreviation of the company control.  Will be used in reporting if present.
+        max_length=30, blank=True, help_text=('Abbreviation'),)  # Abbreviation of the company control.  Will be used in reporting if present.
     alias = models.CharField(
-        max_length=128, blank=True, help_text=('Control alias'),)  # Alias used for the company control.  Will be used for reporting if present.
+        max_length=128, blank=True, help_text=('Alias'),)  # Alias used for the company control.  Will be used for reporting if present.
     version = models.CharField(
-        max_length=100, blank=True, help_text=('Current control version'),)  # Version used for the company control.  Could be policy version, release version,etc It depends on the control defined.
+        max_length=100, blank=True, help_text=('Current version'),)  # Version used for the company control.  Could be policy version, release version,etc It depends on the control defined.
     estimated_opex = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
-        'Annual cost for the control. subscription, licensing, etc. (-dependencies)'),)  # Normally 18% of capital expendure if applicable.  Control costs are captured in the CompanyControlCost table, this field is used for future projections.
+        'Annual cost for the control. subscription, licensing, etc. (-dependencies)'),)  # Normally 18% of capital expendure if applicable.  Control costs are captured in the CompanyControlCost table, this field is used for future projections.  Capex is handled via the CompanyControlCapex model.
     date_maint = models.DateField(null=True, blank=True, help_text=(
         'Annual maintenance date'),)  # Used to determine annual date that maintenance is completed for the control.
-    centralized = models.BooleanField(default=True, help_text=(
-        'Is the company control centralized or decentralized'),)  # If True, the control is a centralized control.  If False, the control is decentralized.
+    centeralized = models.BooleanField(default=True, help_text=(
+        'Centralized or decentralized'),)  # If True, the control is a centralized control.  If False, the control is decentralized.
     budgeted = models.BooleanField(default=True, help_text=(
-        'The control is currently budgeted'),)  # Not in use
-    recovery_integer = models.FloatField(blank=True, null=True, help_text=(
+        'Annually budgeted'),)  # Not in use
+    recovery_multiplier = models.FloatField(blank=True, null=True, help_text=(
         'Number of units it takes the control to recover'),)  # This setting combined with the resilience_unit will define the time required to get the control back to an operational state.
     recovery_time_unit = models.ForeignKey(
         'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='controlresilienceunites', help_text=('Resilience time unit of the company control'),)  # This setting combined with resilience_number will define the time it takes for a control to recover.
@@ -350,10 +350,8 @@ class CompanyControl(DefaultFieldsCompany):
         'Custom company field for company control table -see company table'),)  # Not in use
     date_defined2 = models.DateTimeField(null=True, blank=True, help_text=(
         'Custom company field for company control table -see company table'),)
-    vendor_control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, blank=True, related_name='vendor_companycontrol', help_text=(
-        'The vendor control mapping the control belongs'),)
-    company_control_capex = models.ForeignKey('CompanyControlCapex', on_delete=models.PROTECT, null=True, blank=True, related_name='company_control_capex', help_text=(
-        'The control captial expenditures for the company'),)
+    control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, blank=True, related_name='control_companycontrol', help_text=(
+        'The control that is mapped to the company'),)
     inline_after = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, blank=True, related_name='control_before', help_text=(
         'The upstream control id'),)  # If available, this is the control that is upstream.  This will be used for viewing a layer approach to asset secuirity.
     company_locations = models.ManyToManyField('CompanyLocation', blank=True, through='CompanyControlLocation', through_fields=(
@@ -432,10 +430,12 @@ class CompanyControlMeasurementResult(DefaultFields):
         verbose_name_plural = ("Company Control Measurement Result")
 
 
-class CompanyControlCapex(DefaultFieldsCompany):
+class CompanyControlCapex(DefaultFields):
     """Company Control Capital Expenditures.  This will be leveraged to determine all the captial cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
 
-    date_purchased = models.DateTimeField(
+    description = models.TextField(blank=True, null=True, help_text=(
+        'Description of the field'),)  # Description of the field.
+    date_purchased = models.DateField(
         blank=True, null=True, help_text=('Date the captial expendure was purchased'),)  # Date of purchase for the captial expenditure for the company control
     amount = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
         'Operational cost spent'),)  # The amount of money spent.
@@ -447,14 +447,21 @@ class CompanyControlCapex(DefaultFieldsCompany):
         max_length=30, blank=True, help_text=('Backoffice field used for queries and reporting'),)  # This field is not viewable to the Account users and is used for backoffice reporting and testing.
     bkof_notes = models.TextField(
         blank=True, help_text=('Backoffice notes on company'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
+    company_control = models.ForeignKey('CompanyControl', default=1, on_delete=models.PROTECT, blank=False, related_name='%(app_label)s_%(class)s_related_companycontrol', help_text=(
+        'Company control id for the capital expenditure related to the control'),)  # Company that defined the field.
+    company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, blank=False, related_name='%(app_label)s_%(class)s_related_company', help_text=(
+        'Company id for the company that manages the field'),)  # Company that defined the field.
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Control Capital Expenditures")
+        indexes = [
+            models.Index(fields=['company']),
+        ]
 
     def __str__(self):
         """String."""
-        return self.name
+        return self.description
 
     def get_annual_capex(self):
         """Get active register for this company."""
@@ -669,27 +676,25 @@ class CompanyContact(DefaultFields):
     """Company Contacts.  Contacts are identifed at the Company level.  When listing POC for a company"""
 
     first_name = models.CharField(
-        max_length=128, blank=False, help_text=('First name'),)  # First name of the contact
+        max_length=60, blank=False, help_text=('First name'),)  # First name of the contact
     last_name = models.CharField(
-        max_length=128, blank=False, help_text=('Last name'),)  # Last name of the contact
-    title = models.CharField(
-        max_length=255, blank=True, help_text=('Title'),)  # Work title of the contact
+        max_length=60, blank=False, help_text=('Last name'),)  # Last name of the contact
     main_poc = models.BooleanField(
         default=False, help_text=('Is the contact a main point of contact?'),)  # Primary point of contact.  Not as relevant for employee type contacts.
     decision_maker = models.BooleanField(
         default=False, help_text=('Is the contact a decsion maker?'),)  # The contact is a decision maker for risk related items.
     description = models.CharField(
-        max_length=255, blank=True, help_text=('Description'),)  # Description of the contact
+        max_length=255, blank=True, null=True, help_text=('Description'),)  # Description of the contact
     email = models.EmailField(
-        max_length=128, blank=False, unique=True, help_text=('Email address'),)  # Email of the user.  May be used to trigger alerts to Contacts
+        max_length=128, blank=False, help_text=('Email address'),)  # Email of the user.  May be used to trigger alerts to Contacts
     office_phone = models.CharField(
-        max_length=30, blank=True, help_text=('Office phone'),)  # Office phone number
+        max_length=30, blank=True, null=True, help_text=('Office phone'),)  # Office phone number
     office_phone_ext = models.CharField(
-        max_length=30, blank=True, help_text=('Office extension'),)  # Office extension
+        max_length=30, blank=True, null=True, help_text=('Office extension'),)  # Office extension
     cell_phone = models.CharField(
-        max_length=30, blank=True, help_text=('Cell phone'),)  # Cell phone of Individual
+        max_length=30, blank=True, null=True, help_text=('Cell phone'),)  # Cell phone of Individual
     notes = models.TextField(
-        blank=True, help_text=('Notes'),)  # Notes related to the contact
+        blank=True, null=True, help_text=('Notes'),)  # Notes related to the contact
     defined1_data = models.CharField(max_length=128, null=True, blank=True, help_text=(
         'Custom company field for company contact table -see company table'),)  # Company defined field
     date_defined1 = models.DateTimeField(null=True, blank=True, help_text=(
@@ -702,27 +707,29 @@ class CompanyContact(DefaultFields):
                                           help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
     evaluation_flg = models.BooleanField(
         default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
-    cost_base_salary = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+    cost_base_salary = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'Annual base salary of the contact'),)  # This will be used to determine dependancy control costs.  Avg. 70k
     # FICA 6.2%, Medicare 1.45%, Workmans Comp .03%-7.5%, etc  Should be
     # multiplied by cost_base_salary. Avg. 8%
     cost_employee_tax = models.FloatField(
         blank=True, null=True, help_text=('Corporate annual tax costs if employee'),)
-    cost_employee_benefits = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+    cost_employee_benefits = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for benefits'),)  # Cost for company benefits.  IE Insurance, 401k, Dental, Vision  Avg. $5000
-    cost_equipment = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+    cost_equipment = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for employee equipment'),)  # This value should take a refresh rate into account for tangible assets. IE laptop value / 5yrs.  Avg. $3500
-    cost_space = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+    cost_space = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for the space to house the employee'),)  # Annual cost of sqft should calculated.  Avg. $2000
-    cost_travel = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+    cost_travel = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for travel'),)  # Average cost for travel realted to controls
-    cost_training = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+    cost_training = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for training and education'),)  # Estimated cost for training and education
     # Foreign Key and Relationships
+    title = models.ForeignKey('JobTitle', on_delete=models.PROTECT, null=True, blank=True, related_name='jobtitle_companyindividual', help_text=(
+        'Job title of the company contact'),)  # Used to categorize job titles
     reports_to = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, blank=True, related_name='reports_to_companyindividual', help_text=(
         'Contact id of the supervisor to build a organizational hierachy'),)  # Used to define a organizational hierachy
     user_contact = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='user_contact', help_text=(
-        'Used when an account user is added to the company as a contact'),)  # Used to tie an account user to the contact table.  If this populated, there is special logic to align the user_id and the company_contact_id.
+        'Used when an application user is added to the company as a contact'),)  # Used to tie an account user to the contact table.  If this populated, there is special logic to align the user_id and the company_contact_id.
     company = models.ForeignKey(
         'Company', on_delete=models.PROTECT, related_name='companycontact', help_text=('The company that the control is related'),)  # Company the contact is associated
     contact_type = models.ForeignKey(
@@ -735,21 +742,23 @@ class CompanyContact(DefaultFields):
 
         indexes = [
             models.Index(fields=['email'], name='email_idx'), ]
+        unique_together = (('email', 'company'),)
         verbose_name_plural = ("Company Contacts")
 
     def __str__(self):
         """String."""
-        return self.first_name
+        return self.get_full_name()
 
-    # def get_contact_cost(self):
+    def get_contact_cost(self):
 
-    # return (self.cost_base_salary + (cost_base_salary * cost_employee_tax) +
-    # cost_employee_benefits + cost_equipment + cost_space + cost_travel +
-    # cost_training)
+        return (self.cost_base_salary + (cost_base_salary * cost_employee_tax) +
+                cost_employee_benefits + cost_equipment + cost_space + cost_travel +
+                cost_training)
 
     def get_full_name(self):
         """Get full name."""
         return "{} {}" .format(self.first_name, self.last_name)
+    get_full_name.short_description = 'Name'
 
 
 class ContactType(DefaultFieldsCompany):

@@ -41,7 +41,8 @@ class VendorAdmin(admin.ModelAdmin):
     list_filter = (
         'is_active',
     )
-    search_fields = ('name', 'parent', 'about', 'keywords',)
+    search_fields = ('name', 'about', 'keywords',)
+    ordering = ('name',)
 
 
 class VendorTypeAdmin(admin.ModelAdmin):

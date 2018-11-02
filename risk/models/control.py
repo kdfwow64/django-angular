@@ -18,8 +18,10 @@ class Control(DefaultFieldsCompany):
         max_length=128, null=True, blank=True, help_text=('Model number of the control'),)  # The model will be used to further clarify the type of control being used if it is applicable.  A combination of the control and the model number will make the record unique. IE Cisco ASA "2505".
     vendor = models.ForeignKey('Vendor', on_delete=models.PROTECT, null=True, related_name='controldetail', help_text=(
         'Vendor that produces the control '),)  # Vendor that makes or maintains the control.  If the account manages/creates the control then this should be listed as Self.
-    control_category = models.ForeignKey(
-        'ControlCategory', on_delete=models.PROTECT, null=True,  related_name='controlcategory_control', help_text=('The category of the vendors control'),)  # Category the control is associated.  Used to correlate control information.
+    # control_category = models.ForeignKey(
+    #     'ControlCategory', on_delete=models.PROTECT, null=True,  related_name='controlcategory_control', help_text=('The category of the vendors control'),)  # Category the control is associated.  Used to correlate control information.
+    control_protection = models.ManyToManyField("ControlCategory", through='ControlCategoryProtection', through_fields=('id_control', 'id_controlcategory'), related_name='ControlCategories', help_text=(
+        'The protection categories that the control provides'),)  # Used to categorize the protection the control performs
 
     def __str__(self):
         """String."""
@@ -31,14 +33,26 @@ class Control(DefaultFieldsCompany):
         verbose_name_plural = ("Controls")
 
 
+class ControlCategoryProtection(DefaultFields):
+    """Control Category Protection.  Used determine what type of protection the control provides"""
+
+    # Foreign Key and Relationships
+    id_control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, related_name='controlcategory_protection', help_text=(
+        'The control'),)
+    id_controlcategory = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, null=True, related_name='protection_controlcategory', help_text=(
+        'Category of control'),)
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Control Protections")
+
+
 class ControlCategory(DefaultFieldsCategory):
     """Control Category."""
 
-    has_resilience = models.BooleanField(
-        default=False, help_text=('Designates whether the control will have a resilience option'),)  # If set to True the control has the optiion resilience setting in the companycontrol.
     control_category_type = models.ForeignKey('ControlCategoryType', on_delete=models.PROTECT, null=True, related_name='type_controlcategory', help_text=(
         'Type of control category'),)
-    control_domain = models.ForeignKey('ControlDomain', on_delete=models.PROTECT, null=True, related_name='category_controldomain', help_text=(
+    control_domain = models.ForeignKey('ControlDomain', default=1, on_delete=models.PROTECT, null=True, related_name='category_controldomain', help_text=(
         'Type of control category domain'),)
     available_operation = models.ManyToManyField("ControlOperation", through='ControlCategoryOperation', through_fields=('id_controlcategory', 'id_controloperation'), related_name='ControlOperationalLevel', help_text=(
         'The level at which the control category operates'),)  # Control categories can have multiple operation levels.  This field is used show what may be available for the control.

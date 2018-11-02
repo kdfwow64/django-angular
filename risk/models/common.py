@@ -200,3 +200,16 @@ class TaskStatus(DefaultFieldsCategory):
     def __str__(self):
         """String."""
         return self.name
+
+
+class JobTitle(DefaultFieldsCategory):
+    """Job Titles."""
+
+    class Meta:
+        """Meta class."""
+        ordering = ['name']
+        verbose_name_plural = ("Job Titles")
+
+    def __str__(self):
+        """String."""
+        return self.name

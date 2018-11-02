@@ -12,10 +12,8 @@ from risk.models.utility import (
 class Vendor(DefaultFieldsCompany):
     """Vendors for controls in place for the Company.  Most vendors will belong to Core Account and be used by all Companies, however companies can create their own vendors.  Those vendors will be under review to move to Core Account so all Companies can use them."""
 
-    parent = models.CharField(
-        max_length=255, blank=True, help_text=('Vendor parent company'),)  # If a parent company is applicable
     abbrv = models.CharField(
-        max_length=10, blank=True, help_text=('Vendor abbreviated name'),)  # Abbrevation name
+        max_length=10, blank=True, null=True, help_text=('Vendor abbreviated name'),)  # Abbrevation name
     about = models.TextField(
         blank=True, help_text=('Information about the vendor from their website'),)  # Information about the vendor
     notes_mgmt = models.TextField(
@@ -53,8 +51,8 @@ class Vendor(DefaultFieldsCompany):
         'User id of the user that transitioned the vendor to CORE'),)  # User that transitioned the vendor to CORE.
     initial_account = models.ForeignKey('Account', default=1, on_delete=models.PROTECT, related_name='inital_account_vendor', help_text=(
         'Acocunt that initally created the vendor'),)  # If an Account creates a vendor that is transitioned to CORE, this will keep track of the original account creator.
-    # company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, related_name='company_vendor', help_text=(
-    #     'Company that the vendor is associated with.  If CORE, then all accounts and companies'),)  # Vendors are defined at the Company level need to be approved by the option Vendor.account_approved at the account level for before other companies in the same account can leverage the vendor.
+    parent = models.ForeignKey('Vendor', blank=True, null=True, on_delete=models.PROTECT, related_name='parent_vendor', help_text=(
+        'Parent company of the vendor'),)  # The parent company of the vendor.  If none, then it is the parent
     # Vendors are defined at the Company level need to be approved by the
     # option Vendor.account_approved at the account level for before other
     # companies in the same account can leverage the vendor.
@@ -73,6 +71,7 @@ class VendorType(DefaultFieldsCategory):
 
     class Meta:
         """Meta class."""
+        ordering = ('name',)
         verbose_name_plural = ("Vendor Types")
 
     def __str__(self):

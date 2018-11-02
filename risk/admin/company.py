@@ -58,42 +58,54 @@ class CompanyControlSegmentInline(admin.TabularInline):
 
     model = CompanyControlSegment
     extra = 1
+    fields = ('id_companysegment', 'is_active', 'is_deleted',)
 
 
 class CompanyControlLocationInline(admin.TabularInline):
 
     model = CompanyControlLocation
     extra = 1
+    fields = ('id_companylocation', 'is_active', 'is_deleted',)
 
 
 class CompanyControlContactCostInline(admin.TabularInline):
 
     model = CompanyControlContactCost
     extra = 1
+    fields = (('id_companycontact', 'time_allocation',), ('has_contingency', 'contingency_plan', 'notes',),
+              ('is_active', 'is_deleted'),)
 
 
 class CompanyControlVendorCostInline(admin.TabularInline):
 
     model = CompanyControlVendorCost
     extra = 1
+    fields = (('id_vendor', 'allocated_cost',), ('has_contingency', 'contingency_plan', 'notes',),
+              ('is_active', 'is_deleted'),)
 
 
 class CompanyControlContactProcessInline(admin.TabularInline):
 
     model = CompanyControlContactProcess
     extra = 1
+    fields = (('id_companycontact', 'process',), ('has_contingency', 'contingency_plan', 'notes',),
+              ('is_active', 'is_deleted'),)
 
 
 class CompanyControlVendorProcessInline(admin.TabularInline):
 
     model = CompanyControlVendorProcess
     extra = 1
+    fields = (('id_vendor', 'process',), ('has_contingency', 'contingency_plan', 'notes',),
+              ('is_active', 'is_deleted'),)
 
 
 class CompanyControlTeamProcessInline(admin.TabularInline):
 
     model = CompanyControlTeamProcess
     extra = 1
+    fields = (('id_companyteam', 'process',), ('has_contingency', 'contingency_plan', 'notes',),
+              ('is_active', 'is_deleted'),)
 
 
 class CompanyTeamMemberInline(admin.TabularInline):
@@ -272,20 +284,40 @@ class CompanyControlAdmin(admin.ModelAdmin):
         CompanyControlVendorProcessInline,
         CompanyControlTeamProcessInline,
     )
+
+    readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       )
+
+    fieldsets = (
+        ('Company Control Specific', {
+         'fields': (('control', 'version',), 'centeralized',)}),
+        ('General Info', {
+         'fields': ('name', 'description', 'abbrv', 'company',)}),
+        ('Cost Detail', {'fields': ('budgeted', 'estimated_opex', )}),
+        ('Advanced options', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': (('recovery_time_unit', 'recovery_multiplier',), 'inline_after',),
+        }),
+        ('Management Detail', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': (('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+    )
+
     list_select_related = []
     list_display = (
         'id',
         'name',
         'description',
         'is_active',
-        'vendor_control',
+        'control',
         'inline_after',
         'company',
     )
     list_filter = (
         'name',
         'description',
-        'vendor_control',
+        'control',
         'company',
     )
 
@@ -343,13 +375,11 @@ class CompanyControlCapexAdmin(admin.ModelAdmin):
     list_select_related = []
     list_display = (
         'id',
-        'name',
         'description',
         'date_purchased',
         'amount',
     )
     list_filter = (
-        'name',
         'description',
         'date_purchased',
     )
@@ -411,11 +441,33 @@ class CompanyControlCostTypeAdmin(admin.ModelAdmin):
 
 class CompanyContactAdmin(admin.ModelAdmin):
 
+    #save_as = True
+    readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       )
+    radio_fields = {'contact_type': admin.HORIZONTAL}
+    autocomplete_fields = ['title', ]
+    fieldsets = (
+        ('Company Contact Specific', {
+         'fields': ('company', ('first_name', 'last_name',), 'email', 'title', ('office_phone', 'office_phone_ext',), 'cell_phone',)}),
+        ('General Info', {
+         'classes': ('grp-collapse grp-closed',),
+         'fields': ('contact_type', 'description', 'main_poc', 'decision_maker', 'notes',)}),
+        ('Cost Detail', {
+         'classes': ('grp-collapse grp-closed',),
+         'fields': ('cost_base_salary', 'cost_employee_tax', 'cost_employee_benefits', 'cost_equipment', 'cost_space', 'cost_travel', 'cost_training',),
+         }),
+        ('Advanced options', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('user_contact', 'reports_to', 'vendor',),
+        }),
+        ('Management Detail', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': (('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+    )
     list_select_related = []
     list_display = (
-        'id',
-        'first_name',
-        'last_name',
+        'get_full_name',
         'title',
         'main_poc',
         'decision_maker',
@@ -428,11 +480,15 @@ class CompanyContactAdmin(admin.ModelAdmin):
     list_filter = (
         'main_poc',
         'decision_maker',
+        'last_name',
         'is_active',
         'company',
         'contact_type',
         'vendor',
     )
+    search_fields = ('first_name', 'last_name', 'email',
+                     'description',)
+    ordering = ('last_name',)
 
 
 class ContactTypeAdmin(admin.ModelAdmin):

@@ -104,3 +104,12 @@ class TaskStatusAdmin(admin.ModelAdmin):
     list_select_related = []
     list_display = ('id', 'name', 'description', 'sort_order')
     search_fields = ('name',)
+
+
+class JobTitleAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = ('id', 'name', 'description',
+                    'is_active', 'is_deleted', 'keywords')
+    search_fields = ['name', 'keywords', ]
+    ordering = ['name']

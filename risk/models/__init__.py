@@ -40,6 +40,7 @@ from .common import (
     IntegerType,
     TimeUnit,
     TaskStatus,
+    JobTitle,
 )
 
 from .company import (

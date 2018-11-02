@@ -1,5 +1,5 @@
 from django.contrib import admin
-from risk.models.control import ControlCategoryOperation, ControlCategoryFunction
+from risk.models.control import ControlCategoryOperation, ControlCategoryFunction, ControlCategoryProtection
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -9,17 +9,30 @@ class ControlCategoryOperationInline(admin.TabularInline):
 
     model = ControlCategoryOperation
     extra = 1
+    fields = ('id_controloperation',
+              'is_active', 'is_deleted', 'created_by')
 
 
 class ControlCategoryFunctionInline(admin.TabularInline):
 
     model = ControlCategoryFunction
     extra = 1
+    fields = ('id_controlfunction',
+              'is_active', 'is_deleted', 'created_by')
+
+
+class ControlCategoryProtectionInline(admin.TabularInline):
+
+    model = ControlCategoryProtection
+    extra = 1
+    fields = ('id_controlcategory',
+              'is_active', 'is_deleted', 'created_by')
 
 
 class ControlAdmin(admin.ModelAdmin):
 
     list_select_related = []
+    inlines = (ControlCategoryProtectionInline,)
     list_display = (
         'id',
         'name',
@@ -27,7 +40,6 @@ class ControlAdmin(admin.ModelAdmin):
         'description',
         'abbrv',
         'is_active',
-        'control_category',
         'vendor',
     )
     search_fields = ('name',)
