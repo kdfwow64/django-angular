@@ -20,7 +20,7 @@ class Control(DefaultFieldsCompany):
         'Vendor that produces the control '),)  # Vendor that makes or maintains the control.  If the account manages/creates the control then this should be listed as Self.
     # control_category = models.ForeignKey(
     #     'ControlCategory', on_delete=models.PROTECT, null=True,  related_name='controlcategory_control', help_text=('The category of the vendors control'),)  # Category the control is associated.  Used to correlate control information.
-    control_protection = models.ManyToManyField("ControlCategory", through='ControlCategoryProtection', through_fields=('id_control', 'id_controlcategory'), related_name='ControlCategories', help_text=(
+    categories = models.ManyToManyField("ControlCategory", through='ControlCategoryControl', through_fields=('id_control', 'id_controlcategory'), related_name='controlcategory_controlcategor', help_text=(
         'The protection categories that the control provides'),)  # Used to categorize the protection the control performs
 
     def __str__(self):
@@ -33,18 +33,21 @@ class Control(DefaultFieldsCompany):
         verbose_name_plural = ("Controls")
 
 
-class ControlCategoryProtection(DefaultFields):
-    """Control Category Protection.  Used determine what type of protection the control provides"""
+class ControlCategoryControl(DefaultFields):
+    """Through model for Control.  Used determine what type of protection the control provides"""
 
     # Foreign Key and Relationships
-    id_control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, related_name='controlcategory_protection', help_text=(
+    id_control = models.ForeignKey('Control', on_delete=models.PROTECT, null=True, related_name='controlcategory_control', help_text=(
         'The control'),)
-    id_controlcategory = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, null=True, related_name='protection_controlcategory', help_text=(
+    id_controlcategory = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, null=True, related_name='control_controlcategory', help_text=(
         'Category of control'),)
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Control Protections")
+        verbose_name_plural = ("Control: Control Categories")
+
+    def __str__(self):
+        return self.id_controlcategory.name
 
 
 class ControlCategory(DefaultFieldsCategory):

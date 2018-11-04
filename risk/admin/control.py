@@ -1,5 +1,8 @@
 from django.contrib import admin
-from risk.models.control import ControlCategoryOperation, ControlCategoryFunction, ControlCategoryProtection
+from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+# , ControlCategoryCategory
+from risk.models.control import ControlCategoryOperation, ControlCategoryFunction, ControlCategoryControl
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -21,9 +24,9 @@ class ControlCategoryFunctionInline(admin.TabularInline):
               'is_active', 'is_deleted', 'created_by')
 
 
-class ControlCategoryProtectionInline(admin.TabularInline):
+class ControlCategoryControlInline(admin.TabularInline):
 
-    model = ControlCategoryProtection
+    model = ControlCategoryControl
     extra = 1
     fields = ('id_controlcategory',
               'is_active', 'is_deleted', 'created_by')
@@ -31,8 +34,20 @@ class ControlCategoryProtectionInline(admin.TabularInline):
 
 class ControlAdmin(admin.ModelAdmin):
 
+    readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       )
+    # radio_fields = {'contact_type': admin.HORIZONTAL}
+    autocomplete_fields = ['vendor', ]
+    fieldsets = (
+        ('Control Specific', {
+         'fields': ('name', 'model_number', 'abbrv', 'description', 'vendor',)}),
+        ('Management Detail', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+    )
     list_select_related = []
-    inlines = (ControlCategoryProtectionInline,)
+    inlines = (ControlCategoryControlInline,)
     list_display = (
         'id',
         'name',
@@ -41,8 +56,10 @@ class ControlAdmin(admin.ModelAdmin):
         'abbrv',
         'is_active',
         'vendor',
+        'company',
     )
-    search_fields = ('name',)
+    search_fields = ('name', 'model_number', 'abbrv', 'description')
+    list_filter = ('name', 'vendor', 'company')
 
 
 class ControlCscAdmin(admin.ModelAdmin):
