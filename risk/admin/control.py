@@ -2,25 +2,17 @@ from django.contrib import admin
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 # , ControlCategoryCategory
-from risk.models.control import ControlCategoryOperation, ControlCategoryFunction, ControlCategoryControl
+from risk.models.control import ControlCategoryNotification, ControlCategoryControl, ControlCategoryCIATriad
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
 
 
-class ControlCategoryOperationInline(admin.TabularInline):
+class ControlCategoryNotificationInline(admin.TabularInline):
 
-    model = ControlCategoryOperation
+    model = ControlCategoryNotification
     extra = 1
-    fields = ('id_controloperation',
-              'is_active', 'is_deleted', 'created_by')
-
-
-class ControlCategoryFunctionInline(admin.TabularInline):
-
-    model = ControlCategoryFunction
-    extra = 1
-    fields = ('id_controlfunction',
+    fields = ('id_controlnotification',
               'is_active', 'is_deleted', 'created_by')
 
 
@@ -29,6 +21,14 @@ class ControlCategoryControlInline(admin.TabularInline):
     model = ControlCategoryControl
     extra = 1
     fields = ('id_controlcategory',
+              'is_active', 'is_deleted', 'created_by')
+
+
+class ControlCategoryCIATriadInline(admin.TabularInline):
+
+    model = ControlCategoryCIATriad
+    extra = 1
+    fields = ('id_ciatriad',
               'is_active', 'is_deleted', 'created_by')
 
 
@@ -89,19 +89,7 @@ class ControlDomainAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class ControlFunctionAdmin(admin.ModelAdmin):
-
-    list_select_related = []
-    list_display = (
-        'id',
-        'name',
-        'description',
-        'keywords',
-    )
-    search_fields = ('name',)
-
-
-class ControlOperationAdmin(admin.ModelAdmin):
+class ControlNotificationAdmin(admin.ModelAdmin):
 
     list_select_related = []
     list_display = (
@@ -115,7 +103,19 @@ class ControlOperationAdmin(admin.ModelAdmin):
 
 class ControlCategoryAdmin(admin.ModelAdmin):
 
-    inlines = (ControlCategoryOperationInline, ControlCategoryFunctionInline)
+    readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       )
+    radio_fields = {'control_category_type': admin.HORIZONTAL}
+    fieldsets = (
+        ('Control Category Specific', {
+         'fields': ('name', 'abbrv', 'description', 'keywords', 'control_category_type', 'control_domain',)}),
+        ('Management Detail', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+    )
+    inlines = (ControlCategoryNotificationInline,
+               ControlCategoryCIATriadInline)
     list_select_related = []
     list_display = (
         'name',
@@ -123,12 +123,16 @@ class ControlCategoryAdmin(admin.ModelAdmin):
         'abbrv',
         'keywords',
         'control_category_type',
+        'control_domain',
+        'company',
     )
     list_filter = (
-        'date_created',
         'control_category_type',
+        'control_domain',
+        'company',
+
     )
-    search_fields = ('name',)
+    search_fields = ('name', 'keywords', 'description',)
 
 
 class ControlCategoryTypeAdmin(admin.ModelAdmin):

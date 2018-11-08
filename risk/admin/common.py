@@ -94,9 +94,12 @@ class TimeUnitAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
+        'annual_units',
+        'daily_units',
         'sort_order',
     )
     search_fields = ('name',)
+    ordering = ['sort_order', ]
 
 
 class TaskStatusAdmin(admin.ModelAdmin):

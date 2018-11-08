@@ -180,14 +180,17 @@ class TimeUnit(DefaultFieldsCategory):
 
     annual_units = models.IntegerField(null=True, blank=True, help_text=(
         'Number of units in a year'),)  # Used to for annualization logic.
+    daily_units = models.DecimalField(default=1, max_digits=15, decimal_places=8, help_text=(
+        'Number of units per day'),)
+
+    class Meta:
+        """Meta class."""
+        ordering = ['sort_order', ]
+        verbose_name_plural = ("Time Units")
 
     def __str__(self):
         """String."""
         return self.name
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Time Units")
 
 
 class TaskStatus(DefaultFieldsCategory):

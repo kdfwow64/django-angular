@@ -57,10 +57,10 @@ class ControlCategory(DefaultFieldsCategory):
         'Type of control category'),)
     control_domain = models.ForeignKey('ControlDomain', default=1, on_delete=models.PROTECT, null=True, related_name='category_controldomain', help_text=(
         'Type of control category domain'),)
-    available_operation = models.ManyToManyField("ControlOperation", through='ControlCategoryOperation', through_fields=('id_controlcategory', 'id_controloperation'), related_name='ControlOperationalLevel', help_text=(
+    available_notification = models.ManyToManyField("ControlNotification", through='ControlCategoryNotification', through_fields=('id_controlcategory', 'id_controlnotification'), related_name='ControlNotificationLevel', help_text=(
         'The level at which the control category operates'),)  # Control categories can have multiple operation levels.  This field is used show what may be available for the control.
-    available_function = models.ManyToManyField("ControlFunction", through='ControlCategoryFunction', through_fields=('id_controlcategory', 'id_controlfunction'), related_name='ControlFunctionalLevel', help_text=(
-        'The level at which the control category functions'),)  # Control categories can have multiple functions.  This field is used show what may be available for the control.
+    cia_triad = models.ManyToManyField('CIATriad', through='ControlCategoryCIATriad', through_fields=('id_controlcategory', 'id_ciatriad'), related_name='ControlCategoryCIATriads', help_text=(
+        'Specifies what portion of the triad is associated to the control category'),)  # Ties CIA Triad to the event entry.
 
     class Meta:
         """Meta class."""
@@ -81,8 +81,23 @@ class ControlCategoryType(DefaultFieldsCategory):
         verbose_name_plural = ("Control Category Types")
 
 
-class ControlFunction(DefaultFieldsCategory):
-    """Control Function.  This the type of function the control performs for the company.  Some controls support multiple type of functionality which would result in different types of measurements for the controls effectiveness.  Careful consideration should be taken defining these terms so client messaging is not diluted.  Available functions for the control category will be mapped in the ControlCategory.  What functions are used for the control by the company will be mapped at the CompanyControl."""
+class ControlCategoryCIATriad(DefaultFields):
+    """Through model for Control Category.  Define the triad to the control category"""
+
+    id_controlcategory = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, null=True, related_name='cia_controlcategory', help_text=(
+        'The control category the associated with the CIA Triad'),)
+    id_ciatriad = models.ForeignKey('CIATriad', on_delete=models.PROTECT, null=True, related_name='controlcategory_cia', help_text=(
+        'The CIA Triad'),)
+    context = models.TextField(
+        blank=True, help_text=('Context regarding the CIA triad'),)  # Additional information on why the triad is associated to the eventtype.
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Control Category: CIA Triad")
+
+
+class ControlNotification(DefaultFieldsCategory):
+    """Control Notification.  This will determine the operating stage of the control to prevent risk.  Choices are preventive, detective, corrective, or predictive """
 
     def __str__(self):
         """String."""
@@ -90,54 +105,24 @@ class ControlFunction(DefaultFieldsCategory):
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Control Functions")
+        verbose_name_plural = ("Control Notifications")
+        ordering = ['sort_order', ]
 
 
-class ControlCategoryFunction(DefaultFields):
-    """Control Category Function.Used to define what functions are availabe for the user to chose"""
-
-    # Foreign Key and Relationships
-    id_controlcategory = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, null=True, related_name='category_control_function', help_text=(
-        'Category of control'),)
-    id_controlfunction = models.ForeignKey('ControlFunction', on_delete=models.PROTECT, null=True, related_name='function_control_category', help_text=(
-        'Functional uses of the control'),)
-    description = models.TextField(
-        blank=False, help_text=('Description of the function the control performs'),)  # This field will help the user better understand how they are using the control defined.
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Available Control Functions")
-
-
-class ControlOperation(DefaultFieldsCompany):
-    """Control Operation.  This will determine the operating stage of the control to prevent risk.  Choices are preventive, detective, corrective, or predictive """
-
-    sort_order = models.IntegerField(
-        blank=True, null=True, help_text=('Sort order that the operational level should be in for form selection'),)  # Sort order for form selection.
-
-    def __str__(self):
-        """String."""
-        return self.name
-
-    class Meta:
-        """Meta class."""
-        verbose_name_plural = ("Control Operation")
-
-
-class ControlCategoryOperation(DefaultFields):
+class ControlCategoryNotification(DefaultFields):
     """Control Category Operation.  Used to define what operation levels are availabe for the user to chose"""
 
     # Foreign Key and Relationships
     id_controlcategory = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, null=True, related_name='category_control_operation', help_text=(
         'Category of control'),)
-    id_controloperation = models.ForeignKey('ControlOperation', on_delete=models.PROTECT, null=True, related_name='operation_control_category', help_text=(
-        'Opeational level of the control'),)
+    id_controlnotification = models.ForeignKey('ControlNotification', on_delete=models.PROTECT, null=True, related_name='operation_control_category', help_text=(
+        'Type of notification response the control provides.'),)
     description = models.TextField(
         blank=False, help_text=('Description of the how the control would operate at the selected level'),)  # This field will help the user better understand how they are using the control defined.
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Available Control Operation Levels")
+        verbose_name_plural = ("Control Category: Notification Types")
 
 
 class ControlDomain(DefaultFieldsCategory):

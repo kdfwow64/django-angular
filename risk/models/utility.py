@@ -11,11 +11,13 @@ class Selector(models.Model):
     AMBER = 'A'
     GREEN = 'G'
     UNKNOWN = 'U'
+    KNOWN = 'K'
     HIGH = 'H'
     MEDIUM = 'M'
     LOW = 'L'
     PERCENT = 'P'
     FIXED = 'F'
+    CATEGORY = 'C'
     TIMED = 'T'
     YES_NO = (('Y', 'Yes'), ('N', 'No'))
     RAG = (('R', 'Red'), ('A', 'Amber'), ('G', 'Green'), ('U', 'Unknown'))
@@ -24,6 +26,8 @@ class Selector(models.Model):
     ASSET = (('F', 'Fixed Value'), ('P', 'Percent of Revenue'),
              ('T', 'Time Based Value'))
     LOSS = (('F', 'Fixed Value'), ('P', 'Percent of Revenue'))
+    ARO = (('K', 'Known ARO'), ('C', 'Frequency Category'),
+           ('F', 'Annualized Percentage'))
 
 
 class DefaultFields(models.Model):
@@ -123,12 +127,12 @@ class DefaultFieldsCategory(DefaultFieldsCompany):
         'Sort order the field should be in for form selection'),)  # Used for viewing and field choices
     keywords = models.TextField(blank=True, null=True,  help_text=(
         'Keywords used to idenify proper category or find correct field name'),)  # Used to find the correct field
-    # Used to help contributors understand the category and how it may apply.
+    under_review = models.BooleanField(default=False, help_text=(
+        'Designates whether this category has been marked for review'),)  # Used to mark categories that need further review.  IE. Should a customer custom category be added to Core?  Should the Core category exist?
     example1 = models.TextField(blank=True, null=True,  help_text=(
-        'Pratcial example of the category'),)
-    # Used to help contributors understand the category and how it may apply.
+        'Pratcial example of the category'),)  # Used to help contributors understand the category and how it may apply.
     example2 = models.TextField(blank=True, null=True,  help_text=(
-        'Pratcial example of the category'),)
+        'Pratcial example of the category'),)  # Used to help contributors understand the category and how it may apply.
 
     class Meta:
         """Meta class."""

@@ -89,8 +89,7 @@ from .control import (
     ControlCsc,
     ControlCscFamily,
     ControlDomain,
-    ControlFunction,
-    ControlOperation,
+    ControlNotification,
     DependencyEffort,
 )
 from .entry import (
@@ -101,7 +100,7 @@ from .entry import (
     EntryCause,
     EntryCompanyAsset,
     EntryCompanyControl,
-    EntryCompanyControlFunction,
+    EntryCompanyControlCIATriad,
     EntryCompanyControlMeasure,
     EntryCompanyLocation,
     EntryCompliance,

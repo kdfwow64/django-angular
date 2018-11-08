@@ -34,8 +34,11 @@ class FrequencyCategoryAdmin(admin.ModelAdmin):
         'description',
         'measure',
         'rating',
+        'sort_order',
         'minimum',
         'maximum',
+        'min_year',
+        'max_year',
     )
     search_fields = ('name',)
 
@@ -49,6 +52,7 @@ class ImpactCategoryAdmin(admin.ModelAdmin):
         'description',
         'measure',
         'rating',
+        'sort_order',
         'minimum',
         'maximum',
     )

@@ -25,9 +25,15 @@ class Register(DefaultFields):
     company = models.ForeignKey('Company', on_delete=models.PROTECT, blank=False, related_name='company_register', help_text=(
         'Company id for the register.'),)  # Company that the register is associated.
 
+    class Meta:
+        """Meta class."""
+
+        ordering = ['company', 'name']
+        unique_together = (('name', 'company'),)
+
     def __str__(self):
         """String."""
-        return self.name
+        return "{}- {}" .format(self.company, self.name)
 
 
 class Entry(DefaultFields):
@@ -45,10 +51,6 @@ class Entry(DefaultFields):
         default=False, help_text=('Designates whether the entry is complete'),)  # Only entries that are listed as completed can be leveraged for risk reporting.
     date_completed = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the entry was completed'),)  # This is the date the entry can be leveraged for risk reporting.
-    annual_rate_of_occurence = models.FloatField(
-        default=1, blank=True, null=True, help_text=('Used to multiply the number of occurrences on an annual basis to determine total frequency per year.'),)  # This used to determine the number of times annual the risk may occur.  Logic in the application will be used to set the number. IE 6 times a year = 6, every 2 years = .5
-    aro_notes = models.TextField(
-        blank=True, help_text=('Additional notes from the contributor regarding the frequency calculation.'),)  # Notes regarding the frequency of the threat event
     impact_notes = models.TextField(
         blank=True, null=True, help_text=('Notes regarding the impact logic'),)  # Notes regarding the impactt of the threat event if it occurs.
     additional_mitigation = models.TextField(
@@ -63,7 +65,23 @@ class Entry(DefaultFields):
                                           help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
     evaluation_flg = models.BooleanField(
         default=False, help_text=('Defines if an evaluation is due for the asset'),)  # If True, evaluation is needed.
+    aro_toggle = models.CharField(choices=Selector.ARO, default='K', max_length=1, help_text=(
+        'Toggle to determine how the ARO is calculated'),)
+    aro_notes = models.TextField(
+        blank=True, help_text=('Additional notes from the contributor regarding the frequency calculation.'),)  # Notes regarding the frequency of the threat event
+    # This used to determine the number of times annual the risk may occur.
+    # Logic in the application will be used to set the number
+    aro_fixed = models.DecimalField(default=1, max_digits=19, decimal_places=10, help_text=(
+        'Fixed number of occurrences on an annual basis to determine total frequency per year.'),)
+    aro_known_multiplier = models.FloatField(
+        blank=True, default=1, help_text=('The number of times per time unit.'),)  # The user will select the number of times per aro_unit the threat scenario may occur.  This will define the ARO value and provide every x number of aro_known_time_quantity days.
+    aro_known_unit_quantity = models.IntegerField(
+        default=1, blank=True, help_text=('Defines the number of time units chosen'),)
     # Foreign Key and Relationships
+    aro_time_unit = models.ForeignKey(
+        'TimeUnit', on_delete=models.PROTECT, default=6, null=True, related_name='entry_aro_unit', help_text=('Cadence used on a know occurance'),)  # This setting combined with aro_known_quantity will define the number of times the event occurs.
+    aro_frequency = models.ForeignKey(
+        'FrequencyCategory', on_delete=models.PROTECT, blank=True, null=True, related_name='entry_aro_frequency', help_text=('Frequency Category used to help define ARO'),)  # This setting combined with leveages the average of maximum and minimum values of the frequecy category chosen to determine estimated ARO.  This will also be used for reporting items that are generalized versus having a though out value.
     entry_owner = models.ForeignKey('User', on_delete=models.PROTECT, null=True, related_name='owner_entry', help_text=(
         ' Who owns management of the risk entry.  This should be a contributor of the system'),)  # User that currently owns and is held accountable for the entry
     register = models.ForeignKey('Register', on_delete=models.PROTECT, null=True, related_name='entry', help_text=(
@@ -88,7 +106,7 @@ class Entry(DefaultFields):
     class Meta:
         """Meta class."""
 
-        ordering = ['entry_number']
+        ordering = ['register', 'entry_number']
         indexes = [
             models.Index(fields=['summary'], name='summary_idx'), ]
         verbose_name_plural = ("Entries")
@@ -334,18 +352,20 @@ class EntryCompanyControl(DefaultFields):
         'The company control assigned to mitigate the risk'),)
     id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='companycontrol_entry', help_text=(
         'The entry the associated with the company control'),)
-    mitigation_rate = models.FloatField(default=0, blank=True, help_text=(
-        'Percentage of mitigations the control applies to the inherit risk'),)  # Each control added to the entry should mitigate a portion of the over inherit risk. When selecting the mitigation percentage, it should remove the exposed inhert risk from the asset exposure.
+    aro_mitigation_rate = models.FloatField(default=0, blank=True, help_text=(
+        'Percentage of mitigation the control applies to the Annual Rate of Occurence'),)  # The percentage of mitigation the control provides to the annual rate of occurence.
+    impact_mitigation_rate = models.FloatField(default=0, blank=True, help_text=(
+        'Percentage of mitigation the control applies to the Impact'),)  # The percentage of mitigation the control applies to the impact
     notes = models.TextField(
         blank=True, help_text=('Notes regarding the controls mitigation against the risk'),)  # Notes should be used to suppor the logical leverage to mitigate risk.
     url = models.URLField(max_length=200, blank=True, help_text=(
         'Websites or locations of data supporting the controls mitigation against the risk'),)  # In addtion to notes.  Users can leverage websites for reference.
     submitted_mitigation = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, related_name='userlastsubmittedmitigation', help_text=(
         'User id of the user that last submitted mitigation'),)  # This will be the same for all company controls on the entry.  It is captured to understand the last user that submitted values for the control mitigations.
-    operation = models.ForeignKey('ControlOperation', on_delete=models.CASCADE, blank=True, null=True, related_name='operation_controlentry', help_text=(
-        'The operation associated to the control entered'),)  # Control categories can have multiple operation levels.  This field is used show what may be available for the control and tie its operational level to the entry
-    functions = models.ManyToManyField("ControlFunction", through='EntryCompanyControlFunction', through_fields=('id_entrycompanycontrol', 'id_controlfunction'), related_name='EntryCompanyControlFunction', help_text=(
-        'The level at which the control functions for the entry'),)  # Control categories can have multiple functions.  This field is used show what may be available for the control.
+    notification = models.ForeignKey('ControlNotification', on_delete=models.CASCADE, blank=True, null=True, related_name='notification_controlentry', help_text=(
+        'The notification ability associated to the control entered'),)  # Control categories can have multiple notification levels.  This field is used show what may be available for the control and tie its notification level to the entry
+    cia_triad = models.ManyToManyField('CIATriad', through='EntryCompanyControlCIATriad', through_fields=('id_entrycompanycontrol', 'id_ciatriad'), related_name='EntryCompanyControlCIATriads', help_text=(
+        'Specifies what portion of the triad is associated to the control entry'),)  # Ties CIA Triad to the event entry.
     measurements = models.ManyToManyField("CompanyControlMeasure", through='EntryCompanyControlMeasure', through_fields=('id_entrycompanycontrol', 'id_companycontrolmeasure'), related_name='EntryCompanyControlMeasurements', help_text=(
         'The measurements related to the threat scenario for this entry'),)  # This will be all or a subset of the measurements for the company control.
 
@@ -394,22 +414,18 @@ class EntryRiskType(DefaultFields):
         verbose_name_plural = ("Entry Risk Types")
 
 
-class EntryCompanyControlFunction(DefaultFields):
-    """Through table for EntryCompanyControl.  Entry Company Control Function.  When chosing this list it should control functions should be limited by what is available for the control category."""
+class EntryCompanyControlCIATriad(DefaultFields):
+    """Through table for EntryCompanyControl.  Entry Company Control CIATriad  When chosing this list it should be limited by what is available for the control category cia."""
 
     # Foreign Key and Relationships
-    id_controlfunction = models.ForeignKey('ControlFunction', on_delete=models.CASCADE, null=True, related_name='entry_controlfunction', help_text=(
-        'The function the control preforms against the threat event'),)
-    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.CASCADE, null=True, related_name='controlfunction_entry', help_text=(
+    id_ciatriad = models.ForeignKey('CIATriad', on_delete=models.PROTECT, null=True, related_name='entrycompanycontrol_cia', help_text=(
+        'The CIA Triad'),)
+    id_entrycompanycontrol = models.ForeignKey('EntryCompanyControl', on_delete=models.CASCADE, null=True, related_name='cia_entrycompanycontrol', help_text=(
         'The entry control the associated with the company control'),)
-
-    def __str__(self):
-        """String."""
-        return self.id_controlfunction.name
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Entry Company Control Functions")
+        verbose_name_plural = ("Entry: Company Control CIA")
 
 
 class EntryCompanyControlMeasure(DefaultFields):
@@ -581,18 +597,21 @@ class ResponseVote(DefaultFieldsCompany):
     sort_order = models.IntegerField(
         blank=True, null=True, help_text=('Sort order that should be displayed to the user'),)  # Used when presenting a selection to contributors
 
-    def __str__(self):
-        """String."""
-        return self.name
-
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Response Votes")
+
+    def __str__(self):
+        """String."""
+        return self.name
 
 
 class Response(DefaultFieldsCategory):
     """Response.
     """
+    class Meta:
+        """Meta class."""
+        ordering = ('sort_order',)
 
     def __str__(self):
         """String."""

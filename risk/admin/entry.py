@@ -1,5 +1,5 @@
 from django.contrib import admin
-from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlFunction, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType
+from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlCIATriad, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType, Entry
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -53,9 +53,9 @@ class EntryEventTypeInline(admin.TabularInline):
     extra = 1
 
 
-class EntryCompanyControlFunctionInline(admin.TabularInline):
+class EntryCompanyControlCIATriadInline(admin.TabularInline):
 
-    model = EntryCompanyControlFunction
+    model = EntryCompanyControlCIATriad
     extra = 1
 
 
@@ -96,16 +96,32 @@ class RegisterAdmin(admin.ModelAdmin):
 
 class EntryAdmin(admin.ModelAdmin):
 
+    readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'entry_number', 'register', )
+    radio_fields = {'response': admin.HORIZONTAL}
+    fieldsets = (
+        ('Basic Info', {
+         'fields': ('register', 'response', 'entry_number', ('summary', 'description',),)}),
+        ('Threat Scenario', {
+         'fields': ('aro_notes', 'impact_notes',)}),
+        ('Advanced Options', {
+         'fields': ('is_completed', ('evaluation_flg', 'evaluation_days',), 'incident_response',)}),
+        ('Management Detail', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': (('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+    )
+
     inlines = (EntryActorInline, EntryCompanyAssetInline,
                EntryCompanyControlInline, EntryComplianceInline, EntryEventTypeInline, EntryCompanyLocationInline, EntryRiskTypeInline)
     list_select_related = []
     list_display = (
         'id',
+        'register',
         'summary',
         'description',
         'assumption',
         'entry_number',
-        'annual_rate_of_occurence',
         'incident_response',
         'response',
         'is_completed',
@@ -124,6 +140,7 @@ class EntryAdmin(admin.ModelAdmin):
         'impact_notes',
         'additional_mitigation',
     )
+    ordering = ['register', 'entry_number']
 
 
 class EntryTaskAdmin(admin.ModelAdmin):
@@ -192,12 +209,13 @@ class EntryCauseAdmin(admin.ModelAdmin):
 
 
 class EntryCompanyControlAdmin(admin.ModelAdmin):
-    inlines = (EntryCompanyControlFunctionInline,
+    inlines = (EntryCompanyControlCIATriadInline,
                EntryCompanyControlMeasureInline,)
     list_display = ('id',
                     'id_companycontrol',
                     'id_entry',
-                    'mitigation_rate',
+                    'aro_mitigation_rate',
+                    'impact_mitigation_rate',
                     'notes',
                     'url',
                     )

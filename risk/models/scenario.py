@@ -58,9 +58,16 @@ class FrequencyCategory(DefaultFieldsCategory):
         'The lowest percentage value for the category.'),)  # Minimum value of the frequency
     maximum = models.FloatField(default=0, blank=True, help_text=(
         'The highest percentage value for the category.  If user selects 100< they will need to put in number of occurrences per year.'),)  # Maximum value of the frequency
+    # Defined to help users make appropirate choices for risk relevance.
+    min_year = models.CharField(max_length=128, blank=True, help_text=(
+        'Number of years for the minimum value'),)
+    # Defined to help users make appropirate choices for risk relevance.
+    max_year = models.CharField(max_length=128, blank=True, help_text=(
+        'Number of years for the minimum value'),)
 
     class Meta:
         """Meta class."""
+        ordering = ['sort_order', ]
         verbose_name_plural = ("Frequency Categories")
 
     def __str__(self):
@@ -88,6 +95,7 @@ class ImpactCategory(DefaultFieldsCategory):
 
     class Meta:
         """Meta class."""
+        ordering = ['sort_order', ]
         verbose_name_plural = ("Impact Categories")
 
     def __str__(self):
