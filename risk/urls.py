@@ -31,8 +31,8 @@ urlpatterns = [
 
     re_path(r'^dashboard/api/risk-types/$',
             dashboard.get_all_risk_type_for_dropdown, name="risk-types-dropdown-list"),
-    re_path(r'^dashboard/api/response-types/$',
-            dashboard.get_all_response_type_for_dropdown, name="response-types-dropdown-list"),
+    re_path(r'^dashboard/api/responses/$',
+            dashboard.get_all_responses_for_dropdown, name="responses-dropdown-list"),
     re_path(r'^dashboard/api/company-assets/$',
             dashboard.get_all_company_assets_for_dropdown, name="company-assets-dropdown-list"),
     re_path(r'^dashboard/api/company-controls/$',

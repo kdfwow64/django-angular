@@ -3198,7 +3198,7 @@ colorAdminApp.controller('registerListEntriresController',
     $scope.impact_types = impactTypes;
     $scope.severities = severities;
     $scope.search = {};
-    $scope.search.response = true;
+    // $scope.search.response = true;
     $scope.search.compliance = true;
     $scope.search.revoked = '';
     $scope.users = []; // users;
@@ -3220,7 +3220,7 @@ colorAdminApp.controller('registerListEntriresController',
                     {"data": "created_date", "width": "10%"},
                     {"data": "modified_date", "width": "10%"},
                     {"data": "evaluated", "width": "10%"},
-                    {"data": "response", "name": "response", "visible": false},
+                    // {"data": "response", "name": "response", "visible": false},
                     {"data": "impact", "name":"impact", "visible": false},
                     {"data": "severity_dd", "name":"severity_dd", "visible": false},
                     {"data": "mr", "name":"mr", "visible": false},
@@ -3245,9 +3245,9 @@ colorAdminApp.controller('registerListEntriresController',
                 }
             });
 
-            $('#search_response').change( function() {
-               table.column('response:name').search($scope.search.response?1:0).draw();
-            } );
+            // $('#search_response').change( function() {
+            //    table.column('response:name').search($scope.search.response?1:0).draw();
+            // } );
             $('#search_impact').change( function() {
                 if($scope.search.impact_status){
                    table.column('impact:name').search($scope.search.impact_status).draw();
@@ -3317,7 +3317,7 @@ colorAdminApp.controller('registerAddEntriresController',
         WizardValidatorService,
         WizardFormService,
         riskTypes,
-        responseTypes,
+        responses,
         companyLocations,
         compliances,
         users,
@@ -3334,7 +3334,7 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.basicinfo = {};
 
     $scope.risk_types = riskTypes;
-    $scope.response_types = responseTypes;
+    $scope.responses = responses;
     $scope.company_locations = companyLocations;
     $scope.company_compliances = compliances;
     $scope.users = users;

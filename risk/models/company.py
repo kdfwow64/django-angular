@@ -36,7 +36,7 @@ class Company(DefaultFields):
     weight_severity = models.FloatField(default=1, help_text=(
         'Company specific weighted value for severity'),)  # In special cases based on the type of business the severity weight may need to be adjusted.  Defaults to a 1 multiplier
     resilience_max = models.IntegerField(blank=True, null=True, help_text=(
-        'Maximum number of units any control have to recover'),)  # Resilience time is used to determine if there are controls that may not recover in an appropirate time frame.
+        'Maximum number of units any control has to recover'),)  # Resilience time is used to determine if there are controls that may not recover in an appropirate time frame.
     company_notes = models.TextField(
         blank=True, null=True, help_text=('Company notes that the contriburtor can add'),)  # Notes about the company.  This field is mainly used if the account is a reseller or using the tool for mulitple business units.
     evaluation_days = models.IntegerField(
@@ -86,7 +86,7 @@ class Company(DefaultFields):
         'The NAICS code the defines the clients vertical / industry'),)  # The NAICS code for the company.  This is important for vertical reporting.  Account Admin should be able leverage a search function to determine the companies NAICS from the company profile page.
     resilience_unit = models.ForeignKey(
         'TimeUnit', on_delete=models.PROTECT, default=3, null=True, related_name='maxresilienceunit', help_text=('Resilience time unit of the company control'),)  # This setting combined with resilience_max will define the maximum time it should take to recover any control.
-    currencytype = models.ForeignKey('CurrencyType', on_delete=models.PROTECT, default=1, blank=False, related_name='currencytype_company', help_text=(
+    currency_type = models.ForeignKey('CurrencyType', on_delete=models.PROTECT, default=1, blank=False, related_name='currencytype_company', help_text=(
         'Type of currency the company uses for financing'),)  # This will be used to determine the type of currency a company will leverage for the tool.  It should be determined before the cost loss is generated.  Monetary value logic will need to created based off this setting.  USD by default.
     user_member = models.ManyToManyField('User', through='CompanyMember',
                                          through_fields=('id_company', 'id_user'), related_name='CompanyUserMembers', help_text=('Specifies what users have access to the company'),)  # Specifies what users have acess to the company.

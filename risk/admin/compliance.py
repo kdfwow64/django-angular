@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import linebreaks
+from risk.models import Compliance
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -115,6 +116,8 @@ class NaicsAdmin(admin.ModelAdmin):
 
     list_select_related = []
     list_display = ('id', 'version', 'code', 'title', 'level')
+    search_fields = ('code', 'title', 'level',)
+    ##list_filter = ('get_primary_naics',)
 
 
 class PyramidofPainAdmin(admin.ModelAdmin):

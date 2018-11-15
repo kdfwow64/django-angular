@@ -296,8 +296,8 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 riskTypes: function(RiskTypeService){
                     return RiskTypeService.getAllMyRiskTypes();
                 },
-                responseTypes: function(ResponseTypeService){
-                    return ResponseTypeService.getAllResponseTypes();
+                responses: function(ResponseService){
+                    return ResponseService.getAllResponses();
                 },
                 companyLocations: function(CompanyLocationService){
                     return CompanyLocationService.getCompanyLocations();
@@ -352,8 +352,8 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 riskTypes: function(RiskTypeService){
                     return RiskTypeService.getAllMyRiskTypes();
                 },
-                responseTypes: function(ResponseTypeService){
-                    return ResponseTypeService.getAllResponseTypes();
+                responses: function(ResponseService){
+                    return ResponseService.getAllResponses();
                 },
                 companyLocations: function(CompanyLocationService){
                     return CompanyLocationService.getCompanyLocations();

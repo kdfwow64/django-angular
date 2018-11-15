@@ -86,8 +86,8 @@ class Entry(DefaultFields):
         ' Who owns management of the risk entry.  This should be a contributor of the system'),)  # User that currently owns and is held accountable for the entry
     register = models.ForeignKey('Register', on_delete=models.PROTECT, null=True, related_name='entry', help_text=(
         'Register that the entry belongs'),)  # Register that the entry is associated.
-    response = models.ForeignKey('Response', default=6, on_delete=models.CASCADE, null=True, blank=True, related_name='entryfinalresponse', help_text=(
-        'The final decsion on what to do with the threat scenario'),)  # Based on the decision from the EntryRespons and EntryResponseResults.  This is what the company has determined to do about the threat scenario.
+    response = models.ForeignKey('Response', default=6, on_delete=models.CASCADE, null=True, blank=True, related_name='entry_response', help_text=(
+        'The final decsion on what to do with the threat scenario'),)  # Defines how the company will manage the risk
     actors = models.ManyToManyField('Actor', through='EntryActor',
                                     through_fields=('id_entry', 'id_actor'), related_name='EntryActors', help_text=('Specifies what actors are defined in the scenario'),)  # Many actors could be involved in the threat scenario.
     events = models.ManyToManyField('EventType', through='EntryEventType',

@@ -46,15 +46,15 @@ function RiskTypeService($http){
    2.0 SERVICE - ResponseTypeService
 --------------------------------------*/
 
-function ResponseTypeService($http){
-    function get_all_response_types(){
-        return $http.get('/dashboard/api/response-types/').then(function(r){
+function ResponseService($http){
+    function get_all_responses(){
+        return $http.get('/dashboard/api/responses/').then(function(r){
             return r.data;
         }, function(r){});
     }
 
     var service = {
-        getAllResponseTypes: get_all_response_types,
+        getAllResponses: get_all_responses,
     }
     return service;
 }
@@ -461,7 +461,7 @@ function WizardFormService($http){
 }
 
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
-             .factory('ResponseTypeService', ['$http', ResponseTypeService])
+             .factory('ResponseService', ['$http', ResponseService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
              .factory('ComplianceService', ['$http', ComplianceService])
              .factory('UserService', ['$http', UserService])

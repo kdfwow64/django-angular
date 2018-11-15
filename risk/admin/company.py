@@ -133,22 +133,43 @@ class CompanyPlaybookMemberInline(admin.TabularInline):
 
 
 class CompanyAdmin(admin.ModelAdmin):
+    readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'account', )
+    autocomplete_fields = ['naics', ]
+    radio_fields = {'monetary_value_toggle': admin.HORIZONTAL}
+    fieldsets = (
+        ('Company Info', {
+         'fields': (('name', 'about',), 'url', 'naics',)}),
+        ('Financial', {
+         'classes': ('grp-collapse grp-closed',),
+         'fields': (('annual_revenue', 'currency_type',), 'monetary_value_toggle', ('fixed_max_loss', 'par_max_loss',))}),
+        ('Advanced Options:', {
+         'classes': ('grp-collapse grp-closed',),
+         'fields': (('weight_frequency', 'weight_impact', 'weight_severity',), ('evaluation_days', 'evaluation_alert_days',), ('resilience_max', 'resilience_unit',))}),
+        ('Management Detail', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('company_notes', 'bkof_notes', 'utility_field', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+    )
+
     inlines = (CompanyProfileInline, CompanyMemberInline,)
     list_select_related = []
     list_display = (
         'id',
         'name',
+        'annual_revenue',
+        'naics',
         'account',
         'is_active',
         'is_deleted',
     )
     list_filter = (
         'is_active',
+        'is_deleted',
         'account',
     )
-    raw_id_fields = ('naics',)
-    search_fields = ('name',)
-    ordering = ('name',)
+    search_fields = ('name', 'account',)
+    ordering = ['account', 'name', ]
 
 
 class CompanyMemberAdmin(admin.ModelAdmin):
@@ -441,7 +462,7 @@ class CompanyControlCostTypeAdmin(admin.ModelAdmin):
 
 class CompanyContactAdmin(admin.ModelAdmin):
 
-    #save_as = True
+    # save_as = True
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
                        'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
                        )

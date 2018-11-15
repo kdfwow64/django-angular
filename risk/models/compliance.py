@@ -135,6 +135,11 @@ class Naics(models.Model):
         """String."""
         return self.title
 
+    # def get_primary_naics(self):
+    #     """String."""
+    #     primary = naics.objects.filter(code == self.code[:2])
+    #     return self.primary.title
+
 
 class PyramidofPain(DefaultFieldsCategory):
     """Pyramid of Pain."""

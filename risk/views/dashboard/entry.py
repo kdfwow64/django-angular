@@ -69,7 +69,7 @@ def api_list_risk_entries(request):
             'modified_date': entry.date_modified.strftime("%m/%d/%Y"),
             'evaluated': entry.date_evaluated.strftime("%m/%d/%Y") if entry.date_evaluated else '',
             'id': entry.id,
-            'response': entry.has_response,
+            # 'response': entry.response,
             'impact': entry.impact,
             'severity_dd': entry.severity,
             'compliance': entry.has_compliance,
@@ -118,19 +118,19 @@ class CreateRiskEntry(View):
             risk_entry.save()
 
             # Select single dropdown
-            try:
-                final_response = Response.objects.get(
-                    pk=request_data.get("final_response"))
-                try:
-                    entry_response = EntryResponse.objects.filter(
-                        entry=risk_entry).latest('id')
-                    entry_response.final_response = final_response
-                    entry_response.save()
-                except:
-                    EntryResponse.objects.create(
-                        entry=risk_entry, final_response=final_response)
-            except:
-                pass
+            # try:
+            risk_entry.response_id = int(
+                request_data.get("response", request.response.id))
+            #     try:
+            #         entry_response = EntryResponse.objects.filter(
+            #             entry=risk_entry).latest('id')
+            #         entry_response.response = response
+            #         entry_response.save()
+            #     except:
+            #         EntryResponse.objects.create(
+            #             entry=risk_entry, response=response)
+            # except:
+            #     pass
 
             # Select multiple dropdowns - Risk Type
             selected_rt = request_data.get("risk_types", [])
@@ -417,11 +417,11 @@ def get_all_risk_type_for_dropdown(request):
 
 
 @login_required
-def get_all_response_type_for_dropdown(request):
+def get_all_responses_for_dropdown(request):
     """Get all respose types for dropdown."""
     data = []
-    for response_type in Response.objects.order_by('name').all():
-        data.append({'id': response_type.id, 'name': response_type.name})
+    for response in Response.objects.order_by('name').all():
+        data.append({'id': response.id, 'name': response.name})
     return JsonResponse(data, safe=False)
 
 
@@ -441,14 +441,14 @@ def api_get_risk_entry(request, entry_id):
     rv = {}
     if entry_id:
         try:
-            # Get fist register for company from entry.py/Register
+            # Get first register for company from entry.py/Register
             risk_entry = request.user.get_current_company(
             ).get_active_register().entry.get(pk=entry_id)
-            try:
-                final_response = risk_entry.entryresponse.latest(
-                    'id').final_response_id
-            except:
-                final_response = 1
+            # try:
+            #     response = risk_entry.entryresponse.latest(
+            #         'id').response_id
+            # except:
+            #     response = 1
 
             rv.update({
                 'basicinfo': {
@@ -456,11 +456,11 @@ def api_get_risk_entry(request, entry_id):
                     'summary': risk_entry.summary,
                     'description': risk_entry.description,
                     'risk_types': [ert.id_risktype_id for ert in risk_entry.entryrisktype.all()],
-                    'final_response': final_response,
+                    'response': risk_entry.response_id,
                     'locations': [loc.id_companylocation_id for loc in risk_entry.entry_companylocation.all()] or [1, ],
                     'compliances': [rec.id_compliance_id for rec in risk_entry.entrycompliance.all()],
                     'entry_owner': risk_entry.entry_owner_id or request.user.id,
-                    'annual_rate_of_occurence': risk_entry.annual_rate_of_occurence,
+                    'aro_fixed': risk_entry.aro_fixed,
                     'aro_notes': risk_entry.aro_notes,
                 }
             })

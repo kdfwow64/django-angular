@@ -9,9 +9,9 @@ class RiskEntryBasicForm(forms.ModelForm):
     summary = forms.CharField(required=True, min_length=25, max_length=255)
     description = forms.CharField(required=True)
     risk_types = forms.CharField(required=True)
-    final_response = forms.CharField(required=True)
+    response = forms.CharField(required=True)
     entry_owner = forms.CharField(required=True)
-    annual_rate_of_occurence = forms.CharField(required=True)
+    aro_fixed = forms.CharField(required=True)
     locations = forms.CharField(required=False)
     compliances = forms.CharField(required=False)
     aro_notes = forms.CharField(required=False)
@@ -20,5 +20,5 @@ class RiskEntryBasicForm(forms.ModelForm):
         """Meta Class."""
 
         model = Entry
-        fields = ("summary", "description", "risk_types", "final_response",
-                  "locations", "compliances", "annual_rate_of_occurence", "aro_notes")
+        fields = ("summary", "description", "risk_types", "response",
+                  "locations", "compliances", "aro_fixed", "aro_notes")
