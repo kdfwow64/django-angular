@@ -111,7 +111,6 @@ class CreateRiskEntry(View):
             if entry_id is None:
                 risk_entry.register = request.user.get_current_company().get_active_register()
                 risk_entry.created_by = request.user
-
             risk_entry.entry_owner_id = int(
                 request_data.get("entry_owner", request.user.id))
             risk_entry.modified_by = request.user
@@ -119,8 +118,8 @@ class CreateRiskEntry(View):
 
             # Select single dropdown
             # try:
-            risk_entry.response_id = int(
-                request_data.get("response", request.response.id))
+            #     risk_entry.response_id = int(
+            #       request_data.get("response", request.response.id))
             #     try:
             #         entry_response = EntryResponse.objects.filter(
             #             entry=risk_entry).latest('id')
