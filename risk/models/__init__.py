@@ -89,6 +89,7 @@ from .control import (
     ControlCsc,
     ControlCscFamily,
     ControlDomain,
+    ControlFamily,
     ControlNotification,
     DependencyEffort,
 )

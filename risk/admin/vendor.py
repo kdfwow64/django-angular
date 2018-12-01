@@ -1,5 +1,5 @@
 from django.contrib import admin
-from risk.models.vendor import VendorTypeMap, VendorCategoryMap
+from risk.models.vendor import VendorTypeMap, VendorCategoryMap, Vendor
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -24,24 +24,21 @@ class VendorAdmin(admin.ModelAdmin):
         'id',
         'name',
         'is_active',
-        'under_review',
-        'review_reason',
         'about',
-        'notes_mgmt',
         'phone_info',
         'phone_support',
         'url_main',
         'url_product',
         'url_service',
         'url_support',
-        'rank',
         'initial_account',
         'keywords',
+        'parent',
     )
     list_filter = (
         'is_active',
     )
-    search_fields = ('name', 'about', 'keywords',)
+    search_fields = ('name', 'about', 'keywords', 'parent__name')
     ordering = ('name',)
 
 

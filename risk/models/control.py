@@ -55,8 +55,10 @@ class ControlCategory(DefaultFieldsCategory):
 
     control_category_type = models.ForeignKey('ControlCategoryType', on_delete=models.PROTECT, null=True, related_name='type_controlcategory', help_text=(
         'Type of control category'),)
-    control_domain = models.ForeignKey('ControlDomain', default=1, on_delete=models.PROTECT, null=True, related_name='category_controldomain', help_text=(
+    control_domain = models.ForeignKey('ControlDomain', on_delete=models.PROTECT, null=True, related_name='category_controldomain', help_text=(
         'Type of control category domain'),)
+    control_family = models.ForeignKey('ControlFamily', on_delete=models.PROTECT, null=True, related_name='category_controlfamily', help_text=(
+        'Family that the control category belongs'),)
     available_notification = models.ManyToManyField("ControlNotification", through='ControlCategoryNotification', through_fields=('id_controlcategory', 'id_controlnotification'), related_name='ControlNotificationLevel', help_text=(
         'The level at which the control category operates'),)  # Control categories can have multiple operation levels.  This field is used show what may be available for the control.
     cia_triad = models.ManyToManyField('CIATriad', through='ControlCategoryCIATriad', through_fields=('id_controlcategory', 'id_ciatriad'), related_name='ControlCategoryCIATriads', help_text=(
@@ -135,6 +137,18 @@ class ControlDomain(DefaultFieldsCategory):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Control Domains")
+
+
+class ControlFamily(DefaultFieldsCategory):
+    """Control Family.  This should be the highest level a control cateogry can belong too."""
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Control Families")
 
 
 class ControlCsc(DefaultFields):

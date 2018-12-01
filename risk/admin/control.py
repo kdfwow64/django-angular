@@ -50,8 +50,10 @@ class ControlAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ControlAdminForm, self).__init__(*args, **kwargs)
         if self.instance.pk:
-            self.fields['control_category'].initial = self.instance.categories.all()
-            self.fields['control_category'].queryset = self.fields['control_category'].queryset.exclude(pk=self.instance.pk)
+            self.fields[
+                'control_category'].initial = self.instance.categories.all()
+            self.fields['control_category'].queryset = self.fields[
+                'control_category'].queryset.exclude(pk=self.instance.pk)
 
     def save(self, commit=True):
         control = super(ControlAdminForm, self).save(commit=False)
@@ -62,13 +64,15 @@ class ControlAdminForm(forms.ModelForm):
             control_category = self.cleaned_data['control_category']
             print(control_category)
             for category in control.categories.all():
-                if category in control_category.all(): # Already in category, no need to handle
+                if category in control_category.all():  # Already in category, no need to handle
                     control_category = control_category.exclude(pk=category.pk)
-                else: # Remove if removed in front-end
-                    ControlCategoryControl.objects.get(id_control=control, id_controlcategory=category).delete()
+                else:  # Remove if removed in front-end
+                    ControlCategoryControl.objects.get(
+                        id_control=control, id_controlcategory=category).delete()
 
-            for category in control_category.all(): # Add new categories
-                ControlCategoryControl.objects.create(id_control=control, id_controlcategory=category)
+            for category in control_category.all():  # Add new categories
+                ControlCategoryControl.objects.create(
+                    id_control=control, id_controlcategory=category)
 
         return control
 
@@ -82,7 +86,7 @@ class ControlAdmin(admin.ModelAdmin):
     autocomplete_fields = ['vendor', ]
     fieldsets = (
         ('Control Specific', {
-         'fields': ('name', 'model_number', 'abbrv', 'description', 'vendor','control_category')}),
+         'fields': ('name', 'model_number', 'abbrv', 'description', 'vendor', 'control_category')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
@@ -130,6 +134,18 @@ class ControlDomainAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+class ControlFamilyAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'name',
+        'description',
+        'keywords',
+    )
+    search_fields = ('name',)
+
+
 class ControlNotificationAdmin(admin.ModelAdmin):
 
     list_select_related = []
@@ -150,7 +166,7 @@ class ControlCategoryAdmin(admin.ModelAdmin):
     radio_fields = {'control_category_type': admin.HORIZONTAL}
     fieldsets = (
         ('Control Category Specific', {
-         'fields': ('name', 'abbrv', 'description', 'keywords', 'control_category_type', 'control_domain',)}),
+         'fields': ('name', 'abbrv', 'description', 'keywords', 'control_category_type', 'control_domain', 'control_family')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
@@ -165,11 +181,13 @@ class ControlCategoryAdmin(admin.ModelAdmin):
         'keywords',
         'control_category_type',
         'control_domain',
+        'control_family',
         'company',
     )
     list_filter = (
         'control_category_type',
         'control_domain',
+        'control_family',
         'company',
 
     )

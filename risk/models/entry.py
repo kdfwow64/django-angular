@@ -622,8 +622,8 @@ class EntryUrl(DefaultFieldsEntry):
     """Entry Url."""
 
     notes = models.TextField(
-        blank=False, help_text=('Notes on why the url was selected for the entry'),)  # Notes associated with the URL
-    url = models.URLField(max_length=512, blank=True, help_text=(
+        blank=True, null=True, help_text=('Notes on why the url was selected for the entry'),)  # Notes associated with the URL
+    url = models.URLField(max_length=512, help_text=(
         'URL used to support detail of the entry'),)  # Website or URL of the location defined.
     is_internal = models.BooleanField(
         default=False, help_text=('Designates whether the URL is internal to the company'),)  # If true, the URL is only accessable to company users.
@@ -636,10 +636,10 @@ class EntryUrl(DefaultFieldsEntry):
         default=False, help_text=('Designates whether the URL recieves a page error'),)  # If is_public_domain is True after scan then has_page_error will be tested.  If has_page_error is True, then manual review is needed and alert will be sent to entry owner.
     is_recommended = models.BooleanField(
         default=False, help_text=('Designates whether the URL is recommended by RLB'),)  # URL has been reviewed by RLB and is recommend for this type of entry.
-    recommended_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='user_recommended', help_text=(
+    recommended_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, blank=True, related_name='user_recommended', help_text=(
         'User that recommended the URL'),)  # User that recommended the URL
     recommended_notes = models.TextField(
-        blank=True, help_text=('Notes on why the url was recommended reading for other RLB users'),)  # Recommendation notes associated with the URL
+        blank=True, null=True, help_text=('Notes on why the url was recommended reading for other RLB users'),)  # Recommendation notes associated with the URL
 
     class Meta:
         """Meta class."""

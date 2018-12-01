@@ -1,5 +1,6 @@
 from django.contrib import admin
-from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlCIATriad, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType, Entry
+from django.utils.html import format_html
+from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlCIATriad, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType, Entry, EntryUrl
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -102,7 +103,7 @@ class EntryAdmin(admin.ModelAdmin):
     radio_fields = {'response': admin.HORIZONTAL}
     fieldsets = (
         ('Basic Info', {
-         'fields': ('register', 'response', 'entry_number', ('summary', 'description',),)}),
+         'fields': ('register', 'response', 'entry_number', ('summary', 'description',), 'assumption', 'additional_mitigation',)}),
         ('Threat Scenario', {
          'fields': ('aro_notes', 'impact_notes',)}),
         ('Advanced Options', {
@@ -346,15 +347,19 @@ class EntryUrlAdmin(admin.ModelAdmin):
     list_select_related = []
     list_display = (
         'id',
-        'name',
+        'show_entry_url',
         'notes',
-        'url',
         'is_internal',
         'is_active',
         'is_recommended',
         'entry')
     list_filter = ('entry',)
     search_fields = ('name',)
+
+    def show_entry_url(self, obj):
+        return format_html("<a href='{url}'>{name}</a>", url=obj.url, name=obj.name)
+
+    show_entry_url.short_description = "Entry URL"
 
 
 class MitigationAdequacyAdmin(admin.ModelAdmin):
