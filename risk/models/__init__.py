@@ -40,6 +40,7 @@ from .common import (
     IntegerType,
     TimeUnit,
     TaskStatus,
+    DIType,
     JobTitle,
 )
 

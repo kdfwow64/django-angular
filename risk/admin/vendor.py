@@ -10,12 +10,16 @@ class VendorTypeMapInline(admin.TabularInline):
 
     model = VendorTypeMap
     extra = 1
+    fields = ('id_vendortype',
+              'is_active', 'is_deleted', 'created_by')
 
 
 class VendorCategoryMapInline(admin.TabularInline):
 
     model = VendorCategoryMap
     extra = 1
+    fields = ('id_vendorcategory',
+              'is_active', 'is_deleted', 'created_by')
 
 
 class VendorAdmin(admin.ModelAdmin):
@@ -27,10 +31,10 @@ class VendorAdmin(admin.ModelAdmin):
         ('Vendor Info', {
          'fields': ('name', 'abbrv', 'about', 'description', 'url_main', 'phone_info', 'email_info', 'parent')}),
         ('Vendor Misc', {
-         'fields': (('url_product', 'url_service', 'url_support',), 'name_aka', 'keywords', 'stock_symbol', 'initial_account')}),
+         'fields': (('url_products', 'url_contact', 'url_about_us',), 'name_aka', 'keywords', 'stock_symbol', 'initial_account')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('company', 'email_product', ('under_review', 'review_reason',), 'rank', ('is_active', 'is_deleted',), ('evaluation_days', 'evaluation_flg',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deactivated', 'deactivated_by',), ('date_transitioned', 'transitioned_by',))}),
+            'fields': ('company', 'email_product', ('under_review', 'review_reason',), 'rank', ('is_active', 'is_deleted',), ('evaluation_days', 'evaluation_flg',), ('url_crawler_days', 'url_crawler_flg', 'date_url_crawler',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deactivated', 'deactivated_by',), ('date_transitioned', 'transitioned_by',))}),
     )
     list_select_related = []
     list_display = (

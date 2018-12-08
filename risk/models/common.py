@@ -216,3 +216,15 @@ class JobTitle(DefaultFieldsCategory):
     def __str__(self):
         """String."""
         return self.name
+
+
+class DIType(DefaultFieldsCategory):
+    """Widget Type."""
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Do It Types")

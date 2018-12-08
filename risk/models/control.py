@@ -18,6 +18,10 @@ class Control(DefaultFieldsCompany):
         'Url for the control'),)  # URL specific to the control defined.  Vendor URL's are in the model.
     name_aka = models.TextField(
         blank=True, null=True,  help_text=('Other names the control may have been associated'),)  # This field will be used for searching out controls.  A controls' name may change for various reasons.
+    keywords = models.TextField(
+        blank=True, null=True,  help_text=('Keywords used to idenify or seach the field name'),)  # Keywords to find the control.  This should be updated based on control type
+    di_type = models.ForeignKey('DIType', on_delete=models.PROTECT, null=True, related_name='controlditype', help_text=(
+        'Is the control serviced and maintained by the Company or Provider'),)  # This will help users of the application seperate DIY (do it yourself) from DIFY (do it for you).
     vendor = models.ForeignKey('Vendor', on_delete=models.PROTECT, null=True, related_name='controldetail', help_text=(
         'Vendor that produces the control '),)  # Vendor that makes or maintains the control.  If the account manages/creates the control then this should be listed as Self.
     # control_category = models.ForeignKey(

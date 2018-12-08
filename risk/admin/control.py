@@ -90,11 +90,11 @@ class ControlAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
                        'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
                        )
-    # radio_fields = {'contact_type': admin.HORIZONTAL}
+    radio_fields = {'di_type': admin.HORIZONTAL}
     autocomplete_fields = ['vendor', ]
     fieldsets = (
         ('Control Specific', {
-         'fields': ('name', 'abbrv', 'description', 'name_aka', 'url', 'vendor', 'control_category')}),
+         'fields': ('name', 'abbrv', 'description', 'name_aka', 'url', 'di_type', 'vendor', 'control_category')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
@@ -105,13 +105,14 @@ class ControlAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
-        'abbrv',
-        'name_aka',
         'url',
+        'di_type',
+        'name_aka',
+        'keywords',
         'vendor',
         'company',
     )
-    search_fields = ('name', 'abbrv', 'description')
+    search_fields = ('name', 'abbrv', 'description', 'name_aka', 'keywords')
     list_filter = ('name', 'vendor', 'company')
 
 

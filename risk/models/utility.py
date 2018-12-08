@@ -128,7 +128,7 @@ class DefaultFieldsCategory(DefaultFieldsCompany):
     sort_order = models.IntegerField(default=0, blank=True, null=True, help_text=(
         'Sort order the field should be in for form selection'),)  # Used for viewing and field choices
     keywords = models.TextField(blank=True, null=True,  help_text=(
-        'Keywords used to idenify proper category or find correct field name'),)  # Used to find the correct field
+        'Keywords used to idenify or seach the field name'),)  # Used to find the correct field
     under_review = models.BooleanField(default=False, help_text=(
         'Designates whether this category has been marked for review'),)  # Used to mark categories that need further review.  IE. Should a customer custom category be added to Core?  Should the Core category exist?
     example1 = models.TextField(blank=True, null=True,  help_text=(
@@ -151,7 +151,7 @@ class DefaultFieldsEvaluation(DefaultFields):
     is_approved = models.BooleanField(default=False, help_text=(
         'Designates whether the evaluation has been approved'),)
     date_evaluated = models.DateTimeField(null=True, blank=True, help_text=(
-        'Timestamp the evaluation ended'),)  # Date the user completed submitted the evaluation
+        'Timestamp the evaluation last occured'),)  # Date the user completed submitted the evaluation
     # Foreign Key and Relationships
     evaluated_by = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='%(app_label)s_%(class)s_related_evaluator', help_text=(
         'The user that performed the evaluation'),)  # User that completed the evaluation.
