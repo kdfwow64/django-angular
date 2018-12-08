@@ -90,7 +90,8 @@ from .control import (
     ControlCscFamily,
     ControlDomain,
     ControlFamily,
-    ControlNotification,
+    ControlResponse,
+    ControlFunction,
     DependencyEffort,
 )
 from .entry import (

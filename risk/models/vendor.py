@@ -15,21 +15,25 @@ class Vendor(DefaultFieldsCompany):
     abbrv = models.CharField(
         max_length=10, blank=True, null=True, help_text=('Vendor abbreviated name'),)  # Abbrevation name
     about = models.TextField(
-        blank=True, help_text=('Information about the vendor from their website'),)  # Information about the vendor
-    notes_mgmt = models.TextField(
-        blank=True, help_text=('Management notes regarding the vendor'),)  # Management notes about the vendor
+        blank=True, null=True, help_text=('Information about the vendor from their website'),)  # Information about the vendor
     phone_info = models.CharField(
-        max_length=15, blank=True, help_text=('Vendor information phone number'),)  # General information for the vendor phone number
+        max_length=15, blank=True, null=True, help_text=('Vendor information phone number'),)  # General information for the vendor phone number
     phone_support = models.CharField(
-        max_length=15, blank=True, help_text=('Vendor support phone number'),)  # Support phone number for the vendor
-    url_main = models.URLField(max_length=200, blank=True, help_text=(
+        max_length=15, blank=True, null=True, help_text=('Vendor support phone number'),)  # Support phone number for the vendor
+    email_info = models.EmailField(
+        max_length=255, blank=True, null=True, help_text=('Addtional information email address for the vendor.'),)  # Email address should be unique for the vendor but sometimes they may duplicate due to aquistions.
+    email_product = models.EmailField(
+        max_length=255, blank=True, null=True, help_text=('For internal use to get information from the vendor regarding products and services'),)  # Email address should be unique for the vendor but sometimes they may duplicate due to aquistions.
+    url_main = models.URLField(max_length=200, blank=True, null=True, help_text=(
         'Vendors main website'),)  # Vendor website
-    url_product = models.URLField(max_length=200, blank=True, help_text=(
+    url_product = models.URLField(max_length=200, blank=True, null=True, help_text=(
         'Vendors products website'),)  # Vendor website
-    url_service = models.URLField(max_length=200, blank=True, help_text=(
+    url_service = models.URLField(max_length=200, blank=True, null=True, help_text=(
         'Vendors services website'),)  # Vendor website
-    url_support = models.URLField(max_length=200, blank=True, help_text=(
+    url_support = models.URLField(max_length=200, blank=True, null=True, help_text=(
         'Vendors support website'),)  # Vendor website
+    name_aka = models.TextField(
+        blank=True, null=True,  help_text=('Other names the company may have been associated'),)  # This field will be used for searching out a company.  Company's name may change for various reasons.
     under_review = models.BooleanField(
         default=False, help_text=('Designates whether the vendor is an organization'),)  # Vendors set to True are under review and should not be included in selections.
     review_reason = models.TextField(
@@ -40,6 +44,8 @@ class Vendor(DefaultFieldsCompany):
         default=0, blank=False, help_text=('Ranking of the vendor by the system'),)  # Used to rank vendors base on system logic.  This may be automated through the application.
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Keywords to find the vendor.  This should be updated based on control types
+    stock_symbol = models.CharField(
+        max_length=15, blank=True, null=True, help_text=('Vendor stock symbol'),)  # Used to trend vendor activity
     evaluation_days = models.IntegerField(blank=True, null=True,
                                           help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value that the vendor belongs too based on the company that owns the vendor.
     evaluation_flg = models.BooleanField(
@@ -50,7 +56,7 @@ class Vendor(DefaultFieldsCompany):
     transitioned_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='transitioned_vendor', help_text=(
         'User id of the user that transitioned the vendor to CORE'),)  # User that transitioned the vendor to CORE.
     initial_account = models.ForeignKey('Account', default=1, on_delete=models.PROTECT, related_name='inital_account_vendor', help_text=(
-        'Acocunt that initally created the vendor'),)  # If an Account creates a vendor that is transitioned to CORE, this will keep track of the original account creator.
+        'Account that initally created the vendor'),)  # If an Account creates a vendor that is transitioned to CORE, this will keep track of the original account creator.
     parent = models.ForeignKey('Vendor', blank=True, null=True, on_delete=models.PROTECT, related_name='parent_vendor', help_text=(
         'Parent company of the vendor'),)  # The parent company of the vendor.  If none, then it is the parent
     # Vendors are defined at the Company level need to be approved by the

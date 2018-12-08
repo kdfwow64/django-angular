@@ -86,7 +86,7 @@ class DefaultFieldsCompany(DefaultFields):
     description = models.TextField(blank=True, null=True, help_text=(
         'Description of the field'),)  # Description of the field.
     bkof_notes = models.TextField(
-        blank=True, help_text=('Backoffice notes.  DO NOT SHARE'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
+        blank=True, null=True, help_text=('Backoffice notes.  DO NOT SHARE'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
     # Foreign Key and Relationships
     company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, blank=False, related_name='%(app_label)s_%(class)s_related_company', help_text=(
         'Company id for the company that manages the field'),)  # Company that defined the field.

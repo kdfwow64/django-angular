@@ -3,17 +3,25 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
 # , ControlCategoryCategory
-from risk.models.control import Control, ControlCategory, ControlCategoryNotification, ControlCategoryControl, ControlCategoryCIATriad
+from risk.models.control import Control, ControlCategory, ControlCategoryResponse, ControlCategoryFunction, ControlCategoryControl, ControlCategoryCIATriad
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
 
 
-class ControlCategoryNotificationInline(admin.TabularInline):
+class ControlCategoryResponseInline(admin.TabularInline):
 
-    model = ControlCategoryNotification
+    model = ControlCategoryResponse
     extra = 1
-    fields = ('id_controlnotification',
+    fields = ('id_controlresponse',
+              'is_active', 'is_deleted', 'created_by')
+
+
+class ControlCategoryFunctionInline(admin.TabularInline):
+
+    model = ControlCategoryFunction
+    extra = 1
+    fields = ('id_controlfunction',
               'is_active', 'is_deleted', 'created_by')
 
 
@@ -45,7 +53,7 @@ class ControlAdminForm(forms.ModelForm):
 
     class Meta:
         model = Control
-        fields = ('name', 'model_number', 'abbrv', 'description', 'vendor')
+        fields = ('name', 'url', 'abbrv', 'name_aka', 'description', 'vendor')
 
     def __init__(self, *args, **kwargs):
         super(ControlAdminForm, self).__init__(*args, **kwargs)
@@ -86,7 +94,7 @@ class ControlAdmin(admin.ModelAdmin):
     autocomplete_fields = ['vendor', ]
     fieldsets = (
         ('Control Specific', {
-         'fields': ('name', 'model_number', 'abbrv', 'description', 'vendor', 'control_category')}),
+         'fields': ('name', 'abbrv', 'description', 'name_aka', 'url', 'vendor', 'control_category')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
@@ -96,14 +104,14 @@ class ControlAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'model_number',
         'description',
         'abbrv',
-        'is_active',
+        'name_aka',
+        'url',
         'vendor',
         'company',
     )
-    search_fields = ('name', 'model_number', 'abbrv', 'description')
+    search_fields = ('name', 'abbrv', 'description')
     list_filter = ('name', 'vendor', 'company')
 
 
@@ -146,14 +154,26 @@ class ControlFamilyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class ControlNotificationAdmin(admin.ModelAdmin):
+class ControlResponseAdmin(admin.ModelAdmin):
 
     list_select_related = []
     list_display = (
         'id',
         'name',
         'description',
-        'sort_order',
+        'example1',
+    )
+    search_fields = ('name',)
+
+
+class ControlFunctionAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'name',
+        'description',
+        'example1',
     )
     search_fields = ('name',)
 
@@ -171,7 +191,7 @@ class ControlCategoryAdmin(admin.ModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': ('company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
     )
-    inlines = (ControlCategoryNotificationInline,
+    inlines = (ControlCategoryResponseInline, ControlCategoryResponseInline,
                ControlCategoryCIATriadInline)
     list_select_related = []
     list_display = (

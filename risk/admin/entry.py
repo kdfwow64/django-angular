@@ -357,7 +357,7 @@ class EntryUrlAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
     def show_entry_url(self, obj):
-        return format_html("<a href='{url}'>{name}</a>", url=obj.url, name=obj.name)
+        return format_html("<a target=\"_blank\" href='{url}'>{name}</a>", url=obj.url, name=obj.name)
 
     show_entry_url.short_description = "Entry URL"
 
