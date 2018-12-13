@@ -1,4 +1,5 @@
 from django.contrib import admin
+from risk.models.utility import linkify
 from risk.models.company import (
     CompanyMember,
     CompanyProfile,
@@ -470,7 +471,7 @@ class CompanyContactAdmin(admin.ModelAdmin):
     autocomplete_fields = ['title', ]
     fieldsets = (
         ('Company Contact Specific', {
-         'fields': ('company', ('first_name', 'last_name',), 'email', 'title', ('office_phone', 'office_phone_ext',), 'cell_phone',)}),
+         'fields': ('id', 'company', ('first_name', 'last_name',), 'email', 'title', ('office_phone', 'office_phone_ext',), 'cell_phone',)}),
         ('General Info', {
          'classes': ('grp-collapse grp-closed',),
          'fields': ('contact_type', 'description', 'main_poc', 'decision_maker', 'notes',)}),

@@ -1,5 +1,6 @@
 """Auth Admin."""
 from django.contrib import admin
+from risk.models.utility import linkify
 from risk.models.auth import AccountMembership, DefaultRoleGrant, UserProfile
 from risk.models.company import Company
 

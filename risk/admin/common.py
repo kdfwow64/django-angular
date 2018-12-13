@@ -1,4 +1,5 @@
 from django.contrib import admin
+from risk.models.utility import linkify
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -116,11 +117,3 @@ class JobTitleAdmin(admin.ModelAdmin):
                     'is_active', 'is_deleted', 'keywords')
     search_fields = ['name', 'keywords', ]
     ordering = ['name']
-
-
-class DITypeAdmin(admin.ModelAdmin):
-
-    list_select_related = []
-    list_display = ('id', 'name', 'description', 'sort_order')
-    search_fields = ('name',)
-    ordering = ['sort_order']

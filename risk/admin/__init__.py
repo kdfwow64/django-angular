@@ -7,9 +7,9 @@ from ..models.auth import User, Account, AccountType, UserAccess, UserRole, User
 from ..models.company import Company, CompanyMember, CompanyMemberRole, CompanyMemberRoleType, CompanyAsset, CompanyObjective, CompanyControl, CompanyControlMeasure, CompanyControlMeasurementResult, CompanyControlCapex, CompanyControlCost, CompanyControlCostType, CompanyAssetType, CompanyContact, ContactType, CompanyFinding, CompanyTeam, CompanyLocation, CompanyPlaybook, CompanyPlaybookMember, CompanyPlaybookMemberResponsibility, CompanyPlaybookAction
 from ..models.actor import ActorIntent, ActorMotive, Actor
 from ..models.audit import Notification, NotificationGroup, AuditChange, Snapshot
-from ..models.common import Calendar, CurrencyType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus, DIType, JobTitle
+from ..models.common import Calendar, CurrencyType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus, JobTitle
 from ..models.compliance import Compliance, ComplianceType, ComplianceRequirement, ComplianceVersion, KillChain, Naics, PyramidofPain
-from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomain, ControlFamily, ControlResponse, ControlFunction, ControlCategory, ControlCategoryType, DependencyEffort
+from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomain, ControlFamily, ControlResponse, ControlFunction, ControlFeature, ControlCategory, ControlCategoryType, DependencyEffort, OnusMethod, DeliveryMethod, BillingMethod
 from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponseSubmission, EntryRiskType, RiskType, Response, ResponseVote, EntryUrl, MitigationAdequacy
 from ..models.feedback import Feedback, FeedbackStatus, FeedbackType, FeedbackQuestion, FeedbackAnswer, FeedbackCorrespondence
 from ..models.meeting import Meeting, MeetingTopicComment, MeetingTopicAction, MeetingTopic, MeetingType
@@ -24,9 +24,9 @@ from .auth import UserAdmin, AccountAdmin, AccountMembership, AccountTypeAdmin, 
 from .company import CompanyAdmin, CompanyMemberAdmin, CompanyMemberRoleAdmin, CompanyMemberRoleTypeAdmin, CompanyAssetAdmin, CompanyObjectiveAdmin, CompanyControlAdmin, CompanyControlMeasureAdmin, CompanyControlMeasurementResultAdmin, CompanyControlCapexAdmin, CompanyControlDependencyAdmin, CompanyControlCostAdmin, CompanyControlCostTypeAdmin, CompanyContactAdmin, ContactTypeAdmin, CompanyTeamAdmin, CompanyAssetTypeAdmin, CompanyControlAdmin, CompanyLocationAdmin, CompanyFindingAdmin, CompanyPlaybookAdmin, CompanyPlaybookActionAdmin
 from .actor import ActorIntentAdmin, ActorMotiveAdmin, ActorAdmin
 from .audit import NotificationAdmin, NotificationGroupAdmin, AuditChangeAdmin, SnapshotAdmin
-from .common import CalendarAdmin, CurrencyTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin,  DITypeAdmin, JobTitleAdmin
+from .common import CalendarAdmin, CurrencyTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin, JobTitleAdmin
 from .compliance import ComplianceAdmin, ComplianceTypeAdmin, ComplianceVersionAdmin, ComplianceRequirementAdmin, KillChainAdmin, NaicsAdmin, PyramidofPainAdmin
-from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, ControlDomainAdmin, ControlFamilyAdmin, ControlResponseAdmin, ControlFunctionAdmin, ControlCategoryAdmin, ControlCategoryTypeAdmin, DependencyEffortAdmin
+from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, ControlDomainAdmin, ControlFamilyAdmin, ControlResponseAdmin, ControlFunctionAdmin, ControlFeatureAdmin, ControlCategoryAdmin, ControlCategoryTypeAdmin, DependencyEffortAdmin, OnusMethodAdmin, DeliveryMethodAdmin, BillingMethodAdmin
 from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseSubmissionAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
 from .feedback import FeedbackAdmin, FeedbackStatusAdmin, FeedbackTypeAdmin, FeedbackQuestionAdmin, FeedbackAnswerAdmin, FeedbackCorrespondenceAdmin
 from .meeting import MeetingAdmin, MeetingTopicCommentAdmin, MeetingTopicActionAdmin, MeetingTopicAdmin, MeetingTypeAdmin
@@ -61,7 +61,6 @@ admin.site.register(IntegerType, IntegerTypeAdmin)
 admin.site.register(Cadence, CadenceAdmin)
 admin.site.register(TimeUnit, TimeUnitAdmin)
 admin.site.register(TaskStatus, TaskStatusAdmin)
-admin.site.register(DIType, DITypeAdmin)
 admin.site.register(JobTitle, JobTitleAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(CompanyMember, CompanyMemberAdmin)
@@ -98,9 +97,13 @@ admin.site.register(ControlDomain, ControlDomainAdmin)
 admin.site.register(ControlFamily, ControlFamilyAdmin)
 admin.site.register(ControlResponse, ControlResponseAdmin)
 admin.site.register(ControlFunction, ControlFunctionAdmin)
+admin.site.register(ControlFeature, ControlFeatureAdmin)
 admin.site.register(ControlCategory, ControlCategoryAdmin)
 admin.site.register(ControlCategoryType, ControlCategoryTypeAdmin)
 admin.site.register(DependencyEffort, DependencyEffortAdmin)
+admin.site.register(OnusMethod, OnusMethodAdmin)
+admin.site.register(DeliveryMethod, DeliveryMethodAdmin)
+admin.site.register(BillingMethod, BillingMethodAdmin)
 admin.site.register(Register, RegisterAdmin)
 admin.site.register(Entry, EntryAdmin)
 admin.site.register(EntryActor, EntryActorAdmin)

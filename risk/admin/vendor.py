@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from risk.models.utility import linkify
 from risk.models.vendor import VendorTypeMap, VendorCategoryMap, Vendor
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
@@ -26,7 +27,7 @@ class VendorAdmin(admin.ModelAdmin):
     inlines = (VendorTypeMapInline, VendorCategoryMapInline,)
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
                        'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
-                       )
+                       'id',)
     fieldsets = (
         ('Vendor Info', {
          'fields': ('name', 'abbrv', 'about', 'description', 'url_main', 'phone_info', 'email_info', 'parent')}),
@@ -34,11 +35,10 @@ class VendorAdmin(admin.ModelAdmin):
          'fields': (('url_products', 'url_contact', 'url_about_us',), 'name_aka', 'keywords', 'stock_symbol', 'initial_account')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('company', 'email_product', ('under_review', 'review_reason',), 'rank', ('is_active', 'is_deleted',), ('evaluation_days', 'evaluation_flg',), ('url_crawler_days', 'url_crawler_flg', 'date_url_crawler',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deactivated', 'deactivated_by',), ('date_transitioned', 'transitioned_by',))}),
+            'fields': ('id', 'company', 'email_product', ('under_review', 'review_reason',), 'rank', ('is_active', 'is_deleted',), ('evaluation_days', 'evaluation_flg',), ('url_crawler_days', 'url_crawler_flg', 'date_url_crawler',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deactivated', 'deactivated_by',), ('date_transitioned', 'transitioned_by',))}),
     )
     list_select_related = []
     list_display = (
-        'id',
         'name',
         'show_vendor_url',
         'about',
@@ -46,6 +46,7 @@ class VendorAdmin(admin.ModelAdmin):
         'email_info',
         'name_aka',
         'keywords',
+        # linkify('parent'),
         'parent',
         'under_review',
     )

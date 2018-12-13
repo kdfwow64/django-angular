@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from risk.models.utility import linkify
 from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlCIATriad, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType, Entry, EntryUrl
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,

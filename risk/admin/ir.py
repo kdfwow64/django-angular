@@ -1,4 +1,5 @@
 from django.contrib import admin
+from risk.models.utility import linkify
 # from risk.models.response import
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import linebreaks
+from risk.models.utility import linkify
 from risk.models import Compliance
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
