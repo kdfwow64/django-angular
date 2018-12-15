@@ -431,7 +431,7 @@ class CompanyControlMeasurementResult(DefaultFields):
 
 
 class CompanyControlCapex(DefaultFields):
-    """Company Control Capital Expenditures.  This will be leveraged to determine all the captial cost specific to the company contorl.  This will be use to measure the annual cost of ownership to support the control"""
+    """Company Control Capital Expenditures.  This will be leveraged to determine all the captial cost specific to the company control.  This will be use to measure the annual cost of ownership to support the control"""
 
     description = models.TextField(blank=True, null=True, help_text=(
         'Description of the field'),)  # Description of the field.

@@ -3,9 +3,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
-import re
-from django.urls import reverse
-from django.utils.html import format_html
 
 
 class Selector(models.Model):
@@ -78,7 +75,9 @@ class DefaultFields(models.Model):
         ''' On save, update timestamps '''
         if not self.id:
             self.date_created = timezone.now()
+            #self.created_by = request.user
         self.date_modified = timezone.now()
+        #self.modified_by = request.user
         return super(DefaultFields, self).save(*args, **kwargs)
 
 

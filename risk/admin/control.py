@@ -79,7 +79,7 @@ class ControlAdminForm(forms.ModelForm):
     class Meta:
         model = Control
         fields = ('name', 'url', 'abbrv', 'name_aka',
-                  'description', 'vendor', 'id')
+                  'description', 'vendor')
 
     def __init__(self, *args, **kwargs):
         super(ControlAdminForm, self).__init__(*args, **kwargs)

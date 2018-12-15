@@ -141,7 +141,7 @@ class ControlCategoryResponse(DefaultFields):
 
 
 class ControlFunction(DefaultFieldsCategory):
-    """Control Funtion.  This will determine what the contorl type does.  What function does in play in mitigating the risk for the business """
+    """Control Funtion.  This will determine what the control type does.  What function does in play in mitigating the risk for the business """
 
     def __str__(self):
         """String."""
