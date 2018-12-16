@@ -232,7 +232,7 @@ class ControlCategoryAdmin(admin.ModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': ('id', 'company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
     )
-    inlines = (ControlCategoryResponseInline, ControlCategoryResponseInline,
+    inlines = (ControlCategoryResponseInline,
                ControlCategoryCIATriadInline, ControlCategoryFeatureInline, ControlCategoryFunctionInline
                )
     list_select_related = []
