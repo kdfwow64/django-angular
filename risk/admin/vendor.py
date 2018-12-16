@@ -46,8 +46,8 @@ class VendorAdmin(admin.ModelAdmin):
         'email_info',
         'name_aka',
         'keywords',
-        # linkify('parent'),
-        'parent',
+        linkify(field_name='parent'),
+        # 'parent',
         'under_review',
     )
     list_filter = (

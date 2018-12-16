@@ -180,10 +180,14 @@ def linkify(field_name):
     def _linkify(obj):
         app_label = obj._meta.app_label
         linked_obj = getattr(obj, field_name)
-        model_name = linked_obj._meta.model_name
-        view_name = f"admin:{app_label}_{model_name}_change"
-        link_url = reverse(view_name, args=[linked_obj.id])
-        return format_html('<a target=\"_blank\" href="{}">{}</a>', link_url, linked_obj)
+        if linked_obj:
+            model_name = linked_obj._meta.model_name
+            view_name = f"admin:{app_label}_{model_name}_change"
+            link_url = reverse(view_name, args=[linked_obj.id])
+            return format_html('<a target=\"_blank\" href="{}">{}</a>', link_url, linked_obj)
+        else:
+            return ""
+
 
     _linkify.short_description = field_name  # Sets column name
     return _linkify
