@@ -86,8 +86,8 @@ class ControlAdminForm(forms.ModelForm):
         if self.instance.pk:
             self.fields[
                 'control_category'].initial = self.instance.categories.all()
-            self.fields['control_category'].queryset = self.fields[
-                'control_category'].queryset.exclude(pk=self.instance.pk)
+            # self.fields['control_category'].queryset = self.fields[
+            #     'control_category'].queryset.exclude(pk=self.instance.pk)
 
     def save(self, commit=True):
         control = super(ControlAdminForm, self).save(commit=False)
@@ -96,7 +96,7 @@ class ControlAdminForm(forms.ModelForm):
 
         if control.pk:
             control_category = self.cleaned_data['control_category']
-            print(control_category)
+            # print(control_category)
             for category in control.categories.all():
                 if category in control_category.all():  # Already in category, no need to handle
                     control_category = control_category.exclude(pk=category.pk)
