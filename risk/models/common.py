@@ -216,3 +216,27 @@ class JobTitle(DefaultFieldsCategory):
     def __str__(self):
         """String."""
         return self.name
+
+
+class Appetite(DefaultFieldsCategory):
+    """
+    Appetite.
+
+    How is the company defining its appetite based on the amount of risk it assumes
+    """
+
+    measure = models.CharField(
+        max_length=45, blank=False, help_text=('Measurement of the appetite'),)  # The measurement of appetite occurences within a year
+    minimum = models.FloatField(default=0, blank=True, help_text=(
+        'The lowest percentage value for the category.'),)  # Minimum value of the appetite
+    maximum = models.FloatField(default=0, blank=True, help_text=(
+        'The highest percentage value for the category.  If user selects 100< they will need to put in number of occurrences per year.'),)  # Maximum value of the appetite
+
+    class Meta:
+        """Meta class."""
+        ordering = ['sort_order', ]
+        verbose_name_plural = ("Risk Appetite")
+
+    def __str__(self):
+        """String."""
+        return self.name

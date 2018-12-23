@@ -117,3 +117,18 @@ class JobTitleAdmin(admin.ModelAdmin):
                     'is_active', 'is_deleted', 'keywords')
     search_fields = ['name', 'keywords', ]
     ordering = ['name']
+
+
+class AppetiteAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'name',
+        'description',
+        'measure',
+        'sort_order',
+        'minimum',
+        'maximum',
+    )
+    search_fields = ('name',)

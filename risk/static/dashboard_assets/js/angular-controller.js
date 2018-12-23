@@ -537,25 +537,28 @@ colorAdminApp.controller('dashboardV2Controller', function($scope, $rootScope, $
         Morris.Line({
             element: 'visitors-line-chart',
             data: [
-                {x: '2014-02-01', y: 60, z: 30},
-                {x: '2014-03-01', y: 70, z: 40},
-                {x: '2014-04-01', y: 40, z: 10},
-                {x: '2014-05-01', y: 100, z: 70},
-                {x: '2014-06-01', y: 40, z: 10},
-                {x: '2014-07-01', y: 80, z: 50},
-                {x: '2014-08-01', y: 70, z: 40}
+                {x: '2018-02-01', y: 33.7, z: 28.5, w: 34.2},
+                {x: '2018-03-01', y: 28.5, z: 28.5, w: 34.2},
+                {x: '2018-04-01', y: 28.5, z: 28.5, w: 34.2},
+                {x: '2018-05-01', y: 37.8, z: 28.5, w: 34.2},
+                {x: '2018-06-01', y: 35.9, z: 28.5, w: 34.2},
+                {x: '2018-07-01', y: 32.6, z: 28.5, w: 34.2},
+                {x: '2018-08-01', y: 34.2, z: 28.5, w: 34.2}
             ],
             xkey: 'x',
-            ykeys: ['y', 'z'],
+            ykeys: ['y', 'z', 'w'],
             xLabelFormat: function(x) {
                 x = month[x.getMonth()];
                 return x.toString();
             },
-            labels: ['Page Views', 'Unique Visitors'],
-            lineColors: [green, blue],
-            pointFillColors: [greenLight, blueLight],
+            yLabelFormat: function(y) {
+                return y = Math.round(y)+'%';
+            },
+            labels: ['Profile', 'Appetite', 'Tolerence'],
+            lineColors: [green, blue, blue],
+            pointFillColors: [greenLight, blueLight, blueLight],
             lineWidth: '2px',
-            pointStrokeColors: [blackTransparent, blackTransparent],
+            pointStrokeColors: [blackTransparent, blackTransparent, blackTransparent],
             resize: true,
             gridTextFamily: 'Open Sans',
             gridTextColor: whiteTransparent,
@@ -563,6 +566,7 @@ colorAdminApp.controller('dashboardV2Controller', function($scope, $rootScope, $
             gridTextSize: '11px',
             gridLineColor: 'rgba(0,0,0,0.5)',
             hideHover: 'auto',
+            ymin:'25',
         });
 
         /* Donut Chart
@@ -572,8 +576,8 @@ colorAdminApp.controller('dashboardV2Controller', function($scope, $rootScope, $
         Morris.Donut({
             element: 'visitors-donut-chart',
             data: [
-                {label: "New Visitors", value: 900},
-                {label: "Return Visitors", value: 1200}
+                {label: "Controls", value: 900},
+                {label: "Assets", value: 1200}
             ],
             colors: [green, blue],
             labelFamily: 'Open Sans',

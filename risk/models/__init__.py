@@ -43,6 +43,7 @@ from .common import (
     TimeUnit,
     TaskStatus,
     JobTitle,
+    Appetite,
 )
 
 from .company import (

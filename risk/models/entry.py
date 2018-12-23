@@ -451,8 +451,14 @@ class EntryEvaluation(DefaultFields):
 
     update = models.TextField(
         blank=True, help_text=('Notes regarding the evaluation'),)  # Updates to the evaluation if any were created.
+    request_note = models.TextField(
+        blank=True, help_text=('Notes regarding the logic of why the evaluation was requested'),)  # When the evaluation_flg is set, the reason should be defined.
     date_evaluated = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the risk entry was evaluated'),)  # Date the user completed submitted the evaluation
+    date_approved = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the final approval of the entry'),)  # Date the approver approved the evaluation.
+    date_requested = models.DateTimeField(
+        null=True, blank=True, help_text=('Timestamp the reqestor requested the evaluation'),)  # Date the requestor requested the evaluation.
     # Foreign Key and Relationships
     entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entry_evaluation', help_text=(
         'The entry the associated with the evaluation'),)  # Evaluation entry
@@ -462,6 +468,8 @@ class EntryEvaluation(DefaultFields):
         'The user that performed the evaluation'),)  # User that completed the evaluation.
     approver = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='entryevaluation_approver', help_text=(
         'The user that performed the evaluation'),)  # User that completed the evaluation.
+    requestor = models.ForeignKey('User', on_delete=models.CASCADE, null=True, related_name='entryevaluation_requestor', help_text=(
+        'The user that requested the evaluation'),)  # User that completed the evaluation.
 
     def __str__(self):
         """String."""
