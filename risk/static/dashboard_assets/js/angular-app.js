@@ -621,7 +621,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
         .state('app.dashboard.v2', {
             url: '/v2',
             templateUrl: 'views/index_v2.html',
-            data: { pageTitle: 'Dashboard v2' },
+            data: { pageTitle: 'Risk Log Book' },
             resolve: {
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
