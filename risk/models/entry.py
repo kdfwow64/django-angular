@@ -118,7 +118,7 @@ class Entry(DefaultFields):
 
     @property
     def severity(self):
-        """Severity calculated with formula (24 ((entryid)-1)) /(maxrevenueloss)."""
+        """Severity calculated with test formula (24 ((entryid)-1)) /(maxrevenueloss)."""
         try:
             severity = (24 * (self.id - 1) /
                         self.register.company.annual_revenue)

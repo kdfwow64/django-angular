@@ -1,6 +1,7 @@
 from django.contrib import admin
 from risk.models.utility import linkify
 from risk.models.company import (
+    CompanyContact,
     CompanyMember,
     CompanyProfile,
     CompanyMemberGrant,
@@ -16,7 +17,8 @@ from risk.models.company import (
     CompanyControlVendorProcess,
     CompanyControlTeamProcess,
     CompanyObjectiveRiskType,
-    CompanyPlaybookMember
+    CompanyPlaybookMember,
+    Company
 )
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
@@ -113,6 +115,7 @@ class CompanyTeamMemberInline(admin.TabularInline):
 
     model = CompanyTeamMember
     extra = 1
+    fields = ('id_companycontact', 'is_active', 'is_deleted', 'created_by')
 
 
 class CompanyControlFindingInline(admin.TabularInline):
@@ -159,6 +162,8 @@ class CompanyAdmin(admin.ModelAdmin):
         'id',
         'name',
         'annual_revenue',
+        'get_company_max_loss',
+        'monetary_value_toggle',
         'naics',
         'account',
         'is_active',
@@ -310,12 +315,10 @@ class CompanyControlAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
                        'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
                        )
-
+    autocomplete_fields = ['control', ]
     fieldsets = (
         ('Company Control Specific', {
-         'fields': (('control', 'version',), 'centeralized',)}),
-        ('General Info', {
-         'fields': ('name', 'description', 'abbrv', 'company',)}),
+         'fields': (('control', 'version',), 'name', 'abbrv', 'description', 'company',)}),
         ('Cost Detail', {'fields': ('budgeted', 'estimated_opex', )}),
         ('Advanced options', {
             'classes': ('grp-collapse grp-closed',),
@@ -330,16 +333,18 @@ class CompanyControlAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
+        'abbrv',
         'description',
         'is_active',
-        'control',
-        'inline_after',
-        'company',
+        linkify(field_name='control'),
+        linkify(field_name='inline_after'),
+        linkify(field_name='company'),
     )
     list_filter = (
         'name',
+        'abbrv',
         'description',
-        'control',
+        ('control', admin.RelatedOnlyFieldListFilter),
         'company',
     )
 
@@ -465,16 +470,16 @@ class CompanyContactAdmin(admin.ModelAdmin):
 
     # save_as = True
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by', 'id',
                        )
     radio_fields = {'contact_type': admin.HORIZONTAL}
     autocomplete_fields = ['title', ]
     fieldsets = (
         ('Company Contact Specific', {
-         'fields': ('id', 'company', ('first_name', 'last_name',), 'email', 'title', ('office_phone', 'office_phone_ext',), 'cell_phone',)}),
+         'fields': ('company', ('first_name', 'last_name',), 'email', 'title', ('office_phone', 'office_phone_ext',), 'cell_phone',)}),
         ('General Info', {
          'classes': ('grp-collapse grp-closed',),
-         'fields': ('contact_type', 'description', 'main_poc', 'decision_maker', 'notes',)}),
+         'fields': ('contact_type', 'description', 'main_poc', 'decision_maker', 'practitioner', 'notes',)}),
         ('Cost Detail', {
          'classes': ('grp-collapse grp-closed',),
          'fields': ('cost_base_salary', 'cost_employee_tax', 'cost_employee_benefits', 'cost_equipment', 'cost_space', 'cost_travel', 'cost_training',),
@@ -485,32 +490,32 @@ class CompanyContactAdmin(admin.ModelAdmin):
         }),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': (('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': (('id', 'is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
     )
     list_select_related = []
     list_display = (
         'get_full_name',
-        'title',
+        linkify(field_name='title'),
         'main_poc',
         'decision_maker',
         'description',
         'email',
-        'company',
+        linkify(field_name='company'),
         'contact_type',
         'vendor',
     )
     list_filter = (
         'main_poc',
         'decision_maker',
-        'last_name',
         'is_active',
+        'first_name',
         'company',
         'contact_type',
         'vendor',
     )
     search_fields = ('first_name', 'last_name', 'email',
                      'description',)
-    ordering = ('last_name',)
+    ordering = ('company', 'contact_type', 'last_name',)
 
 
 class ContactTypeAdmin(admin.ModelAdmin):

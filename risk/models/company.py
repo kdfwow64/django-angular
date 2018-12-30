@@ -26,8 +26,8 @@ class Company(DefaultFields):
     # If False, use Fixed Loss for calculations.  If True, use PAR loss for
     # calculations.
     monetary_value_toggle = models.CharField(choices=Selector.LOSS, default='F', max_length=1, help_text=(
-        'Toggle to determine if company max loss is measured by fixed=False or par =True monetary value'),)
-    annual_revenue = models.DecimalField(blank=True, default=0, max_digits=30, decimal_places=2, help_text=(
+        'Toggle to determine if company max loss is measured by fixed=False or par=True monetary value'),)
+    annual_revenue = models.DecimalField(blank=True, default=0, max_digits=30, decimal_places=2,  help_text=(
         'Annual revenue of the company. Requred if the toggle is set to par_max_loss'),)  # Annual revenue of the company.  Carried to 2 decimal places in case this is written via API from other system.
     weight_frequency = models.FloatField(default=1, help_text=(
         'Company specific weighted value for frequency'),)  # In special cases based on the type of business.  The frequency weight may need to be adjusted.
@@ -107,12 +107,15 @@ class Company(DefaultFields):
 
     def get_company_max_loss(self):
         """Get the company's max loss value."""
-        if self.exposure_factor_toggle == 'P':
-            # The contributor has chosen a percentage of the annual revenue
-            return (self.annual_revenue * self.par_max_loss)
-        elif self.monetary_value_togglee == 'F':
-                # The contributor has chosen the a fixed monetary amount
-            return (self.fixed_max_loss)
+        if self.monetary_value_toggle:
+            if self.monetary_value_toggle == 'P':
+                # The contributor has chosen a percentage of the annual revenue
+                return round(float(self.annual_revenue) * self.par_max_loss, 2)
+            elif self.monetary_value_toggle == 'F':
+                    # The contributor has chosen the a fixed monetary amount
+                return self.fixed_max_loss
+        else:
+            return 0
 
 
 class CompanyProfile(models.Model):
@@ -330,8 +333,6 @@ class CompanyControl(DefaultFieldsCompany):
         'Annual cost for the control. subscription, licensing, etc. (-dependencies)'),)  # Normally 18% of capital expendure if applicable.  Control costs are captured in the CompanyControlCost table, this field is used for future projections.  Capex is handled via the CompanyControlCapex model.
     date_maint = models.DateField(null=True, blank=True, help_text=(
         'Annual maintenance date'),)  # Used to determine annual date that maintenance is completed for the control.
-    centeralized = models.BooleanField(default=True, help_text=(
-        'Centralized or decentralized'),)  # If True, the control is a centralized control.  If False, the control is decentralized.
     budgeted = models.BooleanField(default=True, help_text=(
         'Annually budgeted'),)  # Not in use
     recovery_multiplier = models.FloatField(blank=True, null=True, help_text=(
@@ -470,7 +471,7 @@ class CompanyControlCapex(DefaultFields):
 
 
 class CompanyControlContactCost(DefaultFields):
-    """Company Control Dependency."""
+    """Company Control Dependency.  Allocated annual staff cost for the control"""
 
     id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='companycontactcost_companycontrol', help_text=(
         'The company contact the company control is dependent to function effectively'),)
@@ -492,7 +493,7 @@ class CompanyControlContactCost(DefaultFields):
 
 
 class CompanyControlVendorCost(DefaultFields):
-    """Company Control Dependency."""
+    """Company Control Vendor Cost.  Allocated annual vendor costs for the control"""
 
     id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True, related_name='vendorcost_companycontrol', help_text=(
         'The company control the dependency is associated'),)
@@ -514,7 +515,7 @@ class CompanyControlVendorCost(DefaultFields):
 
 
 class CompanyControlContactProcess(DefaultFields):
-    """Company Control Dependency."""
+    """Company Control Dependency. Procedures required from an individual for the control to function effectively"""
 
     id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True,
                                           related_name='contactprocess_companycontrol', help_text=('The company control the dependency is associated'),)
@@ -536,7 +537,7 @@ class CompanyControlContactProcess(DefaultFields):
 
 
 class CompanyControlVendorProcess(DefaultFields):
-    """Company Control Dependency."""
+    """Company Control Dependency.  Required procedures for the vendor of the control"""
 
     id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True,
                                           related_name='vendorprocess_companycontrol', help_text=('The company control the dependency is associated'),)
@@ -558,7 +559,7 @@ class CompanyControlVendorProcess(DefaultFields):
 
 
 class CompanyControlTeamProcess(DefaultFields):
-    """Company Control Dependency."""
+    """Company Control Dependency.  Required procedures for a company team for the control to function effectively"""
 
     id_companycontrol = models.ForeignKey('CompanyControl', on_delete=models.PROTECT, null=True,
                                           related_name='teamprocess_companycontrol', help_text=('The company control the dependency is associated'),)
@@ -683,6 +684,8 @@ class CompanyContact(DefaultFields):
         default=False, help_text=('Is the contact a main point of contact?'),)  # Primary point of contact.  Not as relevant for employee type contacts.
     decision_maker = models.BooleanField(
         default=False, help_text=('Is the contact a decsion maker?'),)  # The contact is a decision maker for risk related items.
+    practitioner = models.BooleanField(
+        default=False, help_text=('Does the contact use the application?'),)  # The contact uses the application to manage risk activty.
     description = models.CharField(
         max_length=255, blank=True, null=True, help_text=('Description'),)  # Description of the contact
     email = models.EmailField(
@@ -712,7 +715,7 @@ class CompanyContact(DefaultFields):
     # FICA 6.2%, Medicare 1.45%, Workmans Comp .03%-7.5%, etc  Should be
     # multiplied by cost_base_salary. Avg. 8%
     cost_employee_tax = models.FloatField(
-        blank=True, null=True, help_text=('Corporate annual tax costs if employee'),)
+        blank=True, null=True, help_text=('Percent of annual salary the company pays in tax costs for employee'),)
     cost_employee_benefits = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for benefits'),)  # Cost for company benefits.  IE Insurance, 401k, Dental, Vision  Avg. $5000
     cost_equipment = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
@@ -747,7 +750,7 @@ class CompanyContact(DefaultFields):
 
     def __str__(self):
         """String."""
-        return self.get_full_name()
+        return self.get_full_name_with_title()
 
     def get_contact_cost(self):
 
@@ -756,9 +759,14 @@ class CompanyContact(DefaultFields):
                 cost_training)
 
     def get_full_name(self):
-        """Get full name."""
-        return "{} {}" .format(self.first_name, self.last_name)
+        """ Get the full name """
+        return "{} {}".format(self.first_name, self.last_name)
     get_full_name.short_description = 'Name'
+
+    def get_full_name_with_title(self):
+        """Get full name with title."""
+        return "{} - {}" .format(self.full_name, self.title)
+    get_full_name_with_title.short_description = 'Name and Title'
 
 
 class ContactType(DefaultFieldsCompany):
@@ -798,17 +806,13 @@ class CompanyTeamMember(DefaultFields):
     """Company Team Members."""
 
     id_companyteam = models.ForeignKey(
-        'CompanyTeam', on_delete=models.PROTECT, related_name='companyteam', help_text=('The company that the team is related'),)  # Company team that the contact is appart.
+        'CompanyTeam', on_delete=models.PROTECT, related_name='member_companyteam', help_text=('The company that the team is related'),)  # Company team that the contact is appart.
     id_companycontact = models.ForeignKey(
-        'CompanyContact', on_delete=models.PROTECT, related_name='companyteammember', help_text=('The member of the team'),)  # Contact this is a part of the team.
+        'CompanyContact', on_delete=models.PROTECT, related_name='companyteam_member', help_text=('The member of the team'),)  # Contact this is a part of the team.
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Team Members")
-
-    def __str__(self):
-        """String."""
-        return self.member
 
 
 class CompanyLocation(DefaultFieldsCompany):

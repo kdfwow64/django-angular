@@ -188,7 +188,6 @@ def linkify(field_name):
         else:
             return ""
 
-
     _linkify.short_description = field_name  # Sets column name
     return _linkify
 

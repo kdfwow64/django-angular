@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'risk',
 ]
 
@@ -72,6 +73,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'rlb.wsgi.application'
 
+# Number formatting
+# https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-USE_THOUSAND_SEPARATOR
+# USE_THOUSAND_SEPARATOR = True
+# Caused issues with putting comma separators in years.  Ie. 2,018
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

@@ -1,4 +1,5 @@
 """Vendor, Product & related models."""
+import datetime
 from django.db import models
 from risk.models.utility import (
     Selector,
@@ -9,6 +10,14 @@ from risk.models.utility import (
 )
 
 
+def current_year():
+    return datetime.date.today().year
+
+YEAR_CHOICES = []
+for r in range(1900, (datetime.datetime.now().year + 1)):
+    YEAR_CHOICES.append((r, r))
+
+
 class Vendor(DefaultFieldsCompany):
     """Vendors for controls in place for the Company.  Most vendors will belong to Core Account and be used by all Companies, however companies can create their own vendors.  Those vendors will be under review to move to Core Account so all Companies can use them."""
 
@@ -16,6 +25,8 @@ class Vendor(DefaultFieldsCompany):
         max_length=10, blank=True, null=True, help_text=('Vendor abbreviated name'),)  # Abbrevation name
     about = models.TextField(
         blank=True, null=True, help_text=('Information about the vendor from their website'),)  # Information about the vendor
+    year_established = models.IntegerField(
+        help_text=('Year the vendor was established'), choices=YEAR_CHOICES, default='1900')  # Year the vendor was established
     phone_info = models.CharField(
         max_length=15, blank=True, null=True, help_text=('Vendor information phone number'),)  # General information for the vendor phone number
     phone_support = models.CharField(
