@@ -6,14 +6,14 @@ Website: http://www.seantheme.com/color-admin-v2.1/frontend/one-page-parallax/
 */
 
 .btn.btn-theme {
-    background: #236f9a;
-    border-color: #236f9a;
+    background: #FBB040;
+    border-color: #FBB040;
     color: #fff;
 }
 .btn.btn-theme:hover,
 .btn.btn-theme:focus {
-    background: #008a8a;
-    border-color: #008a8a;
+    background: #FFD9A8;
+    border-color: #FFD9A8;
 }
 .header.navbar .navbar-nav > li.active > a,
 .header.navbar .navbar-nav > li > a:hover,
@@ -36,22 +36,22 @@ Website: http://www.seantheme.com/color-admin-v2.1/frontend/one-page-parallax/
 .navbar-nav .dropdown-menu > li > a:focus,
 .pricing-table .price .price-number,
 a {
-    color: #236f9a;
+    color: #FBB040;
 }
 a:hover,
 a:focus {
-    color: #008a8a;
+    color: #FFD9A8;
 }
 .pricing-table .highlight h3,
 .pace-progress {
-    background: #008a8a;
+    background: #FFD9A8;
 }
 .pricing-table .highlight .price {
-    background: #236f9a;
+    background: #FBB040;
 }
 .pace .pace-activity {
-    border-top-color: #236f9a;
-    border-left-color: #236f9a;
+    border-top-color: #FBB040;
+    border-left-color: #FBB040;
 }
 .brand-logo,
 .footer .footer-brand-logo {

@@ -230,7 +230,6 @@ body.page-navbar-fixed-top-sm {
     display: block;
 }
 
-
 /* 2.3 Navbar Mobile Toggle */
 
 .navbar-toggle {
@@ -428,7 +427,7 @@ body.page-navbar-fixed-top-sm {
     left: 0;
     right: 0;
     color: #8F8E8E;
-    margin-top: -120px;
+    margin-top: -180px;
     padding: 0 15px;
     text-align: center;
 }
@@ -2909,7 +2908,7 @@ a.list-group-item.active:focus {
 }
 .theme-panel {
     position: fixed;
-    right: -180px;
+    right: -140px;
     top: 200px;
     z-index: 1020;
     box-shadow: 0 0 2px rgba(0,0,0,.4);

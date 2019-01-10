@@ -1,0 +1,53 @@
+PRIMARY ----------------
+
+-- Risktco White --
+RGB - 249,248,245
+HEX - #F9F8F5
+
+-- Risktco Dark Gray --
+RGB - 65,64,66
+HEX - #414042
+
+-- Risktco Light Gray --
+RGB - 128,130,133
+HEX - #808285
+
+-- Risktco Orange --
+RGB - 242,90,41
+HEX - #F25A29
+
+-- Risktco Dark Red --
+RGB - 191,40,36
+HEX - #BF1E2E
+
+-- Risktco Red --
+RGB - 238,28,37
+HEX - #EE1C25
+
+-- Risktco Green --
+RGB - 155,187,89
+HEX - #CA6464
+
+-- Risktco Dark Blue --
+RGB - 10,74,112
+HEX - #0A4A70
+
+-- Risktco Blue --
+RGB - 26,117,188
+HEX - #1A75BC
+
+-- Risktco Sky Blue --
+RGB - 39,170,226
+HEX - #27AAE2
+
+-- Risktco Yellow --
+RGB - 251,176,54
+HEX - #FBB040
+
+-- Risktco Light Yellow --
+RGB - 255,217,168
+HEX - #FFD9A8
+
+END PRIMARY ---------------
+
+OTHER ---------------------
