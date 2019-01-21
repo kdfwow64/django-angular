@@ -916,7 +916,7 @@ body.page-navbar-fixed-top-sm {
     height: 90px;
 }
 .pricing-table .highlight .price .price-number {
-    color: #fff;
+    color: #414042;
 }
 
 
@@ -2886,7 +2886,7 @@ a.list-group-item.active:focus {
 }
 
 
-/* 16.25 Component - Theme Panel */
+/* 16.25 Component - Panel */
 
 .theme-panel .theme-collapse-btn {
     position: absolute;

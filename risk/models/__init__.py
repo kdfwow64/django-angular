@@ -89,11 +89,13 @@ from .control import (
     Control,
     ControlCategory,
     ControlCategoryType,
+    ControlCategoryKPO,
+    ControlCategorySLA,
     ControlCsc,
     ControlCscFamily,
     ControlDomain,
     ControlFamily,
-    ControlResponse,
+    ControlAlertMethod,
     ControlFunction,
     ControlFeature,
     DependencyEffort,
@@ -165,6 +167,7 @@ from .utility import (
     DefaultFieldsEntry,
     DefaultFieldsCompany,
     DefaultFieldsCategory,
+    DefaultFieldsContext,
 )
 
 from .ir import (

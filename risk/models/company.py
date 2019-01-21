@@ -7,6 +7,7 @@ from risk.models.utility import (
     DefaultFieldsEntry,
     DefaultFieldsCompany,
     DefaultFieldsCategory,
+    DefaultFieldsContext,
 )
 
 
@@ -328,7 +329,7 @@ class CompanyControl(DefaultFieldsCompany):
     alias = models.CharField(
         max_length=128, blank=True, help_text=('Alias'),)  # Alias used for the company control.  Will be used for reporting if present.
     version = models.CharField(
-        max_length=100, blank=True, help_text=('Current version'),)  # Version used for the company control.  Could be policy version, release version,etc It depends on the control defined.
+        max_length=100, blank=True, help_text=('Current version if applicable'),)  # Version used for the company control.  Could be policy version, release version,etc It depends on the control defined.
     estimated_opex = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for the control. subscription, licensing, etc. (-dependencies)'),)  # Normally 18% of capital expendure if applicable.  Control costs are captured in the CompanyControlCost table, this field is used for future projections.  Capex is handled via the CompanyControlCapex model.
     date_maint = models.DateField(null=True, blank=True, help_text=(
@@ -765,7 +766,7 @@ class CompanyContact(DefaultFields):
 
     def get_full_name_with_title(self):
         """Get full name with title."""
-        return "{} - {}" .format(self.full_name, self.title)
+        return "{} - {}" .format(self.get_full_name(), self.title)
     get_full_name_with_title.short_description = 'Name and Title'
 
 

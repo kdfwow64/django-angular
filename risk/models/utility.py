@@ -103,6 +103,34 @@ class DefaultFieldsCompany(DefaultFields):
         abstract = True
 
 
+class DefaultFieldsContext(DefaultFields):
+    """Models that are used for categorizing data"""
+
+    # Brief detail regarding the context of the content.
+    summary = models.CharField(max_length=600, blank=True,
+                               null=True, help_text=('Summary of the field'),)
+    description = models.TextField(blank=True, null=True, help_text=(
+        'Description of the field'),)  # Description of the field.
+    core = models.BooleanField(default=False, help_text=(
+        'Is the field a core objective?'),)  # Used to highlight and priortize core objectives in the user view
+    sort_order = models.IntegerField(default=0, blank=True, null=True, help_text=(
+        'Sort order the field should be in for form selection'),)  # Used for viewing and field choices
+    under_review = models.BooleanField(default=False, help_text=(
+        'Designates whether this category has been marked for review'),)  # Used to mark categories that need further review.  IE. Should a customer custom category be added to Core?  Should the Core category exist?
+    bkof_notes = models.TextField(
+        blank=True, null=True, help_text=('Backoffice notes.  DO NOT SHARE'),)  # This field is not viewable to the Account users and is use for backoffice detail only.
+    # Foreign Key and Relationships
+    company = models.ForeignKey('Company', default=1, on_delete=models.PROTECT, blank=False, related_name='%(app_label)s_%(class)s_related_company', help_text=(
+        'Company id for the company that manages the field'),)  # Company that defined the field.
+
+    class Meta:
+        """Meta class."""
+        indexes = [
+            models.Index(fields=['company']),
+        ]
+        abstract = True
+
+
 class DefaultFieldsEntry(DefaultFields):
     """Models that are used for categorizing data"""
 

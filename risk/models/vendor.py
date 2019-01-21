@@ -7,6 +7,7 @@ from risk.models.utility import (
     DefaultFieldsEntry,
     DefaultFieldsCompany,
     DefaultFieldsCategory,
+    DefaultFieldsContext,
 )
 
 

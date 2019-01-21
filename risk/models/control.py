@@ -6,6 +6,7 @@ from risk.models.utility import (
     DefaultFieldsEntry,
     DefaultFieldsCompany,
     DefaultFieldsCategory,
+    DefaultFieldsContext,
 )
 
 
@@ -66,7 +67,7 @@ class ControlCategory(DefaultFieldsCategory):
         'Type of control category domain'),)
     control_family = models.ForeignKey('ControlFamily', on_delete=models.PROTECT, null=True, related_name='category_controlfamily', help_text=(
         'Family that the control category belongs'),)
-    control_response = models.ManyToManyField("ControlResponse", through='ControlCategoryResponse', through_fields=('id_controlcategory', 'id_controlresponse'), related_name='ControlResponseLevel', help_text=(
+    control_alert_method = models.ManyToManyField("ControlAlertMethod", through='ControlCategoryAlertMethod', through_fields=('id_controlcategory', 'id_controlalertmethod'), related_name='ControlAlertMethodResponse', help_text=(
         'The level at which the control category alerts to repsonder'),)  # Control categories can have multiple operation levels.  This field is used show what may be available for the control.
     core_expectation = models.TextField(
         blank=True, null=True, help_text=('Description of the primary purpose of the control.'),)  # This field will help the user better how to measure value of the control.
@@ -111,8 +112,8 @@ class ControlCategoryCIATriad(DefaultFields):
         verbose_name_plural = ("Control Category: CIA Triad")
 
 
-class ControlResponse(DefaultFieldsCategory):
-    """Control Response.  This will determine the operating stage of the control to prevent risk.  Choices are preventive, detective, corrective, or predictive """
+class ControlAlertMethod(DefaultFieldsCategory):
+    """Control AlertMethod.  This will determine the operating stage of the control to prevent risk.  Choices are preventive, detective, corrective, or predictive """
 
     def __str__(self):
         """String."""
@@ -120,24 +121,24 @@ class ControlResponse(DefaultFieldsCategory):
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Control Responses")
+        verbose_name_plural = ("Control Alert Methods")
         ordering = ['sort_order', ]
 
 
-class ControlCategoryResponse(DefaultFields):
+class ControlCategoryAlertMethod(DefaultFields):
     """Control Category Operation.  Used to define what operation levels are availabe for the user to chose"""
 
     # Foreign Key and Relationships
-    id_controlcategory = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, null=True, related_name='category_control_response', help_text=(
+    id_controlcategory = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, null=True, related_name='category_control_alert_method', help_text=(
         'Category of control'),)
-    id_controlresponse = models.ForeignKey('ControlResponse', on_delete=models.PROTECT, null=True, related_name='response_control_category', help_text=(
+    id_controlalertmethod = models.ForeignKey('ControlAlertMethod', on_delete=models.PROTECT, null=True, related_name='alert_method_control_category', help_text=(
         'Type of notification response the control provides.'),)
     description = models.TextField(
         blank=False, help_text=('Description of the how the control would operate at the selected level'),)  # This field will help the user better understand how they are using the control defined.
 
     class Meta:
         """Meta class."""
-        verbose_name_plural = ("Control Category: Notification Types")
+        verbose_name_plural = ("Control Category: Alert Methods")
 
 
 class ControlFunction(DefaultFieldsCategory):
@@ -190,12 +191,43 @@ class ControlCategoryFeature(DefaultFields):
         'Category of control'),)
     id_controlfeature = models.ForeignKey('ControlFeature', on_delete=models.PROTECT, null=True, related_name='feature_control_category', help_text=(
         'Type of feature the control provides.'),)
-    is_key = models.BooleanField(
+    core = models.BooleanField(
         default=False, help_text=('Defines feature should be considered a key feature'),)  # Used to highlight the key features of the control.
 
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Control Category Feature Map")
+
+
+class ControlCategoryKPO(DefaultFieldsContext):
+    """ControlCategoryKPO.   Key performance objectives for the control category"""
+
+    control_category = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, related_name='controlcategory_kpo', help_text=(
+        'The control category assigned to the KPO'),)
+
+    def __str__(self):
+        """String."""
+        return self.summary
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Control Category: KPO")
+
+
+class ControlCategorySLA(DefaultFieldsContext):
+    """ControlCategorySLA.  Insights and inside information when selecting a vendor"""
+
+    # Foreign Key and Relationships
+    control_category = models.ForeignKey('ControlCategory', on_delete=models.PROTECT, related_name='controlcategory_fineprint', help_text=(
+        'The control category assigned to the information provided'),)
+
+    def __str__(self):
+        """String."""
+        return self.summary
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Control Category: SLA")
 
 
 class ControlDomain(DefaultFieldsCategory):

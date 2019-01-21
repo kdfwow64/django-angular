@@ -6,6 +6,7 @@ from risk.models.utility import (
     DefaultFieldsEntry,
     DefaultFieldsCompany,
     DefaultFieldsCategory,
+    DefaultFieldsContext,
 )
 
 
@@ -362,7 +363,7 @@ class EntryCompanyControl(DefaultFields):
         'Websites or locations of data supporting the controls mitigation against the risk'),)  # In addtion to notes.  Users can leverage websites for reference.
     submitted_mitigation = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, related_name='userlastsubmittedmitigation', help_text=(
         'User id of the user that last submitted mitigation'),)  # This will be the same for all company controls on the entry.  It is captured to understand the last user that submitted values for the control mitigations.
-    response = models.ForeignKey('ControlResponse', on_delete=models.CASCADE, blank=True, null=True, related_name='response_controlentry', help_text=(
+    alert_method = models.ForeignKey('ControlAlertMethod', on_delete=models.CASCADE, blank=True, null=True, related_name='alertmethod_controlentry', help_text=(
         'The notification ability associated to the control entered'),)  # Control categories can have multiple notification levels.  This field is used show what may be available for the control and tie its notification level to the entry
     cia_triad = models.ManyToManyField('CIATriad', through='EntryCompanyControlCIATriad', through_fields=('id_entrycompanycontrol', 'id_ciatriad'), related_name='EntryCompanyControlCIATriads', help_text=(
         'Specifies what portion of the triad is associated to the control entry'),)  # Ties CIA Triad to the event entry.

@@ -4,17 +4,17 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.html import format_html
 from risk.models.utility import linkify
 # , ControlCategoryCategory
-from risk.models.control import Control, ControlCategory, ControlCategoryResponse, ControlCategoryFunction, ControlCategoryFeature, ControlCategoryControl, ControlCategoryCIATriad, ControlOnusMethod, ControlDeliveryMethod, ControlBillingMethod
+from risk.models.control import Control, ControlCategory, ControlCategoryAlertMethod, ControlCategoryFunction, ControlCategoryFeature, ControlCategoryControl, ControlCategoryCIATriad, ControlOnusMethod, ControlDeliveryMethod, ControlBillingMethod
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
 
 
-class ControlCategoryResponseInline(admin.TabularInline):
+class ControlCategoryAlertMethodInline(admin.TabularInline):
 
-    model = ControlCategoryResponse
+    model = ControlCategoryAlertMethod
     extra = 1
-    fields = ('id_controlresponse',
+    fields = ('id_controlalertmethod',
               'is_active', 'is_deleted', 'created_by')
 
 
@@ -30,7 +30,7 @@ class ControlCategoryFeatureInline(admin.TabularInline):
 
     model = ControlCategoryFeature
     extra = 1
-    fields = ('id_controlfeature', 'is_key',
+    fields = ('id_controlfeature', 'core',
               'is_active', 'is_deleted', 'created_by')
 
 
@@ -183,7 +183,7 @@ class ControlFamilyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class ControlResponseAdmin(admin.ModelAdmin):
+class ControlAlertMethodAdmin(admin.ModelAdmin):
 
     list_select_related = []
     list_display = (
@@ -232,7 +232,7 @@ class ControlCategoryAdmin(admin.ModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': ('id', 'company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
     )
-    inlines = (ControlCategoryResponseInline,
+    inlines = (ControlCategoryAlertMethodInline,
                ControlCategoryCIATriadInline, ControlCategoryFeatureInline, ControlCategoryFunctionInline
                )
     list_select_related = []
@@ -254,6 +254,46 @@ class ControlCategoryAdmin(admin.ModelAdmin):
 
     )
     search_fields = ('name', 'keywords', 'description', 'abbrv')
+
+
+class ControlCategoryKPOAdmin(admin.ModelAdmin):
+
+    readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'id',)
+    fieldsets = (
+        ('Control Category KPO', {
+         'fields': ('control_category', 'summary', ('core', 'under_review',), 'description', 'sort_order')}),
+        ('Management Detail', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('id', 'company', ('is_active', 'is_deleted',), 'bkof_notes', ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+    )
+
+    list_select_related = []
+    list_display = ('id', 'summary',
+                    'description', 'core', 'under_review', 'control_category')
+    list_filter = ('control_category',)
+    search_fields = ('summary', 'description',)
+
+
+class ControlCategorySLAAdmin(admin.ModelAdmin):
+
+    readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
+                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'id',)
+    fieldsets = (
+        ('Control Category KPO', {
+         'fields': ('control_category', 'summary', ('core', 'under_review',), 'description', 'sort_order')}),
+        ('Management Detail', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('id', 'company', ('is_active', 'is_deleted',), 'bkof_notes', ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+    )
+
+    list_select_related = []
+    list_display = ('id', 'summary',
+                    'description', 'core', 'under_review', 'control_category')
+    list_filter = ('control_category',)
+    search_fields = ('summary', 'description',)
 
 
 class ControlCategoryTypeAdmin(admin.ModelAdmin):
