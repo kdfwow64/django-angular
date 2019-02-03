@@ -99,7 +99,7 @@ class RegisterAdmin(admin.ModelAdmin):
 class EntryAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',
                        'entry_number', 'register', )
     radio_fields = {'response': admin.HORIZONTAL}
     fieldsets = (
@@ -111,7 +111,7 @@ class EntryAdmin(admin.ModelAdmin):
          'fields': ('is_completed', ('evaluation_flg', 'evaluation_days',), 'incident_response',)}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': (('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': (('is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
 
     inlines = (EntryActorInline, EntryCompanyAssetInline,

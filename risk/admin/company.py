@@ -36,7 +36,7 @@ class CompanyMemberInline(admin.TabularInline):
 
     model = CompanyMember
     extra = 1
-    fields = ('id_user', 'is_active', 'is_deleted', 'created_by')
+    fields = ('id_user', 'is_active', 'is_deleted', 'is_test', 'created_by')
 
 
 class CompanyMemberGrantInline(admin.TabularInline):
@@ -61,14 +61,14 @@ class CompanyControlSegmentInline(admin.TabularInline):
 
     model = CompanyControlSegment
     extra = 1
-    fields = ('id_companysegment', 'is_active', 'is_deleted',)
+    fields = ('id_companysegment', 'is_active', 'is_deleted', 'is_test',)
 
 
 class CompanyControlLocationInline(admin.TabularInline):
 
     model = CompanyControlLocation
     extra = 1
-    fields = ('id_companylocation', 'is_active', 'is_deleted',)
+    fields = ('id_companylocation', 'is_active', 'is_deleted', 'is_test',)
 
 
 class CompanyControlContactCostInline(admin.TabularInline):
@@ -115,7 +115,8 @@ class CompanyTeamMemberInline(admin.TabularInline):
 
     model = CompanyTeamMember
     extra = 1
-    fields = ('id_companycontact', 'is_active', 'is_deleted', 'created_by')
+    fields = ('id_companycontact', 'is_active',
+              'is_deleted', 'test_data', 'created_by')
 
 
 class CompanyControlFindingInline(admin.TabularInline):
@@ -138,7 +139,7 @@ class CompanyPlaybookMemberInline(admin.TabularInline):
 
 class CompanyAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',
                        'account', )
     autocomplete_fields = ['naics', ]
     radio_fields = {'monetary_value_toggle': admin.HORIZONTAL}
@@ -153,7 +154,7 @@ class CompanyAdmin(admin.ModelAdmin):
          'fields': (('weight_frequency', 'weight_impact', 'weight_severity',), ('evaluation_days', 'evaluation_alert_days',), ('resilience_max', 'resilience_unit',))}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('company_notes', 'bkof_notes', 'utility_field', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': ('company_notes', 'bkof_notes', 'utility_field', ('is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
 
     inlines = (CompanyProfileInline, CompanyMemberInline,)
@@ -313,7 +314,7 @@ class CompanyControlAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',
                        )
     autocomplete_fields = ['control', ]
     fieldsets = (
@@ -326,7 +327,7 @@ class CompanyControlAdmin(admin.ModelAdmin):
         }),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': (('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': (('is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
 
     list_select_related = []
@@ -470,7 +471,7 @@ class CompanyContactAdmin(admin.ModelAdmin):
 
     # save_as = True
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by', 'id',
+                       'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by', 'id',
                        )
     radio_fields = {'contact_type': admin.HORIZONTAL}
     autocomplete_fields = ['title', ]
@@ -490,7 +491,7 @@ class CompanyContactAdmin(admin.ModelAdmin):
         }),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': (('id', 'is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': (('id', 'is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
     list_select_related = []
     list_display = (

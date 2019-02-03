@@ -47,8 +47,13 @@ class DefaultFields(models.Model):
     is_deleted = models.BooleanField(default=False, help_text=(
         'Designates whether this field row has been deleted'),)
     # Created when field is initallly created in the application.
+    is_test = models.BooleanField(default=False, help_text=(
+        'Designates whether this field or content should be considered to be test data'),)
+    # Created when field is initallly created in the application.
     date_created = models.DateTimeField(
         editable=False, help_text=('Timestamp the field was created'),)
+    date_activated = models.DateTimeField(
+        editable=False, help_text=('Timestamp the field was last activated'),)
     date_modified = models.DateTimeField(null=True, blank=True, help_text=(
         'Timestamp the field was last modified'),)  # Modified when the field was last modified in the application.
     date_deactivated = models.DateTimeField(null=True, blank=True, help_text=(
@@ -59,6 +64,8 @@ class DefaultFields(models.Model):
         'User id of the user that created the field'),)
     modified_by = models.ForeignKey('User', on_delete=models.PROTECT, default=13, related_name='%(app_label)s_%(class)s_related_modified', help_text=(
         'User id that last modified the field'),)
+    activated_by = models.ForeignKey('User', on_delete=models.PROTECT, default=13, related_name='%(app_label)s_%(class)s_related_activated', help_text=(
+        'User id that last activated the field'),)  # Normally this will be the user that created it initally, however there are cases when a field is re-activated.  This information needs to be tracked.
     deactivated_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='%(app_label)s_%(class)s_related_deactivated', help_text=(
         'User id that last deactivated the field'),)
     deleted_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='%(app_label)s_%(class)s_related_deleted', help_text=(
@@ -75,6 +82,8 @@ class DefaultFields(models.Model):
         ''' On save, update timestamps '''
         if not self.id:
             self.date_created = timezone.now()
+            #self.created_by = request.user
+            self.date_activated = timezone.now()
             #self.created_by = request.user
         self.date_modified = timezone.now()
         #self.modified_by = request.user

@@ -314,8 +314,6 @@ class EntryCompanyAsset(DefaultFields):
         'The entry associated to the actor'),)  # Id of the entry
     id_companyasset = models.ForeignKey('CompanyAsset', on_delete=models.CASCADE, related_name='entry_companyasset', help_text=(
         'The asset associated to the entry'),)  # Id of the asset
-    exposure_factor = models.FloatField(default=1, blank=True, help_text=(
-        'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the asset, this is exposed amount used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review must be performed again.
     exposure_factor_fixed = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'The fixed monetary value of the exposure factor dollars'),)  # The exposure factor may be a fixed cost if the threat scenario is realized.
     exposure_factor_percent = models.FloatField(default=1, blank=True, null=True, help_text=(
@@ -353,10 +351,10 @@ class EntryCompanyControl(DefaultFields):
         'The company control assigned to mitigate the risk'),)
     id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='companycontrol_entry', help_text=(
         'The entry the associated with the company control'),)
-    aro_mitigation_rate = models.FloatField(default=0, blank=True, help_text=(
-        'Percentage of mitigation the control applies to the Annual Rate of Occurence'),)  # The percentage of mitigation the control provides to the annual rate of occurence.
-    impact_mitigation_rate = models.FloatField(default=0, blank=True, help_text=(
-        'Percentage of mitigation the control applies to the Impact'),)  # The percentage of mitigation the control applies to the impact
+    aro_mitigation_cost = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Monetary amount of mitigation the control applies to the Annual Rate of Occurence'),)  # The percentage of mitigation the control provides to the annual rate of occurence.
+    impact_mitigation_cost = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Monetary amount of mitigation the control applies to the Impact'),)  # The percentage of mitigation the control applies to the impact
     notes = models.TextField(
         blank=True, help_text=('Notes regarding the controls mitigation against the risk'),)  # Notes should be used to suppor the logical leverage to mitigate risk.
     url = models.URLField(max_length=200, blank=True, help_text=(
@@ -636,6 +634,7 @@ class EntryUrl(DefaultFieldsEntry):
         'URL used to support detail of the entry'),)  # Website or URL of the location defined.
     is_internal = models.BooleanField(
         default=False, help_text=('Designates whether the URL is internal to the company'),)  # If true, the URL is only accessable to company users.
+
     # RLB Processing
     date_scanned = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the URL was last scanned'),)  # Date the URL was last scanned by RLB processing.  Timestamp will be used to randomly test availability.

@@ -15,7 +15,7 @@ class ControlCategoryAlertMethodInline(admin.TabularInline):
     model = ControlCategoryAlertMethod
     extra = 1
     fields = ('id_controlalertmethod',
-              'is_active', 'is_deleted', 'created_by')
+              'is_active', 'is_deleted', 'is_test', 'created_by')
 
 
 class ControlCategoryFunctionInline(admin.TabularInline):
@@ -23,7 +23,7 @@ class ControlCategoryFunctionInline(admin.TabularInline):
     model = ControlCategoryFunction
     extra = 1
     fields = ('id_controlfunction',
-              'is_active', 'is_deleted', 'created_by')
+              'is_active', 'is_deleted', 'is_test', 'created_by')
 
 
 class ControlCategoryFeatureInline(admin.TabularInline):
@@ -31,7 +31,7 @@ class ControlCategoryFeatureInline(admin.TabularInline):
     model = ControlCategoryFeature
     extra = 1
     fields = ('id_controlfeature', 'core',
-              'is_active', 'is_deleted', 'created_by')
+              'is_active', 'is_deleted', 'is_test', 'created_by')
 
 
 class ControlOnusMethodInline(admin.TabularInline):
@@ -39,7 +39,7 @@ class ControlOnusMethodInline(admin.TabularInline):
     model = ControlOnusMethod
     extra = 1
     fields = ('id_onus_method',
-              'is_active', 'is_deleted', 'created_by')
+              'is_active', 'is_deleted', 'is_test', 'created_by')
 
 
 class ControlDeliveryMethodInline(admin.TabularInline):
@@ -47,7 +47,7 @@ class ControlDeliveryMethodInline(admin.TabularInline):
     model = ControlDeliveryMethod
     extra = 1
     fields = ('id_delivery_method',
-              'is_active', 'is_deleted', 'created_by')
+              'is_active', 'is_deleted', 'is_test', 'created_by')
 
 
 class ControlBillingMethodInline(admin.TabularInline):
@@ -55,7 +55,7 @@ class ControlBillingMethodInline(admin.TabularInline):
     model = ControlBillingMethod
     extra = 1
     fields = ('id_billing_method',
-              'is_active', 'is_deleted', 'created_by')
+              'is_active', 'is_deleted', 'is_test', 'created_by')
 
 
 class ControlCategoryCIATriadInline(admin.TabularInline):
@@ -63,7 +63,7 @@ class ControlCategoryCIATriadInline(admin.TabularInline):
     model = ControlCategoryCIATriad
     extra = 1
     fields = ('id_ciatriad',
-              'is_active', 'is_deleted', 'created_by')
+              'is_active', 'is_deleted', 'is_test', 'created_by')
 
 
 class ControlAdminForm(forms.ModelForm):
@@ -114,7 +114,7 @@ class ControlAdminForm(forms.ModelForm):
 class ControlAdmin(admin.ModelAdmin):
     form = ControlAdminForm
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',
                        'id',)
     #radio_fields = {'billing_method': admin.HORIZONTAL}
     autocomplete_fields = ['vendor', ]
@@ -123,7 +123,7 @@ class ControlAdmin(admin.ModelAdmin):
          'fields': ('name', 'abbrv', 'description', 'name_aka', 'url', 'vendor', 'control_category')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('id', 'company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': ('id', 'company', ('is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
     list_select_related = []
     inlines = (ControlOnusMethodInline, ControlDeliveryMethodInline,
@@ -222,7 +222,7 @@ class ControlFeatureAdmin(admin.ModelAdmin):
 class ControlCategoryAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',
                        'id',)
     radio_fields = {'control_category_type': admin.HORIZONTAL}
     fieldsets = (
@@ -230,7 +230,7 @@ class ControlCategoryAdmin(admin.ModelAdmin):
          'fields': ('name', 'abbrv', 'description', 'keywords', 'core_expectation', 'control_category_type', 'control_domain', 'control_family')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('id', 'company', ('is_active', 'is_deleted',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': ('id', 'company', ('is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
     inlines = (ControlCategoryAlertMethodInline,
                ControlCategoryCIATriadInline, ControlCategoryFeatureInline, ControlCategoryFunctionInline
@@ -259,14 +259,14 @@ class ControlCategoryAdmin(admin.ModelAdmin):
 class ControlCategoryKPOAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',
                        'id',)
     fieldsets = (
         ('Control Category KPO', {
          'fields': ('control_category', 'summary', ('core', 'under_review',), 'description', 'sort_order')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('id', 'company', ('is_active', 'is_deleted',), 'bkof_notes', ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': ('id', 'company', ('is_active', 'is_deleted', 'is_test',), 'bkof_notes', ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
 
     list_select_related = []
@@ -279,14 +279,14 @@ class ControlCategoryKPOAdmin(admin.ModelAdmin):
 class ControlCategorySLAAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
-                       'date_deleted', 'deleted_by', 'date_deactivated', 'deactivated_by',
+                       'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',
                        'id',)
     fieldsets = (
         ('Control Category KPO', {
          'fields': ('control_category', 'summary', ('core', 'under_review',), 'description', 'sort_order')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('id', 'company', ('is_active', 'is_deleted',), 'bkof_notes', ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_deactivated', 'deactivated_by',))}),
+            'fields': ('id', 'company', ('is_active', 'is_deleted', 'is_test',), 'bkof_notes', ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
 
     list_select_related = []

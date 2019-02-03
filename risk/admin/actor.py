@@ -10,14 +10,16 @@ class ThreatActorIntentInline(admin.TabularInline):
 
     model = ThreatActorIntent
     extra = 1
-    fields = ('id_actorintent', 'is_active', 'is_deleted', 'created_by')
+    fields = ('id_actorintent', 'is_active',
+              'is_deleted', 'test_data', 'created_by')
 
 
 class ThreatActorMotiveInline(admin.TabularInline):
 
     model = ThreatActorMotive
     extra = 1
-    fields = ('id_actormotive', 'is_active', 'is_deleted', 'created_by')
+    fields = ('id_actormotive', 'is_active',
+              'is_deleted', 'test_data', 'created_by')
 
 
 class ActorAdmin(admin.ModelAdmin):

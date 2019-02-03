@@ -10,7 +10,7 @@ HEX - #414042
 
 -- Risktco Light Gray --
 RGB - 128,130,133
-HEX - #808285
+HEX - #C8C8C8
 
 -- Risktco Orange --
 RGB - 242,90,41
@@ -48,6 +48,8 @@ HEX - #FBB040
 RGB - 255,217,168
 HEX - #FFD9A8
 
+
+Awesome blue  #004887
 END PRIMARY ---------------
 
 OTHER ---------------------

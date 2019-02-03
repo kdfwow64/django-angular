@@ -114,7 +114,7 @@ class JobTitleAdmin(admin.ModelAdmin):
 
     list_select_related = []
     list_display = ('id', 'name', 'description',
-                    'is_active', 'is_deleted', 'keywords')
+                    'is_active', 'is_deleted', 'is_test', 'keywords')
     search_fields = ['name', 'keywords', ]
     ordering = ['name']
 

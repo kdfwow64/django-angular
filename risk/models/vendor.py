@@ -36,6 +36,41 @@ class Vendor(DefaultFieldsCompany):
         max_length=255, blank=True, null=True, help_text=('Addtional information email address for the vendor.'),)  # Email address should be unique for the vendor but sometimes they may duplicate due to aquistions.
     email_product = models.EmailField(
         max_length=255, blank=True, null=True, help_text=('For internal use to get information from the vendor regarding products and services'),)  # Email address should be unique for the vendor but sometimes they may duplicate due to aquistions.
+
+    ''' Future usage for consistant updates on vendor url changes.
+     import hashlib
+     import urllib
+     page = requests.get('<url>')
+     hashlib.sha256(page.text.encode('utf-8')).hexdigest()
+     req = urllib.request.Request('<url>')
+     try: urllib.request.urlopen(req)
+     except urllib.error.URLError as e:
+      code=e.reason
+    '''
+    url_main_hash = models.CharField(
+        max_length=256, blank=True, null=True, help_text=('Main url hash'),)  # Hashed website value for compare for changes
+    url_contact_hash = models.CharField(
+        max_length=256, blank=True, null=True, help_text=('Contact url hash'),)  # Hashed website value for compare for changes
+    url_about_us_hash = models.CharField(
+        max_length=256, blank=True, null=True, help_text=('About Us url hash'),)  # Hashed website value for compare for changes
+    url_products_hash = models.CharField(
+        max_length=256, blank=True, null=True, help_text=('Products url hash'),)  # Hashed website value for compare for changes
+    url_services_hash = models.CharField(
+        max_length=256, blank=True, null=True, help_text=('Services url hash'),)  # Hashed website value for compare for changes
+    url_solutions_hash = models.CharField(
+        max_length=256, blank=True, null=True, help_text=('Solutions url hash'),)  # Hashed website value for compare for changes
+    url_main_http_code = models.CharField(
+        max_length=5, blank=True, null=True, help_text=('Main url http code'),)  # Last recorded HTTP code for the url
+    url_contact_http_code = models.CharField(
+        max_length=5, blank=True, null=True, help_text=('Contact url http code'),)  # Last recorded HTTP code for the url
+    url_about_us_http_code = models.CharField(
+        max_length=5, blank=True, null=True, help_text=('About Us url http code'),)  # Last recorded HTTP code for the url
+    url_products_http_code = models.CharField(
+        max_length=5, blank=True, null=True, help_text=('Products url http code'),)  # Last recorded HTTP code for the url
+    url_services_http_code = models.CharField(
+        max_length=5, blank=True, null=True, help_text=('Services url http code'),)  # Last recorded HTTP code for the url
+    url_solutions_http_code = models.CharField(
+        max_length=5, blank=True, null=True, help_text=('Solutions url http code'),)  # Last recorded HTTP code for the url
     url_main = models.URLField(max_length=200, blank=True, null=True, help_text=(
         'Vendors main website'),)  # Vendor website
     url_contact = models.URLField(max_length=200, blank=True, null=True, help_text=(
@@ -44,6 +79,10 @@ class Vendor(DefaultFieldsCompany):
         'Vendors about us website'),)  # Vendor website
     url_products = models.URLField(max_length=200, blank=True, null=True, help_text=(
         'Vendors products website'),)  # Vendor website
+    url_services = models.URLField(max_length=200, blank=True, null=True, help_text=(
+        'Vendors services website'),)  # Vendor website
+    url_solutions = models.URLField(max_length=200, blank=True, null=True, help_text=(
+        'Vendors solutions website'),)  # Vendor website
     url_crawler_days = models.IntegerField(blank=True, default=90,
                                            help_text=('Defines the default number of days a url scan should be performed'),)  # Default value should be set so to a value that does not insinuate a crawler and is frequent enough to catch vendor url changes.
     url_crawler_flg = models.BooleanField(
@@ -70,8 +109,8 @@ class Vendor(DefaultFieldsCompany):
         default=False, help_text=('Defines if an evaluation is due for the vendor'),)  # If True, evaluation is needed.
     date_evaluated = models.DateTimeField(null=True, blank=True, help_text=(
         'Timestamp the evaluation last occured'),)  # Date the user completed submitted the evaluation
-    account_approved = models.BooleanField(
-        default=False, help_text=('Defines if a company vendor can be used at the account level'),)  # If True, all companies under the account can leverage the vendor, if False only the company that added the vendor can leverage them.
+    approved_by = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True, related_name='%(app_label)s_%(class)s_related_approved', help_text=(
+        'User id that approved the vendor'),)
     # Foreign Key and Relationships
     transitioned_by = models.ForeignKey('User', on_delete=models.PROTECT, blank=True, null=True, related_name='transitioned_vendor', help_text=(
         'User id of the user that transitioned the vendor to CORE'),)  # User that transitioned the vendor to CORE.
@@ -89,7 +128,15 @@ class Vendor(DefaultFieldsCompany):
 
     def __str__(self):
         """String."""
-        return self.name
+        return self.get_vendor_acronym()
+
+    def get_vendor_acronym(self):
+        """Get short name."""
+        if self.abbrv:
+            return "{} - {}".format(self.abbrv, self.name)
+        else:
+            return self.name
+    get_vendor_acronym.short_description = 'Vendor with Acronym'
 
 
 class VendorType(DefaultFieldsCategory):
