@@ -425,7 +425,7 @@ function WizardFormService($http){
             asset_name: null,
             exposure_factor: 100,
             detail: null,
-            impact_notes: null,
+            mitigation_notes: null,
         }
 
     }

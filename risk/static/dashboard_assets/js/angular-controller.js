@@ -3231,7 +3231,7 @@ colorAdminApp.controller('registerListEntriresController',
                     {"data": "compliance", "abbrv":"compliance", "visible": false},
                     {"data": "owner_id", "name":"owner_id", "visible": false, },
                     {"data": "active", "name":"active", "visible": false},
-                    {"data": "impact_notes", "name":"impact_notes", "visible": false},
+                    {"data": "mitigation_notes", "name":"mitigation_notes", "visible": false},
                     {"data": "description", "name":"description", "visible": false},
                     {
                         "data": null,

@@ -24,7 +24,7 @@ class Selector(models.Model):
     YES_NO = (('Y', 'Yes'), ('N', 'No'))
     RAG = (('R', 'Red'), ('A', 'Amber'), ('G', 'Green'), ('U', 'Unknown'))
     HML = (('H', 'High'), ('M', 'Medium'), ('L', 'Low'), ('U', 'Unknown'))
-    EF = (('P', 'Percentage of Asset Value'), ('F', 'Fixed Impact Value'))
+    EF = (('R', 'Rate of Asset Value'), ('F', 'Fixed Impact Value'))
     ASSET = (('F', 'Fixed Value'), ('P', 'Percent of Revenue'),
              ('T', 'Time Based Value'))
     LOSS = (('F', 'Fixed Value'), ('P', 'Percent of Revenue'))

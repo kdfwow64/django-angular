@@ -100,13 +100,13 @@ class EntryAdmin(admin.ModelAdmin):
 
     readonly_fields = ('date_created', 'created_by', 'date_modified', 'modified_by',
                        'date_deleted', 'deleted_by', 'date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',
-                       'entry_number', 'register', )
+                       'entry_number', 'register', 'id', )
     radio_fields = {'response': admin.HORIZONTAL}
     fieldsets = (
         ('Basic Info', {
-         'fields': ('register', 'response', 'entry_number', ('summary', 'description',), 'assumption', 'additional_mitigation',)}),
+         'fields': ('register', 'response', ('id', 'entry_number',), ('summary', 'description',), 'assumption', 'mitigation_notes', 'additional_mitigation',)}),
         ('Threat Scenario', {
-         'fields': ('aro_notes', 'impact_notes',)}),
+         'fields': ('aro_notes',)}),
         ('Advanced Options', {
          'fields': ('is_completed', ('evaluation_flg', 'evaluation_days',), 'incident_response',)}),
         ('Management Detail', {
@@ -139,8 +139,7 @@ class EntryAdmin(admin.ModelAdmin):
         'description',
         'assumption',
         'aro_notes',
-        'impact_notes',
-        'additional_mitigation',
+        'mitigation_notes',
     )
     ordering = ['register', 'entry_number']
 
@@ -217,7 +216,7 @@ class EntryCompanyControlAdmin(admin.ModelAdmin):
                     'id_companycontrol',
                     'id_entry',
                     'aro_mitigation_rate',
-                    'impact_mitigation_rate',
+                    'sle_mitigation_rate',
                     'notes',
                     'url',
                     )

@@ -75,7 +75,7 @@ def api_list_risk_entries(request):
             'compliance': entry.has_compliance,
             'owner_id': entry.entry_owner.id,
             'active': 1 if entry.is_active else 0,
-            'impact_notes': entry.impact_notes,
+            'mitigation_notes': entry.mitigation_notes,
             'description': entry.description,
         })
 
@@ -289,7 +289,7 @@ def api_update_affected_assets(request, entry_id):
                 except:
                     rv = {'status': 'error', 'code': 400,
                           'errors': ["Invalid asset"]}
-            risk_entry.impact_notes = data.get('impact_notes')
+            risk_entry.mitigation_notes = data.get('mitigation_notes')
             risk_entry.save()
 
             rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
@@ -489,7 +489,7 @@ def api_get_risk_entry(request, entry_id):
                         'asset_detail': entry_company_asset.detail,
                     })
                 rv.update({'affected_assets': {
-                          'multidata': affected_assets, 'impact_notes': risk_entry.impact_notes}})
+                          'multidata': affected_assets, 'mitigation_notes': risk_entry.mitigation_notes}})
             except:
                 pass
 

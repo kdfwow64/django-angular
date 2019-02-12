@@ -52,8 +52,8 @@ class Entry(DefaultFields):
         default=False, help_text=('Designates whether the entry is complete'),)  # Only entries that are listed as completed can be leveraged for risk reporting.
     date_completed = models.DateTimeField(
         null=True, blank=True, help_text=('Timestamp the entry was completed'),)  # This is the date the entry can be leveraged for risk reporting.
-    impact_notes = models.TextField(
-        blank=True, null=True, help_text=('Notes regarding the impact logic'),)  # Notes regarding the impactt of the threat event if it occurs.
+    mitigation_notes = models.TextField(
+        blank=True, null=True, help_text=('Notes regarding the logic for the mitigation'),)  # Notes regarding the impactt of the threat event if it occurs.
     additional_mitigation = models.TextField(
         blank=True, null=True, help_text=('Are there other opportunites to prevent the threat event'),)  # Kept to determine other areas of improvment that could performed.
     defined1 = models.CharField(
@@ -316,7 +316,7 @@ class EntryCompanyAsset(DefaultFields):
         'The asset associated to the entry'),)  # Id of the asset
     exposure_factor_fixed = models.DecimalField(default=0, max_digits=30, decimal_places=2, help_text=(
         'The fixed monetary value of the exposure factor dollars'),)  # The exposure factor may be a fixed cost if the threat scenario is realized.
-    exposure_factor_percent = models.FloatField(default=1, blank=True, null=True, help_text=(
+    exposure_factor_rate = models.FloatField(default=1, blank=True, null=True, help_text=(
         'Maximum percentage of asset value exposed given the threat scenario'),)  # Based on the value of the assets in the threat scenario, this is the amount of exposed value used to determine mitigation impact when controls are applied.  If controls already exist on the entry and a new asset is added to the threat secenario, control review should be performed again.
     exposure_factor_toggle = models.CharField(choices=Selector.EF, default='F', max_length=1,
                                               help_text=('Toggle to determine which formula is used to determine the exposure factor'),)  # Defines which logic to use when generating asset value against the entry threat scenario. This toggle defaults to '1' a percent of asset value.
@@ -332,7 +332,7 @@ class EntryCompanyAsset(DefaultFields):
         """String."""
         return self.id_companyasset.name
 
-    def get_entry_asset_value(self):
+    def get_entry_asset_sle_value(self):
         """Get the asset value."""
         if self.exposure_factor_toggle == 'P':
             # The contributor has chosen a percentage of the asset value is at
@@ -351,10 +351,10 @@ class EntryCompanyControl(DefaultFields):
         'The company control assigned to mitigate the risk'),)
     id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='companycontrol_entry', help_text=(
         'The entry the associated with the company control'),)
-    aro_mitigation_cost = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
-        'Monetary amount of mitigation the control applies to the Annual Rate of Occurence'),)  # The percentage of mitigation the control provides to the annual rate of occurence.
-    impact_mitigation_cost = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
-        'Monetary amount of mitigation the control applies to the Impact'),)  # The percentage of mitigation the control applies to the impact
+    aro_mitigation_rate = models.FloatField(default=0, blank=True, null=True, help_text=(
+        'Rate of mitigation the control applies to the Annual Rate of Occurence'),)  # The percentage of mitigation the control provides to the annual rate of occurence.
+    sle_mitigation_rate = models.FloatField(default=0, blank=True, null=True, help_text=(
+        'Rate of mitigation the control applies to the SLE'),)  # The percentage of mitigation the control applies to the single loss expectancy
     notes = models.TextField(
         blank=True, help_text=('Notes regarding the controls mitigation against the risk'),)  # Notes should be used to suppor the logical leverage to mitigate risk.
     url = models.URLField(max_length=200, blank=True, help_text=(
