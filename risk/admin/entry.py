@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from risk.models.utility import linkify
-from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlCIATriad, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType, Entry, EntryUrl
+from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlCIATriad, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType, EntryCompanyArtifact, Entry, EntryUrl
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -10,6 +10,12 @@ from django.contrib.auth.forms import (
 class EntryRiskTypeInline(admin.TabularInline):
 
     model = EntryRiskType
+    extra = 1
+
+
+class EntryCompanyArtifactInline(admin.TabularInline):
+
+    model = EntryCompanyArtifact
     extra = 1
 
 
@@ -114,7 +120,7 @@ class EntryAdmin(admin.ModelAdmin):
             'fields': (('is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
     )
 
-    inlines = (EntryActorInline, EntryCompanyAssetInline,
+    inlines = (EntryActorInline, EntryCompanyAssetInline, EntryCompanyArtifactInline,
                EntryCompanyControlInline, EntryComplianceInline, EntryEventTypeInline, EntryCompanyLocationInline, EntryRiskTypeInline)
     list_select_related = []
     list_display = (

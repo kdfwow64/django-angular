@@ -16,12 +16,14 @@ class ComplianceAdmin(admin.ModelAdmin):
         'description',
         'abbrv',
         'is_active',
-        'is_trademarked',
+        'is_opensource',
+        'version_number',
+        'year',
         'compliance_type',
         'keywords',
 
     )
-    list_filter = ('is_active', 'is_trademarked', 'compliance_type')
+    list_filter = ('is_active', 'is_opensource', 'compliance_type')
     search_fields = ('name',)
 
 

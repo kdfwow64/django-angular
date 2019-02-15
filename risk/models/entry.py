@@ -103,6 +103,8 @@ class Entry(DefaultFields):
         'Specifies what company locations are associated with the entry'),)  # If no locations are specified, it should be ALL locations.
     risk_types = models.ManyToManyField('RiskType', through='EntryRiskType', through_fields=('id_entry', 'id_risktype'), related_name='EntryRiskTypes', help_text=(
         'Specifies business risk types are associated with the entry'),)  # The entry can be associated to more than on risk type
+    artifacts = models.ManyToManyField('CompanyArtifact', through='EntryCompanyArtifact', through_fields=('id_entry', 'id_companyartifact'), related_name='EntryCompnayArtifacts', help_text=(
+        'The files that provide context to the entry inputs'),)  # This will link the entry to files uploaded for documentation and support.  The artifact files should reside in risk/ uploads/<company.id>/artifacts/filename.ext
 
     class Meta:
         """Meta class."""
@@ -411,6 +413,26 @@ class EntryRiskType(DefaultFields):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Entry Risk Types")
+
+
+class EntryCompanyArtifact(DefaultFields):
+    """Through table for Entry. CompanyArtifactFile."""
+
+    # Foreign Key and Relationships
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entrycompanyartifact', help_text=(
+        'The entry the associated with the company artifact'),)
+    id_companyartifact = models.ForeignKey('CompanyArtifact', on_delete=models.CASCADE, null=True, related_name='companyartifactentry', help_text=(
+        'The artifact associated with the entry'),)
+    entry_note = models.TextField(
+        blank=True, help_text=('Note on the artifact specific to the entry'),)  # When the evaluation_flg is set, the reason should be defined.
+
+    def __str__(self):
+        """String."""
+        return self.id_companyartifact.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Entry Artifacts")
 
 
 class EntryCompanyControlCIATriad(DefaultFields):

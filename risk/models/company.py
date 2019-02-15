@@ -1017,3 +1017,24 @@ class CompanyPlaybookAction(DefaultFields):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Company Playbook Actions")
+
+
+class CompanyArtifact(DefaultFieldsCompany):
+    """
+    Files uploaded to provide context and supporting documentation.
+    risk/ uploads/<company.id>/artifacts/filename.ext
+    If company folder does not exist, it will need to be created.
+    TBD - Certain files may need to excluded so they cannot be executed, Ie .bat, .exe, .py, etc.
+
+    """
+    artifact = models.CharField(
+        max_length=100, blank=False, help_text=('Filename of the artifact'),)  # Using artifact instead of filename so no conflict occur with naming conventions.  IE.  mywordfile.doc
+
+    class Meta:
+        """Meta class."""
+        ordering = ['name', ]
+        verbose_name_plural = ("Company Artifacts")
+
+    def __str__(self):
+        """String."""
+        return self.name

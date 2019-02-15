@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 
 # Model files
 from ..models.auth import User, Account, AccountType, UserAccess, UserRole, UserGrant, RoleTracking, AuthenticationType
-from ..models.company import Company, CompanyMember, CompanyMemberRole, CompanyMemberRoleType, CompanyAsset, CompanyObjective, CompanyControl, CompanyControlMeasure, CompanyControlMeasurementResult, CompanyControlCapex, CompanyControlCost, CompanyControlCostType, CompanyAssetType, CompanyContact, ContactType, CompanyFinding, CompanyTeam, CompanyLocation, CompanyPlaybook, CompanyPlaybookMember, CompanyPlaybookMemberResponsibility, CompanyPlaybookAction
+from ..models.company import Company, CompanyMember, CompanyMemberRole, CompanyMemberRoleType, CompanyAsset, CompanyArtifact, CompanyObjective, CompanyControl, CompanyControlMeasure, CompanyControlMeasurementResult, CompanyControlCapex, CompanyControlCost, CompanyControlCostType, CompanyAssetType, CompanyContact, ContactType, CompanyFinding, CompanyTeam, CompanyLocation, CompanyPlaybook, CompanyPlaybookMember, CompanyPlaybookMemberResponsibility, CompanyPlaybookAction
 from ..models.actor import ActorIntent, ActorMotive, Actor
 from ..models.audit import Notification, NotificationGroup, AuditChange, Snapshot
 from ..models.common import Calendar, CurrencyType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus, JobTitle, Appetite
@@ -21,7 +21,7 @@ from ..models.project import Project, ProjectAssumption, ProjectSuccessCriteria,
 
 # Admin files
 from .auth import UserAdmin, AccountAdmin, AccountMembership, AccountTypeAdmin, UserAccessAdmin, UserRoleAdmin, UserGrantAdmin, RoleTrackingAdmin, AuthenticationTypeAdmin
-from .company import CompanyAdmin, CompanyMemberAdmin, CompanyMemberRoleAdmin, CompanyMemberRoleTypeAdmin, CompanyAssetAdmin, CompanyObjectiveAdmin, CompanyControlAdmin, CompanyControlMeasureAdmin, CompanyControlMeasurementResultAdmin, CompanyControlCapexAdmin, CompanyControlDependencyAdmin, CompanyControlCostAdmin, CompanyControlCostTypeAdmin, CompanyContactAdmin, ContactTypeAdmin, CompanyTeamAdmin, CompanyAssetTypeAdmin, CompanyControlAdmin, CompanyLocationAdmin, CompanyFindingAdmin, CompanyPlaybookAdmin, CompanyPlaybookActionAdmin
+from .company import CompanyAdmin, CompanyMemberAdmin, CompanyMemberRoleAdmin, CompanyMemberRoleTypeAdmin, CompanyAssetAdmin, CompanyArtifactAdmin, CompanyObjectiveAdmin, CompanyControlAdmin, CompanyControlMeasureAdmin, CompanyControlMeasurementResultAdmin, CompanyControlCapexAdmin, CompanyControlDependencyAdmin, CompanyControlCostAdmin, CompanyControlCostTypeAdmin, CompanyContactAdmin, ContactTypeAdmin, CompanyTeamAdmin, CompanyAssetTypeAdmin, CompanyControlAdmin, CompanyLocationAdmin, CompanyFindingAdmin, CompanyPlaybookAdmin, CompanyPlaybookActionAdmin
 from .actor import ActorIntentAdmin, ActorMotiveAdmin, ActorAdmin
 from .audit import NotificationAdmin, NotificationGroupAdmin, AuditChangeAdmin, SnapshotAdmin
 from .common import CalendarAdmin, CurrencyTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin, JobTitleAdmin, AppetiteAdmin
@@ -69,6 +69,7 @@ admin.site.register(CompanyMemberRole, CompanyMemberRoleAdmin)
 admin.site.register(CompanyMemberRoleType, CompanyMemberRoleTypeAdmin)
 admin.site.register(CompanyObjective, CompanyObjectiveAdmin)
 admin.site.register(CompanyLocation, CompanyLocationAdmin)
+admin.site.register(CompanyArtifact, CompanyArtifactAdmin)
 admin.site.register(CompanyAsset, CompanyAssetAdmin)
 admin.site.register(CompanyAssetType, CompanyAssetTypeAdmin)
 admin.site.register(CompanyControl, CompanyControlAdmin)

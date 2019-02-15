@@ -1,8 +1,4 @@
 /**
-Atemon Technology Consultants LLP
-Version: 0.0.0
-Author: Varghese Chacko
-Website: http://www.atemon.com/
     ----------------------------
         APPS SERVICES TABLE
     ----------------------------

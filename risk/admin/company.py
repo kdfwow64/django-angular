@@ -248,6 +248,24 @@ class CompanyMemberRoleTypeAdmin(admin.ModelAdmin):
 #     ordering = ('id_companymember',)
 
 
+class CompanyArtifactAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'name',
+        'artifact',
+        'description',
+        'is_active',
+        'company',
+    )
+    list_filter = (
+        'is_active',
+        'company',
+    )
+    search_fields = ('name',)
+
+
 class CompanyAssetTypeAdmin(admin.ModelAdmin):
 
     list_select_related = []

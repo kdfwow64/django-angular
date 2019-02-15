@@ -13,8 +13,13 @@ from risk.models.utility import (
 class Compliance(DefaultFieldsCategory):
     """Compliance."""
 
-    is_trademarked = models.BooleanField(default=False, help_text=(
-        'Designates whether the compliance is trademarked'),)  # If True, the TM symbol will be added to the compliance name.
+    is_opensource = models.BooleanField(default=False, help_text=(
+        'Designates whether the compliance is open for public use'),)  # If True, the TM symbol will be added to the compliance name.
+    version_number = models.CharField(max_length=30, blank=True, null=True, help_text=(
+        'Version indicator of the compliance type'),)  # Version number of the compliance
+    year = models.IntegerField(default=0, blank=True, help_text=(
+        'Year the compliance version was created'),)  # Year the version was created
+
     # Foreign Key and Relationships
     compliance_type = models.ForeignKey('ComplianceType', on_delete=models.PROTECT, blank=True, null=True, related_name='compliance_type', help_text=(
         'Type of compliance'),)  # This will determine the type of compliance.

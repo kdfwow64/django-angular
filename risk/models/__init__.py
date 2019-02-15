@@ -52,6 +52,7 @@ from .company import (
     CompanyMemberRole,
     CompanyMemberRoleType,
     CompanyProfile,
+    CompanyArtifact,
     CompanyAsset,
     CompanyAssetType,
     CompanyObjective,
