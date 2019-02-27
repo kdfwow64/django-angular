@@ -97,7 +97,9 @@ class Entry(DefaultFields):
         'Specifies what assets are defined in the scenario'),)  # Many assets could be involved in the threat scenario.
     controls = models.ManyToManyField('CompanyControl', through='EntryCompanyControl', through_fields=('id_entry', 'id_companycontrol'), related_name='EntryCompanyControls', help_text=(
         'Specifies what controls are defined to mitigate against the risk scenario'),)  # Many controls could be used to mitigate risk.
-    compliances = models.ManyToManyField('Compliance', through='EntryCompliance', through_fields=('id_entry', 'id_compliance'), related_name='EntryComplianceRequirements', help_text=(
+    compliances = models.ManyToManyField('Compliance', through='EntryCompliance', through_fields=('id_entry', 'id_compliance'), related_name='EntryCompliances', help_text=(
+        'Specifies what requirements are associated with the entry'),)  # Compliance requirements may be associated with the risk.
+    compliance_requirements = models.ManyToManyField('ComplianceRequirement', through='EntryComplianceRequirement', through_fields=('id_entry', 'id_compliance_requirement'), related_name='EntryComplianceRequirements', help_text=(
         'Specifies what requirements are associated with the entry'),)  # Compliance requirements may be associated with the risk.
     locations = models.ManyToManyField('CompanyLocation', through='EntryCompanyLocation', through_fields=('id_entry', 'id_companylocation'), related_name='EntryCompanyLocations', help_text=(
         'Specifies what company locations are associated with the entry'),)  # If no locations are specified, it should be ALL locations.
@@ -395,6 +397,24 @@ class EntryCompliance(DefaultFields):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Entry Compliance")
+
+
+class EntryComplianceRequirement(DefaultFields):
+    """Through table for Entry.  Entry Compliance."""
+
+    # Foreign Key and Relationships
+    id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entrycompliancerequirement', help_text=(
+        'The entry the associated with the company control'),)
+    id_compliance_requirement = models.ForeignKey('ComplianceRequirement', on_delete=models.CASCADE, null=True, related_name='entrycompliancerequirement', help_text=(
+        'The compliance requirement or regulation associated with the entry'),)
+
+    def __str__(self):
+        """String."""
+        return self.id_compliancerequirement.requirement
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Entry Compliance Requirements")
 
 
 class EntryRiskType(DefaultFields):

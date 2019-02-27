@@ -116,6 +116,7 @@ from .entry import (
     EntryCompanyControlMeasure,
     EntryCompanyLocation,
     EntryCompliance,
+    EntryComplianceRequirement,
     EntryEvaluation,
     # EntryImpact,
     EntryIndicator,

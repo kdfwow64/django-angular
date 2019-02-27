@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from risk.models.utility import linkify
-from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryEventType, EntryCompanyControlCIATriad, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType, EntryCompanyArtifact, Entry, EntryUrl
+from risk.models.entry import EntryActor, EntryCompanyAsset, EntryActorIntent, EntryCompanyControl, EntryActorMotive, EntryCompliance, EntryComplianceRequirement, EntryEventType, EntryCompanyControlCIATriad, EntryCompanyControlMeasure, EntryCompanyLocation, EntryResponseResult, EntryRiskType, EntryCompanyArtifact, Entry, EntryUrl
 from django.contrib.auth.forms import (
     UserChangeForm, UserCreationForm,
 )
@@ -52,6 +52,12 @@ class EntryCompanyControlInline(admin.TabularInline):
 class EntryComplianceInline(admin.TabularInline):
 
     model = EntryCompliance
+    extra = 1
+
+
+class EntryComplianceRequirementInline(admin.TabularInline):
+
+    model = EntryComplianceRequirement
     extra = 1
 
 
@@ -121,7 +127,7 @@ class EntryAdmin(admin.ModelAdmin):
     )
 
     inlines = (EntryActorInline, EntryCompanyAssetInline, EntryCompanyArtifactInline,
-               EntryCompanyControlInline, EntryComplianceInline, EntryEventTypeInline, EntryCompanyLocationInline, EntryRiskTypeInline)
+               EntryCompanyControlInline, EntryComplianceInline, EntryComplianceRequirementInline, EntryEventTypeInline, EntryCompanyLocationInline, EntryRiskTypeInline)
     list_select_related = []
     list_display = (
         'id',
@@ -234,6 +240,13 @@ class EntryComplianceAdmin(admin.ModelAdmin):
     list_select_related = []
     list_display = ('id', 'id_compliance', 'id_entry')
     list_filter = ('id_compliance', 'id_entry')
+
+
+class EntryComplianceRequirementAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = ('id', 'id_compliance_requirement', 'id_entry')
+    list_filter = ('id_compliance_requirement', 'id_entry')
 
 
 class EntryDependencyEffortAdmin(admin.ModelAdmin):
