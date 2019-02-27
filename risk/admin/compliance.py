@@ -50,7 +50,7 @@ class ComplianceRequirementAdmin(admin.ModelAdmin):
 
     list_select_related = []
     list_display = (
-        'compliance_version',
+        'compliance',
         'cid',
         'family',
         'admin_desc',
@@ -60,7 +60,7 @@ class ComplianceRequirementAdmin(admin.ModelAdmin):
         'admin_recommendation',
         'admin_compensating_control',
     )
-    list_filter = ('compliance_version', 'family', 'priority', 'cid', 'dept')
+    list_filter = ('compliance', 'family', 'priority', 'cid', 'dept')
     search_fields = ('cid', 'family', 'keywords', 'testing')
 
     def get_ordering(self, request):

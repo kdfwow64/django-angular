@@ -92,8 +92,8 @@ class ComplianceRequirement(DefaultFields):
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
     # Foreign Key and Relationships
-    compliance_version = models.ForeignKey('ComplianceVersion', on_delete=models.PROTECT, blank=False, related_name='compliance_version', help_text=(
-        'Compliance.  May have multiple versions'),)  # Compliance requirements for this version.
+    compliance = models.ForeignKey('Compliance', default=1, on_delete=models.PROTECT, blank=False, related_name='compliance', help_text=(
+        'Compliance.  May have multiple versions'),)  # Compliance requirements.
 
     def __str__(self):
         """String."""
