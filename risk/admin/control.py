@@ -138,7 +138,7 @@ class ControlAdmin(admin.ModelAdmin):
         'company',
     )
     search_fields = ('name', 'abbrv', 'description', 'name_aka', 'keywords')
-    list_filter = ('name', 'vendor', 'company')
+    list_filter = ('name', 'vendor', 'company', 'categories')
 
     def show_control_url(self, obj):
         return format_html("<a target=\"_blank\" href='{url}'>{url}</a>", url=obj.url)

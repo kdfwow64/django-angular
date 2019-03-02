@@ -81,6 +81,7 @@ class ControlCategory(DefaultFieldsCategory):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Control Categories")
+        ordering = ['name']
 
     def __str__(self):
         return self.name
