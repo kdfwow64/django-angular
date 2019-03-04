@@ -368,13 +368,13 @@ colorAdminApp.controller('dashboardController', function($scope, $rootScope, $st
         });
         var previousPoint = null;
         $("#interactive-chart").bind("plothover", function (event, pos, item) {
-            $("#x").text(pos.x.toFixed(2));
-            $("#y").text(pos.y.toFixed(2));
+            $("#x").text(pos.x.toFixed(3));
+            $("#y").text(pos.y.toFixed(3));
             if (item) {
                 if (previousPoint !== item.dataIndex) {
                     previousPoint = item.dataIndex;
                     $("#tooltip").remove();
-                    var y = item.datapoint[1].toFixed(2);
+                    var y = item.datapoint[1].toFixed(3);
                     var content = item.series.label + " " + y;
                     $('<div id="tooltip" class="flot-tooltip">' + content + '</div>').css({ top: item.pageY - 45, left: item.pageX - 55 }).appendTo("body").fadeIn(200);
                 }
@@ -2033,13 +2033,13 @@ colorAdminApp.controller('chartFlotController', function($scope, $rootScope, $st
     var previousPoint = null;
 
     $("#interactive-chart").bind("plothover", function (event, pos, item) {
-        $("#x").text(pos.x.toFixed(2));
-        $("#y").text(pos.y.toFixed(2));
+        $("#x").text(pos.x.toFixed(3));
+        $("#y").text(pos.y.toFixed(3));
         if (item) {
             if (previousPoint !== item.dataIndex) {
                 previousPoint = item.dataIndex;
                 $("#tooltip").remove();
-                var y = item.datapoint[1].toFixed(2);
+                var y = item.datapoint[1].toFixed(3);
                 var content = item.series.label + " " + y;
                 $('<div id="tooltip" class="flot-tooltip">' + content + '</div>').css({ top: item.pageY - 45, left: item.pageX - 55 }).appendTo("body").fadeIn(200);
             }
@@ -3332,6 +3332,11 @@ colorAdminApp.controller('registerAddEntriresController',
         companyControls,
         controlMeasures,
         riskEntry,
+        aro_time_units,
+        aro_frequencies,
+        artifacts,
+        compliance_types,
+        severities
     ){
     // console.log(riskEntry);
 
@@ -3339,8 +3344,12 @@ colorAdminApp.controller('registerAddEntriresController',
 
     $scope.risk_types = riskTypes;
     $scope.responses = responses;
+    $scope.aro_frequencies = aro_frequencies;
+    $scope.aro_time_units = aro_time_units;
+    $scope.artifacts = artifacts;
     $scope.company_locations = companyLocations;
     $scope.company_compliances = compliances;
+    $scope.compliance_types = compliance_types;
     $scope.users = users;
     $scope.actors = actors;
     $scope.actor_intents = actorIntents;
@@ -3350,36 +3359,198 @@ colorAdminApp.controller('registerAddEntriresController',
     // $scope.entry_company_controls = entryCompanyControls;
     $scope.entry_company_controls = [];
     $scope.control_measures = controlMeasures;
+    $scope.severities = severities;
 
     if(riskEntry.basicinfo){
         $scope.basicinfo = riskEntry.basicinfo;
     }
     else{
         $scope.basicinfo.locations = [1];
+        $scope.basicinfo.aro_toggle = 'F';
+        $scope.basicinfo.incident_response = '1';
         $scope.basicinfo.entry_owner = $scope.users[0].id;
+        $scope.basicinfo.compliance_requirements = [];
+        $scope.basicinfo.entry_urls = [];
+        $scope.basicinfo.aro_rate = 100;
+        $scope.basicinfo.response_name = '';
+        $scope.basicinfo.entry_owner_name = '';
+        $scope.basicinfo.created_date = '';
+        $scope.basicinfo.modified_date = '';
+        $scope.basicinfo.evaluated_date = '';
     }
 
     if(riskEntry.affected_assets){
         $scope.affected_assets = riskEntry.affected_assets;
     }
     else{
-        $scope.affected_assets = {multidata: [WizardFormService.get_affected_assets_form()]};
+        $scope.affected_assets = {
+            multidata: [],
+            total_asset_value: 0,
+            total_factor: '',
+            total_factor_value: 0,
+            total_sle: '',
+            total_sle_value: 0,
+            total_ale: '',
+            total_ale_value: 0
+        };
     }
 
     if(riskEntry.mitigating_controls){
         $scope.mitigating_controls = riskEntry.mitigating_controls;
     }
     else{
-        $scope.mitigating_controls = {multidata: [WizardFormService.get_mitigating_controls_form()]};
+        $scope.mitigating_controls = {
+            multidata: [],
+            sle_rate: 0,
+            sle_cost: 0,
+            aro_rate: 0,
+            aro_cost: 0,
+            cost_impact: 0,
+            ale_mitigation: 0,
+            notes_mitigation: '',
+            additional_mitigation: '',
+            total_cost: 0,
+            total_ale: 0,
+            max_loss: 0
+        };
+    }
+
+    if(riskEntry.add_control){
+        $scope.add_control = riskEntry.add_control;
+    }
+    else{
+        $scope.add_control = {
+            company_id: null,
+            company_name: null,
+            control_name: null,
+            vendor_name: null,
+            max_loss: null,
+            sle_rate: 0,
+            sle_rate_display: 'Remaining 70.000%',
+            sle_mitigation_rate: 0,
+            aro_rate: 0,
+            aro_rate_display: 'Remaining 53.000%',
+            aro_mitigation_rate: 0,
+            sle_cost: '-$378.31',
+            sle_cost_value: 0,
+            aro_cost: '-$3526.60',
+            aro_cost_value: 0,
+            total_cost: '-$3904.91',
+            total_cost_value: 0,
+            total_ale_impact: '$390.49',
+            total_ale_impact_value: 0,
+            notes: '',
+            edit_num: -1
+        };
     }
 
     if(riskEntry.threat_details){
         $scope.threat_details = riskEntry.threat_details;
     }
     else{
-
-        $scope.threat_details = {multidata: [WizardFormService.get_threat_detail_form()]};
+        $scope.threat_details = {multidata: []};
     }
+
+    if(riskEntry.entry_compliance){
+        $scope.entry_compliance = riskEntry.entry_compliance;
+    }
+    else{
+        $scope.entry_compliance = {
+            type: null,
+            name: null,
+            requirement: null
+        };
+    }
+
+    if(riskEntry.entry_url){
+        $scope.entry_url = riskEntry.entry_url;
+    }
+    else{
+        $scope.entry_url = {
+            url: '',
+            name: '',
+            type: null,
+            desc: ''
+        };
+    }
+
+    if(riskEntry.new_threat){
+        $scope.new_threat = riskEntry.new_threat;
+    }
+    else{
+        $scope.new_threat = {
+            actor_name: null,
+            intentions: null,
+            motives: null,
+            detail: null,
+            edit_num: -1
+        };
+    }
+
+    if(riskEntry.new_as) {
+        $scope.new_as = riskEntry.new_as;
+    } else {
+        $scope.new_as = {
+            asset_name: null,
+            asset_value: null,
+            asset_value_display: '',
+            exposure_factor_toggle: 'F',
+            fixed_amount: null,
+            percent_asset_value: null,
+            asset_detail: null,
+            as_cal_res: null,
+            edit_num: -1
+        };
+    }
+
+    if(riskEntry.entry_overview){
+        $scope.entry_overview = riskEntry.entry_overview;
+    } else{
+        $scope.entry_overview = {
+            response: null,
+            date_created: null,
+            date_modified: null,
+            date_evaluated: null,
+            entry_owner: null,
+            incident_response: null,
+            inherent_ale_category: null,
+            inherent_ale_monitized: null,
+            inherent_ale_rate: null,
+            inherent_sle_category: null,
+            inherent_sle_monitized: null,
+            inherent_sle_rate: null,
+            inherent_aro_category: null,
+            inherent_aro_in_days: null,
+            inherent_aro_rate: null,
+            mitigated_ale_monitized: null,
+            mitigated_ale_rate: null,
+            mitigated_sle_monitized: null,
+            mitigated_sle_rate: null,
+            mitigated_aro_monitized: null,
+            mitigated_aro_rate: null,
+            residual_ale_category: null,
+            residual_ale_monitized: null,
+            residual_ale_rate: null,
+            residual_sle_category: null,
+            residual_sle_monitized: null,
+            residual_sle_rate: null,
+            residual_aro_category: null,
+            residual_aro_in_days: null,
+            residual_aro_rate: null,
+            locations: []
+        };
+    }
+
+    if(riskEntry.entry_list){
+        $scope.entry_list = riskEntry.entry_list;
+    } else{
+        $scope.entry_list = {
+            response: [],
+            severity: [],
+            owner: null
+        };
+    }
+
     if(riskEntry.measurements){
         $scope.measurements = riskEntry.measurements;
         if(riskEntry.measurement_controls){
@@ -3389,6 +3560,7 @@ colorAdminApp.controller('registerAddEntriresController',
     else{
         $scope.measurements = {multidata: [WizardFormService.get_measurements_form()]};
     }
+
     // basic_info: false,
     // threat_details: false,
     // affected_assets: false,
@@ -3401,11 +3573,10 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.remove_this_threat_detail = function(index){
         $scope.threat_details.multidata.splice(index, 1);
     }
-
     $scope.add_more_affected_assets = function(){
         $scope.affected_assets.multidata.push(WizardFormService.get_affected_assets_form());
     }
-    $scope.remove_this_affected_assets = function(index){
+    $scope.remove_this_affected_asset = function(index){
         $scope.affected_assets.multidata.splice(index, 1);
     }
     $scope.add_more_mitigating_controls = function(){
@@ -3420,25 +3591,767 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.remove_this_measurement = function(index){
         $scope.measurements.multidata.splice(index, 1);
     }
+    $scope.remove_this_entry_compliance_requirement = function (index) {
+        $scope.basicinfo.compliance_requirements.splice(index, 1);
+    }
+    $scope.remove_this_control = function (index) {
+        $scope.mitigating_controls.multidata.splice(index, 1);
+        sle_rate = 0;
+        aro_rate = 0;
+        sle_cost = 0;
+        aro_cost = 0;
+        total_cost = 0;
+        total_ale = 0;
+        for( i = 0 ; i< $scope.mitigating_controls.multidata.length ; i++ ){
+            item = $scope.mitigating_controls.multidata[i];
+            sle_rate += item.sle_rate;
+            aro_rate += item.aro_rate;
+            sle_cost += item.sle_cost;
+            aro_cost += item.aro_cost;
+            total_cost += item.total_cost;
+            total_ale += item.total_ale;
+        }
+        $scope.mitigating_controls.sle_rate = sle_rate;
+        $scope.mitigating_controls.aro_rate = aro_rate;
+        $scope.mitigating_controls.sle_cost = sle_cost;
+        $scope.mitigating_controls.aro_cost = aro_cost;
+        $scope.mitigating_controls.total_cost = total_cost;
+        $scope.mitigating_controls.total_ale = total_ale;
+    }
+    $scope.aro_toggle_change = function () {
+        $('.wizard-step-1 .aro-bordered-div input, .wizard-step-1 .aro-bordered-div select').each(function(){
+            $(this).parsley().reset();
+        });
+    }
+    $scope.open_add_entry_compliance_requirement_modal = function () {
+        $('#add_edit_entry_compliance_requirement .modal-title').html('Add Entry Compliance');
+        $('#add_edit_entry_compliance_requirement .add-edit-btn').html('Add');
+        $('#compliance_requirement_edit_num').val('-1');
+        $scope.entry_compliance.type = null;
+        $scope.compliance_names = [];
+        $scope.entry_compliance.name = null;
+        $scope.compliance_requirements = [];
+        $scope.entry_compliance.requirement = null;
+        $('#add_edit_entry_compliance_requirement select').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#add_edit_entry_compliance_requirement').modal('show');
+    }
+    $scope.open_edit_entry_compliance_requirement_modal = function (index) {
+        $('#add_edit_entry_compliance_requirement .modal-title').html('Edit Entry Compliance');
+        $('#add_edit_entry_compliance_requirement .add-edit-btn').html('Save');
+        $('#add_edit_entry_compliance_requirement select').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#compliance_requirement_edit_num').val(index);
+        edit_item = $scope.basicinfo.compliance_requirements[index];
+        $scope.entry_compliance.type = edit_item.type_id;
+
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/compliances-with-type/' + edit_item.type_id + '/')
+        .then(function(r) {
+            if(r) {
+                $scope.compliance_names = r.data;
+                $scope.entry_compliance.name = edit_item.compliance_id;
+                $http.post('/dashboard/api/compliance-requirements-with-name/' + edit_item.compliance_id + '/')
+                .then(function(d){
+                    if(d){
+                        $scope.compliance_requirements = d.data.map(re => {
+                        //    if (re.detail.length >= 25) re.detail = re.detail.slice(0, 35) + '...';
+                            return re
+                        });
+                        $scope.entry_compliance.requirement = edit_item.requirement_id;
+                        $('#add_edit_entry_compliance_requirement').modal('show');
+                        return true;
+                    } else{
+                        return false;
+                    }
+                }).catch(function(d){
+                    return false
+                })
+                return true;
+            } else {
+                return false;
+            }
+        }).catch(function(r){
+            return false;
+        })
+    }
+    $scope.add_edit_entry_compliance_requirement = function () {
+        validation = false;
+        $('#add_edit_entry_compliance_requirement select').each(function(){
+           if ( $(this).parsley().validate() != true)
+               validation = true;
+        });
+        if(validation)
+            return false;
+        new_item = {
+            type:  $('select[name=entry_compliance_type] option:selected').html(),
+            type_id:  $scope.entry_compliance.type,
+            name:  $('select[name=entry_compliance_name] option:selected').html(),
+            compliance_id:  $scope.entry_compliance.name,
+            requirement : $('select[name=entry_compliance_requirement] option:selected').html(),
+            requirement_id : $scope.entry_compliance.requirement,
+            version: ''
+        };
+        index = $('#compliance_requirement_edit_num').val();
+        if (index == '-1') {
+            $scope.basicinfo.compliance_requirements.push(new_item); //[...$scope.basicinfo.compliance_requirements, new_item]
+        } else {
+            $scope.basicinfo.compliance_requirements[index] = new_item;
+        }
+        $('#add_edit_entry_compliance_requirement .close').click();
+    }
+    $scope.entry_compliance_type_change = function () {
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/compliances-with-type/' + $scope.entry_compliance.type + '/')
+        .then(function(r) {
+            if(r) {
+                $scope.compliance_names = r.data;
+                return true;
+            } else {
+                return false;
+            }
+        }).catch(function(r){
+            return false;
+        })
+    }
+    $scope.entry_compliance_name_change = function () {
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/compliance-requirements-with-name/' + $scope.entry_compliance.name + '/')
+        .then(function(r){
+            if(r){
+                $scope.compliance_requirements = r.data.map(re => {
+                //    if (re.detail.length >= 25) re.detail = re.detail.slice(0, 35) + '...';
+                    return re
+                });
+                return true;
+            } else{
+                return false;
+            }
+        }).catch(function(r){
+            return false;
+        })
+    }
+    /*Entry Url*/
+    $scope.remove_this_entry_url = function (index) {
+        $scope.basicinfo.entry_urls.splice(index, 1);
+    }
+    $scope.open_add_entry_url_modal = function () {
+        $('#add_edit_entry_url .modal-title').html('Add Entry Url');
+        $('#add_edit_entry_url .add-edit-btn').html('Add');
+        $('#entry_url_edit_num').val('-1');
+        $scope.entry_url.url = '';
+        $scope.entry_url.name = '';
+        $scope.entry_url.type = null;
+        $scope.entry_url.desc = '';
+        $('#add_edit_entry_url select, #add_edit_entry_url input').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#add_edit_entry_url').modal('show');
+    }
+    $scope.open_edit_entry_url_modal = function (index) {
+        $('#add_edit_entry_url .modal-title').html('Edit Entry Url');
+        $('#add_edit_entry_url .add-edit-btn').html('Save');
+        $('#add_edit_entry_url select, #add_edit_entry_url input').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#entry_url_edit_num').val(index);
+
+        edit_item = $scope.basicinfo.entry_urls[index];
+        $('input[name=entry_url_url]').val(edit_item.url);
+        $('input[name=entry_url_name]').val(edit_item.name);
+        $('select[name=entry_url_type]').val(edit_item.type);
+        $('input[name=entry_url_desc]').val(edit_item.desc);
+        $('#add_edit_entry_url').modal('show');
+    }
+    $scope.add_edit_entry_url = function () {
+        validation = false;
+        $('#add_edit_entry_url select, #add_edit_entry_url input').each(function(){
+           if ( $(this).parsley().validate() != true)
+               validation = true;
+        });
+        if(validation)
+            return false;
+
+        type_name = 'Internal';
+        if ($('select[name=entry_url_type]').val() == 0)
+            type_name = 'External';
+        new_item = {
+            url: $('input[name=entry_url_url]').val(),
+            name: $('input[name=entry_url_name]').val(),
+            type: $('select[name=entry_url_type]').val(),
+            type_name: type_name,
+            desc: $('input[name=entry_url_desc]').val(),
+        };
+
+        if ($('#entry_url_edit_num').val() == '-1') {
+            $scope.basicinfo.entry_urls.push(new_item);
+        } else {
+            index = $('#entry_url_edit_num').val();
+            $scope.basicinfo.entry_urls[index] = new_item;
+        }
+        $('#add_edit_entry_url').modal('hide');
+    }
+    $scope.get_result_from_aro = function() {
+        validation = false;
+        $('.wizard-step-1 .aro-bordered-div input, .wizard-step-1 .aro-bordered-div select').each(function(){
+            if( $(this).parsley().validate() != true )
+                validation = true;
+        });
+        if(validation)
+            return false;
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/frequencies/')
+        .then(function(r) {
+            if (r) {
+                if ($scope.basicinfo.aro_toggle == 'F') {
+                    $http.post('/dashboard/api/time-units/')
+                        .then(function(d){
+                            if ( d ) {
+                                for ( i = 0 ; i < d.data.length ; i++ ) {
+                                    if ( d.data[i].id == $scope.basicinfo.aro_time_unit ) {
+                                        percent = $scope.basicinfo.aro_known_multiplier * d.data[i].annual_units / $scope.basicinfo.aro_known_unit_quantity;
+                                        if ( percent >= 1 )
+                                             $('#aro_cal_res').html('There is a ' + 100 + '% of this event occuring annually. It is considered Certain' );
+                                        else {
+                                            for (j = 0; j < r.data.length; j++) {
+                                                if (r.data[j].min <= percent && r.data[j].max > percent) {
+                                                    percent = percent * 100;
+                                                    percent = percent.toFixed(3);
+                                                    $('#aro_cal_res').html('There is a ' + percent + '% of this event occuring annually. It is considered ' + r.data[j].name);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                                return true;
+                            }
+                            else{
+                                return false;
+                            }
+                        }).catch(function(d){
+                            return false;
+                    })
+                } else if ($scope.basicinfo.aro_toggle == 'C') {
+                    for ( i = 0 ; i < r.data.length ; i++ ) {
+                        if ( r.data[i].id == $scope.basicinfo.aro_frequency ) {
+                            percent = ( r.data[i].min + r.data[i].max ) / 2 * 100;
+                            if ( r.data[i].min == 1 )
+                                percent = 100;
+                            percent = percent.toFixed(3);
+                            $('#aro_cal_res').html('There is a ' + percent + '% of this event occuring annually. It is considered ' + r.data[i].name );
+                            break;
+                        }
+                    }
+                } else if ($scope.basicinfo.aro_toggle == 'K') {
+                    if ( $scope.basicinfo.aro_fixed == 100 ) {
+                        $('#aro_cal_res').html('There is a ' + $scope.basicinfo.aro_fixed + '% of this event occuring annually. It is considered Certain' );
+                    } else {
+                        fixed = parseFloat($scope.basicinfo.aro_fixed);
+                        fixed = fixed / 100;
+                        for (i = 0; i < r.data.length; i++) {
+                            if (r.data[i].min <= fixed && r.data[i].max > fixed) {
+                                $('#aro_cal_res').html('There is a ' + $scope.basicinfo.aro_fixed + '% of this event occuring annually. It is considered ' + r.data[i].name);
+                                break;
+                            }
+                        }
+                    }
+                }
+                return true;
+            } else{
+                return false;
+            }
+        }).catch(function(r){
+            return false;
+        });
+    }
+    /*Threat Detail*/
+    $scope.open_add_threat_detail_modal = function () {
+        $('#add_edit_threat_detail .modal-title').html('Add Threat Detail');
+        $('#add_edit_threat_detail .add-edit-btn').html('Add');
+        $scope.new_threat.actor_name = null;
+        $scope.new_threat.intentions = null;
+        $scope.new_threat.motives = null;
+        $scope.new_threat.detail = '';
+        $scope.new_threat.edit_num = -1;
+        $('#add_edit_threat_detail select, #add_edit_threat_detail input, #add_edit_threat_detail textarea').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#add_edit_threat_detail').modal('show');
+    }
+    $scope.open_edit_threat_detail_modal = function (index) {
+        $('#add_edit_threat_detail .modal-title').html('Edit Threat Detail');
+        $('#add_edit_threat_detail .add-edit-btn').html('Save');
+        $('#add_edit_threat_detail select, #add_edit_threat_detail input, #add_edit_threat_detail textarea').each(function() {
+            $(this).parsley().reset();
+        });
+        edit_item = $scope.threat_details.multidata[index];
+        $scope.new_threat.actor_name = edit_item.actor_name_id;
+        $scope.new_threat.intentions = edit_item.intentions_id;
+        $scope.new_threat.motives = edit_item.motives_id;
+        $scope.new_threat.detail = edit_item.detail;
+        $scope.new_threat.edit_num = index;
+        $('#add_edit_threat_detail').modal('show');
+    }
+    $scope.add_edit_threat_detail = function () {
+        validation = false;
+        $('#add_edit_threat_detail select, #add_edit_threat_detail textarea').each(function() {
+            if($(this).parsley().validate() != true)
+                validation = true;
+        });
+        if(validation)
+            return false;
+        selected_intentions = '';
+        $('select[name=new_intentions] option:selected').each(function() {
+             selected_intentions += $(this).html() + '\n';
+        });
+        selected_motives = '';
+        $('select[name=new_motives] option:selected').each(function() {
+             selected_motives += $(this).html() + '\n';
+        });
+        new_item = {
+            actor_name: $('select[name=new_threat_actor] option:selected').html(),
+            actor_name_id: $scope.new_threat.actor_name,
+            intentions: selected_intentions,
+            intentions_id: $scope.new_threat.intentions,
+            motives: selected_motives,
+            motives_id: $scope.new_threat.motives,
+            detail: $scope.new_threat.detail
+        };
+        index = $scope.new_threat.edit_num;
+        if (index == -1)
+            $scope.threat_details.multidata.push(new_item);
+        else
+            $scope.threat_details.multidata[index] = new_item;
+        $('#add_edit_threat_detail').modal('hide');
+    }
+    /*Affect Asset Step 3*/
+    $scope.open_add_affected_asset_modal = function() {
+        $('#add_edit_affected_asset .modal-title').html('Add Affected Asset');
+        $('#add_edit_affected_asset .add-edit-btn').html('Add');
+        $scope.new_as.asset_name = null;
+        $scope.new_as.asset_value = '';
+        $scope.new_as.exposure_factor_toggle = 'F';
+        $scope.new_as.asset_value_display = '';
+        $scope.new_as.fixed_amount = '';
+        $scope.new_as.percent_asset_value = '';
+        $scope.new_as.asset_detail = '';
+        $scope.new_as.as_cal_res = '';
+        $scope.new_as.edit_num = -1;
+        $('#add_edit_affected_asset select, #add_edit_affected_asset input, #add_edit_affected_asset textarea').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#add_edit_affected_asset').modal('show');
+    }
+    $scope.open_edit_affected_asset_modal = function(index) {
+        $('#add_edit_affected_asset .modal-title').html('Edit Affected Asset');
+        $('#add_edit_affected_asset .add-edit-btn').html('Save');
+        $scope.new_as.edit_num = index;
+        edit_item = $scope.affected_assets.multidata[index];
+        $scope.new_as.asset_name = edit_item.name_id;
+        $scope.new_as.asset_value = edit_item.asset_value;
+        $scope.new_as.exposure_factor_toggle = edit_item.exposure_factor_toggle;
+        $scope.new_as.asset_value_display = edit_item.asset_value_display;
+        $scope.new_as.fixed_amount = edit_item.exposure_factor_fixed;
+        $scope.new_as.percent_asset_value = edit_item.exposure_factor_rate;
+        $scope.new_as.asset_detail = edit_item.detail;
+        $('input[name=new_fixed_amount]').attr('max',parseInt(edit_item.asset_value));
+        $('#add_edit_affected_asset select, #add_edit_affected_asset input, #add_edit_affected_asset textarea').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#add_edit_affected_asset').modal('show');
+    }
+    $scope.company_asset_change = function () {
+        if($('select[name=new_asset_name]').parsley().validate() != true) {
+            $scope.new_as.asset_value_display = '';
+            $scope.new_as.fixed_amount = '';
+            $scope.new_as.percent_asset_value = '';
+            return false;
+        }
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/get-company-asset/' + $scope.new_as.asset_name + '/')
+            .then(function(r){
+                if(r){
+                    $scope.new_as.asset_value = r.data.asset_value;
+                    $scope.new_as.asset_value_display = '$' + r.data.asset_value;
+                    $scope.new_as.fixed_amount = parseInt(r.data.asset_value);
+                    $('input[name=new_fixed_amount]').attr('max',parseInt(r.data.asset_value));
+                    $scope.new_as.percent_asset_value = parseInt(r.data.asset.asset_percent);
+                    $scope.new_as.asset_detail = r.data.asset.asset_detail;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }).catch(function(r){
+                return false;
+            })
+    }
+    $scope.get_result_from_as = function () {
+        validation = false;
+        $('#add_edit_affected_asset select, #add_edit_affected_asset input').each(function(){
+            if ($(this).parsley().validate() != true)
+                validation = true;
+        });
+        if(validation)
+            return false;
+        if ($scope.new_as.exposure_factor_toggle == 'F') {
+            if ($scope.new_as.fixed_amount == '')
+                return false;
+            str = 'The monitized value expose is a Fixed amount of $' + $scope.new_as.fixed_amount;
+            $scope.new_as.as_cal_res = str;
+        } else {
+            if ($scope.new_as.percent_asset_value == '')
+                return false;
+            monetary_conversion = parseInt($scope.new_as.asset_value) * parseInt($scope.new_as.percent_asset_value) / 100;
+            str = 'The monitized value expose is a Percent amount of $' + monetary_conversion;
+            $scope.new_as.as_cal_res = str;
+        }
+    }
+    $scope.add_edit_affected_asset = function() {
+        validation = false;
+        $('#add_edit_affected_asset select, #add_edit_affected_asset input').each(function(){
+            if ($(this).parsley().validate() != true)
+                validation = true;
+        });
+        if(validation)
+            return false;
+        if ($scope.new_as.exposure_factor_toggle == 'F') {
+            factor = 'fixed: $' + $scope.new_as.fixed_amount;
+            sle = '$' + $scope.new_as.fixed_amount;
+            sle_value = $scope.new_as.fixed_amount;
+            ale_value = sle_value * $scope.basicinfo.aro_rate/100;
+            ale = '$' + ale_value;
+        } else {
+            factor = 'rate: ' + $scope.new_as.percent_asset_value + '%';
+            monetary_conversion = parseInt($scope.new_as.asset_value) * parseInt($scope.new_as.percent_asset_value) / 100;
+            sle = '$' + monetary_conversion;
+            sle_value = monetary_conversion;
+            ale_value = monetary_conversion * $scope.basicinfo.aro_rate/100;
+            ale = '$' + ale_value;
+        }
+        edited_item = {
+            name_id: $scope.new_as.asset_name,
+            name: $('select[name=new_asset_name] option:selected').html(),
+            exposure_factor_toggle: $scope.new_as.exposure_factor_toggle,
+            asset_value: $scope.new_as.asset_value,
+            exposure_factor_fixed: $scope.new_as.fixed_amount,
+            exposure_factor_rate: $scope.new_as.percent_asset_value,
+            asset_value_display: '$' + $scope.new_as.asset_value,
+            factor: factor,
+            detail: $scope.new_as.asset_detail,
+            sle: sle,
+            sle_value: sle_value,
+            ale: ale,
+            ale_value: ale_value
+        };
+        index = $scope.new_as.edit_num;
+        if (index == -1)
+            $scope.affected_assets.multidata.push(edited_item);
+        else
+            $scope.affected_assets.multidata[index] = edited_item;
+        total_asset_value = 0;
+        total_sle = 0;
+        total_ale = 0;
+        for (i = 0; i < $scope.affected_assets.multidata.length ; i++) {
+            total_asset_value += parseInt($scope.affected_assets.multidata[i].asset_value);
+
+            total_sle +=$scope.affected_assets.multidata[i].sle_value;
+            total_ale +=$scope.affected_assets.multidata[i].ale_value;
+        }
+        $scope.affected_assets.total_asset_value = '$' + total_asset_value;
+        total_factor = total_sle / total_asset_value * 100;
+        $scope.affected_assets.total_factor = total_factor.toFixed(3) + '%';
+        $scope.affected_assets.total_factor_value = total_factor.toFixed(3);
+        $scope.affected_assets.total_sle = '$' + total_sle.toFixed(3);
+        $scope.affected_assets.total_sle_value = total_sle.toFixed(3);
+        $scope.affected_assets.total_ale = '$' + total_ale.toFixed(3);
+        $scope.affected_assets.total_ale_value = total_ale.toFixed(3);
+        $('#add_edit_affected_asset').modal('hide');
+    }
+    $scope.as_toggle_change = function() {
+        $('#add_edit_affected_asset select, #add_edit_affected_asset input').each(function(){
+            $(this).parsley().reset();
+        });
+    }
+    /*--------End Step 3-----------*/
+
+    /* Start Step 4 Mitigation Control*/
+    $scope.open_add_control_modal = function() {
+        $('#add_edit_mitigation_control .modal-title').html('Add a Control');
+        $('#add_edit_mitigation_control .modal-footer .add-edit-btn').html('Add');
+        $scope.add_control.edit_num = -1;
+        sle_rate = 100;
+        aro_rate = 100;
+        for( i=0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+            item = $scope.mitigating_controls.multidata[i];
+            sle_rate -= item.sle_mitigation_rate;
+            aro_rate -= item.aro_mitigation_rate;
+        }
+        $scope.add_control.company_id = null;
+        $scope.add_control.sle_rate = sle_rate;
+        $scope.add_control.sle_rate_display = 'Remaining ' + sle_rate + '%';
+        $scope.add_control.sle_mitigation_rate = null;
+        $scope.add_control.aro_rate = aro_rate;
+        $scope.add_control.aro_rate_display = 'Remaining ' + aro_rate + '%';
+        $scope.add_control.aro_mitigation_rate = null;
+        $scope.add_control.sle_cost = '$0.00';
+        $scope.add_control.sle_cost_value = 0;
+        $scope.add_control.aro_cost = '$0.00';
+        $scope.add_control.aro_cost_value = 0;
+        $scope.add_control.total_cost = '$0.00';
+        $scope.add_control.total_cost_value = 0;
+        $scope.add_control.total_ale_impact = '$0.00';
+        $scope.add_control.total_ale_impact_value = 0;
+        $scope.add_control.notes = null;
+        $('#add_edit_mitigation_control select, #add_edit_mitigation_control input, #add_edit_mitigation_control textarea').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#add_edit_mitigation_control').modal('show');
+    }
+    $scope.open_edit_control_modal = function(index) {
+        $('#add_edit_mitigation_control .modal-title').html('Edit a Control');
+        $('#add_edit_mitigation_control .modal-footer .add-edit-btn').html('Save');
+        $scope.add_control.edit_num = index;
+        $('#add_edit_mitigation_control select, #add_edit_mitigation_control input, #add_edit_mitigation_control textarea').each(function() {
+            $(this).parsley().reset();
+        });
+        edit_item = $scope.mitigating_controls.multidata[index];
+
+        sle_rate = 100;
+        aro_rate = 100;
+
+        sle_cost = 0;
+        aro_cost = 0;
+        total_cost = 0;
+        total_ale = 0;
+        for( i=0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+            if( i != index ) {
+                item = $scope.mitigating_controls.multidata[i];
+                sle_rate -= item.sle_mitigation_rate;
+                aro_rate -= item.aro_mitigation_rate;
+
+                sle_cost += item.sle_cost_value;
+                aro_cost += item.aro_cost_value;
+                total_cost += item.total_cost_value;
+                total_ale += item.total_ale_impact_value;
+            }
+        }
+
+        $scope.add_control.company_id = edit_item.company_id;
+        $scope.add_control.sle_rate = sle_rate;
+        $scope.add_control.sle_rate_display = 'Remaining ' + sle_rate + '%';
+        $scope.add_control.sle_mitigation_rate = edit_item.sle_mitigation_rate;
+        $scope.add_control.aro_rate = aro_rate;
+        $scope.add_control.aro_rate_display = 'Remaining ' + aro_rate + '%';
+        $scope.add_control.aro_mitigation_rate = edit_item.aro_mitigation_rate;
+        $scope.add_control.sle_cost_value = $scope.affected_assets.total_sle_value * edit_item.sle_mitigation_rate / 100;
+        $scope.add_control.sle_cost = '-$' + $scope.add_control.sle_cost_value;
+        $scope.add_control.aro_cost_value = ($scope.affected_assets.total_sle_value - sle_cost - edit_item.sle_cost_value) * edit_item.aro_mitigation_rate / 100;
+        $scope.add_control.aro_cost = '-$' + $scope.add_control.aro_cost_value;
+
+        $scope.add_control.total_cost_value = ($scope.add_control.sle_cost_value + $scope.add_control.aro_cost_value).toFixed(3);
+        $scope.add_control.total_cost = '-$' + $scope.add_control.total_cost_value;
+        $scope.add_control.total_ale_impact_value = ($scope.add_control.total_cost_value * $scope.basicinfo.aro_rate / 100).toFixed(3);
+        $scope.add_control.total_ale_impact = '-$' + $scope.add_control.total_ale_impact_value;
+
+        $scope.add_control.notes = edit_item.notes;
+        $('#add_edit_mitigation_control').modal('show');
+    }
+    $scope.add_control_mitigation = function() {
+        validation = false;
+        $('#add_edit_mitigation_control select, #add_edit_mitigation_control input, #add_edit_mitigation_control textarea').each(function() {
+            if($(this).parsley().validate() != true)
+                validation = true;
+        });
+        if(validation)
+            return false;
+
+        sle_cost = 0;
+        aro_cost = 0;
+        sle_rate = 0;
+        aro_rate = 0;
+        total_cost = 0;
+        total_ale = 0;
+        for( i=0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+            item = $scope.mitigating_controls.multidata[i];
+            sle_cost += item.sle_cost_value;
+            aro_cost += item.aro_cost_value;
+            sle_rate += item.sle_mitigation_rate;
+            aro_rate += item.aro_mitigation_rate;
+            total_cost += item.total_cost_value;
+            total_ale += item.total_ale_impact_value;
+        }
+        $scope.add_control.sle_cost_value = $scope.affected_assets.total_sle_value * $scope.add_control.sle_mitigation_rate / 100;
+        $scope.add_control.sle_cost = '-$' + $scope.add_control.sle_cost_value;
+        $scope.add_control.aro_cost_value = ($scope.affected_assets.total_sle_value - sle_cost - $scope.add_control.sle_cost_value) * $scope.add_control.aro_mitigation_rate / 100;
+        $scope.add_control.aro_cost = '-$' + $scope.add_control.aro_cost_value;
+        $scope.add_control.total_cost_value = $scope.add_control.sle_cost_value + $scope.add_control.aro_cost_value;
+        $scope.add_control.total_cost = '-$' + $scope.add_control.total_cost_value;
+        $scope.add_control.total_ale_impact_value = $scope.add_control.total_cost_value * $scope.basicinfo.aro_rate / 100;
+        $scope.add_control.total_ale_impact = '-$' + $scope.add_control.total_ale_impact_value;
+
+        $http.post('/dashboard/api/control-details-with-company/' + $scope.add_control.company_id + '/')
+            .then(function(r){
+                if(r){
+                    new_item = {
+                        company_id: $scope.add_control.company_id,
+                        company_name: r.data.company_name,
+                        control_name: r.data.control_name,
+                        vendor_name: r.data.vendor_name,
+                        max_loss: r.data.max_loss,
+                        sle_rate: $scope.add_control.sle_mitigation_rate,
+                        sle_rate_display: '',
+                        sle_mitigation_rate: $scope.add_control.sle_mitigation_rate,
+                        aro_rate: $scope.add_control.aro_mitigation_rate,
+                        aro_rate_display: '',
+                        aro_mitigation_rate: $scope.add_control.aro_mitigation_rate,
+                        sle_cost: $scope.add_control.sle_cost,
+                        sle_cost_value: $scope.add_control.sle_cost_value,
+                        aro_cost: $scope.add_control.aro_cost,
+                        aro_cost_value: $scope.add_control.aro_cost_value,
+                        total_cost: $scope.add_control.total_cost,
+                        total_cost_value: $scope.add_control.total_cost_value,
+                        total_ale_impact: $scope.add_control.total_ale_impact,
+                        total_ale_impact_value: $scope.add_control.total_ale_impact_value,
+                        notes: $scope.add_control.notes
+                    };
+                    index = $scope.add_control.edit_num;
+                    if( index == -1)
+                        $scope.mitigating_controls.multidata.push(new_item);
+                    else
+                        $scope.mitigating_controls.multidata[index] = new_item;
+                    sle_cost += $scope.add_control.sle_cost_value;
+                    aro_cost = 0;
+                    total_cost = 0;
+                    total_ale = 0;
+                    for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+                        $scope.mitigating_controls.multidata[i].aro_cost_value = ($scope.affected_assets.total_sle_value - sle_cost) * $scope.mitigating_controls.multidata[i].aro_mitigation_rate / 100;
+                        $scope.mitigating_controls.multidata[i].aro_cost = '$' + $scope.mitigating_controls.multidata[i].aro_cost_value;
+                        aro_cost += $scope.mitigating_controls.multidata[i].aro_cost_value;
+                        $scope.mitigating_controls.multidata[i].total_cost_value = $scope.mitigating_controls.multidata[i].sle_cost_value + $scope.mitigating_controls.multidata[i].aro_cost_value;
+                        $scope.mitigating_controls.multidata[i].total_ale_impact_value = $scope.mitigating_controls.multidata[i].total_cost_value * $scope.basicinfo.aro_rate / 100;
+                        total_cost += $scope.mitigating_controls.multidata[i].total_cost_value;
+                        total_ale += $scope.mitigating_controls.multidata[i].total_ale_impact_value;
+                    }
+                    $scope.mitigating_controls.sle_rate = sle_rate + $scope.add_control.sle_mitigation_rate;
+                    $scope.mitigating_controls.aro_rate = aro_rate + $scope.add_control.aro_mitigation_rate;
+                    $scope.mitigating_controls.sle_cost = sle_cost;
+                    $scope.mitigating_controls.aro_cost = aro_cost.toFixed(3);
+                    $scope.mitigating_controls.total_cost = total_cost.toFixed(3);
+                    $scope.mitigating_controls.total_ale = total_ale.toFixed(3);
+                    $('#add_edit_mitigation_control').modal('hide');
+                    return true;
+                } else{
+                    return false;
+                }
+            }).catch(function(r){
+                return false;
+        });
+    }
+    $scope.get_result_from_control = function() {
+        validation = false;
+        $('#add_edit_mitigation_control select, #add_edit_mitigation_control input, #add_edit_mitigation_control textarea').each(function() {
+            if($(this).parsley().validate() != true)
+                validation = true;
+        });
+        if(validation)
+            return false;
+
+        sle_cost = 0;
+        for( i=0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+            item = $scope.mitigating_controls.multidata[i];
+            sle_cost += item.sle_cost_value;
+            aro_cost += item.aro_cost_value;
+        }
+        $scope.add_control.sle_cost_value = $scope.affected_assets.total_sle_value * $scope.add_control.sle_mitigation_rate / 100;
+        $scope.add_control.sle_cost = '-$' + $scope.add_control.sle_cost_value;
+        $scope.add_control.aro_cost_value = ($scope.affected_assets.total_sle_value - sle_cost - $scope.add_control.sle_cost_value) * $scope.add_control.aro_mitigation_rate / 100;
+        $scope.add_control.aro_cost = '-$' + $scope.add_control.aro_cost_value;
+        $scope.add_control.total_cost_value = $scope.add_control.sle_cost_value + $scope.add_control.aro_cost_value;
+        $scope.add_control.total_cost = '-$' + $scope.add_control.total_cost_value;
+        $scope.add_control.total_ale_impact_value = $scope.add_control.total_cost_value * $scope.basicinfo.aro_rate / 100;
+        $scope.add_control.total_ale_impact = '-$' + $scope.add_control.total_ale_impact_value;
+    }
+    /* Ent Step 4*/
 
     $scope.save_basic_info = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
         $http.post('/dashboard/api/risk-entry/create/', $scope.basicinfo)
-        .then(function(r){
-            if(r.data.code == 200){
-                $scope.entry_id = r.data.id;
-                $scope.basicinfo.entry_id = r.data.id;  // In case of back button, do not create twice
-                WizardValidatorService.status.basic_info = true;
-                $(element).bwizard("next");
-                return true;
-            }
-            else{
+            .then(function(r){
+                if(r.data.code == 200){
+                    $scope.entry_id = r.data.id;
+                    $scope.basicinfo.entry_id = r.data.id;  // In case of back button, do not create twice
+                    if ($scope.basicinfo.aro_toggle == 'C') {
+                        $http.post('/dashboard/api/frequencies/')
+                            .then(function (r) {
+                                if (r) {
+                                    for (i = 0; i < r.data.length ; i++) {
+                                        if ( r.data[i].id == $scope.basicinfo.aro_frequency) {
+                                            percent = ( r.data[i].min + r.data[i].max ) / 2 * 100;
+                                            if ( r.data[i].min == 1 )
+                                                percent = 100;
+                                            $scope.basicinfo.aro_rate = percent;
+                                        }
+                                    }
+                                }
+                            }).catch(function(r){
+                                return false;
+                        });
+                    } else if ($scope.basicinfo.aro_toggle == 'K') {
+                        $scope.basicinfo.aro_rate = $scope.basicinfo.aro_fixed;
+                    } else {
+                        $http.post('/dashboard/api/time-units/')
+                            .then(function(d){
+                                if ( d ) {
+                                    for ( i = 0 ; i < d.data.length ; i++ ) {
+                                        if ( d.data[i].id == $scope.basicinfo.aro_time_unit ) {
+                                            percent = $scope.basicinfo.aro_known_multiplier * d.data[i].annual_units / $scope.basicinfo.aro_known_unit_quantity;
+                                            if ( percent >= 1 )
+                                                 $scope.basicinfo.aro_rate = 100;
+                                            else {
+                                                 percent = percent * 100;
+                                                 $scope.basicinfo.aro_rate = percent.toFixed(3);
+                                            }
+                                        }
+                                    }
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            }).catch(function(d) {
+                                return false;
+                        });
+                    }
+                    $scope.entry_overview.response = $('.wizard-step-1 select[name=response] option:selected').html();
+                    $scope.entry_overview.entry_owner = $('.wizard-step-1 select[name=entry_owner] option:selected').html();
+                    $scope.entry_overview.date_created = r.data.created_date;
+                    $scope.entry_overview.date_modified = r.data.modified_date;
+                    $scope.entry_overview.date_evaluated = r.data.evaluated_date;
+
+                    $('.wizard-step-1 select[name=locations] option:selected').each(function() {
+                        $scope.entry_overview.locations.push($(this).html());
+                    });
+
+                    WizardValidatorService.status.basic_info = true;
+                    $(element).bwizard("next");
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }).catch(function(r){
                 return false;
-            }
-        }).catch(function(r){
-            return false
-        })
+        });
     }
 
     $scope.save_threat_details = function(element){
@@ -3455,8 +4368,8 @@ colorAdminApp.controller('registerAddEntriresController',
                 return false;
             }
         }).catch(function(r){
-            return false
-        })
+            return false;
+        });
     }
 
     $scope.save_affected_assets = function(element){
@@ -3473,7 +4386,7 @@ colorAdminApp.controller('registerAddEntriresController',
                 return false;
             }
         }).catch(function(r){
-            return false
+            return false;
         })
     }
 
@@ -3483,37 +4396,130 @@ colorAdminApp.controller('registerAddEntriresController',
         $http.post('/dashboard/api/risk-entry/mitigating-controls/' + $scope.entry_id + '/', $scope.mitigating_controls)
         .then(function(r){
             if(r.data.code){
+                /*Inherent*/
+                max_loss = 0;
+                for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++){
+                    item = $scope.mitigating_controls.multidata[i];
+                    max_loss = max_loss > item.max_loss ? max_loss : item.max_loss;
+                }
+                $scope.mitigating_controls.max_loss = max_loss;
+
+                inherent_ale_rate = $scope.affected_assets.total_ale_value / max_loss;
+                $scope.entry_overview.inherent_ale_monitized = $scope.affected_assets.total_ale_value;
+                $scope.entry_overview.inherent_ale_rate = inherent_ale_rate.toFixed(5);
+
+                residual_ale_rate = ($scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale) / max_loss;
+                $scope.entry_overview.residual_ale_monitized = $scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale;
+                $scope.entry_overview.residual_ale_rate = residual_ale_rate.toFixed(5);
+                $http.post('/dashboard/api/severity-categories/')
+                    .then(function (d) {
+                        if (d) {
+                            for (i = 0; i < d.data.length; i++) {
+                                if (inherent_ale_rate >= d.data[i].min && inherent_ale_rate < d.data[i].max) {
+                                    $scope.entry_overview.inherent_ale_category = d.data[i].name;
+                                }
+                                if (residual_ale_rate >= d.data[i].min && residual_ale_rate < d.data[i].max) {
+                                    $scope.entry_overview.residual_ale_category = d.data[i].name;
+                                }
+                            }
+                        }
+                    }).catch(function (d) {
+                    return false;
+                });
+
+                inherent_sle_rate = $scope.affected_assets.total_sle_value / max_loss;
+                $scope.entry_overview.inherent_sle_monitized = $scope.affected_assets.total_sle_value;
+                $scope.entry_overview.inherent_sle_rate = inherent_sle_rate.toFixed(5);
+
+                residual_sle_rate = $scope.entry_overview.inherent_sle_rate - ($scope.entry_overview.inherent_sle_rate * $scope.mitigating_controls.sle_rate / 100);
+                $scope.entry_overview.residual_sle_monitized = $scope.affected_assets.total_sle_value - $scope.mitigating_controls.sle_cost;
+                $scope.entry_overview.residual_sle_rate = residual_sle_rate.toFixed(5);
+                if( inherent_sle_rate >= 1 )
+                    $scope.entry_overview.inherent_sle_category = 'Catastrophic';
+                else {
+                    $http.post('/dashboard/api/impact-categories/')
+                        .then(function (d) {
+                            if (d) {
+                                for (i = 0; i < d.data.length; i++) {
+                                    if (inherent_sle_rate >= d.data[i].min && inherent_sle_rate < d.data[i].max) {
+                                        $scope.entry_overview.inherent_sle_category = d.data[i].name;
+                                    }
+                                    if (residual_sle_rate >= d.data[i].min && residual_sle_rate < d.data[i].max) {
+                                        $scope.entry_overview.residual_sle_category = d.data[i].name;
+                                    }
+                                }
+                            }
+                        }).catch(function (d) {
+                        return false;
+                    });
+                }
+
+                inherent_aro_rate = $scope.basicinfo.aro_rate / 100;
+                $scope.entry_overview.inherent_aro_rate = $scope.basicinfo.aro_rate.toFixed(3);
+                $scope.entry_overview.inherent_aro_in_days = parseInt(365 / $scope.basicinfo.aro_rate * 100);
+
+                residual_aro_rate = $scope.entry_overview.inherent_aro_rate / 100 - ($scope.entry_overview.inherent_aro_rate / 100 * $scope.mitigating_controls.aro_rate / 100);
+                $scope.entry_overview.residual_aro_rate = residual_aro_rate.toFixed(5);
+                $scope.entry_overview.residual_aro_in_days = parseInt(365 / residual_aro_rate);
+                $http.post('/dashboard/api/frequencies/')
+                    .then(function (d) {
+                        if (d) {
+                            for( j = 0 ; j < d.data.length ; j++){
+                                if ( d.data[j].min <= inherent_aro_rate && d.data[j].max > inherent_aro_rate) {
+                                    $scope.entry_overview.inherent_aro_category = d.data[j].name;
+                                }
+                                if ( d.data[j].min <= residual_aro_rate && d.data[j].max > residual_aro_rate) {
+                                    $scope.entry_overview.residual_aro_category = d.data[j].name;
+                                }
+                            }
+                        }
+                    }).catch(function (d) {
+                    return false;
+                });
+                /*Mitigated Risk*/
+                $scope.entry_overview.mitigated_ale_monitized = $scope.mitigating_controls.total_ale;
+                $scope.entry_overview.mitigated_ale_rate = $scope.mitigating_controls.total_ale / $scope.affected_assets.total_ale_value;
+                $scope.entry_overview.mitigated_ale_rate = $scope.entry_overview.mitigated_ale_rate.toFixed(3);
+
+                $scope.entry_overview.mitigated_sle_monitized = $scope.mitigating_controls.sle_cost;
+                $scope.entry_overview.mitigated_sle_rate = $scope.mitigating_controls.sle_rate.toFixed(3);
+
+                $scope.entry_overview.mitigated_aro_monitized = $scope.mitigating_controls.aro_cost;
+                $scope.entry_overview.mitigated_aro_rate = $scope.mitigating_controls.aro_rate.toFixed(3);
+                /*Inherent Risk Details*/
+                $scope.entry_overview.incident_response = $scope.basicinfo.incident_response;
+
                 WizardValidatorService.status.mitigating_controls = true;
                 $scope.entry_company_controls = r.data.entry_control;
                 $scope.measurements.measurement_controls = r.data.measurement_controls;
                 $(element).bwizard("next");
                 return true;
-            }
-            else{
+            } else{
                 return false;
             }
         }).catch(function(r){
-            return false
+            return false;
         })
     }
 
     $scope.save_measurements = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
-        $http.post('/dashboard/api/risk-entry/measurements/' + $scope.entry_id + '/', $scope.measurements)
-        .then(function(r){
-            if(r.data.code == 200){
-                WizardValidatorService.status.measurements = true;
-                $scope.entry_details = r.data.entry_details;
-                $(element).bwizard("next");
-                return true;
-            }
-            else{
-                return false;
-            }
-        }).catch(function(r){
-            return false
-        })
+        $(element).bwizard("next");
+        // $http.post('/dashboard/api/risk-entry/measurements/' + $scope.entry_id + '/', $scope.measurements)
+        // .then(function(r){
+        //     if(r.data.code == 200){
+        //         WizardValidatorService.status.measurements = true;
+        //         $scope.entry_details = r.data.entry_details;
+        //         $(element).bwizard("next");
+        //         return true;
+        //     }
+        //     else{
+        //         return false;
+        //     }
+        // }).catch(function(r){
+        //     return false;
+        // })
     }
 
 

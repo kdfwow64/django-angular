@@ -227,6 +227,7 @@ function CompanyControlMeasuresService($http){
   12.0 SERVICE - WizardValidatorService
 -----------------------------------------------*/
 
+
 function WizardValidatorService(){
     riskEntryValidator = function (e, ui) {
         $scope = angular.element(e.target).scope()
@@ -447,11 +448,92 @@ function WizardFormService($http){
 
     }
 
+    function get_compliance_requirement_form(){
+        return {
+            type: null,
+            type_id: null,
+            name: null,
+            compliance_id: null,
+            requirement: null,
+            requirement_id: null,
+            version: null,
+            details: null,
+        }
+
+    }
+
     var service = {
         get_threat_detail_form: get_threat_detail_form,
         get_affected_assets_form: get_affected_assets_form,
         get_mitigating_controls_form: get_mitigating_controls_form,
         get_measurements_form: get_measurements_form,
+        get_compliance_requirement_form: get_compliance_requirement_form,
+    }
+    return service;
+}
+
+/* -----------------------------------
+  18.0 SERVICE - TimeUnitService
+--------------------------------------*/
+
+function TimeUnitService($http){
+    function get_all_time_units(){
+        return $http.get('/dashboard/api/time-units/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getAllTimeUnits: get_all_time_units,
+    }
+    return service;
+}
+
+/* -----------------------------------
+  19.0 SERVICE - FrequencyCategoryService
+--------------------------------------*/
+
+function FrequencyCategoryService($http){
+    function get_all_frequencies(){
+        return $http.get('/dashboard/api/frequencies/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getAllFrequencies: get_all_frequencies,
+    }
+    return service;
+}
+
+/* -----------------------------------
+  20.0 SERVICE - EntryUrlService
+--------------------------------------*/
+
+function EntryUrlService($http){
+    function get_all_entry_urls(){
+        return $http.get('/dashboard/api/entry-urls/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+    var service = {
+        getAllEntryUrls: get_all_entry_urls,
+    }
+    return service;
+}
+
+/* -----------------------------------
+  21.0 SERVICE - ComplianceTypeService
+--------------------------------------*/
+
+function ComplianceTypeService($http){
+    function get_all_compliance_types(){
+        return $http.get('/dashboard/api/compliance-types/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+    var service = {
+        getAllComplianceTypes: get_all_compliance_types,
     }
     return service;
 }
@@ -473,3 +555,7 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ImpactTypeService', ['$http', ImpactTypeService])
              .factory('SeverityService', ['$http', SeverityService])
              .factory('WizardFormService', [WizardFormService])
+             .factory('TimeUnitService', ['$http', TimeUnitService])
+             .factory('FrequencyCategoryService', ['$http', FrequencyCategoryService])
+             .factory('EntryUrlService', ['$http', EntryUrlService])
+             .factory('ComplianceTypeService', ['$http', ComplianceTypeService])

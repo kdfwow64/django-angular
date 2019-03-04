@@ -669,9 +669,9 @@ class Response(DefaultFieldsCategory):
 
 class EntryUrl(DefaultFieldsEntry):
     """Entry Url."""
-
     notes = models.TextField(
-        blank=True, null=True, help_text=('Notes on why the url was selected for the entry'),)  # Notes associated with the URL
+        blank=True, null=True,
+        help_text=('Notes on why the url was selected for the entry'), )  # Notes associated with the URL
     url = models.URLField(max_length=512, help_text=(
         'URL used to support detail of the entry'),)  # Website or URL of the location defined.
     is_internal = models.BooleanField(
