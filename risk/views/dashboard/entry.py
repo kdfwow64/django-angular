@@ -28,6 +28,13 @@ from risk.models import (
     EntryRiskType,
     Response,
     RiskType,
+    TimeUnit,
+    FrequencyCategory,
+    EntryUrl,
+    ComplianceType,
+    ComplianceRequirement,
+    EntryComplianceRequirement,
+    CompanyAsset,
 )
 from risk.forms.entry import(
     RiskEntryBasicForm,
@@ -111,8 +118,14 @@ class CreateRiskEntry(View):
             if entry_id is None:
                 risk_entry.register = request.user.get_current_company().get_active_register()
                 risk_entry.created_by = request.user
+            risk_entry.response_id = int(
+                request_data.get("response", request.user.id))
             risk_entry.entry_owner_id = int(
                 request_data.get("entry_owner", request.user.id))
+            risk_entry.aro_frequency_id = int(
+                request_data.get("aro_frequency", request.user.id))
+            risk_entry.aro_time_unit_id = int(
+                request_data.get("aro_time_unit", request.user.id))
             risk_entry.modified_by = request.user
             risk_entry.save()
 
@@ -132,20 +145,20 @@ class CreateRiskEntry(View):
             #     pass
 
             # Select multiple dropdowns - Risk Type
-            selected_rt = request_data.get("risk_types", [])
-            for ert in risk_entry.entryrisktype.all():
-                try:
-                    selected_rt.remove(ert.id_risktype_id)
-                except:  # This risktype is not selected anymore
-                    ert.delete()
-            # Add new RiskType
-            for risk_type_id in selected_rt:
-                try:
-                    risk_type = RiskType.objects.get(pk=risk_type_id)
-                    EntryRiskType.objects.get_or_create(
-                        id_entry=risk_entry, id_risktype=risk_type)
-                except:
-                    pass
+            # selected_rt = request_data.get("risk_types", [])
+            # for ert in risk_entry.entryrisktype.all():
+            #     try:
+            #         selected_rt.remove(ert.id_risktype_id)
+            #     except:  # This risktype is not selected anymore
+            #         ert.delete()
+            # # Add new RiskType
+            # for risk_type_id in selected_rt:
+            #     try:
+            #         risk_type = RiskType.objects.get(pk=risk_type_id)
+            #         EntryRiskType.objects.get_or_create(
+            #             id_entry=risk_entry, id_risktype=risk_type)
+            #     except:
+            #         pass
 
             # Select multiple dropdowns - Company locations
             selected_cl = request_data.get(
@@ -165,22 +178,39 @@ class CreateRiskEntry(View):
                     pass
 
             # Select multiple dropdowns - Compliance
-            selected_cp = request_data.get("compliances", [])
-            for ecp in risk_entry.entrycompliance.all():
-                try:
-                    selected_cp.remove(ecp.id_compliance_id)
-                except:  # This Compliance is not selected anymore
-                    ecp.delete()
+            # selected_cp = request_data.get("compliances", [])
+            # for ecp in risk_entry.entrycompliance.all():
+            #     try:
+            #         selected_cp.remove(ecp.id_compliance_id)
+            #     except:  # This Compliance is not selected anymore
+            #         ecp.delete()
             # Add new Compliance
-            for compliances_id in selected_cp:
+            # for compliances_id in selected_cp:
+            #     try:
+            #         compliance = Compliance.objects.get(pk=compliances_id)
+            #         EntryCompliance.objects.get_or_create(
+            #             id_entry=risk_entry, id_compliance=compliance)
+            #     except:
+            #         pass
+            #Compliance Requirements
+            selected_compliance_requirements = request_data.get("compliance_requirements", [])
+
+            for requirement in selected_compliance_requirements:
                 try:
-                    compliance = Compliance.objects.get(pk=compliances_id)
-                    EntryCompliance.objects.get_or_create(
-                        id_entry=risk_entry, id_compliance=compliance)
+                    requirement_item = ComplianceRequirement.objects.get(pk=requirement['requirement_id'])
+                    EntryComplianceRequirement.objects.get_or_create(
+                        id_entry=risk_entry, id_compliance_requirement=requirement_item)
                 except:
                     pass
-
-            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
+            #Entry Url
+            entry_urls = request_data.get("entry_urls", [])
+            for entry_url in entry_urls:
+                try:
+                    EntryUrl.objects.get_or_create(
+                        entry=risk_entry, url=entry_url['url'], description=entry_url['desc'], name=entry_url['name'], is_internal=entry_url['type'])
+                except:
+                    pass
+            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, 'created_date': risk_entry.date_created, 'modified_date': risk_entry.date_modified, 'evaluated_date': risk_entry.date_completed}
         else:
             rv = {'status': 'error', 'code': 400, 'errors': form.errors}
 
@@ -268,7 +298,7 @@ def api_update_affected_assets(request, entry_id):
                 # Get current company asset (if any)
                 try:
                     asset = CompanyAsset.objects.get(
-                        pk=request_data.get('asset_name'))
+                        pk=int(request_data.get('name_id')))
                     entry_asset_id = request_data.get('entry_asset_id')
                     try:
                         entry_asset = EntryCompanyAsset.objects.get(
@@ -282,9 +312,13 @@ def api_update_affected_assets(request, entry_id):
                         EntryCompanyAsset.objects.create(
                             id_entry=risk_entry,
                             id_companyasset=asset,
-                            detail=request_data.get('asset_detail'),
-                            exposure_factor=request_data.get(
-                                'exposure_factor'),
+                            detail=request_data.get('detail'),
+                            exposure_factor_toggle=request_data.get(
+                                'exposure_factor_toggle'),
+                            exposure_factor_fixed=request_data.get(
+                                'exposure_factor_fixed'),
+                            exposure_factor_rate=request_data.get(
+                                'exposure_factor_rate'),
                         )
                 except:
                     rv = {'status': 'error', 'code': 400,
@@ -309,11 +343,15 @@ def api_update_mitigating_controls(request, entry_id):
             risk_entry = Entry.objects.get(pk=entry_id)
             data = json.loads(request.body.decode('utf-8'))
             payload = data.get("multidata", [])
+            # data.get('notes_mitigation')
+            # data.get('additional_mitigation')
+            risk_entry.mitigation_notes = data.get('notes_mitigation')
+            risk_entry.additional_mitigation = data.get('additional_mitigation')
             measurement_controls = []
             for request_data in payload:
                 try:
                     control = CompanyControl.objects.get(
-                        pk=request_data.get('control'))
+                        pk=request_data.get('company_id'))
                     entry_mcontrol_id = request_data.get('entry_mcontrol_id')
                     try:
                         entry_control = EntryCompanyControl.objects.get(
@@ -328,10 +366,12 @@ def api_update_mitigating_controls(request, entry_id):
                         entry_control = EntryCompanyControl.objects.create(
                             id_entry=risk_entry,
                             id_companycontrol=control,
-                            mitigation_rate=request_data.get(
-                                'mitigation_rate', 0) or 0,
+                            sle_mitigation_rate=request_data.get(
+                                'sle_mitigation_rate', 0) or 0,
+                            aro_mitigation_rate=request_data.get(
+                                'aro_mitigation_rate', 0) or 0,
                             notes=request_data.get('notes'),
-                            url=request_data.get('url'),
+                            # url=request_data.get('url'),
                         )
                     measurement_controls.append(
                         {'id': entry_control.id, 'name': entry_control.id_companycontrol.name})
@@ -425,6 +465,45 @@ def get_all_responses_for_dropdown(request):
 
 
 @login_required
+def get_all_time_units_for_dropdown(request):
+    """Get all time units for dropdown."""
+    data = []
+    for unit in TimeUnit.objects.order_by('name').all():
+        data.append({'id': unit.id, 'name': unit.name, 'annual_units':unit.annual_units})
+    return JsonResponse(data, safe=False)
+
+
+@login_required
+def get_all_frequencies_for_dropdown(request):
+    """Get all frequency categories for dropdown."""
+    data = []
+    for frequency in FrequencyCategory.objects.order_by('name').all():
+        data.append({'id': frequency.id, 'name': frequency.name, 'min':frequency.minimum, 'max':frequency.maximum})
+    return JsonResponse(data, safe=False)
+
+
+@login_required
+def get_all_entry_urls_for_dropdown(request):
+    """Get all entry urls for dropdown."""
+    data = []
+    for url in EntryUrl.objects.order_by('name').all():
+        type = 'Internal'
+        if url.is_internal == 0:
+            type = 'External'
+        data.append({'id': url.id, 'name': url.name, 'url': url.url, 'type': type, 'desc': url.description})
+    return JsonResponse(data, safe=False)
+
+
+@login_required
+def get_all_compliance_types_for_dropdown(request):
+    """Get all compliance types for dropdown."""
+    data = []
+    for type in ComplianceType.objects.order_by('name').all():
+        data.append({'id': type.id, 'name': type.name})
+    return JsonResponse(data, safe=False)
+
+
+@login_required
 def get_all_entry_company_control_for_dropdown(request):
     """Get all entry company control for dropdown."""
     data = []
@@ -432,7 +511,6 @@ def get_all_entry_company_control_for_dropdown(request):
         data.append(
             {'id': measures.id, 'name': measures.id_companycontrol.name})
     return JsonResponse(data, safe=False)
-
 
 @login_required
 def api_get_risk_entry(request, entry_id):
@@ -459,8 +537,17 @@ def api_get_risk_entry(request, entry_id):
                     'locations': [loc.id_companylocation_id for loc in risk_entry.entry_companylocation.all()] or [1, ],
                     'compliances': [rec.id_compliance_id for rec in risk_entry.entrycompliance.all()],
                     'entry_owner': risk_entry.entry_owner_id or request.user.id,
-                    'aro_fixed': risk_entry.aro_fixed,
                     'aro_notes': risk_entry.aro_notes,
+                    'assumption': risk_entry.assumption,
+                    'evaluation_days': risk_entry.evaluation_days,
+                    'aro_toggle': risk_entry.aro_toggle,
+                    'aro_known_multiplier': risk_entry.aro_known_multiplier,
+                    'aro_known_unit_quantity': risk_entry.aro_known_unit_quantity,
+                    'aro_time_unit': risk_entry.aro_time_unit_id,
+                    'aro_frequency': risk_entry.aro_frequency_id,
+                    'aro_fixed': risk_entry.aro_fixed,
+                    'artifacts': risk_entry.artifacts,
+                    'incident_response': risk_entry.incident_response,
                 }
             })
             try:

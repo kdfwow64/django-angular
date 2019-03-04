@@ -26,7 +26,9 @@ class NotificationGroup(DefaultFieldsCategory):
     """This table describes the notifiication group."""
 
     members = models.ManyToManyField('User', through='NotificationEmailDistro',
-                                     through_fields=('id_notificationgroup', 'id_user'), related_name='NotificationGroupMembers', help_text=('Users that belong to the notification group'),)  # There will be specific NotificationGroups setup for CORE that will be used for all clients.  This is for application notifications, marketing notifications will be handled separately.
+                                     through_fields=('id_notificationgroup', 'id_user'),
+                                     related_name='NotificationGroupMembers', help_text=(
+        'Users that belong to the notification group'), )  # There will be specific NotificationGroups setup for CORE that will be used for all clients.  This is for application notifications, marketing notifications will be handled separately.
 
     def __str__(self):
         """String."""
@@ -45,10 +47,12 @@ class NotificationEmailDistro(DefaultFields):
     Foreign Key and Relationships
     """
 
-    id_notificationgroup = models.ForeignKey('NotificationGroup', on_delete=models.PROTECT, blank=False, related_name='notificaitonemaildistro', help_text=(
-        'Alert used for the email notification'),)
-    id_user = models.ForeignKey('User', on_delete=models.PROTECT, blank=False, related_name='alertemaildistro', help_text=(
-        'Users the alert will be sent to'),)
+    id_notificationgroup = models.ForeignKey('NotificationGroup', on_delete=models.PROTECT, blank=False,
+                                             related_name='notificaitonemaildistro', help_text=(
+            'Alert used for the email notification'), )
+    id_user = models.ForeignKey('User', on_delete=models.PROTECT, blank=False, related_name='alertemaildistro',
+                                help_text=(
+                                    'Users the alert will be sent to'), )
 
     def __str__(self):
         """String."""
@@ -68,22 +72,22 @@ class AuditChange(models.Model):
     """
 
     date_modified = models.DateTimeField(
-        auto_now=True, null=True, help_text=('Timestamp that the change was made'),)  # Not in use
+        auto_now=True, null=True, help_text=('Timestamp that the change was made'), )  # Not in use
     table = models.CharField(
-        max_length=128, blank=False, help_text=('Table name that the change was made'),)  # Not in use
+        max_length=128, blank=False, help_text=('Table name that the change was made'), )  # Not in use
     column = models.CharField(
-        max_length=128, blank=False, help_text=('Column name that was changed'),)  # Not in use
+        max_length=128, blank=False, help_text=('Column name that was changed'), )  # Not in use
     row = models.IntegerField(
-        blank=False, help_text=('The table id that was changed'),)  # Not in use
+        blank=False, help_text=('The table id that was changed'), )  # Not in use
     oldvalue = models.CharField(
-        max_length=255, blank=False, help_text=('The value prior to the change'),)  # Not in use
+        max_length=255, blank=False, help_text=('The value prior to the change'), )  # Not in use
     # Foreign Key and Relationships
     user = models.ForeignKey('User', on_delete=models.PROTECT, related_name='auditchange', help_text=(
-        'User id for the user that made the change'),)
+        'User id for the user that made the change'), )
     account = models.ForeignKey('Account', on_delete=models.PROTECT, related_name='auditchange', help_text=(
-        'Account id for the account that was changed'),)
+        'Account id for the account that was changed'), )
     company = models.ForeignKey('Company', on_delete=models.PROTECT, null=True, related_name='auditchange', help_text=(
-        'Company id for the company that was changed'),)
+        'Company id for the company that was changed'), )
 
     class Meta:
         """Meta class."""
@@ -106,31 +110,32 @@ class Snapshot(models.Model):
     """
 
     date_created = models.DateTimeField(
-        auto_now_add=True, null=True, help_text=('The timestamp the snapshot was taken'),)  # Not in use
+        auto_now_add=True, null=True, help_text=('The timestamp the snapshot was taken'), )  # Not in use
     active_accounts = models.IntegerField(
-        blank=True, null=True, help_text=('Number of active accounts '),)  # Not in use
+        blank=True, null=True, help_text=('Number of active accounts '), )  # Not in use
     active_companies = models.IntegerField(
-        blank=True, null=True, help_text=('Number of active companies'),)  # Not in use
+        blank=True, null=True, help_text=('Number of active companies'), )  # Not in use
     active_users = models.IntegerField(
-        blank=True, null=True, help_text=('Number of active users'),)  # Not in use
+        blank=True, null=True, help_text=('Number of active users'), )  # Not in use
     company_activity = models.IntegerField(
-        blank=True, null=True, help_text=('Number of companies that had activity since last snapshot '),)  # Not in use
+        blank=True, null=True, help_text=('Number of companies that had activity since last snapshot '), )  # Not in use
     recent_login = models.IntegerField(
-        blank=True, null=True, help_text=('Number of logins since last snapshot'),)  # Not in use
+        blank=True, null=True, help_text=('Number of logins since last snapshot'), )  # Not in use
     feedback_entries = models.IntegerField(
-        blank=True, null=True, help_text=('Number of feedback entries from users'),)  # Not in use
+        blank=True, null=True, help_text=('Number of feedback entries from users'), )  # Not in use
     churn_accounts = models.IntegerField(
-        blank=True, null=True, help_text=('Number of accounts that did not renew'),)  # Not in use
+        blank=True, null=True, help_text=('Number of accounts that did not renew'), )  # Not in use
     disabled_users = models.IntegerField(
-        blank=True, null=True, help_text=('Users marked as disabled from active companies'),)  # Not in use
+        blank=True, null=True, help_text=('Users marked as disabled from active companies'), )  # Not in use
     register_number = models.IntegerField(
-        blank=True, null=True, help_text=('Number of active registers'),)  # Not in use
+        blank=True, null=True, help_text=('Number of active registers'), )  # Not in use
     entry_number = models.IntegerField(
-        blank=True, null=True, help_text=('Number of active entries'),)  # Not in use
+        blank=True, null=True, help_text=('Number of active entries'), )  # Not in use
     control_number_total = models.IntegerField(
-        blank=True, null=True, help_text=('Number of controls being used'),)  # Not in use
+        blank=True, null=True, help_text=('Number of controls being used'), )  # Not in use
     control_number_core = models.IntegerField(
-        blank=True, null=True, help_text=('Number of controls being used specific to core'),)  # Not in use
+        blank=True, null=True, help_text=('Number of controls being used specific to core'), )  # Not in use
+
     # Foreign Key and Relationships
 
     def __str__(self):

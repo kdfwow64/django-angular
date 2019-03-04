@@ -1,0 +1,129 @@
+/*
+Customized CSS by Randy 2/25/19
+*/
+
+/* For Register Entry */
+legend {
+    padding-left: 8px;
+    font-size: 16px;
+    background-color: #d2d0d0;
+}
+.wizard-step-1 textarea {
+    max-width: 100%;
+}
+.aro-bordered-div {
+    border: 1px solid #ccd0d4;
+    margin-bottom: 10px;
+    padding-top: 12px;
+}
+.aro-radio-btn {
+    margin-top: 29px !important;
+    height: 18px;
+}
+.div-right {
+    float: right !important;
+}
+.input-without-label {
+    margin-top: 22px;
+}
+.btw-txt {
+    float: left;
+    margin-top: 39px;
+}
+.aro-cal-res-div {
+    text-align: center;
+    font-size: 19px;
+    margin-top: 10px;
+}
+.add-entry-tb thead th {
+    text-align: center;
+}
+.add-entry-tb tbody {
+    border: 1px solid #ccd0d4 !important;
+}
+.add-entry-tb tbody td {
+    padding: 3px !important;
+    text-align: center;
+    vertical-align: middle !important;
+    border: 1px solid #e2e7eb;
+}
+.add-entry-tb tbody td .btn{
+    padding: 2px 12px !important;
+}
+.incident-radio-btn {
+    height: 18px;
+}
+.span-yes-no {
+    float: left;margin: 3px 21px 10px 6px;
+}
+#add-entry-compliance select option {
+    max-width: 100px;
+}
+
+@media only screen and (max-width: 992px) {
+    .res-times-in {
+        margin-bottom: 34px;
+    }
+}
+/*--------------------*/
+
+/*Threat Detail*/
+.add-threat-detail-btn {
+    margin-bottom: 10px;
+}
+.multiple-lines {
+     white-space: pre-wrap;
+}
+
+/*Affect Assets*/
+.as-asset-value-txt {
+    margin-top: 23px;
+    font-size:20px;
+}
+
+/*Mitigating*/
+.font-16 {
+    font-size: 16px;
+}
+.half-left {
+    width: 50%;
+    float: left;
+}
+.control-calc-table {
+    font-size: 16px;
+}
+.control-calc-table td {
+    padding-top: 5px;
+    text-align: right;
+}
+.control-calc-table tr td:nth-child(2) {
+    font-weight: bold;
+}
+.border-tr td {
+    border-bottom: 2px solid black;
+}
+
+/*Entry Detail View*/
+.entry-view-table {
+    font-size: 12px;
+    margin-left: 10px;
+}
+.entry-view-table td {
+    padding-top: 5px;
+}
+.entry-view-table tr td:nth-child(2) {
+    font-weight: bold;
+}
+.top-bordered-div {
+    border-top: 2px solid #ccd0d4;
+    padding: 20px;
+}
+.top-bordered-div div {
+    /*margin: 0;*/
+}
+.top-bordered-div textarea {
+    width: 100%;
+}
+.bottom-10 {
+    margin-bottom: 20px !important;
+}

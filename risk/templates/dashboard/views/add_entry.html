@@ -1,4 +1,336 @@
 {% load staticfiles %}
+{#Add or Edit Entry Compliance Requirement#}
+<div class="modal fade" id="add_edit_entry_compliance_requirement">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Entry Compliance</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+                    <div class="m-b-0">
+                        <div class="row">
+                            <input type="hidden" id="compliance_requirement_edit_num" value="-1">
+                            <div class="col-md-3">
+                                <label>Type</label>
+                                <select name="entry_compliance_type" ng-model="entry_compliance.type" ng-change="entry_compliance_type_change()" class="form-control" ng-options="k.id as k.name for k in compliance_types" data-parsley-group="wizard-add-entry-compliance" required><option value=""></option></select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Name</label>
+                                <select name="entry_compliance_name" ng-model="entry_compliance.name" ng-change="entry_compliance_name_change()" class="form-control" ng-options="k.id as k.name for k in compliance_names" data-parsley-group="wizard-add-entry-compliance" required ><option value=""></option></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Detail</label>
+                                <select name="entry_compliance_requirement" ng-model="entry_compliance.requirement" class="form-control" ng-options="k.id as k.detail for k in compliance_requirements" data-parsley-group="wizard-add-entry-compliance" required ><option value=""></option></select>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a class="btn btn-success add-edit-btn" ng-click="add_edit_entry_compliance_requirement()">Add</a>
+            </div>
+        </div>
+    </div>
+</div>
+{#Add or Edit Entry Url or Artifact#}
+<div class="modal fade" id="add_edit_entry_url">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Artifact</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+                    <div class="m-b-0">
+                        <div class="row">
+                            <input type="hidden" id="entry_url_edit_num" value="-1">
+                            <div class="col-md-3">
+                                <label>URL</label>
+                                <input type="text" name="entry_url_url" ng-model="entry_url.url" class="form-control" required/>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Name</label>
+                                <input type="text" name="entry_url_name" ng-model="entry_url.name" class="form-control" required/>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Type</label>
+                                <select name="entry_url_type" ng-model="entry_url.type" class="form-control" required >
+                                    <option value=""></option>
+                                    <option value="1">Internal</option>
+                                    <option value="0">External</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Description</label>
+                                <input type="text" name="entry_url_desc" ng-model="entry_url.desc" class="form-control" required/>
+                            </div>
+                        </div>
+                        <div class="row entry-url-warning-txt" style="display: none;">
+                            <span class="pull-right" style="color: red;">Something wrong</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a class="btn btn-success add-edit-btn" ng-click="add_edit_entry_url()">Add</a>
+            </div>
+        </div>
+    </div>
+</div>
+{#Add or Edit Threat Detail#}
+<div class="modal fade" id="add_edit_threat_detail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Threat Detail</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+                    <div class="m-b-0">
+                        <div class="row">
+                            <input type="hidden" ng-model="new_threat.edit_num">
+                            <div class="col-md-4">
+                                <label>Threat Actor</label>
+                                <select name="new_threat_actor" ng-model="new_threat.actor_name" class="form-control" ng-options="k.id as k.name for k in actors" required/><option value=""></option></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Intention</label>
+                                <select name="new_intentions" ng-model="new_threat.intentions" class="form-control" multiple=true ng-options="k.id as k.name for k in actor_intents"/></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Motive</label>
+                                <select name="new_motives" ng-model="new_threat.motives"class="form-control" multiple=true ng-options="k.id as k.name for k in actor_motives"/></select>
+                            </div>
+                            <div class="col-md-12">
+                                <label>Detail</label>
+                                <textarea rows="3" ng-model="new_threat.detail" name="new_threat_detail" placeholder="Threat Details" class="form-control" required/></textarea>
+                            </div>
+                        </div>
+                        <div class="row threat-detail-warning-txt" style="display: none;">
+                            <span class="pull-right" style="color: red;">Requirement was not selected</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a class="btn btn-success add-edit-btn" ng-click="add_edit_threat_detail()">Add</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+#Add or Edit Affected Asset#}
+<div class="modal fade" id="add_edit_affected_asset">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Affected Asset</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+                    <div class="m-b-0">
+                        <div class="row">
+                            <input type="hidden" ng-model="new_as.edit_num">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Company Asset</label>
+                                    <select name="new_asset_name" ng-change="company_asset_change()" ng-model="new_as.asset_name" class="form-control" ng-options="k.id as k.name for k in company_assets" required/><option value=""></option></select>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label ng-bind="new_as.asset_value_display" class="as-asset-value-txt"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Asset Exposure Details</label>
+                                    <div class="col-md-12 aro-bordered-div">
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <input type="radio" ng-change="as_toggle_change()" ng-disabled="new_as.asset_name == null" ng-model="new_as.exposure_factor_toggle" value="F" class="form-control aro-radio-btn as-radio-btn-new" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Fixed Amount</label>
+                                                    <input min="0" type="number" name="new_fixed_amount" ng-required="new_as.exposure_factor_toggle == 'F'" ng-disabled="new_as.exposure_factor_toggle != 'F'" ng-model="new_as.fixed_amount" step="1" placeholder="" class="form-control" required/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <span class="btw-txt">$</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <input type="radio" ng-change="as_toggle_change()" ng-disabled="new_as.asset_name == null" ng-model="new_as.exposure_factor_toggle" value="P" class="form-control aro-radio-btn as-radio-btn-new" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Percent of asset value</label>
+                                                    <input min="0" max="100" type="number" ng-required="new_as.exposure_factor_toggle == 'P'" ng-disabled="new_as.exposure_factor_toggle != 'P'" ng-model="new_as.percent_asset_value" step="1" placeholder="" class="form-control" required/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <span class="btw-txt">%</span>
+                                            </div>
+                                            <div class="col-md-2 div-right">
+                                                <a class="btn btn-success input-without-label" ng-click="get_result_from_as()">Calculate</a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group aro-cal-res-div">
+                                                    <span ng-bind="new_as.as_cal_res"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Asset Exposure Details</label>
+                                    <textarea rows="3" ng-model="new_as.asset_detail" placeholder="Description" class="form-control"/></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row as-warning-txt-new" style="display: none;">
+                            <span style="color: red;float: right">Something wrong</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a class="btn btn-success add-edit-btn" ng-click="add_edit_affected_asset()"><i class="fa fa-plus"></i>Add</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#Add or Edit Mitigation Control#}
+<div class="modal fade" id="add_edit_mitigation_control">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add a Control</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+                    <input type="hidden" ng-model="add_control.edit_num">
+                    <div class="m-b-0">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Company Control</label>
+                                    <select name="control_name" ng-model="add_control.company_id" class="form-control" ng-options="k.id as k.name for k in company_controls" required/><option value=""></option></select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        <!-- begin row -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Cost Reduction Rate</label>
+                                    <div class="col-md-12 aro-bordered-div">
+                                        <div style="width: 40%; float: left;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="font-16">SLE Reduction Rate</label>
+                                                        <div class="col-md-8">
+                                                            <div class="form-group">
+                                                                <label ng-bind="add_control.sle_rate_display"></label>
+                                                                <input type="number" min="0" ng-max="add_control.sle_rate" ng-model="add_control.sle_mitigation_rate" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="font-16">ARO Reduction Rate</label>
+                                                        <div class="col-md-8">
+                                                            <div class="form-group">
+                                                                <label ng-bind="add_control.aro_rate_display"></label>
+                                                                <input type="number" min="0" ng-max="add_control.aro_rate" ng-model="add_control.aro_mitigation_rate" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="width: 60%; float: left;">
+                                            <table class="control-calc-table" style="border-spacing: 5px 1rem;">
+                                                <tr>
+                                                    <th width="50%"></th>
+                                                    <th width="50%"></th>
+                                                </tr>
+                                                <tr>
+                                                    <td>SLE Cost Reduction</td>
+                                                    <td ng-bind="add_control.sle_cost"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ARO Cost Reduction</td>
+                                                    <td ng-bind="add_control.aro_cost"></td>
+                                                </tr>
+                                                <tr class="border-tr">
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Total Cost Reduction</td>
+                                                    <td ng-bind="add_control.total_cost"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight: bold;">Total ALE Impact</td>
+                                                    <td ng-bind="add_control.total_ale_impact"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <a class="btn btn-success add-edit-btn" style="margin-bottom: 10px;" ng-click="get_result_from_control()">Calculate</a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Control Mitigation Details</label>
+                                    <textarea rows="3" ng-model="add_control.notes" placeholder="Mitigation Details" class="form-control"/></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a class="btn btn-success add-edit-btn" ng-click="add_control_mitigation()">Add</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div ng-init="initialize();">
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">
@@ -102,11 +434,11 @@
                                     <small></small>
                                 </li>
                                 <li>
-                                    Measurements
+                                    Entry Overview
                                     <small></small>
                                 </li>
                                 <li>
-                                    Entry Activity
+                                    Entry List
                                     <small></small>
                                 </li>
                             </ol>
@@ -122,56 +454,241 @@
                                                 <input type="text" pattern=".{25,255}" ng-model="basicinfo.summary" name="summary" placeholder="Summary" class="form-control" data-parsley-group="wizard-step-1" required />
                                             </div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Full Description</label>
                                                 <textarea rows="3" ng-model="basicinfo.description" name="description" placeholder="Description" class="form-control" data-parsley-group="wizard-step-1" required/></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Risk Types</label>
-                                                <select name="risktypes"  ng-model="basicinfo.risk_types" class="form-control" data-parsley-group="wizard-step-1" multiple=true required ng-model="risk_type" ng-options="k.id as k.name for k in risk_types"/></select>
+                                                <label>Assumptions</label>
+                                                <textarea rows="3" ng-model="basicinfo.assumption" name="assumption" placeholder="Assumptions" class="form-control" data-parsley-group="wizard-step-1" required/></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Response</label>
-                                                <select name="response" ng-model="basicinfo.response" class="form-control" ng-model="response" ng-options="k.id as k.name for k in responses"data-parsley-group="wizard-step-1"  required/><option value=""></option></select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Company Location</label>
+                                                <label>Locations in Scope</label>
                                                 <select name="locations" ng-model="basicinfo.locations" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="locations" ng-options="k.id as k.name for k in company_locations"/></select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Compliances</label>
-                                                <select name="compliances" ng-model="basicinfo.compliances" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="compliances" ng-options="k.id as k.abbrv for k in company_compliances"/></select>
+                                                <label>Entry Response</label>
+                                                <select name="response" ng-model="basicinfo.response" class="form-control" ng-model="response" ng-options="k.id as k.name for k in responses"data-parsley-group="wizard-step-1"  required/><option value=""></option></select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Entry Owner</label>
                                                 <select name="entry_owner" ng-model="basicinfo.entry_owner" class="form-control" data-parsley-group="wizard-step-1" ng-model="entry_owner" ng-options="k.id as k.name for k in users" required/><option value=""></option></select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group block1">
-                                                <label>Annual Rate of Occurrence (ARO)</label>
-                                                <input type="number" ng-model="basicinfo.aro_fixed" step="0.01" name="aro_fixed" placeholder="Annual Rate of Occurrence" class="form-control" data-parsley-group="wizard-step-1" required />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>ARO Notes</label>
-                                                <textarea rows="3" ng-model="basicinfo.aro_notes" name="aro_notes" placeholder="ARO Notes" class="form-control" data-parsley-group="wizard-step-1"/></textarea>
+                                                <label>Evaluation Cadence in Days</label>
+                                                <input type="number" ng-model="basicinfo.evaluation_days" step="1" name="evaluation_days" placeholder="Evaluation Days" class="form-control" data-parsley-group="wizard-step-1" required />
                                             </div>
                                         </div>
                                     </div>
-                                 <!-- end row -->
+                                    <!-- end row -->
+                                    <legend class="pull-left width-full">Annual Rate of Occurence (ARO)</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Choose from the following methods</label>
+                                                <div class="col-md-12 aro-bordered-div">
+                                                    <div class="row">
+                                                        <div class="col-md-1">
+                                                            <div class="form-group">
+                                                                <input type="radio" ng-change="aro_toggle_change()" ng-model="basicinfo.aro_toggle" value="F" name="aro_toggle" class="form-control aro-radio-btn" data-parsley-group="wizard-step-1" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>By Units of Time</label>
+                                                                <input min="0" type="number" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_known_multiplier" step="1" name="aro_known_multiplier" placeholder="Times" class="form-control" data-parsley-group="wizard-step-1"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <span class="btw-txt">times in</span>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <input min="0" type="number" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_known_unit_quantity" step="1" name="aro_known_unit_quantity" placeholder="Total" class="form-control input-without-label" data-parsley-group="wizard-step-1"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <select name="aro_time_unit" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_time_unit" class="form-control input-without-label" ng-options="k.id as k.name for k in aro_time_units" data-parsley-group="wizard-step-1" /><option value=""></option></select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-1">
+                                                            <div class="form-group">
+                                                                <input type="radio" ng-change="aro_toggle_change()" ng-model="basicinfo.aro_toggle" value="C" name="aro_toggle" class="form-control aro-radio-btn" data-parsley-group="wizard-step-1" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label>By Frequency Category</label>
+                                                                <select name="aro_frequency" ng-disabled="basicinfo.aro_toggle!='C'" ng-required="basicinfo.aro_toggle=='C'" ng-model="basicinfo.aro_frequency" class="form-control" ng-options="k.id as k.name for k in aro_frequencies" data-parsley-group="wizard-step-1" /><option value=""></option></select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-1">
+                                                            <div class="form-group">
+                                                                <input type="radio" ng-change="aro_toggle_change()" ng-model="basicinfo.aro_toggle" value="K" name="aro_toggle" class="form-control aro-radio-btn" data-parsley-group="wizard-step-1" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label>Known annual rate of occurence</label>
+                                                                <input min="0" max="100" type="number" ng-disabled="basicinfo.aro_toggle!='K'" ng-required="basicinfo.aro_toggle=='K'" ng-model="basicinfo.aro_fixed" step="0.01" name="aro_fixed" placeholder="%" class="form-control" data-parsley-group="wizard-step-1" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <span class="btw-txt">%</span>
+                                                        </div>
+                                                        <div class="col-md-2 div-right">
+                                                            <a class="btn btn-success input-without-label" ng-click="get_result_from_aro()">Calculate</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group aro-cal-res-div">
+                                                                <span id="aro_cal_res"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>ARO Details</label>
+                                                <textarea rows="3" ng-model="basicinfo.aro_notes" name="aro_notes" placeholder="ARO Details" class="form-control" data-parsley-group="wizard-step-1"/></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <legend class="pull-left width-full">Compliance</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <table class="table add-entry-tb">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Type</th>
+                                                            <th>Name</th>
+                                                            <th>Version</th>
+                                                            <th>Detail</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="compliance in basicinfo.compliance_requirements">
+                                                            <input type="hidden" ng-bind="compliance.type_id">
+                                                            <input type="hidden" ng-bind="compliance.compliance_id">
+                                                            <input type="hidden" ng-bind="compliance.requirement_id">
+                                                            <td ng-bind="compliance.type">
+                                                            </td>
+                                                            <td ng-bind="compliance.name">
+                                                            </td>
+                                                            <td ng-bind="compliance.version">
+                                                            </td>
+                                                            <td ng-bind="compliance.requirement">
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-primary" ng-click="open_edit_entry_compliance_requirement_modal($index)">Edit</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-danger" ng-click="remove_this_entry_compliance_requirement($index)">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <!-- start row -->
+                                    <div class="row" style="margin-bottom: 10px;">
+                                        <div class="col-md-1 pull-right">
+                                            <a class="btn btn-success" ng-click="open_add_entry_compliance_requirement_modal()"><i class="fa fa-plus"></i>ADD</a>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <legend class="pull-left width-full">Artifacts</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Websites</label>
+                                                <table class="table add-entry-tb">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="15%">URL</th>
+                                                            <th width="15%">Name</th>
+                                                            <th width="10%">Type</th>
+                                                            <th width="40%">Description</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in basicinfo.entry_urls">
+                                                            <td ng-bind="item.url">
+                                                            </td>
+                                                            <td ng-bind="item.name">
+                                                            </td>
+                                                            <td ng-bind="item.type_name">
+                                                            </td>
+                                                            <td ng-bind="item.desc">
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-primary" ng-click="open_edit_entry_url_modal($index)">Edit</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-danger" ng-click="remove_this_entry_url($index)">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <!-- start row -->
+                                    <div class="row" style="margin-bottom: 10px;">
+                                        <div class="col-md-1 pull-right">
+                                            <a class="btn btn-success" ng-click="open_add_entry_url_modal()"><i class="fa fa-plus"></i>ADD</a>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <legend class="pull-left width-full">Incident Response</legend>
+                                    <!-- start row -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Does this risk event have an incident response plan?</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <input style="width: 15%;float: left;" type="radio" ng-model="basicinfo.incident_response" step="1" name="incident_response" class="form-control incident-radio-btn" data-parsley-group="wizard-step-1" value="1" checked />
+                                                <span class="span-yes-no">Yes</span>
+                                                <input style="width: 15%;float: left;" type="radio" ng-model="basicinfo.incident_response" step="1" name="incident_response" class="form-control incident-radio-btn" data-parsley-group="wizard-step-1" value="0" />
+                                                <span class="span-yes-no">No</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
                                 </fieldset>
                             </div>
                             <!-- end wizard step-1 -->
@@ -180,79 +697,105 @@
                                 <fieldset>
                                     <legend class="pull-left width-full">Threat Detail </legend>
                                     <!-- begin row -->
-                                    <div class="row" ng-repeat="td in threat_details.multidata" ng-class="{'odd': $odd, 'even':$even}">
-                                        <input type='hidden' name='entry_actor_id' ng-model='td.entry_actor_id'>
-                                        <!-- begin col-4 -->
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Threat Actor</label>
-                                                <select name="threat_actor" ng-model="td.actor_name" class="form-control" data-parsley-group="wizard-step-2" required ng-model="actor" ng-options="k.id as k.name for k in actors"/><option value=""></option></select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Intention</label>
-                                                <select name="intention" ng-model="td.intentions" class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_intent" ng-options="k.id as k.name for k in actor_intents"/></select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Motive</label>
-                                                <select name="motive" ng-model="td.motives"class="form-control" data-parsley-group="wizard-step-2" multiple=true ng-model="actor_motive" ng-options="k.id as k.name for k in actor_motives"/></select>
-                                            </div>
-                                        </div>
+                                    <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Detail</label>
-                                                <textarea rows="3" ng-model="td.detail" name="threat_detail" placeholder="Threat Details" class="form-control" data-parsley-group="wizard-step-2"/></textarea>
+                                                <table class="table add-entry-tb">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Threat Actor</th>
+                                                            <th>Intention</th>
+                                                            <th>Motive</th>
+                                                            <th>Detail</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="threat in threat_details.multidata">
+                                                            <td ng-bind="threat.actor_name"></td>
+                                                            <td ng-bind="threat.intentions" class="multiple-lines"></td>
+                                                            <td ng-bind="threat.motives" class="multiple-lines"></td>
+                                                            <td ng-bind="threat.detail"></td>
+                                                            <td>
+                                                                <a class="btn btn-primary" ng-click="open_edit_threat_detail_modal($index)">Edit</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-danger" ng-click="remove_this_threat_detail($index)">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" ng-show="$index>0"><a title="Remove this threat detail" class="btn btn-danger pull-right" ng-click="remove_this_threat_detail($index)"><i class="fa fa-trash-o"></i></a></div>
-                                        <!-- end col-6 -->
+                                    </div>
+                                    <!-- start row -->
+                                    <div class="row" style="margin-bottom: 10px;">
+                                        <div class="col-md-1 pull-right">
+                                            <a class="btn btn-success" ng-click="open_add_threat_detail_modal()"><i class="fa fa-plus"></i>ADD</a>
+                                        </div>
                                     </div>
                                     <!-- end row -->
-                                    <a class="btn btn-success pull-right" ng-click="add_more_threat_detail()"><i class="fa fa-plus"></i> Add More Threat Detail</a>
                                 </fieldset>
                             </div>
                             <!-- end wizard step-2 -->
                             <!-- begin wizard step-3  Affected Assets-->
                             <div class="wizard-step-3">
                                 <fieldset>
-                                    <legend class="pull-left width-full">Affected Assets</legend>
+                                    <legend class="pull-left width-full">Affected Assets </legend>
                                     <!-- begin row -->
-                                    <div class="row" ng-repeat="as in affected_assets.multidata" ng-class="{'odd': $odd, 'even':$even}">
-                                        <input type='hidden' name='entry_asset_id' ng-model='as.entry_asset_id'>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Asset</label>
-                                                <select name="asset_name" ng-model="as.asset_name" class="form-control" data-parsley-group="wizard-step-3" required ng-model="asset" ng-options="k.id as k.name for k in company_assets"/><option value=""></option></select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Exposure Factor</label>
-                                                <div class="controls">
-                                                    <input type="number" ng-model="as.exposure_factor" value='100' min="0" max="100" step="0.01" name="exposure_factor" placeholder="100" class="form-control" data-parsley-group="wizard-step-3" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Detail</label>
-                                                <textarea rows="3" ng-model="as.asset_detail" name="asset_detail" placeholder="Asset Details" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12" ng-show="$index>0"><a title="Remove this affected asset" class="btn btn-danger pull-right" ng-click="remove_this_affected_assets($index)"><i class="fa fa-trash-o"></i></a></div>
-                                    </div>
-                                    <div class="row even">
+                                    <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>SLE Notes</label>
-                                                <textarea rows="3" ng-model="affected_assets.impact_notes" name="impact_notes" placeholder="Single Loss Expectancy Notes" class="form-control" data-parsley-group="wizard-step-3"/></textarea>
+                                                <table class="table add-entry-tb">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Asset Name</th>
+                                                            <th>Asset Value</th>
+                                                            <th>Exposure Factor</th>
+                                                            <th>Detail</th>
+                                                            <th>SLE Cost</th>
+                                                            <th>ALE Cost</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="asset in affected_assets.multidata">
+                                                            <td ng-bind="asset.name"></td>
+                                                            <td ng-bind="asset.asset_value_display"></td>
+                                                            <td ng-bind="asset.factor"></td>
+                                                            <td ng-bind="asset.detail"></td>
+                                                            <td ng-bind="asset.sle"></td>
+                                                            <td ng-bind="asset.ale"></td>
+                                                            <td>
+                                                                <a class="btn btn-primary" ng-click="open_edit_affected_asset_modal($index)">Edit</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-danger" ng-click="remove_this_affected_asset($index)">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>TOTALS</td>
+                                                            <td ng-bind="affected_assets.total_asset_value"></td>
+                                                            <td ng-bind="affected_assets.total_factor"></td>
+                                                            <td></td>
+                                                            <td ng-bind="affected_assets.total_sle"></td>
+                                                            <td ng-bind="affected_assets.total_ale"></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
-                                    <a class="btn btn-success pull-right" ng-click="add_more_affected_assets()"><i class="fa fa-plus"></i> Add More Affected Assets</a>
+                                    <!-- start row -->
+                                    <div class="row" style="margin-bottom: 10px;">
+                                        <div class="col-md-1 pull-right">
+                                            <a class="btn btn-success" ng-click="open_add_affected_asset_modal()"><i class="fa fa-plus"></i>ADD</a>
+                                        </div>
+                                    </div>
                                     <!-- end row -->
                                 </fieldset>
                             </div>
@@ -260,47 +803,115 @@
                             <!-- begin wizard step-4 Mitigating Controls-->
                             <div class="wizard-step-4">
                                 <fieldset>
+                                    <!-- end row -->
                                     <legend class="pull-left width-full">Mitigating Controls</legend>
                                     <!-- begin row -->
-                                    <div class="row" ng-repeat="mc in mitigating_controls.multidata" ng-class="{'even': $odd, 'even':$even}">
-                                        <input type='hidden' name='entry_mcontrol_id' ng-model='mc.entry_mcontrol_id'>
+                                    <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Name</label>
-                                                <select name="control_name" ng-model="mc.control" class="form-control" data-parsley-group="wizard-step-4" ng-model="mitigating_control" ng-options="k.id as k.name for k in company_controls" required/><option value=""></option></select>
-                                            </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>Mitigation Rate</label>
-                                                <div class="controls">
-                                                    <input type="number" ng-model="mc.mitigation_rate" name="mitigation_rate" placeholder="100" min="0" max="100" step="0.01" class="form-control" data-parsley-group="wizard-step-4" />
+                                                <div class="col-md-4">
+                                                    <label>Inherent ALE: </label>
+                                                    <label style="font-weight: bold" ng-bind="'$' + affected_assets.total_ale_value"></label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label>Mitigated ALE: </label>
+                                                    <label style="font-weight: bold" ng-bind="'-$' + mitigating_controls.total_ale"></label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label>Residual ALE: </label>
+                                                    <label style="font-weight: bold" ng-bind="'$' + (affected_assets.total_ale_value - mitigating_controls.total_ale)"></label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Detail</label>
-                                                <textarea rows="3"  ng-model="mc.notes" name="notes" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>URL</label>
-                                                <input type="url"  ng-model="mc.url" name="url" class="form-control" data-parsley-group="wizard-step-4" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12" ng-show="$index>0"><a title="Remove this mitigating control" class="btn btn-danger pull-right" ng-click="remove_this_mitigating_controls($index)"><i class="fa fa-trash-o"></i></a></div>
                                     </div>
-                                    <div class="row even">
+                                    <!-- end row -->
+                                    <!-- begin row -->
+                                    <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label> Additional Mitigation Opportunites</label>
-                                                <textarea rows="3"  ng-model="mitigating_controls.addtional_mitigation" name="addtional_mitigation" placeholder=" Additional Mitigation Opportunites" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
+                                                <label class="font-16">Cost Reduction</label>
+                                                <table class="table add-entry-tb">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Control Name</th>
+                                                            <th>Vendor</th>
+                                                            <th>SLE Rate</th>
+                                                            <th>SLE Cost</th>
+                                                            <th>ARO Rate</th>
+                                                            <th>ARO Cost</th>
+                                                            <th>Cost Impact</th>
+                                                            <th>ALE Mitigation</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="mc in mitigating_controls.multidata">
+                                                            <td ng-bind="mc.company_name"></td>
+                                                            <td ng-bind="mc.control_name"></td>
+                                                            <td ng-bind="mc.vendor_name"></td>
+                                                            <td ng-bind="mc.sle_rate + '%'"></td>
+                                                            <td ng-bind="mc.sle_cost"></td>
+                                                            <td ng-bind="mc.aro_rate + '%'"></td>
+                                                            <td ng-bind="mc.aro_cost"></td>
+                                                            <td ng-bind="'-$' + (mc.sle_cost_value + mc.aro_cost_value)"></td>
+                                                            <td ng-bind="'-$' + (mc.sle_cost_value + mc.aro_cost_value) * basicinfo.aro_rate / 100"></td>
+                                                            <td>
+                                                                <a class="btn btn-primary" ng-click="open_edit_control_modal($index)">Edit</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-danger" ng-click="remove_this_control($index)">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>TOTALS</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td ng-bind="mitigating_controls.sle_rate + '%'"></td>
+                                                            <td ng-bind="'-$' + mitigating_controls.sle_cost"></td>
+                                                            <td ng-bind="mitigating_controls.aro_rate + '%'"></td>
+                                                            <td ng-bind="'-$' + mitigating_controls.aro_cost"></td>
+                                                            <td ng-bind="'-$' + mitigating_controls.total_cost"></td>
+                                                            <td ng-bind="'-$' + mitigating_controls.total_ale"></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
-                                    <a class="btn btn-success pull-right" ng-click="add_more_mitigating_controls()"><i class="fa fa-plus"></i> Add More Mitigating Controls</a>
+                                    <!-- End row -->
+                                    <!-- start row -->
+                                    <div class="row" style="margin-bottom: 10px;">
+                                        <div class="col-md-1 pull-right">
+                                            <a class="btn btn-success" ng-click="open_add_control_modal()"><i class="fa fa-plus"></i>ADD</a>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <legend class="pull-left width-full">Mitigating Detail</legend>
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Context</label>
+                                                <textarea rows="3" ng-model="mitigating_controls.notes_mitigation" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4" required/></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Additional Opportunities</label>
+                                                <textarea rows="3" ng-model="mitigating_controls.additional_mitigation" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4" required/></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- end row -->
                                 </fieldset>
                             </div>
@@ -308,25 +919,441 @@
                             <!-- begin wizard step-5 Measurements-->
                             <div class="wizard-step-5">
                                 <fieldset>
-                                    <legend class="pull-left width-full">Measurements</legend>
+                                    <legend class="pull-left width-full">
+                                        Entry <label ng-bind="entry_id"> </label> Overview<label style="padding-left: 100px;" ng-bind="basicinfo.aro_rate + '%'"></label><label ng-bind="entry_overview.residual_ale_category" style="padding-left: 200px;"></label><label style="padding-left: 20px;" ng-bind="entry_overview.residual_ale_rate"></label><label style="padding-left: 100px;" ng-bind="entry_overview.date_created"></label>
+                                    </legend>
                                     <!-- begin row -->
-                                    <div class="row" ng-repeat="mm in measurements.multidata" ng-class="{'odd': $odd, 'even':$even}">
-                                        <input type='hidden' name='entry_mcontrol_id' ng-model='mm.entry_mcontrol_id'>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Control</label>
-                                                <select name="control_name" class="form-control" data-parsley-group="wizard-step-5" required ng-model="mm.control" ng-options="k.id as k.name for k in measurements.measurement_controls"/><option value=""></option></select>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <label class="font-16" ng-bind="basicinfo.summary"></label>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Measurement</label>
-                                                <select name="locations" class="form-control" data-parsley-group="wizard-step-5" multiple=true ng-model="mm.measurement" ng-options="k.id as k.name for k in control_measures"/></select>
-                                            </div>
+                                            <label ng-bind="entry_overview.response"></label>
                                         </div>
-                                        <div class="col-md-12" ng-show="$index>0"><a title="Remove this mitigating control" class="btn btn-danger pull-right" ng-click="remove_this_measurement($index)"><i class="fa fa-trash-o"></i></a></div>
                                     </div>
-                                    <a class="btn btn-success pull-right" ng-click="add_more_measurements()"><i class="fa fa-plus"></i>Add More Measurements</a>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <label ng-bind="basicinfo.description"></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <table style="font-size: 14px;" class="entry-view-table">
+                                                <tr>
+                                                    <th width="50%"></th>
+                                                    <th width="50%"></th>
+                                                </tr>
+                                                <tr>
+                                                    <td>Created Date:</td>
+                                                    <td ng-bind="entry_overview.date_created"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Modified Date:</td>
+                                                    <td ng-bind="entry_overview.date_modified"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Evaluated Date:</td>
+                                                    <td ng-bind="entry_overview.date_evaluated"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Current Owner:</td>
+                                                    <td ng-bind="entry_overview.entry_owner"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Incident Response Plan:</td>
+                                                    <td ng-if="entry_overview.incident_response == '1'">Yes</td>
+                                                    <td ng-if="entry_overview.incident_response == '0'">No</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Risk Summary</label>
+                                            <div class="top-bordered-div">
+                                                <div class="row bottom-10">
+                                                    <label>Inherent Risk</label>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ALE Category: </td>
+                                                                    <td ng-bind="entry_overview.inherent_ale_category"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ALE Monitized: </td>
+                                                                    <td ng-bind="'$' + entry_overview.inherent_ale_monitized"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ALE Rate: </td>
+                                                                    <td ng-bind="'-' + (entry_overview.inherent_ale_rate * 100) + '%'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SLE Category: </td>
+                                                                    <td ng-bind="entry_overview.inherent_sle_category"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SLE Monitized: </td>
+                                                                    <td ng-bind="'$' + entry_overview.inherent_sle_monitized"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SLE Rate: </td>
+                                                                    <td ng-bind="(entry_overview.inherent_sle_rate * 100) + '%'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ARO Category: </td>
+                                                                    <td ng-bind="entry_overview.inherent_aro_category"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ARO in Days: </td>
+                                                                    <td ng-bind="'Every ' + entry_overview.inherent_aro_in_days + 'days'"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ARO Rate: </td>
+                                                                    <td ng-bind="entry_overview.inherent_aro_rate + '%'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row bottom-10">
+                                                    <label>Mitigated Risk</label>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ALE Monitized: </td>
+                                                                    <td ng-bind="'($' + entry_overview.mitigated_ale_monitized + ')'"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ALE Rate Reduction: </td>
+                                                                    <td ng-bind="'(' + entry_overview.mitigated_ale_rate * 100 + '%)'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SLE Monitized: </td>
+                                                                    <td ng-bind="'($' + entry_overview.mitigated_sle_monitized + ')'"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SLE Rate Reduction: </td>
+                                                                    <td ng-bind="'(' + entry_overview.mitigated_sle_rate + '%)'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ARO Monitized: </td>
+                                                                    <td ng-bind="'($' + entry_overview.mitigated_aro_monitized + ')'"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ARO Rate Reduction: </td>
+                                                                    <td ng-bind="'(' + entry_overview.mitigated_aro_rate + '%)'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <label>Residual Risk</label>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ALE Category: </td>
+                                                                    <td ng-bind="entry_overview.residual_ale_category"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ALE Monitized: </td>
+                                                                    <td ng-bind="'$' + entry_overview.residual_ale_monitized"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ALE Rate: </td>
+                                                                    <td ng-bind="'-'+ entry_overview.residual_ale_rate * 100 +'%'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SLE Category: </td>
+                                                                    <td ng-bind="entry_overview.residual_sle_category"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SLE Monitized: </td>
+                                                                    <td ng-bind="'$' + entry_overview.residual_sle_monitized"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SLE Rate: </td>
+                                                                    <td ng-bind="entry_overview.residual_sle_rate * 100 + '%'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <table class="entry-view-table">
+                                                                <tr>
+                                                                    <th width="50%"></th>
+                                                                    <th width="50%"></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ARO Category: </td>
+                                                                    <td ng-bind="entry_overview.residual_aro_category"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ARO in Days: </td>
+                                                                    <td ng-bind="'Every ' + entry_overview.residual_aro_in_days + 'days'"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>ARO Rate: </td>
+                                                                    <td ng-bind="entry_overview.residual_aro_rate * 100 + '%'"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Inherent Risk Details</label>
+                                            <div class="top-bordered-div">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Locations:</label>
+                                                        <div class="col-md-12">
+                                                            <table class="table add-entry-tb">
+                                                                <tr>
+                                                                    <th width="100%" style="visibility: hidden;">Locations</th>
+                                                                </tr>
+                                                                <tr ng-repeat="location in entry_overview.locations">
+                                                                    <td ng-bind="location"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Compliance:</label>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <table class="table add-entry-tb">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Type</th>
+                                                                            <th>Name</th>
+                                                                            <th>Version</th>
+                                                                            <th>Detail</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr ng-repeat="compliance in basicinfo.compliance_requirements">
+                                                                            <input type="hidden" ng-bind="compliance.type_id">
+                                                                            <input type="hidden" ng-bind="compliance.compliance_id">
+                                                                            <input type="hidden" ng-bind="compliance.requirement_id">
+                                                                            <td ng-bind="compliance.type">
+                                                                            </td>
+                                                                            <td ng-bind="compliance.name">
+                                                                            </td>
+                                                                            <td ng-bind="compliance.version">
+                                                                            </td>
+                                                                            <td ng-bind="compliance.requirement">
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label>ARO Notes:</label>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <textarea ng-model="basicinfo.aro_notes"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label>Asset Exposure:</label>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <table class="table add-entry-tb">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Asset Name</th>
+                                                                            <th>Asset Value</th>
+                                                                            <th>Exposure Factor</th>
+                                                                            <th>Detail</th>
+                                                                            <th>SLE Cost</th>
+                                                                            <th>ALE Cost</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr ng-repeat="asset in affected_assets.multidata">
+                                                                            <td ng-bind="asset.name"></td>
+                                                                            <td ng-bind="asset.asset_value_display"></td>
+                                                                            <td ng-bind="asset.factor"></td>
+                                                                            <td ng-bind="asset.detail"></td>
+                                                                            <td ng-bind="asset.sle"></td>
+                                                                            <td ng-bind="asset.ale"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>TOTALS</td>
+                                                                            <td ng-bind="affected_assets.total_asset_value"></td>
+                                                                            <td ng-bind="affected_assets.total_factor"></td>
+                                                                            <td></td>
+                                                                            <td ng-bind="affected_assets.total_sle"></td>
+                                                                            <td ng-bind="affected_assets.total_ale"></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label>Threat Actor Details:</label>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <table class="table add-entry-tb">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Threat Actor</th>
+                                                                                <th>Intention</th>
+                                                                                <th>Motive</th>
+                                                                                <th>Detail</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr ng-repeat="threat in threat_details.multidata">
+                                                                                <td ng-bind="threat.actor_name"></td>
+                                                                                <td ng-bind="threat.intentions" class="multiple-lines"></td>
+                                                                                <td ng-bind="threat.motives" class="multiple-lines"></td>
+                                                                                <td ng-bind="threat.detail"></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Mitigated Risk Details</label>
+                                            <div class="top-bordered-div">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label>Mitigating Controls:</label>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <table class="table add-entry-tb">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Name</th>
+                                                                                <th>Control Name</th>
+                                                                                <th>Vendor</th>
+                                                                                <th>SLE Rate</th>
+                                                                                <th>SLE Cost</th>
+                                                                                <th>ARO Rate</th>
+                                                                                <th>ARO Cost</th>
+                                                                                <th>Cost Impact</th>
+                                                                                <th>ALE Mitigation</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr ng-repeat="mc in mitigating_controls.multidata">
+                                                                                <td ng-bind="mc.company_name"></td>
+                                                                                <td ng-bind="mc.control_name"></td>
+                                                                                <td ng-bind="mc.vendor_name"></td>
+                                                                                <td ng-bind="mc.sle_rate + '%'"></td>
+                                                                                <td ng-bind="mc.sle_cost"></td>
+                                                                                <td ng-bind="mc.aro_rate + '%'"></td>
+                                                                                <td ng-bind="mc.aro_cost"></td>
+                                                                                <td ng-bind="'-$' + (mc.sle_cost_value + mc.aro_cost_value)"></td>
+                                                                                <td ng-bind="'-$' + (mc.sle_cost_value + mc.aro_cost_value) * basicinfo.aro_rate / 100"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>TOTALS</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td ng-bind="mitigating_controls.sle_rate + '%'"></td>
+                                                                                <td ng-bind="'-$' + mitigating_controls.sle_cost"></td>
+                                                                                <td ng-bind="mitigating_controls.aro_rate + '%'"></td>
+                                                                                <td ng-bind="'-$' + mitigating_controls.aro_cost"></td>
+                                                                                <td ng-bind="'-$' + mitigating_controls.total_cost"></td>
+                                                                                <td ng-bind="'-$' + mitigating_controls.total_ale"></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label>Mitigation Notes:</label>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <textarea ng-model="mitigating_controls.notes_mitigation"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label>Additional Mitigation:</label>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <textarea ng-model="mitigating_controls.additional_mitigation"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                  <!-- end row -->
                                 </fieldset>
                             </div>
@@ -334,47 +1361,47 @@
                             <!-- begin wizard step-6 Entry Activity-->
                             <div class="wizard-step-6">
                                 <fieldset>
-                                    <legend class="pull-left width-full">Entry Activity</legend>
+                                    <legend class="pull-left width-full">Entry List</legend>
                                     <!-- begin row -->
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Date Created :</label> {(entry_details.entry_date_created)}
+                                    <div class="row" style="padding: 20px;">
+                                        <div class="col-md-2">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Response:</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select ng-model="entry_list.response" multiple=true class="form-control" ng-options="k.id as k.name for k in responses"data-parsley-group="wizard-step-6"  required/></select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Created By :</label> {(entry_details.created_by)}
+                                        <div class="col-md-2">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Severity:</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select ng-model="entry_list.severity" multiple=true class="form-control" ng-options="k.id as k.name for k in severities"data-parsley-group="wizard-step-6"  required/></select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Last Modified Date :</label> {(entry_details.date_modified)}
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Owner:</label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <select ng-model="entry_list.owner" class="form-control" data-parsley-group="wizard-step-6" ng-options="k.id as k.name for k in users" required/><option value=""></option></select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Last Modified By :</label> {(entry_details.modified_by)}
+                                        <div class="col-md-2">
+                                            <div class="row">
+                                                <label>Completed: </label>
+                                                <input type="checkbox">
                                             </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Last Evaluated :</label> {(entry_details.date_evaluation)}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Mitigation Adequacey :</label> {(entry_details.mitigation_adequacy)}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Total Asset Value :</label> {(entry_details.total_asset_value)}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Total Control Mitigation :</label> {(entry_details.total_control_mitigation)}
+                                            <div class="row">
+                                                <label>Compliance: </label>
+                                                <input type="checkbox">
                                             </div>
                                         </div>
                                     </div>

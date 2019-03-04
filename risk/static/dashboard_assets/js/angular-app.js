@@ -329,6 +329,21 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 riskEntry: function($stateParams, RiskEntryService){
                     return RiskEntryService.getselectedRiskEntry(0);
                 },
+                aro_time_units: function(TimeUnitService){
+                    return TimeUnitService.getAllTimeUnits();
+                },
+                aro_frequencies: function(FrequencyCategoryService){
+                    return FrequencyCategoryService.getAllFrequencies();
+                },
+                artifacts: function(EntryUrlService){
+                    return EntryUrlService.getAllEntryUrls();
+                },
+                compliance_types: function(ComplianceTypeService){
+                    return ComplianceTypeService.getAllComplianceTypes();
+                },
+                severities: function(SeverityService){
+                    return SeverityService.getAllSeverities();
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,
@@ -384,6 +399,21 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 },
                 riskEntry: function($stateParams, RiskEntryService){
                     return RiskEntryService.getselectedRiskEntry($stateParams.id);
+                },
+                aro_time_units: function(TimeUnitService){
+                    return TimeUnitService.getAllTimeUnits();
+                },
+                aro_frequencies: function(FrequencyCategoryService){
+                    return FrequencyCategoryService.getAllFrequencies();
+                },
+                artifacts: function(EntryUrlService){
+                    return EntryUrlService.getAllEntryUrls();
+                },
+                compliance_types: function(ComplianceTypeService){
+                    return ComplianceTypeService.getAllComplianceTypes();
+                },
+                severities: function(SeverityService){
+                    return SeverityService.getAllSeverities();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
