@@ -400,7 +400,7 @@ class EntryCompliance(DefaultFields):
 
 
 class EntryComplianceRequirement(DefaultFields):
-    """Through table for Entry.  Entry Compliance."""
+    """Through table for Entry.  Entry Compliance Requirement."""
 
     # Foreign Key and Relationships
     id_entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entrycompliancerequirement', help_text=(
