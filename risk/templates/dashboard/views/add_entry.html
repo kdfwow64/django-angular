@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{#Add or Edit Entry Compliance Requirement#}
+<!--Add or Edit Entry Compliance Requirement-->
 <div class="modal fade" id="add_edit_entry_compliance_requirement">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -8,7 +8,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+<!--                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">-->
                     <div class="m-b-0">
                         <div class="row">
                             <input type="hidden" id="compliance_requirement_edit_num" value="-1">
@@ -34,7 +34,7 @@
         </div>
     </div>
 </div>
-{#Add or Edit Entry Url or Artifact#}
+<!--Add or Edit Entry Url or Artifact-->
 <div class="modal fade" id="add_edit_entry_url">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -43,7 +43,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+<!--                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">-->
                     <div class="m-b-0">
                         <div class="row">
                             <input type="hidden" id="entry_url_edit_num" value="-1">
@@ -80,7 +80,7 @@
         </div>
     </div>
 </div>
-{#Add or Edit Threat Detail#}
+<!--Add or Edit Threat Detail-->
 <div class="modal fade" id="add_edit_threat_detail">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -89,7 +89,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+<!--                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">-->
                     <div class="m-b-0">
                         <div class="row">
                             <input type="hidden" ng-model="new_threat.edit_num">
@@ -123,7 +123,7 @@
     </div>
 </div>
 
-#Add or Edit Affected Asset#}
+<!--Add or Edit Affected Asset-->
 <div class="modal fade" id="add_edit_affected_asset">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -132,7 +132,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+<!--                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">-->
                     <div class="m-b-0">
                         <div class="row">
                             <input type="hidden" ng-model="new_as.edit_num">
@@ -218,7 +218,7 @@
     </div>
 </div>
 
-{#Add or Edit Mitigation Control#}
+<!--Add or Edit Mitigation Control-->
 <div class="modal fade" id="add_edit_mitigation_control">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -227,7 +227,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-{#                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
+<!--                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">-->
                     <input type="hidden" ng-model="add_control.edit_num">
                     <div class="m-b-0">
                         <div class="row">
@@ -1397,13 +1397,84 @@
                                         <div class="col-md-2">
                                             <div class="row">
                                                 <label>Completed: </label>
-                                                <input type="checkbox">
+                                                <input type="checkbox" ng-model="entry_list.completed">
                                             </div>
                                             <div class="row">
                                                 <label>Compliance: </label>
-                                                <input type="checkbox">
+                                                <input type="checkbox" ng-model="entry_list.compliance">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" ng-click="entry_list.sortType = 'entry'; entry_list.sortReverse = !entry_list.sortReverse">
+                                                            Entry
+                                                            <span ng-show="entry_list.sortType == 'entry' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
+                                                            <span ng-show="entry_list.sortType == 'entry' && entry_list.sortReverse" class="fa fa-caret-up"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" ng-click="entry_list.sortType = 'response'; entry_list.sortReverse = !entry_list.sortReverse">
+                                                            Reponse
+                                                            <span ng-show="entry_list.sortType == 'response' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
+                                                            <span ng-show="entry_list.sortType == 'response' && entry_list.sortReverse" class="fa fa-caret-up"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" ng-click="entry_list.sortType = 'ale_category'; entry_list.sortReverse = !entry_list.sortReverse">
+                                                            Residual ALE Category
+                                                            <span ng-show="entry_list.sortType == 'ale_category' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
+                                                            <span ng-show="entry_list.sortType == 'ale_category' && entry_list.sortReverse" class="fa fa-caret-up"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" ng-click="entry_list.sortType = 'ale_rate'; entry_list.sortReverse = !entry_list.sortReverse">
+                                                            Residual ALE Rate
+                                                            <span ng-show="entry_list.sortType == 'ale_rate' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
+                                                            <span ng-show="entry_list.sortType == 'ale_rate' && entry_list.sortReverse" class="fa fa-caret-up"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" ng-click="entry_list.sortType = 'summary'; entry_list.sortReverse = !entry_list.sortReverse">
+                                                            Summary
+                                                            <span ng-show="entry_list.sortType == 'summary' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
+                                                            <span ng-show="entry_list.sortType == 'summary' && entry_list.sortReverse" class="fa fa-caret-up"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" ng-click="entry_list.sortType = 'evaluated'; entry_list.sortReverse = !entry_list.sortReverse">
+                                                            Evaluated
+                                                            <span ng-show="entry_list.sortType == 'evaluated' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
+                                                            <span ng-show="entry_list.sortType == 'evaluated' && entry_list.sortReverse" class="fa fa-caret-up"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" ng-click="entry_list.sortType = 'modified'; entry_list.sortReverse = !entry_list.sortReverse">
+                                                            Modified
+                                                            <span ng-show="entry_list.sortType == 'modified' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
+                                                            <span ng-show="entry_list.sortType == 'modified' && entry_list.sortReverse" class="fa fa-caret-up"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" ng-click="entry_list.sortType = 'response_plan'; entry_list.sortReverse = !entry_list.sortReverse">
+                                                            Response Plan
+                                                            <span ng-show="entry_list.sortType == 'response_plan' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
+                                                            <span ng-show="entry_list.sortType == 'response_plan' && entry_list.sortReverse" class="fa fa-caret-up"></span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr ng-repeat="roll in sushi | orderBy:entry_list.sortType:entry_list.sortReverse | filter:searchFish">
+
+                                                </tr>
+                                            </tbody>
+
+                                          </table>
                                     </div>
                                  <!-- end row -->
                                 </fieldset>
