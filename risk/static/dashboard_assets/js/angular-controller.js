@@ -3547,7 +3547,10 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.entry_list = {
             response: [],
             severity: [],
-            owner: null
+            owner: null,
+            sortType: 'response',
+            sortReverse: false,
+            searchFish: ''
         };
     }
 
