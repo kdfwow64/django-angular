@@ -849,8 +849,8 @@
                                                             <td ng-bind="mc.sle_cost"></td>
                                                             <td ng-bind="mc.aro_rate + '%'"></td>
                                                             <td ng-bind="mc.aro_cost"></td>
-                                                            <td ng-bind="'-$' + (mc.sle_cost_value + mc.aro_cost_value)"></td>
-                                                            <td ng-bind="'-$' + (mc.sle_cost_value + mc.aro_cost_value) * basicinfo.aro_rate / 100"></td>
+                                                            <td ng-bind="'-$' + mc.total_cost_value"></td>
+                                                            <td ng-bind="'-$' + mc.total_ale_impact_value"></td>
                                                             <td>
                                                                 <a class="btn btn-primary" ng-click="open_edit_control_modal($index)">Edit</a>
                                                             </td>

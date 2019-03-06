@@ -3223,7 +3223,7 @@ colorAdminApp.controller('registerListEntriresController',
                     {"data": "entry_number", "width": "5%"},
                     {"data": "response", "name": "response", "width": "5%"},
                     {"data": "residual_ale_category", "name": "residual_ale_category", "width": "5%"},
-                    {"data": "residual_ale_rate", "width": "5%"},
+                    {"data": "residual_ale_rate", "width": "10%"},
                     {"data": "owner_name", "name": "owner_name", "width": "10%", "visible": false},
                     {"data": "compliance", "name":"compliance", "visible": false},
                     {"data": "completed", "name":"completed", "visible": false},
@@ -4503,7 +4503,6 @@ colorAdminApp.controller('registerAddEntriresController',
 
                 WizardValidatorService.status.mitigating_controls = true;
                 $scope.entry_company_controls = r.data.entry_control;
-                $scope.measurements.measurement_controls = r.data.measurement_controls;
                 $(element).bwizard("next");
                 return true;
             } else{
