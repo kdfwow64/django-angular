@@ -39,6 +39,9 @@ class Register(DefaultFields):
 
 class Entry(DefaultFields):
     """Entry."""
+    residual_ale_rate = models.DecimalField(default=0, max_digits=19, decimal_places=10, help_text=(
+        'Residual ALE Rate generated after Entry Overview.'), )
+
 
     summary = models.CharField(
         max_length=128, blank=False, help_text=('Brief description of the risk'),)  # Brief summary of the risk to be tracked.  Specifically used when listing entries.
@@ -152,6 +155,48 @@ class Entry(DefaultFields):
         return response
 
     @property
+    def has_completed(self):
+        """Is there a response associated with this."""
+        try:
+            aro_rate = 0
+            if self.aro_toggle == 'C':
+                frequency_category = FrequencyCategory.objects.get(id=self.aro_frequency_id)
+                aro_rate = (frequency_category.minimum + frequency_category.maximum) / 2 * 100
+                if frequency_category.minimum == 1:
+                    aro_rate = 100
+            elif self.aro_toggle == 'K':
+                aro_rate = self.aro_fixed
+            else:
+                time_unit = TimeUnit.objects.get(id=self.aro_time_unit_id)
+                aro_rate = self.aro_known_multiplier * time_unit.annual_units / self.aro_known_unit_quantity
+                if aro_rate >= 1:
+                    aro_rate = 100
+                else:
+                    aro_rate *= 100
+
+            response = int(all([
+                self.summary,
+                self.description,
+                aro_rate,
+                self.response_id,
+                EntryActor.objects.filter(id_entry_id=self.id).count() > 0
+            ]))
+        except:
+            response = 0
+        return response
+
+    @property
+    def response_name(self):
+        """A percentage based formula generated from other items in the application."""
+        try:
+            response = Response.objects.get(id=self.response_id)
+            response_name = response.name
+        except:
+            response_name = ''
+
+        return response_name
+
+    @property
     def impact(self):
         """Is there impact associated with this."""
         try:
@@ -164,7 +209,7 @@ class Entry(DefaultFields):
     def has_compliance(self):
         """Is there a compliance associated with this."""
         try:
-            compliance = 1 if self.entrycompliance.count() else 0
+            compliance = 1 if self.entrycompliancerequirement.count() else 0
         except:
             compliance = 0
         return compliance

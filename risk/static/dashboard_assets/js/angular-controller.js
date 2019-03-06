@@ -3198,14 +3198,15 @@ colorAdminApp.controller('changeCompanyController', function($scope, $state, $ui
 
 
 colorAdminApp.controller('registerListEntriresController',
-    function($scope, $rootScope, $state, impactTypes, severities) {
-    $scope.impact_types = impactTypes;
+    function($scope, $rootScope, $state, responses, severities, users) {
+    $scope.responses = responses;
+    $scope.users = users;
     $scope.severities = severities;
     $scope.search = {};
     // $scope.search.response = true;
     $scope.search.compliance = true;
-    $scope.search.revoked = '';
-    $scope.users = []; // users;
+    $scope.search.completed = true;
+    // $scope.users = [];
     angular.element(document).ready(function () {
 
         if ($('#risk-entry-table').length !== 0) {
@@ -3215,24 +3216,21 @@ colorAdminApp.controller('registerListEntriresController',
                 // "serverSide": true,
                 "ajax": 'api/risk-entries/',
                 "autoWidth": false,
+                "search": {
+                    regex: true
+                },
                 columns: [
                     {"data": "entry_number", "width": "5%"},
-                    {"data": "severity", "width": "5%"},
-                    {"data": "mr", "width": "5%"},
+                    {"data": "response", "name": "response", "width": "5%"},
+                    {"data": "residual_ale_category", "name": "residual_ale_category", "width": "5%"},
+                    {"data": "residual_ale_rate", "width": "5%"},
+                    {"data": "owner_name", "name": "owner_name", "width": "10%", "visible": false},
+                    {"data": "compliance", "name":"compliance", "visible": false},
+                    {"data": "completed", "name":"completed", "visible": false},
                     {"data": "summary", "width": "40%"},
-                    {"data": "owner_name", "name": "owner_name", "width": "10%"},
-                    {"data": "created_date", "width": "10%"},
+                    {"data": "evaluated", "width": "5%"},
                     {"data": "modified_date", "width": "10%"},
-                    {"data": "evaluated", "width": "10%"},
-                    // {"data": "response", "name": "response", "visible": false},
-                    {"data": "impact", "name":"impact", "visible": false},
-                    {"data": "severity_dd", "name":"severity_dd", "visible": false},
-                    {"data": "mr", "name":"mr", "visible": false},
-                    {"data": "compliance", "abbrv":"compliance", "visible": false},
-                    {"data": "owner_id", "name":"owner_id", "visible": false, },
-                    {"data": "active", "name":"active", "visible": false},
-                    {"data": "mitigation_notes", "name":"mitigation_notes", "visible": false},
-                    {"data": "description", "name":"description", "visible": false},
+                    {"data": "response_plan", "width": "5%"},
                     {
                         "data": null,
                         "orderable": false,
@@ -3243,29 +3241,32 @@ colorAdminApp.controller('registerListEntriresController',
                     }
                 ],
                 initComplete: function () {
-                    this.api().column(4).data().unique().sort().each( function ( d, j ) {
-                        $('#search_owner').append( '<option value="'+d+'">'+d+'</option>' )
-                    });
+                    table.column('compliance:name').search($scope.search.compliance?1:0).draw();
+                    table.column('completed:name').search($scope.search.completed?1:0).draw();
                 }
             });
 
-            // $('#search_response').change( function() {
-            //    table.column('response:name').search($scope.search.response?1:0).draw();
-            // } );
-            $('#search_impact').change( function() {
-                if($scope.search.impact_status){
-                   table.column('impact:name').search($scope.search.impact_status).draw();
+            $('#search_response').change( function() {
+                if($scope.search.response){
+                    var keywords = $scope.search.response, filter ='';
+                    for (var i=0; i<keywords.length; i++) {
+                        filter = (filter!=='') ? filter+'|'+keywords[i] : keywords[i];
+                    }
+                    table.column('response:name').search(filter, true, false).draw();
+                } else{
+                    table.column('response:name').search('').draw();
+                }
+            });
+            $('#search_residual_ale_category').change( function() {
+                if($scope.search.residual_ale_category){
+                    var keywords = $scope.search.residual_ale_category, filter ='';
+                    for (var i=0; i<keywords.length; i++) {
+                        filter = (filter!=='') ? filter+'|'+keywords[i] : keywords[i];
+                    }
+                    table.column('residual_ale_category:name').search(filter, true, false).draw();
                 }
                 else{
-                   table.column('impact:name').search('').draw();
-                }
-            } );
-            $('#search_severity').change( function() {
-                if($scope.search.severity_status){
-                   table.column('severity_dd:name').search($scope.search.severity_status).draw();
-                }
-                else{
-                   table.column('severity_dd:name').search('').draw();
+                   table.column('residual_ale_category:name').search('').draw();
                 }
             } );
             $('#search_mr').keyup( function() {
@@ -3277,17 +3278,25 @@ colorAdminApp.controller('registerListEntriresController',
                 }
             } );
             $('#search_compliance').change( function() {
-               table.column('compliance:abbrv').search($scope.search.compliance?1:0).draw();
+               table.column('compliance:name').search($scope.search.compliance?1:0).draw();
             } );
 
+            // $('#search_owner').change( function() {
+            //     if($(this).val()){
+            //         table.column('owner_name:name').search($(this).val()).draw();
+            //     }
+            //     else{
+            //         table.column('owner_name:name').search('').draw();
+            //     }
+            // } );
+
             $('#search_owner').change( function() {
-                if($(this).val()){
-                    table.column('owner_name:name').search($(this).val()).draw();
+                if($scope.search.owner){
+                   table.column('owner_name:name').search($scope.search.owner).draw();
+                } else{
+                   table.column('owner_name:name').search('').draw();
                 }
-                else{
-                    table.column('owner_name:name').search('').draw();
-                }
-            } );
+            });
 
             // $('#search_owner').change( function() {
             //     if($scope.search.owner){
@@ -3297,8 +3306,8 @@ colorAdminApp.controller('registerListEntriresController',
             //         table.column('owner_id:name').search('').draw();
             //     }
             // } );
-            $('#search_revoked').change( function() {
-               table.column('active:name').search($scope.search.revoked?0:1).draw(); // revoked is when active is 0
+            $('#search_completed').change( function() {
+               table.column('completed:name').search($scope.search.completed?1:0).draw(); // revoked is when active is 0
             } );
 
             $("#list-entry_title").text("Risk Entries - " + $("#current_company").text());
@@ -3360,7 +3369,6 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.entry_company_controls = [];
     $scope.control_measures = controlMeasures;
     $scope.severities = severities;
-
     if(riskEntry.basicinfo){
         $scope.basicinfo = riskEntry.basicinfo;
     }
@@ -4396,24 +4404,25 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.save_mitigating_controls = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        max_loss = 0;
+        for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++){
+            item = $scope.mitigating_controls.multidata[i];
+            max_loss = max_loss > item.max_loss ? max_loss : item.max_loss;
+        }
+        $scope.mitigating_controls.max_loss = max_loss;
+
+        residual_ale_rate = ($scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale) / max_loss;
+        $scope.entry_overview.residual_ale_monitized = $scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale;
+        $scope.entry_overview.residual_ale_rate = residual_ale_rate.toFixed(5);
+        $scope.mitigating_controls.residual_ale_rate = $scope.entry_overview.residual_ale_rate;
         $http.post('/dashboard/api/risk-entry/mitigating-controls/' + $scope.entry_id + '/', $scope.mitigating_controls)
         .then(function(r){
             if(r.data.code){
                 /*Inherent*/
-                max_loss = 0;
-                for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++){
-                    item = $scope.mitigating_controls.multidata[i];
-                    max_loss = max_loss > item.max_loss ? max_loss : item.max_loss;
-                }
-                $scope.mitigating_controls.max_loss = max_loss;
-
                 inherent_ale_rate = $scope.affected_assets.total_ale_value / max_loss;
                 $scope.entry_overview.inherent_ale_monitized = $scope.affected_assets.total_ale_value;
                 $scope.entry_overview.inherent_ale_rate = inherent_ale_rate.toFixed(5);
 
-                residual_ale_rate = ($scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale) / max_loss;
-                $scope.entry_overview.residual_ale_monitized = $scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale;
-                $scope.entry_overview.residual_ale_rate = residual_ale_rate.toFixed(5);
                 $http.post('/dashboard/api/severity-categories/')
                     .then(function (d) {
                         if (d) {

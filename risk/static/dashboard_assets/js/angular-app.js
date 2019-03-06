@@ -264,11 +264,14 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             data: { pageTitle: 'List Entries' },
             controller: 'registerListEntriresController',
             resolve: {
-                impactTypes: function(ImpactTypeService){
-                    return ImpactTypeService.getAllImpactTypes();
+                responses: function(ResponseService){
+                    return ResponseService.getAllResponses();
                 },
                 severities: function(SeverityService){
                     return SeverityService.getAllSeverities();
+                },
+                users: function(UserService){
+                    return UserService.getUsers();
                 },
                 // users: function(UserService){
                 //     return UserService.getUsers();

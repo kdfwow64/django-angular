@@ -88,28 +88,25 @@
                                 <label>Response : </label><input id="search_response" ng-model="search.response" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}" checked/>
                             </div> -->
                             <div class="col-md-2 col-xs-8">
-                                <label>Impact Status : </label><select id="search_impact" ng-model="search.impact_status" class="form-control" ng-options="k.id as k.name for k in impact_types">
+                                <label>Response : </label><select id="search_response" multiple="true" ng-model="search.response" class="form-control" ng-options="k.name as k.name for k in responses">
                                     <option value="" selected>All</option>
                                 </select>
                             </div>
                             <div class="col-md-2 col-xs-8">
-                                <label>Severity : </label><select id="search_severity" ng-model="search.severity_status" class="form-control" ng-options="k.id as k.name for k in severities"/>>
+                                <label>Severity : </label><select id="search_residual_ale_category" multiple="true" ng-model="search.residual_ale_category" class="form-control" ng-options="k.name as k.name for k in severities"/>>
                                     <option value="" selected>All</option>
                                 </select>
                             </div>
-                            <div class="col-md-2 col-xs-6">
-                                <label>Mitigation rate : </label><input id="search_mr" ng-model="search.mitigation_rate" type="number" min='0' max='100' step="0.01" class="form-control"/>
+                            <div class="col-md-2 col-xs-8">
+                                <label>Owner : </label><select id="search_owner" ng-model="search.owner" class="form-control" ng-options="k.name as k.name for k in users">
+                                    <option value="" selected>All</option>
+                                </select>
                             </div>
                             <div class="col-md-1 col-xs-4">
                                 <label>Compliance : </label><input id="search_compliance" ng-model="search.compliance" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}" checked/>
                             </div>
-                            <div class="col-md-2 col-xs-8">
-                                <label>Owner : </label><select id="search_owner" ng-model="search.owner" class="form-control">
-                                    <option value="" selected>All</option>
-                                </select>
-                            </div>
                             <div class="col-md-1 col-xs-4">
-                                <label>Revoked : </label><input id="search_revoked" ng-model="search.revoked" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}"/>
+                                <label>Completed : </label><input id="search_completed" ng-model="search.completed" type="checkbox" class="js-switch" ui-switch="{color: '#00ACAC', secondaryColor: '#d9e0e7'}"/>
                             </div>
                         </div>
                     </div>
@@ -118,22 +115,16 @@
                         <thead>
                             <tr>
                                 <th>Entry</th>
-                                <th>Severity</th>
-                                <th>Mitigation</th>
+                                <th>Response</th>
+                                <th>Residual ALE Category</th>
+                                <th>Residual ALE Rate</th>
+                                <th>Owner Name</th>
+                                <th>Compliance</th>
+                                <th>Completed</th>
                                 <th>Summary</th>
-                                <th>Owner</th>
-                                <th>Created</th>
-                                <th>Modified</th>
                                 <th>Evaluated</th>
-                                <th>Test</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>Modified</th>
+                                <th>Response Plan</th>
                                 <th></th>
                             </tr>
                         </thead>

@@ -110,9 +110,6 @@
                                 <textarea rows="3" ng-model="new_threat.detail" name="new_threat_detail" placeholder="Threat Details" class="form-control" required/></textarea>
                             </div>
                         </div>
-                        <div class="row threat-detail-warning-txt" style="display: none;">
-                            <span class="pull-right" style="color: red;">Requirement was not selected</span>
-                        </div>
                     </div>
             </div>
             <div class="modal-footer">
@@ -122,7 +119,6 @@
         </div>
     </div>
 </div>
-
 <!--Add or Edit Affected Asset-->
 <div class="modal fade" id="add_edit_affected_asset">
     <div class="modal-dialog">
@@ -205,9 +201,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row as-warning-txt-new" style="display: none;">
-                            <span style="color: red;float: right">Something wrong</span>
-                        </div>
                     </div>
             </div>
             <div class="modal-footer">
@@ -217,7 +210,6 @@
         </div>
     </div>
 </div>
-
 <!--Add or Edit Mitigation Control-->
 <div class="modal fade" id="add_edit_mitigation_control">
     <div class="modal-dialog">
@@ -547,7 +539,7 @@
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label>Known annual rate of occurence</label>
-                                                                <input min="0" max="100" type="number" ng-disabled="basicinfo.aro_toggle!='K'" ng-required="basicinfo.aro_toggle=='K'" ng-model="basicinfo.aro_fixed" step="0.01" name="aro_fixed" placeholder="%" class="form-control" data-parsley-group="wizard-step-1" />
+                                                                <input min="0" max="100" type="number" ng-disabled="basicinfo.aro_toggle!='K'" ng-required="basicinfo.aro_toggle=='K'" ng-model="basicinfo.aro_fixed" step=".001" name="aro_fixed" placeholder="%" class="form-control" data-parsley-group="wizard-step-1" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-1">
@@ -681,9 +673,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <input style="width: 15%;float: left;" type="radio" ng-model="basicinfo.incident_response" step="1" name="incident_response" class="form-control incident-radio-btn" data-parsley-group="wizard-step-1" value="1" checked />
+                                                <input style="width: 15%;float: left;" type="radio" ng-model="basicinfo.incident_response" step="1" name="incident_response" class="form-control incident-radio-btn" data-parsley-group="wizard-step-1" value="1" ng-checked="basicinfo.incident_response" />
                                                 <span class="span-yes-no">Yes</span>
-                                                <input style="width: 15%;float: left;" type="radio" ng-model="basicinfo.incident_response" step="1" name="incident_response" class="form-control incident-radio-btn" data-parsley-group="wizard-step-1" value="0" />
+                                                <input style="width: 15%;float: left;" type="radio" ng-model="basicinfo.incident_response" step="1" name="incident_response" class="form-control incident-radio-btn" data-parsley-group="wizard-step-1" value="0" ng-checked="basicinfo.incident_response"/>
                                                 <span class="span-yes-no">No</span>
                                             </div>
                                         </div>
@@ -1360,124 +1352,6 @@
                             <!-- end wizard step-5 -->
                             <!-- begin wizard step-6 Entry Activity-->
                             <div class="wizard-step-6">
-                                <fieldset>
-                                    <legend class="pull-left width-full">Entry List</legend>
-                                    <!-- begin row -->
-                                    <div class="row" style="padding: 20px;">
-                                        <div class="col-md-2">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label>Response:</label>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <select ng-model="entry_list.response" multiple=true class="form-control" ng-options="k.id as k.name for k in responses"data-parsley-group="wizard-step-6"  required/></select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label>Severity:</label>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <select ng-model="entry_list.severity" multiple=true class="form-control" ng-options="k.id as k.name for k in severities"data-parsley-group="wizard-step-6"  required/></select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <label>Owner:</label>
-                                                </div>
-                                                <div class="col-md-9">
-                                                    <select ng-model="entry_list.owner" class="form-control" data-parsley-group="wizard-step-6" ng-options="k.id as k.name for k in users" required/><option value=""></option></select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="row">
-                                                <label>Completed: </label>
-                                                <input type="checkbox" ng-model="entry_list.completed">
-                                            </div>
-                                            <div class="row">
-                                                <label>Compliance: </label>
-                                                <input type="checkbox" ng-model="entry_list.compliance">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <table class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <td>
-                                                        <a href="#" ng-click="entry_list.sortType = 'entry'; entry_list.sortReverse = !entry_list.sortReverse">
-                                                            Entry
-                                                            <span ng-show="entry_list.sortType == 'entry' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
-                                                            <span ng-show="entry_list.sortType == 'entry' && entry_list.sortReverse" class="fa fa-caret-up"></span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#" ng-click="entry_list.sortType = 'response'; entry_list.sortReverse = !entry_list.sortReverse">
-                                                            Reponse
-                                                            <span ng-show="entry_list.sortType == 'response' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
-                                                            <span ng-show="entry_list.sortType == 'response' && entry_list.sortReverse" class="fa fa-caret-up"></span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#" ng-click="entry_list.sortType = 'ale_category'; entry_list.sortReverse = !entry_list.sortReverse">
-                                                            Residual ALE Category
-                                                            <span ng-show="entry_list.sortType == 'ale_category' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
-                                                            <span ng-show="entry_list.sortType == 'ale_category' && entry_list.sortReverse" class="fa fa-caret-up"></span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#" ng-click="entry_list.sortType = 'ale_rate'; entry_list.sortReverse = !entry_list.sortReverse">
-                                                            Residual ALE Rate
-                                                            <span ng-show="entry_list.sortType == 'ale_rate' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
-                                                            <span ng-show="entry_list.sortType == 'ale_rate' && entry_list.sortReverse" class="fa fa-caret-up"></span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#" ng-click="entry_list.sortType = 'summary'; entry_list.sortReverse = !entry_list.sortReverse">
-                                                            Summary
-                                                            <span ng-show="entry_list.sortType == 'summary' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
-                                                            <span ng-show="entry_list.sortType == 'summary' && entry_list.sortReverse" class="fa fa-caret-up"></span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#" ng-click="entry_list.sortType = 'evaluated'; entry_list.sortReverse = !entry_list.sortReverse">
-                                                            Evaluated
-                                                            <span ng-show="entry_list.sortType == 'evaluated' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
-                                                            <span ng-show="entry_list.sortType == 'evaluated' && entry_list.sortReverse" class="fa fa-caret-up"></span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#" ng-click="entry_list.sortType = 'modified'; entry_list.sortReverse = !entry_list.sortReverse">
-                                                            Modified
-                                                            <span ng-show="entry_list.sortType == 'modified' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
-                                                            <span ng-show="entry_list.sortType == 'modified' && entry_list.sortReverse" class="fa fa-caret-up"></span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="#" ng-click="entry_list.sortType = 'response_plan'; entry_list.sortReverse = !entry_list.sortReverse">
-                                                            Response Plan
-                                                            <span ng-show="entry_list.sortType == 'response_plan' && !entry_list.sortReverse" class="fa fa-caret-down"></span>
-                                                            <span ng-show="entry_list.sortType == 'response_plan' && entry_list.sortReverse" class="fa fa-caret-up"></span>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr ng-repeat="roll in sushi | orderBy:entry_list.sortType:entry_list.sortReverse | filter:searchFish">
-
-                                                </tr>
-                                            </tbody>
-
-                                          </table>
-                                    </div>
-                                 <!-- end row -->
-                                </fieldset>
                             </div>
                             <!-- end wizard step-6 -->
                         </div>
