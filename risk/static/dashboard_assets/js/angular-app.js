@@ -461,6 +461,30 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             //     }]
             // }
         })
+        .state('app.controls.list_control_groups', {
+            url: '/list-control-groups',
+            templateUrl: 'views/list_control_groups.html',
+            data: { pageTitle: 'Company Control Groups' },
+            // resolve: {
+            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
+            //         return $ocLazyLoad.load({
+            //             serie: true,
+            //             files: [
+            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
+            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
+            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
+            //                 '/static/dashboard_assets/plugins/morris/morris.css',
+            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
+            //                 '/static/dashboard_assets/plugins/morris/morris.js',
+            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
+            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
+            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
+            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
+            //             ]
+            //         });
+            //     }]
+            // }
+        })
         .state('app.controls.control_category_list', {
             url: '/control-category-list',
             templateUrl: 'views/list_control_category.html',

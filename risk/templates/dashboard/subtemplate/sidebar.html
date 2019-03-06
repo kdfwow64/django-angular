@@ -73,7 +73,7 @@
                     <span>Contacts</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.contacts.list_contacts">List Contacts</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.contacts.list_contacts">Company Contacts</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-contact" data-toggle="modal">Add Contact</a></li>
                     <li ui-sref-active="active"><a href="#" data-target="#add-contact-group" data-toggle="modal">Add Contact Group</a></li>
                 </ul>
@@ -97,10 +97,10 @@
                     <span>Controls</span>
                 </a>
                 <ul class="sub-menu">
-                    <li ui-sref-active="active"><a ui-sref="app.controls.list_controls">List Controls</a></li>
-                    <li ui-sref-active="active"><a href="#" data-target="#add-control" data-toggle="modal">Add Control</a></li>
-                    <li ui-sref-active="active"><a href="#" data-target="#add-control-group" data-toggle="modal">Add Control Group</a></li>
-                    <li ui-sref-active="active"><a ui-sref="app.controls.control_category_list">Control Category Lookup</a></li>
+                    <li ui-sref-active="active"><a href="#" data-target="#add-control" data-toggle="modal">Control Check-in</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.controls.list_controls">Company Controls</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.controls.list_control_groups">Control Groups</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.controls.control_category_list">Control Research</a></li>
                 </ul>
             </li>
             <li class="has-sub" ng-class="{active:$state.includes('app.assets')}">
@@ -225,18 +225,18 @@
     </div>
 </div>
 
-<!-- #modal- Add Contact -->
+<!-- #modal- Add Company Control -->
 <div class="modal fade" id="add-control">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add Control</h4>
+                <h4 class="modal-title">Welcome to Control Check-in</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
                 <div class="m-b-0">
-                    <h5><i class="fa fa-info-circle"></i> Add Contact</h5>
-                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                    <h5><i class="fa fa-info-circle"></i> Add a Company Control</h5>
+                    <p>First attempt to find your control with the quick finder.  If you are not able to find your control, you may need to provide information about the control such as control category, reference url, and vendor to complete the check-in process</p>
                 </div>
             </div>
             <div class="modal-footer">
