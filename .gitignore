@@ -1,6 +1,7 @@
 # Folders #
 ###################
 /venv
+/rlb/settings.py
 
 # Sublime #
 ############

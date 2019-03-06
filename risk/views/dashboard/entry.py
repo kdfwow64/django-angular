@@ -57,67 +57,15 @@ def api_list_risk_entries(request):
     total = 0
 
     register_entries = company_register.entry
-
-    # start = int(request.GET.get('start', '0'))
-    # length = int(request.GET.get('length', '10'))
-    # search = request.GET.get('search', '')
-
-    # if search:
-    #     register_entries = register_entries.filter(summary__contains=search)
-
     total = register_entries.count()
-    # severities = SeverityCategory.objects.order_by('name').all()
     for entry in register_entries.order_by('-date_modified').all():
-        # Get total_ale_value
-        # aro_rate = 0
-        # if entry.aro_toggle == 'C':
-        #     frequency_category = FrequencyCategory.objects.get(id=entry.aro_frequency_id)
-        #     aro_rate = (frequency_category.minimum + frequency_category.maximum) / 2 * 100
-        #     if frequency_category.minimum == 1:
-        #         aro_rate = 100
-        # elif entry.aro_toggle == 'K':
-        #     aro_rate = entry.aro_fixed
-        # else:
-        #     time_unit = TimeUnit.objects.get(id=entry.aro_time_unit_id)
-        #     aro_rate = entry.aro_known_multiplier * time_unit.annual_units / entry.aro_known_unit_quantity
-        #     if aro_rate >= 1:
-        #         aro_rate = 100
-        #     else:
-        #         aro_rate *= 100
-        #
-        # total_ale = 0
-        # total_sle = 0
-        # entry_company_assets = EntryCompanyAsset.objects.filter(id_entry_id=entry.id)
-        # for entry_company_asset in entry_company_assets:
-        #     if entry_company_asset.exposure_factor_toggle == 'F':
-        #         total_ale += entry_company_asset.exposure_factor_fixed * aro_rate / 100
-        #         total_sle += entry_company_asset.exposure_factor_fixed
-        #     else:
-        #         total_sle += entry_company_asset.exposure_factor_fixed * entry_company_asset.exposure_factor_rate / 100
-        #         total_ale += entry_company_asset.exposure_factor_fixed * entry_company_asset.exposure_factor_rate / 100 * aro_rate / 100
-        #
-        # # Max_loss
-        # max_loss = 0
-        # sle_cost = 0
-        # entry_company_controls = EntryCompanyControl.objects.filter(id_entry_id=entry.id)
-        # for entry_company_control in entry_company_controls:
-        #     company_control = CompanyControl.objects.get(id=entry_company_control.id_companycontrol_id)
-        #     company = Company.objects.get(id=company_control.company)
-        #     if max_loss < company.fixed_max_loss:
-        #         max_loss = company.fixed_max_loss
-        #     sle_cost += total_sle * entry_company_control.sle_mitigation_rate / 100
-        #
-        # residual_ale_rate = (total_ale - )
-        # total_ale_mitigation = 0
-        # severity_name = ''
-        # for severity in severities:
-        #     if severity.minimum <= entry
+        category_name = ''
         try:
             for category in SeverityCategory.objects.order_by('name').all():
                 if float(entry.residual_ale_rate) >= category.minimum and float(entry.residual_ale_rate) < category.maximum:
                     category_name = category.name
         except:
-            category_name = ''
+            pass
         rows.append({
             'owner_name': entry.entry_owner.full_name,
             'compliance': entry.has_compliance,
