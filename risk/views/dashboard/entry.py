@@ -188,17 +188,19 @@ class CreateRiskEntry(View):
             #             id_entry=risk_entry, id_compliance=compliance)
             #     except:
             #         pass
-            #Compliance Requirements
-            selected_compliance_requirements = request_data.get("compliance_requirements", [])
+            # Compliance Requirements
+            selected_compliance_requirements = request_data.get(
+                "compliance_requirements", [])
 
             for requirement in selected_compliance_requirements:
                 try:
-                    requirement_item = ComplianceRequirement.objects.get(pk=requirement['requirement_id'])
+                    requirement_item = ComplianceRequirement.objects.get(
+                        pk=requirement['requirement_id'])
                     EntryComplianceRequirement.objects.get_or_create(
                         id_entry=risk_entry, id_compliance_requirement=requirement_item)
                 except:
                     pass
-            #Entry Url
+            # Entry Url
             entry_urls = request_data.get("entry_urls", [])
             for entry_url in entry_urls:
                 try:
@@ -206,7 +208,8 @@ class CreateRiskEntry(View):
                         entry=risk_entry, url=entry_url['url'], description=entry_url['desc'], name=entry_url['name'], is_internal=entry_url['type'])
                 except:
                     pass
-            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, 'created_date': risk_entry.date_created.strftime("%m/%d/%Y"), 'modified_date': risk_entry.date_modified.strftime("%m/%d/%Y"), 'evaluated_date': risk_entry.date_evaluated.strftime("%m/%d/%Y") if risk_entry.date_evaluated else ''}
+            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, 'created_date': risk_entry.date_created.strftime(
+                "%m/%d/%Y"), 'modified_date': risk_entry.date_modified.strftime("%m/%d/%Y"), 'evaluated_date': risk_entry.date_evaluated.strftime("%m/%d/%Y") if risk_entry.date_evaluated else ''}
         else:
             rv = {'status': 'error', 'code': 400, 'errors': form.errors}
 
@@ -344,7 +347,8 @@ def api_update_mitigating_controls(request, entry_id):
             risk_entry.save()
             # data.get('additional_mitigation')
             risk_entry.mitigation_notes = data.get('notes_mitigation')
-            risk_entry.additional_mitigation = data.get('additional_mitigation')
+            risk_entry.additional_mitigation = data.get(
+                'additional_mitigation')
             measurement_controls = []
             for request_data in payload:
                 try:
@@ -467,7 +471,8 @@ def get_all_time_units_for_dropdown(request):
     """Get all time units for dropdown."""
     data = []
     for unit in TimeUnit.objects.order_by('name').all():
-        data.append({'id': unit.id, 'name': unit.name, 'annual_units':unit.annual_units})
+        data.append({'id': unit.id, 'name': unit.name,
+                     'annual_units': unit.annual_units})
     return JsonResponse(data, safe=False)
 
 
@@ -476,7 +481,8 @@ def get_all_frequencies_for_dropdown(request):
     """Get all frequency categories for dropdown."""
     data = []
     for frequency in FrequencyCategory.objects.order_by('name').all():
-        data.append({'id': frequency.id, 'name': frequency.name, 'min':frequency.minimum, 'max':frequency.maximum})
+        data.append({'id': frequency.id, 'name': frequency.name,
+                     'min': frequency.minimum, 'max': frequency.maximum})
     return JsonResponse(data, safe=False)
 
 
@@ -488,7 +494,8 @@ def get_all_entry_urls_for_dropdown(request):
         type = 'Internal'
         if url.is_internal == 0:
             type = 'External'
-        data.append({'id': url.id, 'name': url.name, 'url': url.url, 'type': type, 'desc': url.description})
+        data.append({'id': url.id, 'name': url.name, 'url': url.url,
+                     'type': type, 'desc': url.description})
     return JsonResponse(data, safe=False)
 
 
@@ -510,6 +517,7 @@ def get_all_entry_company_control_for_dropdown(request):
             {'id': measures.id, 'name': measures.id_companycontrol.name})
     return JsonResponse(data, safe=False)
 
+
 @login_required
 def api_get_risk_entry(request, entry_id):
     """Get risk entry by id."""
@@ -517,7 +525,8 @@ def api_get_risk_entry(request, entry_id):
     if entry_id:
         try:
             # Get first register for company from entry.py/Register
-            risk_entry = request.user.get_current_company().get_active_register().entry.get(pk=entry_id)
+            risk_entry = request.user.get_current_company(
+            ).get_active_register().entry.get(pk=entry_id)
             # try:
             #     response = risk_entry.entryresponse.latest(
             #         'id').response_id
@@ -525,8 +534,10 @@ def api_get_risk_entry(request, entry_id):
             #     response = 1
             compliance_requirements = []
             for entry_compliance_requirement in EntryComplianceRequirement.objects.filter(id_entry_id=risk_entry.id):
-                compliance_requirement = ComplianceRequirement.objects.get(pk=entry_compliance_requirement.id_compliance_requirement_id)
-                compliance = Compliance.objects.get(pk=compliance_requirement.compliance_id)
+                compliance_requirement = ComplianceRequirement.objects.get(
+                    pk=entry_compliance_requirement.id_compliance_requirement_id)
+                compliance = Compliance.objects.get(
+                    pk=compliance_requirement.compliance_id)
 
                 compliance_requirements.append({
                     'type_id': compliance.compliance_type_id,
@@ -597,15 +608,19 @@ def api_get_risk_entry(request, entry_id):
 
             aro_rate = 0
             if risk_entry.aro_toggle == 'C':
-                frequency_category = FrequencyCategory.objects.get(id=risk_entry.aro_frequency_id)
-                aro_rate = (frequency_category.minimum + frequency_category.maximum) / 2 * 100
+                frequency_category = FrequencyCategory.objects.get(
+                    id=risk_entry.aro_frequency_id)
+                aro_rate = (frequency_category.minimum +
+                            frequency_category.maximum) / 2 * 100
                 if frequency_category.minimum == 1:
                     aro_rate = 100
             elif risk_entry.aro_toggle == 'K':
                 aro_rate = risk_entry.aro_fixed
             else:
-                time_unit = TimeUnit.objects.get(id=risk_entry.aro_time_unit_id)
-                aro_rate = risk_entry.aro_known_multiplier * time_unit.annual_units / risk_entry.aro_known_unit_quantity
+                time_unit = TimeUnit.objects.get(
+                    id=risk_entry.aro_time_unit_id)
+                aro_rate = risk_entry.aro_known_multiplier * \
+                    time_unit.annual_units / risk_entry.aro_known_unit_quantity
                 if aro_rate >= 1:
                     aro_rate = 100
                 else:
@@ -617,10 +632,14 @@ def api_get_risk_entry(request, entry_id):
                 total_sle = 0
                 total_ale = 0
                 for entry_company_asset in risk_entry.companyasset_entry.order_by('id').all():
-                    company_asset = CompanyAsset.objects.get(pk=entry_company_asset.id_companyasset_id)
-                    sle_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(entry_company_asset.exposure_factor_rate) / 100, 3) if entry_company_asset.exposure_factor_toggle == 'P' else round(entry_company_asset.exposure_factor_fixed, 3)
-                    ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(entry_company_asset.exposure_factor_rate) * aro_rate / 10000, 3) if entry_company_asset.exposure_factor_toggle == 'P' else round(Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 3)
-                    total_asset_value += round(company_asset.asset_value_fixed, 3)
+                    company_asset = CompanyAsset.objects.get(
+                        pk=entry_company_asset.id_companyasset_id)
+                    sle_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                                      3) if entry_company_asset.exposure_factor_toggle == 'P' else round(entry_company_asset.exposure_factor_fixed, 3)
+                    ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
+                                      3) if entry_company_asset.exposure_factor_toggle == 'P' else round(Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 3)
+                    total_asset_value += round(
+                        company_asset.asset_value_fixed, 3)
                     total_sle += sle_value
                     total_ale += ale_value
                     affected_assets.append({
@@ -661,14 +680,20 @@ def api_get_risk_entry(request, entry_id):
                     total_sle_rate += mitigating_control.sle_mitigation_rate
 
                 for mitigating_control in risk_entry.companycontrol_entry.order_by('id').all():
-                    company_control = CompanyControl.objects.get(pk=mitigating_control.id_companycontrol_id)
-                    company = Company.objects.get(pk=company_control.company_id)
-                    control = Control.objects.get(pk=company_control.control_id)
+                    company_control = CompanyControl.objects.get(
+                        pk=mitigating_control.id_companycontrol_id)
+                    company = Company.objects.get(
+                        pk=company_control.company_id)
+                    control = Control.objects.get(
+                        pk=company_control.control_id)
                     vendor = Vendor.objects.get(pk=control.vendor_id)
-                    sle_cost_value = round(total_sle * mitigating_control.sle_mitigation_rate / 100, 3)
-                    aro_cost_value = round(total_sle * (100 - total_sle_rate) * mitigating_control.aro_mitigation_rate / 100, 3)
+                    sle_cost_value = round(
+                        total_sle * mitigating_control.sle_mitigation_rate / 100, 3)
+                    aro_cost_value = round(
+                        total_sle * (100 - total_sle_rate) * mitigating_control.aro_mitigation_rate / 100, 3)
                     total_cost_value = sle_cost_value + aro_cost_value
-                    total_ale_impact_value = round(total_cost_value * aro_rate / 100, 3)
+                    total_ale_impact_value = round(
+                        total_cost_value * aro_rate / 100, 3)
                     mitigating_controls.append({
                         'company_id': company.id,
                         'company_name': company.name,
