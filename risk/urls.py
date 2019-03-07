@@ -79,6 +79,8 @@ urlpatterns = [
             dashboard.get_all_impact_categories, name="impact-categories-dropdown-list"),
     re_path(r'^dashboard/api/severity-categories/$',
             dashboard.get_all_severity_categories, name="severity-categories-dropdown-list"),
+    re_path(r'^dashboard/api/list-entries-info/$',
+            dashboard.api_list_entries_info, name="api-list-entries-info"),
 
     # SHOULD BE THE LAST IN THIS LIST
     re_path(r'^$', home.index, name='index'),

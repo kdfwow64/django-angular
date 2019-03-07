@@ -127,3 +127,15 @@ legend {
 .bottom-10 {
     margin-bottom: 20px !important;
 }
+
+/*List Entry*/
+.widget-stats .stats-number label{
+    font-weight: 300;
+    color: #fff;
+    margin-bottom: 0;
+}
+.small-label label {
+    font-weight: 300;
+    color: #fff;
+    margin-bottom: 0;
+}

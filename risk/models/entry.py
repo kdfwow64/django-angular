@@ -154,21 +154,18 @@ class Entry(DefaultFields):
             response = 0
         return response
 
-    @property
-    def has_completed(self):
+    def has_completed(self, rate_relation):
         """Is there a response associated with this."""
         try:
             aro_rate = 0
             if self.aro_toggle == 'C':
-                frequency_category = FrequencyCategory.objects.get(id=self.aro_frequency_id)
-                aro_rate = (frequency_category.minimum + frequency_category.maximum) / 2 * 100
-                if frequency_category.minimum == 1:
+                aro_rate = (rate_relation['minimum'] + rate_relation['maximum']) / 2 * 100
+                if rate_relation['minimum'] == 1:
                     aro_rate = 100
             elif self.aro_toggle == 'K':
                 aro_rate = self.aro_fixed
             else:
-                time_unit = TimeUnit.objects.get(id=self.aro_time_unit_id)
-                aro_rate = self.aro_known_multiplier * time_unit.annual_units / self.aro_known_unit_quantity
+                aro_rate = self.aro_known_multiplier * rate_relation['annual_units'] / self.aro_known_unit_quantity
                 if aro_rate >= 1:
                     aro_rate = 100
                 else:
@@ -186,21 +183,18 @@ class Entry(DefaultFields):
             response = 0
         return response
 
-    @property
-    def is_qualified(self):
+    def is_qualified(self, rate_relation):
         """Is this entry qualified."""
         try:
             aro_rate = 0
             if self.aro_toggle == 'C':
-                frequency_category = FrequencyCategory.objects.get(id=self.aro_frequency_id)
-                aro_rate = (frequency_category.minimum + frequency_category.maximum) / 2 * 100
-                if frequency_category.minimum == 1:
+                aro_rate = (rate_relation['minimum'] + rate_relation['maximum']) / 2 * 100
+                if rate_relation['minimum'] == 1:
                     aro_rate = 100
             elif self.aro_toggle == 'K':
                 aro_rate = self.aro_fixed
             else:
-                time_unit = TimeUnit.objects.get(id=self.aro_time_unit_id)
-                aro_rate = self.aro_known_multiplier * time_unit.annual_units / self.aro_known_unit_quantity
+                aro_rate = self.aro_known_multiplier * rate_relation['annual_units'] / self.aro_known_unit_quantity
                 if aro_rate >= 1:
                     aro_rate = 100
                 else:
@@ -213,7 +207,7 @@ class Entry(DefaultFields):
                 self.response_id,
                 EntryActor.objects.filter(id_entry_id=self.id).count() > 0,
                 EntryCompanyAsset.objects.filter(id_entry_id=self.id).count() > 0,
-                Response.objects.get(pk=self.response_id).name in ['Threat', 'Transfer', 'Accept'],
+                Response.objects.get(pk=self.response_id).name in ['Treat', 'Transfer', 'Accept'],
                 not self.evaluation_flg
             ]))
         except:

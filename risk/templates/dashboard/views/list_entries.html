@@ -17,11 +17,11 @@
             <div class="widget widget-stats bg-green">
                 <div class="stats-icon stats-icon-lg"><i class="fa fa-asterisk fa-fw"></i></div>
                 <div class="stats-title">COMPANY RESIDUAL ALE RATE</div>
-                <div class="stats-number">23%</div>
+                <div class="stats-number"><label ng-bind="company_residual_ale_rate + '%'"></label></div>
                 <div class="stats-progress progress">
                     <div class="progress-bar" style="width: 23.1%;"></div>
                 </div>
-                <div class="stats-desc">Highest Inherent Risk Entry: $2,210,256</br>Highest Residual Risk Entry: $504,453</div>
+                <div class="stats-desc small-label">Highest Inherent Risk Entry: <label ng-bind="'$' + highest_total_ale"></label></br>Highest Residual Risk Entry: <label ng-bind="'$' + highest_residual_ale_cost"></label></div>
             </div>
         </div>
         <!-- end col-3 -->
@@ -30,11 +30,11 @@
             <div class="widget widget-stats bg-purple">
                 <div class="stats-icon stats-icon-lg"><i class="fa fa-shield fa-fw"></i></div>
                 <div class="stats-title">TREATED ENTRY PROTECTION</div>
-                <div class="stats-number">42.5%</div>
+                <div class="stats-number"><label ng-bind="treated_entry_protection + '%'"></label></div>
                 <div class="stats-progress progress">
                     <div class="progress-bar" style="width: 42.5%;"></div>
                 </div>
-                <div class="stats-desc">Inherent: $28,324,221</br>Mitigated: $10,933,402 </div>
+                <div class="stats-desc small-label">Inherent: <label ng-bind="'$' + inherent_ale_total"></label></br>Mitigated: <label ng-bind="'$' + mitigated_ale_total"></label></div>
             </div>
         </div>
         <!-- end col-3 -->
@@ -43,12 +43,12 @@
             <div class="widget widget-stats bg-blue">
                 <div class="stats-icon stats-icon-lg"><i class="fa fa-cogs fa-fw"></i></div>
                 <div class="stats-title">TOTAL MANAGED ENTRIES</div>
-                <div class="stats-number">756</div>
+                <div class="stats-number"><label ng-bind="count_active_entries"></label></div>
                 <div class="stats-progress progress">
                     <div class="progress-bar" style="width: 36.1%;"></div>
                 </div>
-                <div class="stats-desc">Treating: 694&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Transferred: 34</div>
-                <div class="stats-desc">Accepted: 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avoided: 14</div>
+                <div class="stats-desc small-label">Treating: <label ng-bind="count_treat_entries"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Transferred: <label ng-bind="count_transfer_entries"></label></div>
+                <div class="stats-desc small-label">Accepted: <label ng-bind="count_accept_entries"></label>&nbsp;&nbsp;  &nbsp;Avoided: <label ng-bind="count_avoid_entries"></label></div>
             </div>
         </div>
         <!-- end col-3 -->
@@ -57,11 +57,11 @@
             <div class="widget widget-stats bg-black">
                 <div class="stats-icon stats-icon-lg"><i class="fa fa-stack-overflow fa-fw"></i></div>
                 <div class="stats-title">QUALIFED ENTRIES</div>
-                <div class="stats-number">721</div>
+                <div class="stats-number"><label ng-bind="count_qualified_entries"></label></div>
                 <div class="stats-progress progress">
                     <div class="progress-bar" style="width: 89.5%;"></div>
                 </div>
-                <div class="stats-desc">Not Completed: 4</br>Evaluation Required: 17</div>
+                <div class="stats-desc small-label">Not Completed: <label ng-bind="count_not_completed_entries"></label></br>Evaluation Required: <label ng-bind="count_require_evaluation_entries"></label></div>
             </div>
         </div>
         <!-- end col-3 -->

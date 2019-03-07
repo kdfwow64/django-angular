@@ -59,7 +59,24 @@ def api_list_risk_entries(request):
 
         register_entries = company_register.entry
         total = register_entries.count()
+        rate_relation = {}
         for entry in register_entries.order_by('-date_modified').all():
+            if entry.aro_toggle == 'C':
+                frequency_category = FrequencyCategory.objects.get(
+                    id=entry.aro_frequency_id)
+                rate_relation = {
+                    'minimum': frequency_category.minimum,
+                    'maximum': frequency_category.maximum
+                }
+            elif entry.aro_toggle == 'K':
+                pass
+            else:
+                time_unit = TimeUnit.objects.get(
+                    id=entry.aro_time_unit_id)
+                rate_relation = {
+                    'annual_units': time_unit.annual_units
+                }
+
             category_name = ''
             try:
                 for category in SeverityCategory.objects.order_by('name').all():
@@ -72,7 +89,7 @@ def api_list_risk_entries(request):
             rows.append({
                 'owner_name': entry.entry_owner.full_name,
                 'compliance': entry.has_compliance,
-                'completed': entry.has_completed,
+                'completed': entry.has_completed(rate_relation),
                 'entry_number': entry.id,  # Entry number
                 'response': entry.response_name,
                 'mr': entry.mitigation_rate,  #
@@ -125,43 +142,17 @@ class CreateRiskEntry(View):
                 request_data.get("response", request.user.id))
             risk_entry.entry_owner_id = int(
                 request_data.get("entry_owner", request.user.id))
-            risk_entry.aro_frequency_id = int(
-                request_data.get("aro_frequency", request.user.id))
+            risk_entry.aro_toggle = request_data.get("aro_toggle", request.user.id)
+            risk_entry.aro_known_multiplier = int(
+                request_data.get("aro_known_multiplier", request.user.id))
+            risk_entry.aro_known_unit_quantity = int(
+                request_data.get("aro_known_unit_quantity", request.user.id))
             risk_entry.aro_time_unit_id = int(
                 request_data.get("aro_time_unit", request.user.id))
+            risk_entry.aro_fixed = request_data.get("aro_fixed", request.user.id)
+            risk_entry.aro_frequency_id = request_data.get("aro_frequency", request.user.id)
             risk_entry.modified_by = request.user
             risk_entry.save()
-
-            # Select single dropdown
-            # try:
-            #     risk_entry.response_id = int(
-            #       request_data.get("response", request.response.id))
-            #     try:
-            #         entry_response = EntryResponse.objects.filter(
-            #             entry=risk_entry).latest('id')
-            #         entry_response.response = response
-            #         entry_response.save()
-            #     except:
-            #         EntryResponse.objects.create(
-            #             entry=risk_entry, response=response)
-            # except:
-            #     pass
-
-            # Select multiple dropdowns - Risk Type
-            # selected_rt = request_data.get("risk_types", [])
-            # for ert in risk_entry.entryrisktype.all():
-            #     try:
-            #         selected_rt.remove(ert.id_risktype_id)
-            #     except:  # This risktype is not selected anymore
-            #         ert.delete()
-            # # Add new RiskType
-            # for risk_type_id in selected_rt:
-            #     try:
-            #         risk_type = RiskType.objects.get(pk=risk_type_id)
-            #         EntryRiskType.objects.get_or_create(
-            #             id_entry=risk_entry, id_risktype=risk_type)
-            #     except:
-            #         pass
 
             # Select multiple dropdowns - Company locations
             selected_cl = request_data.get(
@@ -180,22 +171,12 @@ class CreateRiskEntry(View):
                 except:
                     pass
 
-            # Select multiple dropdowns - Compliance
-            # selected_cp = request_data.get("compliances", [])
-            # for ecp in risk_entry.entrycompliance.all():
-            #     try:
-            #         selected_cp.remove(ecp.id_compliance_id)
-            #     except:  # This Compliance is not selected anymore
-            #         ecp.delete()
-            # Add new Compliance
-            # for compliances_id in selected_cp:
-            #     try:
-            #         compliance = Compliance.objects.get(pk=compliances_id)
-            #         EntryCompliance.objects.get_or_create(
-            #             id_entry=risk_entry, id_compliance=compliance)
-            #     except:
-            #         pass
-            # Compliance Requirements
+            for ecp in risk_entry.entrycompliancerequirement.all():
+                try:
+                    ecp.delete()
+                except:  # This Compliance is not selected anymore
+                    pass
+
             selected_compliance_requirements = request_data.get(
                 "compliance_requirements", [])
 
@@ -208,6 +189,11 @@ class CreateRiskEntry(View):
                 except:
                     pass
             # Entry Url
+            for eurl in EntryUrl.objects.filter(entry_id=risk_entry.id):
+                try:
+                    eurl.delete()
+                except:  # This Compliance is not selected anymore
+                    pass
             entry_urls = request_data.get("entry_urls", [])
             for entry_url in entry_urls:
                 try:
@@ -231,29 +217,35 @@ def api_update_threat_details(request, entry_id):
             risk_entry = Entry.objects.get(pk=entry_id)
             payload = json.loads(request.body.decode(
                 'utf-8')).get("multidata", [])
+            try:
+                for item in EntryActor.objects.filter(id_entry_id=entry_id):
+                    try:
+                        for i_item in EntryActorIntent.objects.filter(id_entryactor_id=item.id):
+                            try:
+                                i_item.delete()
+                            except:
+                                pass
+                        for m_item in EntryActorMotive.objects.filter(id_entryactor_id=item.id):
+                            try:
+                                m_item.delete()
+                            except:
+                                pass
+                        item.delete()
+                    except:
+                        pass
+            except:
+                pass
             for request_data in payload:
                 try:
                     actor = Actor.objects.get(
                         pk=request_data.get('actor_name_id'))
-                    # Get current entry actor (if any)
-                    try:  # If EntryActor already exists
-                        entry_actor_id = request_data.get('entry_actor_id')
-                        entry_actor = EntryActor.objects.get(
-                            id=entry_actor_id, id_entry=risk_entry)
-                        entry_actor.id_actor = actor
-                        entry_actor.detail = request_data.get('detail')
-                        entry_actor.save()
-                    except:  # No actor already, create one
-                        entry_actor = EntryActor.objects.create(
-                            id_entry=risk_entry, id_actor=actor, detail=request_data.get('detail'))
+
+                    entry_actor = EntryActor.objects.create(
+                        id_entry=risk_entry, id_actor=actor, detail=request_data.get('detail'))
 
                     # Select multiple dropdowns - Intensions
                     selected_intents = request_data.get("intentions_id", [])
-                    for ai in entry_actor.intent_entryactor.all():
-                        try:
-                            selected_intents.remove()
-                        except:
-                            ai.delete()
+
                     for intention_id in selected_intents:
                         try:
                             intention = ActorIntent.objects.get(
@@ -265,11 +257,6 @@ def api_update_threat_details(request, entry_id):
 
                     # Select multiple dropdowns - Motives
                     selected_motives = request_data.get("motives_id", [])
-                    for am in entry_actor.motive_entryactor.all():
-                        try:
-                            selected_motives.remove()
-                        except:
-                            am.delete()
 
                     for motives_id in selected_motives:
                         try:
@@ -329,8 +316,6 @@ def api_update_affected_assets(request, entry_id):
                 except:
                     rv = {'status': 'error', 'code': 400,
                           'errors': ["Invalid asset"]}
-            # risk_entry.mitigation_notes = data.get('mitigation_notes')
-            # risk_entry.save()
 
             rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
         else:
@@ -365,7 +350,6 @@ def api_update_mitigating_controls(request, entry_id):
                         entry_control.id_companycontrol = control
                         entry_control.sle_mitigation_rate = request_data.get('sle_mitigation_rate', 0) or 0
                         entry_control.aro_mitigation_rate = request_data.get('aro_mitigation_rate', 0) or 0
-                        entry_control.notes = request_data.get('notes')
                         entry_control.save()
                     except:
                         entry_control = EntryCompanyControl.objects.create(
@@ -540,7 +524,7 @@ def api_get_risk_entry(request, entry_id):
                 compliance_requirements.append({
                     'type_id': compliance.compliance_type_id,
                     'type': ComplianceType.objects.get(id=compliance.compliance_type_id).name,
-                    'name': compliance.name,
+                    'name': compliance.abbrv,
                     'compliance_id': compliance.id,
                     'requirement': compliance_requirement.requirement,
                     'requirement_id': compliance_requirement.id,
@@ -623,11 +607,11 @@ def api_get_risk_entry(request, entry_id):
                 else:
                     aro_rate *= 100
             aro_rate = Decimal(aro_rate)
+            total_sle = 0
+            total_ale = 0
             try:
                 affected_assets = []
                 total_asset_value = 0
-                total_sle = 0
-                total_ale = 0
                 for entry_company_asset in risk_entry.companyasset_entry.order_by('id').all():
                     company_asset = CompanyAsset.objects.get(
                         pk=entry_company_asset.id_companyasset_id)
@@ -706,7 +690,7 @@ def api_get_risk_entry(request, entry_id):
                         'company_name': company_control.name,
                         'control_name': control.name,
                         'vendor_name': vendor.name,
-                        'max_loss': company.fixed_max_loss,
+                        'max_loss': company.get_company_max_loss(),
                         'sle_mitigation_rate': mitigating_control.sle_mitigation_rate,
                         'sle_rate': mitigating_control.sle_mitigation_rate,
                         'sle_rate_display': str(mitigating_control.sle_mitigation_rate) + '%',
@@ -732,7 +716,9 @@ def api_get_risk_entry(request, entry_id):
                         'aro_rate': total_aro_rate,
                         'aro_cost': total_aro_cost,
                         'total_cost': total_cost,
-                        'total_ale': total_ale
+                        'total_ale': total_ale,
+                        'notes_mitigation': risk_entry.mitigation_notes,
+                        'additional_mitigation': risk_entry.additional_mitigation
                     }
                 })
             except:
@@ -741,3 +727,150 @@ def api_get_risk_entry(request, entry_id):
             pass
 
     return JsonResponse(rv)
+
+
+@login_required
+def api_list_entries_info(request):
+    """Get Detailed information for Entry list."""
+    data = {}
+    company_residual_ale_rate = 0
+    highest_total_ale = 0
+    highest_residual_ale_cost = 0
+    protection_residual_ale_cost_sum = 0
+    protection_inherent_ale_cost_sum = 0
+    protection_inherent_ale_cost_sum_qualified_and_treat = 0
+    protection_mitigated_ale_cost_sum_qualified_and_treat = 0
+    count_active_entries = 0
+    count_treat_entries = 0
+    count_transfer_entries = 0
+    count_accept_entries = 0
+    count_avoid_entries = 0
+    count_qualified_entries = 0
+    count_not_completed_entries = 0
+    count_require_evaluation_entries = 0
+    rate_relation = {}
+    try:
+        for entry in Entry.objects.order_by('id').all():
+            # ARO Rate
+            aro_rate = 0
+            if entry.aro_toggle == 'C':
+                frequency_category = FrequencyCategory.objects.get(
+                    id=entry.aro_frequency_id)
+                rate_relation = {
+                    'minimum': frequency_category.minimum,
+                    'maximum': frequency_category.maximum
+                }
+                aro_rate = (frequency_category.minimum +
+                            frequency_category.maximum) / 2 * 100
+                if frequency_category.minimum == 1:
+                    aro_rate = 100
+            elif entry.aro_toggle == 'K':
+                aro_rate = entry.aro_fixed
+            else:
+                time_unit = TimeUnit.objects.get(
+                    id=entry.aro_time_unit_id)
+                rate_relation = {
+                    'annual_units': time_unit.annual_units
+                }
+                aro_rate = entry.aro_known_multiplier * time_unit.annual_units / entry.aro_known_unit_quantity
+                if aro_rate >= 1:
+                    aro_rate = 100
+                else:
+                    aro_rate *= 100
+            aro_rate = Decimal(aro_rate)
+            # Total SLE
+            total_sle = 0
+            total_ale = 0
+            try:
+                total_asset_value = 0
+                for entry_company_asset in entry.companyasset_entry.order_by('id').all():
+                    company_asset = CompanyAsset.objects.get(
+                        pk=entry_company_asset.id_companyasset_id)
+                    sle_value = round(
+                        Decimal(company_asset.asset_value_fixed) * Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                        3) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                        entry_company_asset.exposure_factor_fixed, 3)
+                    ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(
+                        entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
+                                      3) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                        Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 3)
+                    total_asset_value += round(company_asset.asset_value_fixed, 3)
+                    total_sle += sle_value
+                    total_ale += ale_value
+            except:
+                pass
+            # Mitigating Info
+            total_ale_impact = 0
+            try:
+                total_sle_rate = 0
+                for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                    total_sle_rate += mitigating_control.sle_mitigation_rate
+                total_sle_rate = Decimal(total_sle_rate)
+                total_aro_rate = 0
+                total_sle_cost = 0
+                total_aro_cost = 0
+                total_cost = 0
+                for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                    company_control = CompanyControl.objects.get(
+                        pk=mitigating_control.id_companycontrol_id)
+                    company = Company.objects.get(
+                        pk=company_control.company_id)
+                    control = Control.objects.get(
+                        pk=company_control.control_id)
+                    vendor = Vendor.objects.get(pk=control.vendor_id)
+                    sle_cost_value = round(
+                        total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 3)
+                    aro_cost_value = round(
+                        total_sle * (100 - total_sle_rate) * Decimal(mitigating_control.aro_mitigation_rate) / 10000, 3)
+                    total_cost_value = sle_cost_value + aro_cost_value
+                    impact_value = round(total_cost_value * aro_rate / 100, 3)
+                    total_sle_cost += sle_cost_value
+                    total_aro_cost += aro_cost_value
+                    total_cost += total_cost_value
+                    total_ale_impact += impact_value
+                    total_aro_rate += mitigating_control.aro_mitigation_rate
+            except:
+                pass
+            highest_total_ale = total_ale if total_ale > highest_total_ale and entry.is_qualified(rate_relation) else highest_total_ale
+            highest_residual_ale_cost = Decimal(total_ale - total_ale_impact) if Decimal(total_ale - total_ale_impact) > highest_residual_ale_cost and entry.is_qualified(rate_relation) else highest_residual_ale_cost
+            company_residual_ale_rate += Decimal(total_ale - total_ale_impact) if entry.is_qualified(rate_relation) else 0
+            protection_inherent_ale_cost_sum += total_ale if entry.response_name == 'Treat' else 0
+            protection_residual_ale_cost_sum += Decimal(total_ale - total_ale_impact) if entry.response_name == 'Treat' else 0
+            protection_mitigated_ale_cost_sum_qualified_and_treat += total_ale_impact if entry.response_name == 'Treat' and entry.is_qualified(rate_relation) else 0
+            protection_inherent_ale_cost_sum_qualified_and_treat += total_ale if entry.response_name == 'Treat' and entry.is_qualified(rate_relation) else 0
+            count_active_entries += 1 if entry.is_active == 1 else 0
+            count_treat_entries += 1 if entry.response_name == 'Treat' else 0
+            count_transfer_entries += 1 if entry.response_name == 'Transfer' else 0
+            count_accept_entries += 1 if entry.response_name == 'Accept' else 0
+            count_avoid_entries += 1 if entry.response_name == 'Avoid' else 0
+            count_qualified_entries += 1 if entry.is_qualified(rate_relation) else 0
+            count_not_completed_entries += 1 if entry.has_completed(rate_relation) else 0
+            count_require_evaluation_entries += 1 if entry.evaluation_flg else 0
+
+        try:
+            company_residual_ale_rate = round(company_residual_ale_rate / Decimal(request.user.get_current_company().get_company_max_loss()) * 100, 5)
+        except:
+            company_residual_ale_rate = 0
+        try:
+            protection_rate = round(protection_residual_ale_cost_sum / protection_inherent_ale_cost_sum * 100, 5)
+        except:
+            protection_rate = 0
+        data = {
+            'company_residual_ale_rate': company_residual_ale_rate,
+            'highest_total_ale': highest_total_ale,
+            'highest_residual_ale_cost': highest_residual_ale_cost,
+            'treated_entry_protection': protection_rate,
+            'mitigated_ale_total': protection_mitigated_ale_cost_sum_qualified_and_treat,
+            'inherent_ale_total': protection_inherent_ale_cost_sum_qualified_and_treat,
+            'count_active_entries': count_active_entries,
+            'count_treat_entries': count_treat_entries,
+            'count_transfer_entries': count_transfer_entries,
+            'count_accept_entries': count_accept_entries,
+            'count_avoid_entries': count_avoid_entries,
+            'count_qualified_entries': count_qualified_entries,
+            'count_not_completed_entries': count_not_completed_entries,
+            'count_require_evaluation_entries': count_require_evaluation_entries
+        }
+    except:
+        pass
+    return JsonResponse(data, safe=False)
