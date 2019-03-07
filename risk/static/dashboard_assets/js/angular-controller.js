@@ -3207,17 +3207,21 @@ colorAdminApp.controller('registerListEntriresController',
     $scope.search.compliance = true;
     $scope.search.completed = true;
     $scope.company_residual_ale_rate = 0;
+    $scope.company_residual_ale_rate_width = 0;
     $scope.highest_total_ale = 0;
     $scope.highest_residual_ale_cost = 0;
     $scope.treated_entry_protection = 0;
+    $scope.treated_entry_protection_width = 0;
     $scope.inherent_ale_total = 0;
     $scope.mitigated_ale_total = 0;
     $scope.count_active_entries = 0;
+    $scope.count_active_entries_width = 0;
     $scope.count_treat_entries = 0;
     $scope.count_transfer_entries = 0;
     $scope.count_accept_entries = 0;
     $scope.count_avoid_entries = 0;
     $scope.count_qualified_entries = 0;
+    $scope.count_qualified_entries_width = 0;
     $scope.count_not_completed_entries = 0;
     $scope.count_require_evaluation_entries = 0;
     // $scope.users = [];
@@ -3228,17 +3232,21 @@ colorAdminApp.controller('registerListEntriresController',
             .then(function(r) {
                 if(r) {
                     $scope.company_residual_ale_rate = r.data.company_residual_ale_rate;
+                    $scope.company_residual_ale_rate_width = r.data.company_residual_ale_rate_width;
                     $scope.highest_total_ale = r.data.highest_total_ale;
                     $scope.highest_residual_ale_cost = r.data.highest_residual_ale_cost;
                     $scope.treated_entry_protection = r.data.treated_entry_protection;
+                    $scope.treated_entry_protection_width = r.data.treated_entry_protection_width;
                     $scope.inherent_ale_total = r.data.inherent_ale_total;
                     $scope.mitigated_ale_total = r.data.mitigated_ale_total;
                     $scope.count_active_entries = r.data.count_active_entries;
+                    $scope.count_active_entries_width = r.data.count_active_entries_width;
                     $scope.count_treat_entries = r.data.count_treat_entries;
                     $scope.count_transfer_entries = r.data.count_transfer_entries;
                     $scope.count_accept_entries = r.data.count_accept_entries;
                     $scope.count_avoid_entries = r.data.count_avoid_entries;
                     $scope.count_qualified_entries = r.data.count_qualified_entries;
+                    $scope.count_qualified_entries_width = r.data.count_qualified_entries_width;
                     $scope.count_not_completed_entries = r.data.count_not_completed_entries;
                     $scope.count_require_evaluation_entries = r.data.count_require_evaluation_entries;
                 } else {

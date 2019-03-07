@@ -855,19 +855,28 @@ def api_list_entries_info(request):
             protection_rate = round(protection_residual_ale_cost_sum / protection_inherent_ale_cost_sum * 100, 5)
         except:
             protection_rate = 0
+
+        company_residual_ale_rate_width = str(company_residual_ale_rate) + '%'
+        treated_entry_protection_width = str(protection_rate) + '%'
+        count_active_entries_width = str(count_active_entries / Entry.objects.count() * 100) + '%'
+        count_qualified_entries_width = str(count_qualified_entries / Entry.objects.count() * 100) + '%'
         data = {
             'company_residual_ale_rate': company_residual_ale_rate,
+            'company_residual_ale_rate_width': company_residual_ale_rate_width,
             'highest_total_ale': highest_total_ale,
             'highest_residual_ale_cost': highest_residual_ale_cost,
             'treated_entry_protection': protection_rate,
+            'treated_entry_protection_width': treated_entry_protection_width,
             'mitigated_ale_total': protection_mitigated_ale_cost_sum_qualified_and_treat,
             'inherent_ale_total': protection_inherent_ale_cost_sum_qualified_and_treat,
             'count_active_entries': count_active_entries,
+            'count_active_entries_width': count_active_entries_width,
             'count_treat_entries': count_treat_entries,
             'count_transfer_entries': count_transfer_entries,
             'count_accept_entries': count_accept_entries,
             'count_avoid_entries': count_avoid_entries,
             'count_qualified_entries': count_qualified_entries,
+            'count_qualified_entries_width': count_qualified_entries_width,
             'count_not_completed_entries': count_not_completed_entries,
             'count_require_evaluation_entries': count_require_evaluation_entries
         }

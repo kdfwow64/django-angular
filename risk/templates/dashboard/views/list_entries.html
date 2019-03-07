@@ -19,7 +19,7 @@
                 <div class="stats-title">COMPANY RESIDUAL ALE RATE</div>
                 <div class="stats-number"><label ng-bind="company_residual_ale_rate + '%'"></label></div>
                 <div class="stats-progress progress">
-                    <div class="progress-bar" style="width: 23.1%;"></div>
+                    <div class="progress-bar" ng-style="{'width': company_residual_ale_rate_width}"></div>
                 </div>
                 <div class="stats-desc small-label">Highest Inherent Risk Entry: <label ng-bind="'$' + highest_total_ale"></label></br>Highest Residual Risk Entry: <label ng-bind="'$' + highest_residual_ale_cost"></label></div>
             </div>
@@ -32,7 +32,7 @@
                 <div class="stats-title">TREATED ENTRY PROTECTION</div>
                 <div class="stats-number"><label ng-bind="treated_entry_protection + '%'"></label></div>
                 <div class="stats-progress progress">
-                    <div class="progress-bar" style="width: 42.5%;"></div>
+                    <div class="progress-bar" ng-style="{'width': treated_entry_protection_width}"></div>
                 </div>
                 <div class="stats-desc small-label">Inherent: <label ng-bind="'$' + inherent_ale_total"></label></br>Mitigated: <label ng-bind="'$' + mitigated_ale_total"></label></div>
             </div>
@@ -45,7 +45,7 @@
                 <div class="stats-title">TOTAL MANAGED ENTRIES</div>
                 <div class="stats-number"><label ng-bind="count_active_entries"></label></div>
                 <div class="stats-progress progress">
-                    <div class="progress-bar" style="width: 36.1%;"></div>
+                    <div class="progress-bar" ng-style="{'width': count_active_entries_width}"></div>
                 </div>
                 <div class="stats-desc small-label">Treating: <label ng-bind="count_treat_entries"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Transferred: <label ng-bind="count_transfer_entries"></label></div>
                 <div class="stats-desc small-label">Accepted: <label ng-bind="count_accept_entries"></label>&nbsp;&nbsp;  &nbsp;Avoided: <label ng-bind="count_avoid_entries"></label></div>
@@ -59,7 +59,7 @@
                 <div class="stats-title">QUALIFED ENTRIES</div>
                 <div class="stats-number"><label ng-bind="count_qualified_entries"></label></div>
                 <div class="stats-progress progress">
-                    <div class="progress-bar" style="width: 89.5%;"></div>
+                    <div class="progress-bar" ng-style="{'width': count_qualified_entries_width}"></div>
                 </div>
                 <div class="stats-desc small-label">Not Completed: <label ng-bind="count_not_completed_entries"></label></br>Evaluation Required: <label ng-bind="count_require_evaluation_entries"></label></div>
             </div>
