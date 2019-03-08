@@ -284,6 +284,9 @@ def api_update_affected_assets(request, entry_id):
             risk_entry = Entry.objects.get(pk=entry_id)
             data = json.loads(request.body.decode('utf-8'))
             payload = data.get("multidata", [])
+            for del_item in EntryCompanyAsset.objects.filter(id_entry_id=risk_entry.id):
+                del_item.delete()
+
             for request_data in payload:
                 # Get current company asset (if any)
                 try:
@@ -291,8 +294,6 @@ def api_update_affected_assets(request, entry_id):
                         pk=int(request_data.get('name_id')))
                     toggle = request_data.get('exposure_factor_toggle')
                     entry_asset_id = request_data.get('entry_asset_id')
-                    for del_item in EntryCompanyAsset.objects.filter(id_entry_id=risk_entry.id):
-                        del_item.delete()
                     # try:
                     #     entry_asset = EntryCompanyAsset.objects.get(
                     #         id=entry_asset_id, id_entry=risk_entry)
