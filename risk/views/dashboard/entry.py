@@ -754,8 +754,14 @@ def api_list_entries_info(request):
     count_not_completed_entries = 0
     count_require_evaluation_entries = 0
     rate_relation = {}
+    user = request.user
     try:
-        for entry in Entry.objects.order_by('id').all():
+        company = user.get_current_company()
+        # Get fist register for company from entry.py/Register
+        company_register = company.get_active_register()
+        register_entries = company_register.entry
+        total = register_entries.count()
+        for entry in register_entries.order_by('id').all():
             # ARO Rate
             aro_rate = 0
             if entry.aro_toggle == 'C':
@@ -863,8 +869,8 @@ def api_list_entries_info(request):
 
         company_residual_ale_rate_width = str(company_residual_ale_rate) + '%'
         treated_entry_protection_width = str(protection_rate) + '%'
-        count_active_entries_width = str(count_active_entries / Entry.objects.count() * 100) + '%'
-        count_qualified_entries_width = str(count_qualified_entries / Entry.objects.count() * 100) + '%'
+        count_active_entries_width = str(count_active_entries / total * 100) + '%'
+        count_qualified_entries_width = str(count_qualified_entries / total * 100) + '%'
         data = {
             'company_residual_ale_rate': company_residual_ale_rate,
             'company_residual_ale_rate_width': company_residual_ale_rate_width,
