@@ -3547,7 +3547,9 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.file_model = riskEntry.file_model;
     }
     else{
-        $scope.file_model = null;
+        $scope.file_model = {
+            'name': ''
+        };
     }
 
     if(riskEntry.new_threat){
@@ -3663,6 +3665,22 @@ colorAdminApp.controller('registerAddEntriresController',
     }
     $scope.remove_this_affected_asset = function(index){
         $scope.affected_assets.multidata.splice(index, 1);
+        total_asset_value = 0;
+        total_sle = 0;
+        total_ale = 0;
+        for (i = 0; i < $scope.affected_assets.multidata.length ; i++) {
+            total_asset_value += parseFloat($scope.affected_assets.multidata[i].asset_value);
+            total_sle +=$scope.affected_assets.multidata[i].sle_value;
+            total_ale +=$scope.affected_assets.multidata[i].ale_value;
+        }
+        $scope.affected_assets.total_asset_value = '$' + total_asset_value;
+        total_factor = total_sle / total_asset_value * 100;
+        $scope.affected_assets.total_factor = total_factor.toFixed(3) + '%';
+        $scope.affected_assets.total_factor_value = total_factor.toFixed(3);
+        $scope.affected_assets.total_sle = '$' + total_sle;
+        $scope.affected_assets.total_sle_value = total_sle;
+        $scope.affected_assets.total_ale = '$' + total_ale;
+        $scope.affected_assets.total_ale_value = total_ale;
     }
     $scope.add_more_mitigating_controls = function(){
         $scope.mitigating_controls.multidata.push(WizardFormService.get_mitigating_controls_form());
@@ -4389,25 +4407,7 @@ colorAdminApp.controller('registerAddEntriresController',
                         $scope.mitigating_controls.multidata.push(new_item);
                     else
                         $scope.mitigating_controls.multidata[index] = new_item;
-                    sle_cost += $scope.add_control.sle_cost_value;
-                    aro_cost = 0;
-                    total_cost = 0;
-                    total_ale = 0;
-                    for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
-                        $scope.mitigating_controls.multidata[i].aro_cost_value = ($scope.affected_assets.total_sle_value - sle_cost) * parseFloat($scope.mitigating_controls.multidata[i].aro_mitigation_rate) / 100;
-                        $scope.mitigating_controls.multidata[i].aro_cost = '$' + parseFloat($scope.mitigating_controls.multidata[i].aro_cost_value);
-                        aro_cost += $scope.mitigating_controls.multidata[i].aro_cost_value;
-                        $scope.mitigating_controls.multidata[i].total_cost_value = parseFloat($scope.mitigating_controls.multidata[i].sle_cost_value + $scope.mitigating_controls.multidata[i].aro_cost_value);
-                        $scope.mitigating_controls.multidata[i].total_ale_impact_value = parseFloat($scope.mitigating_controls.multidata[i].total_cost_value * $scope.basicinfo.aro_rate / 100);
-                        total_cost += $scope.mitigating_controls.multidata[i].total_cost_value;
-                        total_ale += $scope.mitigating_controls.multidata[i].total_ale_impact_value;
-                    }
-                    $scope.mitigating_controls.sle_rate = sle_rate + $scope.add_control.sle_mitigation_rate;
-                    $scope.mitigating_controls.aro_rate = aro_rate + $scope.add_control.aro_mitigation_rate;
-                    $scope.mitigating_controls.sle_cost = sle_cost;
-                    $scope.mitigating_controls.aro_cost = aro_cost.toFixed(3);
-                    $scope.mitigating_controls.total_cost = total_cost.toFixed(3);
-                    $scope.mitigating_controls.total_ale = total_ale.toFixed(3);
+                    $scope.mitigating_controls_update();
                     $('#add_edit_mitigation_control').modal('hide');
                     return true;
                 } else{
@@ -4416,6 +4416,38 @@ colorAdminApp.controller('registerAddEntriresController',
             }).catch(function(r){
                 return false;
         });
+    }
+    $scope.mitigating_controls_update = function () {
+        sle_cost = 0;
+        sle_rate = 0;
+        aro_rate = 0;
+        for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+            $scope.mitigating_controls.multidata[i].sle_cost_value = parseFloat($scope.mitigating_controls.multidata[i].sle_cost_value);
+            $scope.mitigating_controls.multidata[i].aro_cost_value = parseFloat($scope.mitigating_controls.multidata[i].aro_cost_value);
+            sle_cost += parseFloat($scope.mitigating_controls.multidata[i].sle_cost_value);
+            sle_rate += $scope.mitigating_controls.multidata[i].sle_mitigation_rate;
+            aro_rate += $scope.mitigating_controls.multidata[i].aro_mitigation_rate;
+        }
+        aro_cost = 0;
+        total_cost = 0;
+        total_ale = 0;
+        for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+            $scope.mitigating_controls.multidata[i].aro_cost_value = parseFloat($scope.affected_assets.total_sle_value - sle_cost) * parseFloat($scope.mitigating_controls.multidata[i].aro_mitigation_rate) / 100;
+            $scope.mitigating_controls.multidata[i].aro_cost_value = parseFloat($scope.mitigating_controls.multidata[i].aro_cost_value).toFixed(3);
+            $scope.mitigating_controls.multidata[i].aro_cost = '$' + $scope.mitigating_controls.multidata[i].aro_cost_value;
+            aro_cost += parseFloat($scope.mitigating_controls.multidata[i].aro_cost_value);
+            $scope.mitigating_controls.multidata[i].total_cost_value = parseFloat($scope.mitigating_controls.multidata[i].sle_cost_value) + parseFloat($scope.mitigating_controls.multidata[i].aro_cost_value);
+            $scope.mitigating_controls.multidata[i].total_cost_value = parseFloat($scope.mitigating_controls.multidata[i].total_cost_value).toFixed(3);
+            $scope.mitigating_controls.multidata[i].total_ale_impact_value = parseFloat($scope.mitigating_controls.multidata[i].total_cost_value * $scope.basicinfo.aro_rate / 100).toFixed(3);
+            total_cost += parseFloat($scope.mitigating_controls.multidata[i].total_cost_value);
+            total_ale += parseFloat($scope.mitigating_controls.multidata[i].total_ale_impact_value);
+        }
+        $scope.mitigating_controls.sle_rate = sle_rate;
+        $scope.mitigating_controls.aro_rate = aro_rate;
+        $scope.mitigating_controls.sle_cost = parseFloat(sle_cost).toFixed(3);
+        $scope.mitigating_controls.aro_cost = aro_cost.toFixed(3);
+        $scope.mitigating_controls.total_cost = total_cost.toFixed(3);
+        $scope.mitigating_controls.total_ale = total_ale.toFixed(3);
     }
     $scope.get_result_from_control = function() {
         validation = false;
@@ -4432,13 +4464,14 @@ colorAdminApp.controller('registerAddEntriresController',
             sle_cost += parseFloat(item.sle_cost_value);
             aro_cost += parseFloat(item.aro_cost_value);
         }
-        $scope.add_control.sle_cost_value = $scope.affected_assets.total_sle_value * $scope.add_control.sle_mitigation_rate / 100;
+        $scope.add_control.sle_cost_value = parseFloat($scope.affected_assets.total_sle_value * $scope.add_control.sle_mitigation_rate / 100).toFixed(3);
         $scope.add_control.sle_cost = '-$' + $scope.add_control.sle_cost_value;
         $scope.add_control.aro_cost_value = ($scope.affected_assets.total_sle_value - sle_cost - $scope.add_control.sle_cost_value) * $scope.add_control.aro_mitigation_rate / 100;
+        $scope.add_control.aro_cost_value = parseFloat($scope.add_control.aro_cost_value).toFixed(3);
         $scope.add_control.aro_cost = '-$' + $scope.add_control.aro_cost_value;
-        $scope.add_control.total_cost_value = $scope.add_control.sle_cost_value + $scope.add_control.aro_cost_value;
+        $scope.add_control.total_cost_value = parseFloat($scope.add_control.sle_cost_value + $scope.add_control.aro_cost_value).toFixed(3);
         $scope.add_control.total_cost = '-$' + $scope.add_control.total_cost_value;
-        $scope.add_control.total_ale_impact_value = $scope.add_control.total_cost_value * $scope.basicinfo.aro_rate / 100;
+        $scope.add_control.total_ale_impact_value = parseFloat($scope.add_control.total_cost_value * $scope.basicinfo.aro_rate / 100).toFixed(3);
         $scope.add_control.total_ale_impact = '-$' + $scope.add_control.total_ale_impact_value;
     }
     /* Ent Step 4*/

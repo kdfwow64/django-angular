@@ -291,25 +291,27 @@ def api_update_affected_assets(request, entry_id):
                         pk=int(request_data.get('name_id')))
                     toggle = request_data.get('exposure_factor_toggle')
                     entry_asset_id = request_data.get('entry_asset_id')
-                    try:
-                        entry_asset = EntryCompanyAsset.objects.get(
-                            id=entry_asset_id, id_entry=risk_entry)
-                        entry_asset.id_companyasset = asset
-                        entry_asset.detail = request_data.get('detail')
-                        entry_asset.exposure_factor_toggle = toggle
-                        entry_asset.exposure_factor_fixed = 0 if toggle == 'P' else request_data.get('exposure_factor_fixed')
-                        entry_asset.exposure_factor_rate = 0 if toggle == 'F' else request_data.get('exposure_factor_rate')
-                        entry_asset.exposure_factor = request_data.get('exposure_factor')
-                        entry_asset.save()
-                    except:
-                        EntryCompanyAsset.objects.create(
-                            id_entry=risk_entry,
-                            id_companyasset=asset,
-                            detail=request_data.get('detail'),
-                            exposure_factor_toggle=toggle,
-                            exposure_factor_fixed=0 if toggle == 'P' else request_data.get('exposure_factor_fixed'),
-                            exposure_factor_rate=0 if toggle == 'F' else request_data.get('exposure_factor_rate')
-                        )
+                    for del_item in EntryCompanyAsset.objects.filter(id_entry_id=risk_entry.id):
+                        del_item.delete()
+                    # try:
+                    #     entry_asset = EntryCompanyAsset.objects.get(
+                    #         id=entry_asset_id, id_entry=risk_entry)
+                    #     entry_asset.id_companyasset = asset
+                    #     entry_asset.detail = request_data.get('detail')
+                    #     entry_asset.exposure_factor_toggle = toggle
+                    #     entry_asset.exposure_factor_fixed = 0 if toggle == 'P' else request_data.get('exposure_factor_fixed')
+                    #     entry_asset.exposure_factor_rate = 0 if toggle == 'F' else request_data.get('exposure_factor_rate')
+                    #     entry_asset.exposure_factor = request_data.get('exposure_factor')
+                    #     entry_asset.save()
+                    # except:
+                    EntryCompanyAsset.objects.create(
+                        id_entry=risk_entry,
+                        id_companyasset=asset,
+                        detail=request_data.get('detail'),
+                        exposure_factor_toggle=toggle,
+                        exposure_factor_fixed=0 if toggle == 'P' else request_data.get('exposure_factor_fixed'),
+                        exposure_factor_rate=0 if toggle == 'F' else request_data.get('exposure_factor_rate')
+                    )
                 except:
                     rv = {'status': 'error', 'code': 400,
                           'errors': ["Invalid asset"]}
