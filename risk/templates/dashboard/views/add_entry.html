@@ -80,6 +80,41 @@
         </div>
     </div>
 </div>
+<!--Add or Edit Files-->
+<div class="modal fade" id="add_edit_file">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add File</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+<!--                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">-->
+                    <div class="m-b-0">
+                        <div class="row">
+                            <input type="hidden" ng-model="add_file.edit_num">
+                            <div class="col-md-3">
+                                <label>Name</label>
+                                <input type="text" ng-bind="add_file.name" class="form-control" required/>
+                            </div>
+                            <div class="col-md-3">
+                                <label>File</label>
+                                <input type="file" class="btn" file-model="file_model"/>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Description</label>
+                                <input type="text" ng-model="add_file.desc" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+                <a class="btn btn-success add-edit-btn" ng-click="add_edit_file()">Add</a>
+            </div>
+        </div>
+    </div>
+</div>
 <!--Add or Edit Threat Detail-->
 <div class="modal fade" id="add_edit_threat_detail">
     <div class="modal-dialog">
@@ -656,6 +691,49 @@
                                     <div class="row" style="margin-bottom: 10px;">
                                         <div class="col-md-1 pull-right">
                                             <a class="btn btn-success" ng-click="open_add_entry_url_modal()"><i class="fa fa-plus"></i>ADD</a>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <!-- begin row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Files</label>
+                                                <table class="table add-entry-tb">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="15%">Name</th>
+                                                            <th width="15%">File</th>
+                                                            <th width="70%">Description</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="file in basicinfo.files">
+                                                            <td ng-bind="file.name">
+                                                            </td>
+                                                            <td ng-bind="file.file">
+                                                            </td>
+                                                            <td ng-bind="file.desc">
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-primary" ng-click="open_edit_file_modal($index)">Edit</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-danger" ng-click="remove_this_file($index)">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+                                    <!-- start row -->
+                                    <div class="row" style="margin-bottom: 10px;">
+                                        <div class="col-md-1 pull-right">
+                                            <a class="btn btn-success" ng-click="open_add_file_modal()"><i class="fa fa-plus"></i>ADD</a>
                                         </div>
                                     </div>
                                     <!-- end row -->

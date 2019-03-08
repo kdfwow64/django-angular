@@ -47,7 +47,7 @@ def get_compliance_requirements_with_name(request, compliance_id):
     except:
         requirements = []
     for requirement in requirements:
-        data.append({'id': requirement.id, 'detail': requirement.requirement})
+        data.append({'id': requirement.id, 'detail': requirement.requirement, 'cid': requirement.cid})
 
     return JsonResponse(data, safe=False)
 

@@ -526,7 +526,7 @@ def api_get_risk_entry(request, entry_id):
                     'type': ComplianceType.objects.get(id=compliance.compliance_type_id).name,
                     'name': compliance.abbrv,
                     'compliance_id': compliance.id,
-                    'requirement': compliance_requirement.requirement,
+                    'requirement': str(compliance_requirement.cid) + ' - ' + compliance_requirement.requirement,
                     'requirement_id': compliance_requirement.id,
                     'version': ''
                 })
