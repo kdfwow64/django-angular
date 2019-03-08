@@ -3701,27 +3701,7 @@ colorAdminApp.controller('registerAddEntriresController',
     }
     $scope.remove_this_control = function (index) {
         $scope.mitigating_controls.multidata.splice(index, 1);
-        sle_rate = 0;
-        aro_rate = 0;
-        sle_cost = 0;
-        aro_cost = 0;
-        total_cost = 0;
-        total_ale = 0;
-        for( i = 0 ; i< $scope.mitigating_controls.multidata.length ; i++ ){
-            item = $scope.mitigating_controls.multidata[i];
-            sle_rate += item.sle_rate;
-            aro_rate += item.aro_rate;
-            sle_cost += item.sle_cost;
-            aro_cost += item.aro_cost;
-            total_cost += item.total_cost;
-            total_ale += item.total_ale;
-        }
-        $scope.mitigating_controls.sle_rate = sle_rate;
-        $scope.mitigating_controls.aro_rate = aro_rate;
-        $scope.mitigating_controls.sle_cost = sle_cost;
-        $scope.mitigating_controls.aro_cost = aro_cost;
-        $scope.mitigating_controls.total_cost = total_cost;
-        $scope.mitigating_controls.total_ale = total_ale;
+        $scope.mitigating_controls_update();
     }
     $scope.aro_toggle_change = function () {
         $('.wizard-step-1 .aro-bordered-div input, .wizard-step-1 .aro-bordered-div select').each(function(){
@@ -4425,12 +4405,6 @@ colorAdminApp.controller('registerAddEntriresController',
         sle_rate = 0;
         aro_rate = 0;
         for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
-            $scope.mitigating_controls.multidata[i].sle_cost_value = parseFloat($scope.mitigating_controls.multidata[i].sle_cost_value);
-            $scope.mitigating_controls.multidata[i].aro_cost_value = parseFloat($scope.mitigating_controls.multidata[i].aro_cost_value);
-            sle_cost += parseFloat($scope.mitigating_controls.multidata[i].sle_cost_value);
-            sle_rate += $scope.mitigating_controls.multidata[i].sle_mitigation_rate;
-            aro_rate += $scope.mitigating_controls.multidata[i].aro_mitigation_rate;
-
             $scope.mitigating_controls.multidata[i].sle_cost_value = $scope.affected_assets.total_sle_value * $scope.mitigating_controls.multidata[i].sle_mitigation_rate / 100;
             $scope.mitigating_controls.multidata[i].sle_cost = '-$' + $scope.mitigating_controls.multidata[i].sle_cost_value;
             $scope.mitigating_controls.multidata[i].aro_cost_value = ($scope.affected_assets.total_sle_value - sle_cost - $scope.mitigating_controls.multidata[i].sle_cost_value) * $scope.mitigating_controls.multidata[i].aro_mitigation_rate / 100;
@@ -4439,6 +4413,9 @@ colorAdminApp.controller('registerAddEntriresController',
             $scope.mitigating_controls.multidata[i].total_cost = '-$' + $scope.mitigating_controls.multidata[i].total_cost_value;
             $scope.mitigating_controls.multidata[i].total_ale_impact_value = $scope.mitigating_controls.multidata[i].total_cost_value * $scope.basicinfo.aro_rate / 100;
             $scope.mitigating_controls.multidata[i].total_ale_impact = '-$' + $scope.mitigating_controls.multidata[i].total_ale_impact_value;
+            sle_cost += parseFloat($scope.mitigating_controls.multidata[i].sle_cost_value);
+            sle_rate += $scope.mitigating_controls.multidata[i].sle_mitigation_rate;
+            aro_rate += $scope.mitigating_controls.multidata[i].aro_mitigation_rate;
         }
         aro_cost = 0;
         total_cost = 0;
@@ -4552,7 +4529,7 @@ colorAdminApp.controller('registerAddEntriresController',
                     $('.wizard-step-1 select[name=locations] option:selected').each(function() {
                         $scope.entry_overview.locations.push($(this).html());
                     });
-
+                    $scope.setServiceStatusFalse();
                     WizardValidatorService.status.basic_info = true;
                     $(element).bwizard("next");
                     return true;
@@ -4563,6 +4540,13 @@ colorAdminApp.controller('registerAddEntriresController',
             }).catch(function(r){
                 return false;
         });
+    }
+
+    $scope.setServiceStatusFalse = function () {
+        WizardValidatorService.status.basic_info = false;
+        WizardValidatorService.status.threat_details = false;
+        WizardValidatorService.status.affected_assets = false;
+        WizardValidatorService.status.mitigating_controls = false;
     }
 
     $scope.affected_assets_update = function(){

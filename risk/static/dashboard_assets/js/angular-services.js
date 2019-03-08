@@ -251,6 +251,7 @@ function WizardValidatorService(){
                 return false;
             }
             else{
+                $scope.setServiceStatusFalse();
                 return true;
             }
         } else if (ui.index == 1) {
@@ -262,6 +263,7 @@ function WizardValidatorService(){
                 return false;
             }
             else{
+                $scope.setServiceStatusFalse();
                 return true;
             }
         } else if (ui.index == 2) {
@@ -270,6 +272,7 @@ function WizardValidatorService(){
                 return false;
             }else if(service.status.affected_assets == false){
                 $scope.save_affected_assets(this);
+                $scope.setServiceStatusFalse();
                 return false;
             }
             else{
@@ -281,6 +284,7 @@ function WizardValidatorService(){
                 return false;
             }else if(service.status.mitigating_controls == false){
                 $scope.save_mitigating_controls(this);
+                $scope.setServiceStatusFalse();
                 return false;
             }
             else{
