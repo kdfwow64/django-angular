@@ -239,7 +239,6 @@ function WizardValidatorService(){
                 case 4: service.status.mitigating_controls = true; break;
                 case 5: service.status.measurements = true; break;
             }
-
             return true;
         }
         if (ui.index == 0) {
@@ -308,7 +307,7 @@ function WizardValidatorService(){
             threat_details: false,
             affected_assets: false,
             mitigating_controls: false,
-            measurements:false,
+            measurements:false
         },
         set: function(){
             this.status= {
@@ -316,7 +315,7 @@ function WizardValidatorService(){
                 threat_details: true,
                 affected_assets: true,
                 mitigating_controls: true,
-                measurements:true,
+                measurements:true
             }
         },
         reset: function(){
@@ -325,9 +324,9 @@ function WizardValidatorService(){
                 threat_details: false,
                 affected_assets: false,
                 mitigating_controls: false,
-                measurements:false,
+                measurements:false
             }
-        },
+        }
     }
     return service;
 }

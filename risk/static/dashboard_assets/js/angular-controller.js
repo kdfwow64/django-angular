@@ -4463,6 +4463,7 @@ colorAdminApp.controller('registerAddEntriresController',
                                             $scope.basicinfo.aro_rate = percent;
                                             if( $scope.affected_assets )
                                                 $scope.affected_assets_update();
+                                            break;
                                         }
                                     }
                                 }
@@ -4486,6 +4487,7 @@ colorAdminApp.controller('registerAddEntriresController',
                                             }
                                             if( $scope.affected_assets )
                                                 $scope.affected_assets_update();
+                                            break;
                                         }
                                     }
                                     return true;
@@ -4528,14 +4530,14 @@ colorAdminApp.controller('registerAddEntriresController',
                 factor = 'fixed: $' + edit_item.exposure_factor_fixed;
                 sle = '$' + edit_item.exposure_factor_fixed;
                 sle_value = parseFloat(edit_item.exposure_factor_fixed);
-                ale_value = sle_value * $scope.basicinfo.aro_rate/100;
+                ale_value = sle_value * parseFloat($scope.basicinfo.aro_rate) / 100;
                 ale = '$' + ale_value;
             } else {
                 factor = 'rate: ' + edit_item.exposure_factor_rate + '%';
                 monetary_conversion = parseFloat(edit_item.asset_value) * parseFloat(edit_item.exposure_factor_rate) / 100;
                 sle = '$' + monetary_conversion;
                 sle_value = monetary_conversion;
-                ale_value = monetary_conversion * $scope.basicinfo.aro_rate/100;
+                ale_value = monetary_conversion * $scope.basicinfo.aro_rate / 100;
                 ale = '$' + ale_value;
             }
             edit_item['sle'] = sle;
@@ -4659,7 +4661,7 @@ colorAdminApp.controller('registerAddEntriresController',
                 }
 
                 inherent_aro_rate = $scope.basicinfo.aro_rate / 100;
-                $scope.entry_overview.inherent_aro_rate = inherent_aro_rate;
+                $scope.entry_overview.inherent_aro_rate = $scope.basicinfo.aro_rate;
                 $scope.entry_overview.inherent_aro_in_days = parseInt(365 / $scope.basicinfo.aro_rate * 100);
 
                 residual_aro_rate = $scope.entry_overview.inherent_aro_rate / 100 - ($scope.entry_overview.inherent_aro_rate / 100 * $scope.mitigating_controls.aro_rate / 100);

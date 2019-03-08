@@ -143,12 +143,9 @@ class CreateRiskEntry(View):
             risk_entry.entry_owner_id = int(
                 request_data.get("entry_owner", request.user.id))
             risk_entry.aro_toggle = request_data.get("aro_toggle", request.user.id)
-            risk_entry.aro_known_multiplier = int(
-                request_data.get("aro_known_multiplier", request.user.id))
-            risk_entry.aro_known_unit_quantity = int(
-                request_data.get("aro_known_unit_quantity", request.user.id))
-            risk_entry.aro_time_unit_id = int(
-                request_data.get("aro_time_unit", request.user.id))
+            risk_entry.aro_known_multiplier = request_data.get("aro_known_multiplier", request.user.id)
+            risk_entry.aro_known_unit_quantity = request_data.get("aro_known_unit_quantity", request.user.id)
+            risk_entry.aro_time_unit_id = request_data.get("aro_time_unit", request.user.id)
             risk_entry.aro_fixed = request_data.get("aro_fixed", request.user.id)
             risk_entry.aro_frequency_id = request_data.get("aro_frequency", request.user.id)
             risk_entry.modified_by = request.user
@@ -340,26 +337,31 @@ def api_update_mitigating_controls(request, entry_id):
             risk_entry.additional_mitigation = data.get('additional_mitigation')
             # data.get('additional_mitigation')
             measurement_controls = []
+            try:
+                for item in EntryCompanyControl.objects.filter(id_entry_id=risk_entry.id):
+                    item.delete()
+            except:
+                pass
             for request_data in payload:
                 try:
                     control = CompanyControl.objects.get(pk=request_data.get('company_id'))
-                    entry_mcontrol_id = request_data.get('entry_company_control_id')
-                    try:
-                        entry_control = EntryCompanyControl.objects.get(
-                            id=entry_mcontrol_id, id_entry=risk_entry)
-                        entry_control.id_companycontrol = control
-                        entry_control.sle_mitigation_rate = request_data.get('sle_mitigation_rate', 0) or 0
-                        entry_control.aro_mitigation_rate = request_data.get('aro_mitigation_rate', 0) or 0
-                        entry_control.save()
-                    except:
-                        entry_control = EntryCompanyControl.objects.create(
-                            id_entry=risk_entry,
-                            id_companycontrol=control,
-                            sle_mitigation_rate=request_data.get(
-                                'sle_mitigation_rate', 0) or 0,
-                            aro_mitigation_rate=request_data.get(
-                                'aro_mitigation_rate', 0) or 0
-                        )
+                    # entry_mcontrol_id = request_data.get('entry_company_control_id')
+                    # try:
+                    #     entry_control = EntryCompanyControl.objects.get(
+                    #         id=entry_mcontrol_id, id_entry=risk_entry)
+                    #     entry_control.id_companycontrol = control
+                    #     entry_control.sle_mitigation_rate = request_data.get('sle_mitigation_rate', 0) or 0
+                    #     entry_control.aro_mitigation_rate = request_data.get('aro_mitigation_rate', 0) or 0
+                    #     entry_control.save()
+                    # except:
+                    entry_control = EntryCompanyControl.objects.create(
+                        id_entry=risk_entry,
+                        id_companycontrol=control,
+                        sle_mitigation_rate=request_data.get(
+                            'sle_mitigation_rate', 0) or 0,
+                        aro_mitigation_rate=request_data.get(
+                            'aro_mitigation_rate', 0) or 0
+                    )
                     measurement_controls.append(
                             {'id': entry_control.id, 'name': entry_control.id_companycontrol.name})
 
@@ -686,7 +688,7 @@ def api_get_risk_entry(request, entry_id):
                     total_aro_rate += mitigating_control.aro_mitigation_rate
                     mitigating_controls.append({
                         'entry_company_control_id': mitigating_control.id,
-                        'company_id': company.id,
+                        'company_id': company_control.id,
                         'company_name': company_control.name,
                         'control_name': control.name,
                         'vendor_name': vendor.name,
