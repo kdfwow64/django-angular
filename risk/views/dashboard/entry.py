@@ -142,12 +142,18 @@ class CreateRiskEntry(View):
                 request_data.get("response", request.user.id))
             risk_entry.entry_owner_id = int(
                 request_data.get("entry_owner", request.user.id))
-            risk_entry.aro_toggle = request_data.get("aro_toggle", request.user.id)
-            risk_entry.aro_known_multiplier = request_data.get("aro_known_multiplier", request.user.id)
-            risk_entry.aro_known_unit_quantity = request_data.get("aro_known_unit_quantity", request.user.id)
-            risk_entry.aro_time_unit_id = request_data.get("aro_time_unit", request.user.id)
-            risk_entry.aro_fixed = request_data.get("aro_fixed", request.user.id)
-            risk_entry.aro_frequency_id = request_data.get("aro_frequency", request.user.id)
+            risk_entry.aro_toggle = request_data.get(
+                "aro_toggle", request.user.id)
+            risk_entry.aro_known_multiplier = request_data.get(
+                "aro_known_multiplier", request.user.id)
+            risk_entry.aro_known_unit_quantity = request_data.get(
+                "aro_known_unit_quantity", request.user.id)
+            risk_entry.aro_time_unit_id = request_data.get(
+                "aro_time_unit", request.user.id)
+            risk_entry.aro_fixed = request_data.get(
+                "aro_fixed", request.user.id)
+            risk_entry.aro_frequency_id = request_data.get(
+                "aro_frequency", request.user.id)
             risk_entry.modified_by = request.user
             risk_entry.save()
 
@@ -310,8 +316,10 @@ def api_update_affected_assets(request, entry_id):
                         id_companyasset=asset,
                         detail=request_data.get('detail'),
                         exposure_factor_toggle=toggle,
-                        exposure_factor_fixed=0 if toggle == 'P' else request_data.get('exposure_factor_fixed'),
-                        exposure_factor_rate=0 if toggle == 'F' else request_data.get('exposure_factor_rate')
+                        exposure_factor_fixed=0 if toggle == 'P' else request_data.get(
+                            'exposure_factor_fixed'),
+                        exposure_factor_rate=0 if toggle == 'F' else request_data.get(
+                            'exposure_factor_rate')
                     )
                 except:
                     rv = {'status': 'error', 'code': 400,
@@ -337,7 +345,8 @@ def api_update_mitigating_controls(request, entry_id):
             residual_ale_rate = data.get('residual_ale_rate')
             risk_entry.residual_ale_rate = residual_ale_rate
             risk_entry.mitigation_notes = data.get('notes_mitigation')
-            risk_entry.additional_mitigation = data.get('additional_mitigation')
+            risk_entry.additional_mitigation = data.get(
+                'additional_mitigation')
             # data.get('additional_mitigation')
             measurement_controls = []
             try:
@@ -347,7 +356,8 @@ def api_update_mitigating_controls(request, entry_id):
                 pass
             for request_data in payload:
                 try:
-                    control = CompanyControl.objects.get(pk=request_data.get('company_id'))
+                    control = CompanyControl.objects.get(
+                        pk=request_data.get('company_id'))
                     # entry_mcontrol_id = request_data.get('entry_company_control_id')
                     # try:
                     #     entry_control = EntryCompanyControl.objects.get(
@@ -366,7 +376,7 @@ def api_update_mitigating_controls(request, entry_id):
                             'aro_mitigation_rate', 0) or 0
                     )
                     measurement_controls.append(
-                            {'id': entry_control.id, 'name': entry_control.id_companycontrol.name})
+                        {'id': entry_control.id, 'name': entry_control.id_companycontrol.name})
 
                 except:
                     rv = {'status': 'error', 'code': 400,
@@ -606,7 +616,8 @@ def api_get_risk_entry(request, entry_id):
             else:
                 time_unit = TimeUnit.objects.get(
                     id=risk_entry.aro_time_unit_id)
-                aro_rate = risk_entry.aro_known_multiplier * time_unit.annual_units / risk_entry.aro_known_unit_quantity
+                aro_rate = risk_entry.aro_known_multiplier * \
+                    time_unit.annual_units / risk_entry.aro_known_unit_quantity
                 if aro_rate >= 1:
                     aro_rate = 100
                 else:
@@ -621,10 +632,11 @@ def api_get_risk_entry(request, entry_id):
                     company_asset = CompanyAsset.objects.get(
                         pk=entry_company_asset.id_companyasset_id)
                     sle_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(entry_company_asset.exposure_factor_rate) / 100,
-                                      3) if entry_company_asset.exposure_factor_toggle == 'P' else round(entry_company_asset.exposure_factor_fixed, 3)
+                                      2) if entry_company_asset.exposure_factor_toggle == 'P' else round(entry_company_asset.exposure_factor_fixed, 2)
                     ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
-                                      3) if entry_company_asset.exposure_factor_toggle == 'P' else round(Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 3)
-                    total_asset_value += round(company_asset.asset_value_fixed, 3)
+                                      2) if entry_company_asset.exposure_factor_toggle == 'P' else round(Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
+                    total_asset_value += round(
+                        company_asset.asset_value_fixed, 2)
                     total_sle += sle_value
                     total_ale += ale_value
                     affected_assets.append({
@@ -632,22 +644,22 @@ def api_get_risk_entry(request, entry_id):
                         'name_id': company_asset.id,
                         'name': company_asset.name,
                         'exposure_factor_toggle': entry_company_asset.exposure_factor_toggle,
-                        'asset_value': round(company_asset.asset_value_fixed, 3),
-                        'exposure_factor_fixed': round(entry_company_asset.exposure_factor_fixed, 3),
+                        'asset_value': round(company_asset.asset_value_fixed, 2),
+                        'exposure_factor_fixed': round(entry_company_asset.exposure_factor_fixed, 2),
                         'exposure_factor_rate': int(entry_company_asset.exposure_factor_rate),
-                        'asset_value_display': '$' + str(round(company_asset.asset_value_fixed, 3)),
-                        'factor': 'rate: ' + str(round(entry_company_asset.exposure_factor_rate, 3)) + '%' if entry_company_asset.exposure_factor_toggle == 'P' else 'fixed: $' + str(round(entry_company_asset.exposure_factor_fixed, 3)),
+                        'asset_value_display': '$' + str(round(company_asset.asset_value_fixed, 2)),
+                        'factor': 'rate: ' + str(round(entry_company_asset.exposure_factor_rate, 3)) + '%' if entry_company_asset.exposure_factor_toggle == 'P' else 'fixed: $' + str(round(entry_company_asset.exposure_factor_fixed, 2)),
                         'detail': entry_company_asset.detail,
                         'sle_value': sle_value,
                         'sle': '$' + str(sle_value),
                         'ale_value': ale_value,
                         'ale': '$' + str(ale_value)
                     })
-                total_factor = round(total_sle / total_asset_value * 100, 3)
+                total_factor = round(total_sle / total_asset_value * 100, 2)
                 rv.update({
                     'affected_assets': {
                         'multidata': affected_assets,
-                        'total_asset_value': '$' + str(total_asset_value),
+                        'total_asset_value': '$' + str(round(total_asset_value, 2)),
                         'total_factor_value': total_factor,
                         'total_factor': str(total_factor) + '%',
                         'total_sle_value': total_sle,
@@ -679,11 +691,12 @@ def api_get_risk_entry(request, entry_id):
                         pk=company_control.control_id)
                     vendor = Vendor.objects.get(pk=control.vendor_id)
                     sle_cost_value = round(
-                        total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 3)
+                        total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
                     aro_cost_value = round(
-                        total_sle * (100 - total_sle_rate) * Decimal(mitigating_control.aro_mitigation_rate) / 10000, 3)
+                        total_sle * (100 - total_sle_rate) * Decimal(mitigating_control.aro_mitigation_rate) / 10000, 2)
                     total_cost_value = sle_cost_value + aro_cost_value
-                    total_ale_impact_value = round(total_cost_value * aro_rate / 100, 3)
+                    total_ale_impact_value = round(
+                        total_cost_value * aro_rate / 100, 2)
                     total_sle_cost += sle_cost_value
                     total_aro_cost += aro_cost_value
                     total_cost += total_cost_value
@@ -783,7 +796,8 @@ def api_list_entries_info(request):
                 rate_relation = {
                     'annual_units': time_unit.annual_units
                 }
-                aro_rate = entry.aro_known_multiplier * time_unit.annual_units / entry.aro_known_unit_quantity
+                aro_rate = entry.aro_known_multiplier * \
+                    time_unit.annual_units / entry.aro_known_unit_quantity
                 if aro_rate >= 1:
                     aro_rate = 100
                 else:
@@ -798,14 +812,16 @@ def api_list_entries_info(request):
                     company_asset = CompanyAsset.objects.get(
                         pk=entry_company_asset.id_companyasset_id)
                     sle_value = round(
-                        Decimal(company_asset.asset_value_fixed) * Decimal(entry_company_asset.exposure_factor_rate) / 100,
-                        3) if entry_company_asset.exposure_factor_toggle == 'P' else round(
-                        entry_company_asset.exposure_factor_fixed, 3)
+                        Decimal(company_asset.asset_value_fixed) *
+                        Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                        2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                        entry_company_asset.exposure_factor_fixed, 2)
                     ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(
                         entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
-                                      3) if entry_company_asset.exposure_factor_toggle == 'P' else round(
-                        Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 3)
-                    total_asset_value += round(company_asset.asset_value_fixed, 3)
+                        2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                        Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
+                    total_asset_value += round(
+                        company_asset.asset_value_fixed, 2)
                     total_sle += sle_value
                     total_ale += ale_value
             except:
@@ -830,11 +846,11 @@ def api_list_entries_info(request):
                         pk=company_control.control_id)
                     vendor = Vendor.objects.get(pk=control.vendor_id)
                     sle_cost_value = round(
-                        total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 3)
+                        total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
                     aro_cost_value = round(
-                        total_sle * (100 - total_sle_rate) * Decimal(mitigating_control.aro_mitigation_rate) / 10000, 3)
+                        total_sle * (100 - total_sle_rate) * Decimal(mitigating_control.aro_mitigation_rate) / 10000, 2)
                     total_cost_value = sle_cost_value + aro_cost_value
-                    impact_value = round(total_cost_value * aro_rate / 100, 3)
+                    impact_value = round(total_cost_value * aro_rate / 100, 2)
                     total_sle_cost += sle_cost_value
                     total_aro_cost += aro_cost_value
                     total_cost += total_cost_value
@@ -842,35 +858,47 @@ def api_list_entries_info(request):
                     total_aro_rate += mitigating_control.aro_mitigation_rate
             except:
                 pass
-            highest_total_ale = total_ale if total_ale > highest_total_ale and entry.is_qualified(rate_relation) else highest_total_ale
-            highest_residual_ale_cost = Decimal(total_ale - total_ale_impact) if Decimal(total_ale - total_ale_impact) > highest_residual_ale_cost and entry.is_qualified(rate_relation) else highest_residual_ale_cost
-            company_residual_ale_rate += Decimal(total_ale - total_ale_impact) if entry.is_qualified(rate_relation) else 0
+            highest_total_ale = total_ale if total_ale > highest_total_ale and entry.is_qualified(
+                rate_relation) else highest_total_ale
+            highest_residual_ale_cost = Decimal(total_ale - total_ale_impact) if Decimal(
+                total_ale - total_ale_impact) > highest_residual_ale_cost and entry.is_qualified(rate_relation) else highest_residual_ale_cost
+            company_residual_ale_rate += Decimal(
+                total_ale - total_ale_impact) if entry.is_qualified(rate_relation) else 0
             protection_inherent_ale_cost_sum += total_ale if entry.response_name == 'Treat' else 0
-            protection_residual_ale_cost_sum += Decimal(total_ale - total_ale_impact) if entry.response_name == 'Treat' else 0
-            protection_mitigated_ale_cost_sum_qualified_and_treat += total_ale_impact if entry.response_name == 'Treat' and entry.is_qualified(rate_relation) else 0
-            protection_inherent_ale_cost_sum_qualified_and_treat += total_ale if entry.response_name == 'Treat' and entry.is_qualified(rate_relation) else 0
+            protection_residual_ale_cost_sum += Decimal(
+                total_ale - total_ale_impact) if entry.response_name == 'Treat' else 0
+            protection_mitigated_ale_cost_sum_qualified_and_treat += total_ale_impact if entry.response_name == 'Treat' and entry.is_qualified(
+                rate_relation) else 0
+            protection_inherent_ale_cost_sum_qualified_and_treat += total_ale if entry.response_name == 'Treat' and entry.is_qualified(
+                rate_relation) else 0
             count_active_entries += 1 if entry.is_active == 1 else 0
             count_treat_entries += 1 if entry.response_name == 'Treat' else 0
             count_transfer_entries += 1 if entry.response_name == 'Transfer' else 0
             count_accept_entries += 1 if entry.response_name == 'Accept' else 0
             count_avoid_entries += 1 if entry.response_name == 'Avoid' else 0
-            count_qualified_entries += 1 if entry.is_qualified(rate_relation) else 0
-            count_not_completed_entries += 1 if entry.has_completed(rate_relation) else 0
+            count_qualified_entries += 1 if entry.is_qualified(
+                rate_relation) else 0
+            count_not_completed_entries += 1 if entry.has_completed(
+                rate_relation) else 0
             count_require_evaluation_entries += 1 if entry.evaluation_flg else 0
 
         try:
-            company_residual_ale_rate = round(company_residual_ale_rate / Decimal(request.user.get_current_company().get_company_max_loss()) * 100, 5)
+            company_residual_ale_rate = round(company_residual_ale_rate / Decimal(
+                request.user.get_current_company().get_company_max_loss()) * 100, 5)
         except:
             company_residual_ale_rate = 0
         try:
-            protection_rate = round(protection_residual_ale_cost_sum / protection_inherent_ale_cost_sum * 100, 5)
+            protection_rate = round(
+                protection_residual_ale_cost_sum / protection_inherent_ale_cost_sum * 100, 5)
         except:
             protection_rate = 0
 
         company_residual_ale_rate_width = str(company_residual_ale_rate) + '%'
         treated_entry_protection_width = str(protection_rate) + '%'
-        count_active_entries_width = str(count_active_entries / total * 100) + '%'
-        count_qualified_entries_width = str(count_qualified_entries / total * 100) + '%'
+        count_active_entries_width = str(
+            count_active_entries / total * 100) + '%'
+        count_qualified_entries_width = str(
+            count_qualified_entries / total * 100) + '%'
         data = {
             'company_residual_ale_rate': company_residual_ale_rate,
             'company_residual_ale_rate_width': company_residual_ale_rate_width,

@@ -469,44 +469,48 @@
                             <div class="wizard-step-1">
                                 <fieldset>
                                     <legend class="pull-left width-full">Basic Information</legend>
-                                    <!-- begin row -->
+                                    <!-- begin Basic Information in Basic Info section -->
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Risk Response</label>
+                                                <select name="response" ng-model="basicinfo.response" class="form-control" ng-model="response" ng-options="k.id as k.name for k in responses"data-parsley-group="wizard-step-1"  required/><option value=""></option></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10">
                                             <div class="form-group block1">
                                                 <label>Summary</label>
                                                 <input type="text" pattern=".{25,255}" ng-model="basicinfo.summary" name="summary" placeholder="Summary" class="form-control" data-parsley-group="wizard-step-1" required />
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10">
                                             <div class="form-group">
                                                 <label>Full Description</label>
                                                 <textarea rows="3" ng-model="basicinfo.description" name="description" placeholder="Description" class="form-control" data-parsley-group="wizard-step-1" required/></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10">
                                             <div class="form-group">
                                                 <label>Assumptions</label>
                                                 <textarea rows="3" ng-model="basicinfo.assumption" name="assumption" placeholder="Assumptions" class="form-control" data-parsley-group="wizard-step-1" required/></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Locations in Scope</label>
                                                 <select name="locations" ng-model="basicinfo.locations" class="form-control" data-parsley-group="wizard-step-1" multiple=true ng-model="locations" ng-options="k.id as k.name for k in company_locations"/></select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Entry Response</label>
-                                                <select name="response" ng-model="basicinfo.response" class="form-control" ng-model="response" ng-options="k.id as k.name for k in responses"data-parsley-group="wizard-step-1"  required/><option value=""></option></select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Entry Owner</label>
-                                                <select name="entry_owner" ng-model="basicinfo.entry_owner" class="form-control" data-parsley-group="wizard-step-1" ng-model="entry_owner" ng-options="k.id as k.name for k in users" required/><option value=""></option></select>
-                                            </div>
-                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Evaluation Cadence in Days</label>
@@ -514,9 +518,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- end row -->
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Entry Owner</label>
+                                                <select name="entry_owner" ng-model="basicinfo.entry_owner" class="form-control" data-parsley-group="wizard-step-1" ng-model="entry_owner" ng-options="k.id as k.name for k in users" required/><option value=""></option></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end Basic Information in Basic Info section -->
                                     <legend class="pull-left width-full">Annual Rate of Occurence (ARO)</legend>
-                                    <!-- begin row -->
+                                    <!-- begin ARO in Basic Info section -->
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -531,7 +543,7 @@
                                                         <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label>By Units of Time</label>
-                                                                <input min="0" type="number" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_known_multiplier" step="1" name="aro_known_multiplier" placeholder="Times" class="form-control" data-parsley-group="wizard-step-1"/>
+                                                                <input min="0" type="number" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_known_multiplier" step="1" name="aro_known_multiplier" placeholder="# occurences" class="form-control" data-parsley-group="wizard-step-1"/>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-1">
@@ -539,12 +551,13 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                             <div class="form-group">
-                                                                <input min="0" type="number" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_known_unit_quantity" step="1" name="aro_known_unit_quantity" placeholder="Total" class="form-control input-without-label" data-parsley-group="wizard-step-1"/>
+                                                                <input min="0" type="number" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_known_unit_quantity" step="1" name="aro_known_unit_quantity" placeholder="# of units" class="form-control input-without-label" data-parsley-group="wizard-step-1"/>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <div class="form-group">
-                                                                <select name="aro_time_unit" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_time_unit" class="form-control input-without-label" ng-options="k.id as k.name for k in aro_time_units" data-parsley-group="wizard-step-1" /><option value=""></option></select>
+                                                                <select name="aro_time_unit" ng-disabled="basicinfo.aro_toggle!='F'" ng-required="basicinfo.aro_toggle=='F'" ng-model="basicinfo.aro_time_unit" class="form-control input-without-label" ng-options="k.id as k.name for k in aro_time_units | orderBy:'sort_order'"
+                                                                data-parsley-group="wizard-step-1" /><option value=""></option></select>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -597,7 +610,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- end row -->
+                                    <!-- end ARO in Basic Info section -->
                                     <legend class="pull-left width-full">Compliance</legend>
                                     <!-- begin row -->
                                     <div class="row">
@@ -656,20 +669,21 @@
                                                 <table class="table add-entry-tb">
                                                     <thead>
                                                         <tr>
-                                                            <th width="15%">URL</th>
+                                                            <!-- <th width="15%">URL</th> -->
                                                             <th width="15%">Name</th>
                                                             <th width="10%">Type</th>
-                                                            <th width="40%">Description</th>
+                                                            <th width="55%">Description</th>
                                                             <th></th>
                                                             <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr ng-repeat="item in basicinfo.entry_urls">
-                                                            <td ng-bind="item.url">
-                                                            </td>
-                                                            <td ng-bind="item.name">
-                                                            </td>
+                                                            <!-- <td ng-bind="item.url">
+                                                            </td> -->
+                                                            <!-- <td ng-bind="item.name">
+                                                            </td> -->
+                                                            <td><a ng-href="{{item.url}}" ng-bind="item.name"></a></td>
                                                             <td ng-bind="item.type_name">
                                                             </td>
                                                             <td ng-bind="item.desc">

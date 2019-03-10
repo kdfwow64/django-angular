@@ -42,7 +42,6 @@ class Entry(DefaultFields):
     residual_ale_rate = models.DecimalField(default=0, max_digits=19, decimal_places=10, help_text=(
         'Residual ALE Rate generated after Entry Overview.'), )
 
-
     summary = models.CharField(
         max_length=128, blank=False, help_text=('Brief description of the risk'),)  # Brief summary of the risk to be tracked.  Specifically used when listing entries.
     description = models.TextField(
@@ -159,13 +158,16 @@ class Entry(DefaultFields):
         try:
             aro_rate = 0
             if self.aro_toggle == 'C':
-                aro_rate = (rate_relation['minimum'] + rate_relation['maximum']) / 2 * 100
+                aro_rate = (rate_relation['minimum'] +
+                            rate_relation['maximum']) / 2 * 100
                 if rate_relation['minimum'] == 1:
                     aro_rate = 100
             elif self.aro_toggle == 'K':
                 aro_rate = self.aro_fixed
             else:
-                aro_rate = self.aro_known_multiplier * rate_relation['annual_units'] / self.aro_known_unit_quantity
+                aro_rate = self.aro_known_multiplier * \
+                    rate_relation['annual_units'] / \
+                    self.aro_known_unit_quantity
                 if aro_rate >= 1:
                     aro_rate = 100
                 else:
@@ -177,7 +179,8 @@ class Entry(DefaultFields):
                 aro_rate,
                 self.response_id,
                 EntryActor.objects.filter(id_entry_id=self.id).count() > 0,
-                EntryCompanyAsset.objects.filter(id_entry_id=self.id).count() > 0
+                EntryCompanyAsset.objects.filter(
+                    id_entry_id=self.id).count() > 0
             ]))
         except:
             response = 0
@@ -188,13 +191,16 @@ class Entry(DefaultFields):
         try:
             aro_rate = 0
             if self.aro_toggle == 'C':
-                aro_rate = (rate_relation['minimum'] + rate_relation['maximum']) / 2 * 100
+                aro_rate = (rate_relation['minimum'] +
+                            rate_relation['maximum']) / 2 * 100
                 if rate_relation['minimum'] == 1:
                     aro_rate = 100
             elif self.aro_toggle == 'K':
                 aro_rate = self.aro_fixed
             else:
-                aro_rate = self.aro_known_multiplier * rate_relation['annual_units'] / self.aro_known_unit_quantity
+                aro_rate = self.aro_known_multiplier * \
+                    rate_relation['annual_units'] / \
+                    self.aro_known_unit_quantity
                 if aro_rate >= 1:
                     aro_rate = 100
                 else:
@@ -206,8 +212,10 @@ class Entry(DefaultFields):
                 aro_rate,
                 self.response_id,
                 EntryActor.objects.filter(id_entry_id=self.id).count() > 0,
-                EntryCompanyAsset.objects.filter(id_entry_id=self.id).count() > 0,
-                Response.objects.get(pk=self.response_id).name in ['Treat', 'Transfer', 'Accept'],
+                EntryCompanyAsset.objects.filter(
+                    id_entry_id=self.id).count() > 0,
+                Response.objects.get(pk=self.response_id).name in [
+                    'Treat', 'Transfer', 'Accept'],
                 not self.evaluation_flg
             ]))
         except:
@@ -484,7 +492,7 @@ class EntryComplianceRequirement(DefaultFields):
 
     def __str__(self):
         """String."""
-        return self.id_compliancerequirement.requirement
+        return self.id_compliance_requirement.requirement
 
     class Meta:
         """Meta class."""
