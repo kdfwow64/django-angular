@@ -4646,7 +4646,7 @@ colorAdminApp.controller('registerAddEntriresController',
                 /*Inherent*/
                 inherent_ale_rate = $scope.affected_assets.total_ale_value / max_loss;
                 $scope.entry_overview.inherent_ale_monitized = $scope.affected_assets.total_ale_value;
-                $scope.entry_overview.inherent_ale_rate = inherent_ale_rate.toFixed(5);
+                $scope.entry_overview.inherent_ale_rate = parseInt(inherent_ale_rate * 1000000) / 10000;
 
                 $http.post('/dashboard/api/severity-categories/')
                     .then(function (d) {
@@ -4696,7 +4696,7 @@ colorAdminApp.controller('registerAddEntriresController',
                 $scope.entry_overview.inherent_aro_in_days = parseInt(365 / $scope.basicinfo.aro_rate * 100);
 
                 residual_aro_rate = $scope.entry_overview.inherent_aro_rate / 100 - ($scope.entry_overview.inherent_aro_rate / 100 * $scope.mitigating_controls.aro_rate / 100);
-                $scope.entry_overview.residual_aro_rate = residual_aro_rate;
+                $scope.entry_overview.residual_aro_rate = residual_aro_rate.toFixed(5);
                 $scope.entry_overview.residual_aro_in_days = parseInt(365 / residual_aro_rate);
                 $http.post('/dashboard/api/frequencies/')
                     .then(function (d) {
@@ -4716,7 +4716,8 @@ colorAdminApp.controller('registerAddEntriresController',
                 /*Mitigated Risk*/
                 $scope.entry_overview.mitigated_ale_monitized = $scope.mitigating_controls.total_ale;
                 $scope.entry_overview.mitigated_ale_rate = $scope.mitigating_controls.total_ale / $scope.affected_assets.total_ale_value;
-                $scope.entry_overview.mitigated_ale_rate = $scope.entry_overview.mitigated_ale_rate;
+                $scope.entry_overview.mitigated_ale_rate = $scope.entry_overview.mitigated_ale_rate.toFixed(5) * 100;
+                $scope.entry_overview.mitigated_ale_rate = parseInt($scope.entry_overview.mitigated_ale_rate * 100) / 100;
 
                 $scope.entry_overview.mitigated_sle_monitized = $scope.mitigating_controls.sle_cost;
                 $scope.entry_overview.mitigated_sle_rate = $scope.mitigating_controls.sle_rate;
