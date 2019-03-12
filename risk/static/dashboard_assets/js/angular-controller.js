@@ -3654,7 +3654,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.basicinfo.entry_urls.splice(index, 1);
     }
     $scope.remove_this_file = function (index) {
-        $scope.basicinfo.files.splice(index, 1);
+        $scope.basicinfo.artifacts_files.splice(index, 1);
     }
     $scope.add_more_threat_detail = function(){
         $scope.threat_details.multidata.push(WizardFormService.get_threat_detail_form());
@@ -3835,10 +3835,10 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.open_add_file_modal = function () {
         $('#add_edit_file .modal-title').html('Add File');
         $('#add_edit_file .add-edit-btn').html('Add');
-        $scope.entry_url.edit_num = -1;
-        $scope.entry_url.name = '';
-        $scope.entry_url.file = null;
-        $scope.entry_url.desc = '';
+        $scope.artifact_file.edit_num = -1;
+        $scope.artifact_file.name = '';
+        $scope.artifact_file.file = null;
+        $scope.artifact_file.desc = '';
         $('#add_edit_file input').each(function() {
             $(this).parsley().reset();
         });
@@ -3850,12 +3850,12 @@ colorAdminApp.controller('registerAddEntriresController',
         $('#add_edit_file input').each(function() {
             $(this).parsley().reset();
         });
-        $scope.entry_url.edit_num = index;
+        $scope.artifact_file.edit_num = index;
 
-        edit_item = $scope.basicinfo.files[index];
-        $scope.add_file.name = edit_item.name;
-        $scope.add_file.file = edit_item.file;
-        $scope.add_file.desc = edit_item.desc;
+        edit_item = $scope.basicinfo.artifacts_files[index];
+        $scope.artifact_file.name = edit_item.name;
+        $scope.artifact_file.file = edit_item.file;
+        $scope.artifact_file.desc = edit_item.desc;
         $('#add_edit_file').modal('show');
     }
     $scope.add_edit_file = function () {
@@ -3873,12 +3873,13 @@ colorAdminApp.controller('registerAddEntriresController',
                 'desc': $scope.artifact_file.desc,
                 'file': file
             }
-            $scope.basicinfo.artifacts_files.push(new_item);
+            index = $scope.artifact_file.edit_num;
+            if( index == '-1')
+                $scope.basicinfo.artifacts_files.push(new_item);
+            else
+                $scope.basicinfo.artifacts_files[index] = new_item;
         }
         $('#add_edit_file').modal('hide');
-    }
-    $scope.open_add_file_modal1 = function() {
-        $scope.save_file_formdata(1, 7);
     }
     /*Entry Url*/
     $scope.open_add_entry_url_modal = function () {
@@ -4489,6 +4490,10 @@ colorAdminApp.controller('registerAddEntriresController',
         })
     }
 
+    $scope.get_item_url = function (url) {
+        return url;
+    }
+
     $scope.save_basic_info = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -4496,7 +4501,8 @@ colorAdminApp.controller('registerAddEntriresController',
             .then(function(r){
                 if(r.data.code == 200){
                     $scope.entry_id = r.data.id;
-                    $scope.save_file_formdata(r.data.id, r.data.company_id);
+                    if( $scope.basicinfo.artifacts_files && $scope.basicinfo.artifacts_files.length > 0)
+                        $scope.save_file_formdata(r.data.id, r.data.company_id);
 
                     $scope.basicinfo.entry_id = r.data.id;  // In case of back button, do not create twice
                     if ($scope.basicinfo.aro_toggle == 'C') {
@@ -4650,7 +4656,23 @@ colorAdminApp.controller('registerAddEntriresController',
         }).catch(function(r){
             return false;
         })
-    }
+    };
+
+    $scope.formatMoney = function(amount, decimalCount=2, decimal=".", thousands =",") {
+        try {
+            decimalCount = Math.abs(decimalCount);
+            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+            const negativeSign = amount < 0 ? "-" : "";
+
+            i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+            j = (i.length > 3) ? i.length % 3 : 0;
+
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+        } catch (e) {
+            console.log(e)
+        }
+    };
 
     $scope.save_mitigating_controls = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
@@ -4671,7 +4693,7 @@ colorAdminApp.controller('registerAddEntriresController',
             if(r.data.code){
                 /*Inherent*/
                 inherent_ale_rate = $scope.affected_assets.total_ale_value / max_loss;
-                $scope.entry_overview.inherent_ale_monitized = $scope.affected_assets.total_ale_value;
+                $scope.entry_overview.inherent_ale_monitized = $scope.formatMoney($scope.affected_assets.total_ale_value);
                 $scope.entry_overview.inherent_ale_rate = parseInt(inherent_ale_rate * 1000000) / 10000;
 
                 $http.post('/dashboard/api/severity-categories/')
@@ -4691,11 +4713,11 @@ colorAdminApp.controller('registerAddEntriresController',
                 });
 
                 inherent_sle_rate = $scope.affected_assets.total_sle_value / max_loss;
-                $scope.entry_overview.inherent_sle_monitized = $scope.affected_assets.total_sle_value;
+                $scope.entry_overview.inherent_sle_monitized = $scope.formatMoney($scope.affected_assets.total_sle_value);
                 $scope.entry_overview.inherent_sle_rate = inherent_sle_rate.toFixed(5);
 
                 residual_sle_rate = $scope.entry_overview.inherent_sle_rate - ($scope.entry_overview.inherent_sle_rate * $scope.mitigating_controls.sle_rate / 100);
-                $scope.entry_overview.residual_sle_monitized = $scope.affected_assets.total_sle_value - $scope.mitigating_controls.sle_cost;
+                $scope.entry_overview.residual_sle_monitized = $scope.formatMoney($scope.affected_assets.total_sle_value - $scope.mitigating_controls.sle_cost);
                 $scope.entry_overview.residual_sle_rate = residual_sle_rate.toFixed(5);
                 if( inherent_sle_rate >= 1 )
                     $scope.entry_overview.inherent_sle_category = 'Catastrophic';
@@ -4740,15 +4762,15 @@ colorAdminApp.controller('registerAddEntriresController',
                     return false;
                 });
                 /*Mitigated Risk*/
-                $scope.entry_overview.mitigated_ale_monitized = $scope.mitigating_controls.total_ale;
+                $scope.entry_overview.mitigated_ale_monitized = $scope.formatMoney($scope.mitigating_controls.total_ale);
                 $scope.entry_overview.mitigated_ale_rate = $scope.mitigating_controls.total_ale / $scope.affected_assets.total_ale_value;
                 $scope.entry_overview.mitigated_ale_rate = $scope.entry_overview.mitigated_ale_rate.toFixed(5) * 100;
                 $scope.entry_overview.mitigated_ale_rate = parseInt($scope.entry_overview.mitigated_ale_rate * 100) / 100;
 
-                $scope.entry_overview.mitigated_sle_monitized = $scope.mitigating_controls.sle_cost;
+                $scope.entry_overview.mitigated_sle_monitized = $scope.formatMoney(parseFloat($scope.mitigating_controls.sle_cost));
                 $scope.entry_overview.mitigated_sle_rate = $scope.mitigating_controls.sle_rate;
 
-                $scope.entry_overview.mitigated_aro_monitized = $scope.mitigating_controls.aro_cost;
+                $scope.entry_overview.mitigated_aro_monitized = $scope.formatMoney(parseFloat($scope.mitigating_controls.aro_cost));
                 $scope.entry_overview.mitigated_aro_rate = $scope.mitigating_controls.aro_rate;
                 /*Inherent Risk Details*/
                 $scope.entry_overview.incident_response = $scope.basicinfo.incident_response;

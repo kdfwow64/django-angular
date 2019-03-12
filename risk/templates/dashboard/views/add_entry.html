@@ -92,7 +92,7 @@
 <!--                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">-->
                     <div class="m-b-0">
                         <div class="row">
-                            <input type="hidden" ng-model="add_file.edit_num">
+                            <input type="hidden" ng-model="artifact_file.edit_num">
                             <div class="col-md-3">
                                 <label>Name</label>
                                 <input type="text" ng-model="artifact_file.name" class="form-control" required/>
@@ -616,7 +616,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <table class="table add-entry-tb">
+                                                <table class="table add-entry-tb compliance-tb">
                                                     <thead>
                                                         <tr>
                                                             <th>Type</th>
@@ -638,7 +638,7 @@
                                                             </td>
                                                             <td ng-bind="compliance.version">
                                                             </td>
-                                                            <td ng-bind="compliance.requirement">
+                                                            <td ng-bind="compliance.requirement" style="text-align: left !important;">
                                                             </td>
                                                             <td>
                                                                 <a class="btn btn-primary" ng-click="open_edit_entry_compliance_requirement_modal($index)">Edit</a>
@@ -683,7 +683,7 @@
                                                             </td> -->
                                                             <!-- <td ng-bind="item.name">
                                                             </td> -->
-                                                            <td><a ng-href="{{item.url}}" ng-bind="item.name"></a></td>
+                                                            <td><a ng-href="get_item_url(item.url)" ng-bind="item.name"></a></td>
                                                             <td ng-bind="item.type_name">
                                                             </td>
                                                             <td ng-bind="item.desc">
@@ -724,10 +724,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr ng-repeat="file in basicinfo.files">
+                                                        <tr ng-repeat="file in basicinfo.artifacts_files">
                                                             <td ng-bind="file.name">
                                                             </td>
-                                                            <td ng-bind="file.file">
+                                                            <td ng-bind="file.file.name">
                                                             </td>
                                                             <td ng-bind="file.desc">
                                                             </td>
@@ -748,11 +748,6 @@
                                     <div class="row" style="margin-bottom: 10px;">
                                         <div class="col-md-1 pull-right">
                                             <a class="btn btn-success" ng-click="open_add_file_modal()"><i class="fa fa-plus"></i>ADD</a>
-                                        </div>
-                                    </div>
-                                    <div class="row" style="margin-bottom: 10px;">
-                                        <div class="col-md-1 pull-right">
-                                            <a class="btn btn-success" ng-click="open_add_file_modal1()"><i class="fa fa-plus"></i>Save all Data</a>
                                         </div>
                                     </div>
                                     <!-- end row -->
@@ -1399,8 +1394,8 @@
                                                                                 <td ng-bind="mc.sle_cost"></td>
                                                                                 <td ng-bind="mc.aro_rate + '%'"></td>
                                                                                 <td ng-bind="mc.aro_cost"></td>
-                                                                                <td ng-bind="'-$' + (mc.sle_cost_value + mc.aro_cost_value)"></td>
-                                                                                <td ng-bind="'-$' + (mc.sle_cost_value + mc.aro_cost_value) * basicinfo.aro_rate / 100"></td>
+                                                                                <td ng-bind="'-$' + mc.total_cost_value"></td>
+                                                                                <td ng-bind="'-$' + mc.total_ale_impact_value"></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td>TOTALS</td>

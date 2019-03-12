@@ -47,6 +47,9 @@ legend {
     vertical-align: middle !important;
     border: 1px solid #e2e7eb;
 }
+.compliance-tb tbody tr td:nth-child(4) {
+    text-align: left !important;
+}
 .add-entry-tb tbody td .btn{
     padding: 2px 12px !important;
 }

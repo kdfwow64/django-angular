@@ -391,15 +391,7 @@ def api_update_mitigating_controls(request, entry_id):
                 try:
                     control = CompanyControl.objects.get(
                         pk=request_data.get('company_id'))
-                    # entry_mcontrol_id = request_data.get('entry_company_control_id')
-                    # try:
-                    #     entry_control = EntryCompanyControl.objects.get(
-                    #         id=entry_mcontrol_id, id_entry=risk_entry)
-                    #     entry_control.id_companycontrol = control
-                    #     entry_control.sle_mitigation_rate = request_data.get('sle_mitigation_rate', 0) or 0
-                    #     entry_control.aro_mitigation_rate = request_data.get('aro_mitigation_rate', 0) or 0
-                    #     entry_control.save()
-                    # except:
+
                     entry_control = EntryCompanyControl.objects.create(
                         id_entry=risk_entry,
                         id_companycontrol=control,
@@ -483,7 +475,7 @@ def get_all_risk_type_for_dropdown(request):
     """Get all risk types for dropdown."""
     data = []
     for risk_type in RiskType.objects.order_by('name').all():
-        data.append({'id': risk_type.id, 'name': risk_type.name})
+        data.append({'id': risk_type.id, 'name': risk_type.name, 'sort_order': risk_type.sort_order})
     return JsonResponse(data, safe=False)
 
 
@@ -492,7 +484,7 @@ def get_all_responses_for_dropdown(request):
     """Get all respose types for dropdown."""
     data = []
     for response in Response.objects.order_by('name').all():
-        data.append({'id': response.id, 'name': response.name})
+        data.append({'id': response.id, 'name': response.name, 'sort_order': response.sort_order})
     return JsonResponse(data, safe=False)
 
 
@@ -502,7 +494,7 @@ def get_all_time_units_for_dropdown(request):
     data = []
     for unit in TimeUnit.objects.order_by('name').all():
         data.append({'id': unit.id, 'name': unit.name,
-                     'annual_units': unit.annual_units})
+                     'annual_units': unit.annual_units, 'sort_order': unit.sort_order})
     return JsonResponse(data, safe=False)
 
 
@@ -512,7 +504,7 @@ def get_all_frequencies_for_dropdown(request):
     data = []
     for frequency in FrequencyCategory.objects.order_by('name').all():
         data.append({'id': frequency.id, 'name': frequency.name,
-                     'min': frequency.minimum, 'max': frequency.maximum})
+                     'min': frequency.minimum, 'max': frequency.maximum, 'sort_order': frequency.sort_order})
     return JsonResponse(data, safe=False)
 
 
@@ -555,39 +547,51 @@ def api_get_risk_entry(request, entry_id):
     if entry_id:
         try:
             # Get first register for company from entry.py/Register
-            risk_entry = request.user.get_current_company(
-            ).get_active_register().entry.get(pk=entry_id)
-            # try:
-            #     response = risk_entry.entryresponse.latest(
-            #         'id').response_id
-            # except:
-            #     response = 1
+            risk_entry = request.user.get_current_company().get_active_register().entry.get(pk=entry_id)
             compliance_requirements = []
-            for entry_compliance_requirement in EntryComplianceRequirement.objects.filter(id_entry_id=risk_entry.id):
-                compliance_requirement = ComplianceRequirement.objects.get(
-                    pk=entry_compliance_requirement.id_compliance_requirement_id)
-                compliance = Compliance.objects.get(
-                    pk=compliance_requirement.compliance_id)
+            try:
+                for entry_compliance_requirement in EntryComplianceRequirement.objects.filter(id_entry_id=risk_entry.id):
+                    compliance_requirement = ComplianceRequirement.objects.get(
+                        pk=entry_compliance_requirement.id_compliance_requirement_id)
+                    compliance = Compliance.objects.get(
+                        pk=compliance_requirement.compliance_id)
 
-                compliance_requirements.append({
-                    'type_id': compliance.compliance_type_id,
-                    'type': ComplianceType.objects.get(id=compliance.compliance_type_id).name,
-                    'name': compliance.abbrv,
-                    'compliance_id': compliance.id,
-                    'requirement': str(compliance_requirement.cid) + ' - ' + compliance_requirement.requirement,
-                    'requirement_id': compliance_requirement.id,
-                    'version': ''
-                })
+                    compliance_requirements.append({
+                        'type_id': compliance.compliance_type_id,
+                        'type': ComplianceType.objects.get(id=compliance.compliance_type_id).name,
+                        'name': compliance.abbrv,
+                        'compliance_id': compliance.id,
+                        'requirement': str(compliance_requirement.cid) + ' - ' + compliance_requirement.requirement,
+                        'requirement_id': compliance_requirement.id,
+                        'version': ''
+                    })
+            except:
+                pass
 
             entry_urls = []
-            for entry_url in EntryUrl.objects.filter(entry_id=risk_entry.id):
-                entry_urls.append({
-                    'url': entry_url.url,
-                    'name': entry_url.name,
-                    'type': '1' if entry_url.is_internal else '0',
-                    'type_name': 'Internal' if entry_url.is_internal else 'External',
-                    'desc': entry_url.description
-                })
+            try:
+                for entry_url in EntryUrl.objects.filter(entry_id=risk_entry.id):
+                    entry_urls.append({
+                        'url': entry_url.url,
+                        'name': entry_url.name,
+                        'type': '1' if entry_url.is_internal else '0',
+                        'type_name': 'Internal' if entry_url.is_internal else 'External',
+                        'desc': entry_url.description
+                    })
+            except:
+                pass
+
+            artifacts_files = []
+            try:
+                for artifact_file in EntryCompanyArtifact.objects.filter(id_entry_id=risk_entry.id):
+                    company_artifact = CompanyArtifact.objects.get(pk=artifact_file.id_companyartifact_id)
+                    artifacts_files.append({
+                        'name': company_artifact.name,
+                        'desc': company_artifact.description,
+                        'file': {'name': company_artifact.artifact_file.name.split('/')[-1]}
+                    })
+            except:
+                pass
             rv.update({
                 'basicinfo': {
                     'entry_id': risk_entry.id,
@@ -607,6 +611,7 @@ def api_get_risk_entry(request, entry_id):
                     'aro_notes': risk_entry.aro_notes,
                     'compliance_requirements': compliance_requirements,
                     'entry_urls': entry_urls,
+                    'artifacts_files': artifacts_files,
                     'incident_response': '1' if risk_entry.incident_response else '0'
                 }
             })
