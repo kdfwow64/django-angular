@@ -50,7 +50,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 @login_required
-def simple_upload(request, count, entry_id, company_id):
+def file_upload(request, count, entry_id, company_id):
     if request.method == 'POST' and request.FILES:
         st = 'file_'
         for i in range(0, int(count)):

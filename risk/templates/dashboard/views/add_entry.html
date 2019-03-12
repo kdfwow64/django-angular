@@ -679,11 +679,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr ng-repeat="item in basicinfo.entry_urls">
-                                                            <!-- <td ng-bind="item.url">
-                                                            </td> -->
-                                                            <!-- <td ng-bind="item.name">
-                                                            </td> -->
-                                                            <td><a ng-href="get_item_url(item.url)" ng-bind="item.name"></a></td>
+                                                            <td><a ng-click="get_item_url(item.url)" ng-bind="item.name"></a></td>
                                                             <td ng-bind="item.type_name">
                                                             </td>
                                                             <td ng-bind="item.desc">

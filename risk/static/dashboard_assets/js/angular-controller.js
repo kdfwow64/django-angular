@@ -3210,7 +3210,10 @@ formatMoney = function(amount, decimalCount=2, decimal=".", thousands =",") {
             console.log(e)
         }
     };
-
+isUrl = function(s) {
+   var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+   return regexp.test(s);
+}
 colorAdminApp.controller('registerListEntriresController',
     function($http, $scope, $rootScope, $state, responses, severities, users) {
     $scope.responses = responses;
@@ -3930,8 +3933,13 @@ colorAdminApp.controller('registerAddEntriresController',
            if ( $(this).parsley().validate() != true)
                validation = true;
         });
-        if(validation)
+        if( validation )
             return false;
+        else if( !isUrl($scope.entry_url.url) ) {
+            $('input[name=entry_url_url]').addClass('parsley-error');
+            $('input[name=entry_url_url]').removeClass('parsley-success');
+            return false;
+        }
 
         type_name = 'Internal';
         if ($('select[name=entry_url_type]').val() == 0)
@@ -4505,7 +4513,10 @@ colorAdminApp.controller('registerAddEntriresController',
     }
 
     $scope.get_item_url = function (url) {
-        return url;
+        if( !url.includes('http'))
+            url = 'https://' + url;
+        $window.open(url);
+        return true;
     }
 
     $scope.save_basic_info = function(element){

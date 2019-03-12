@@ -82,7 +82,7 @@ urlpatterns = [
     re_path(r'^dashboard/api/list-entries-info/$',
             dashboard.api_list_entries_info, name="api-list-entries-info"),
     re_path(r'^dashboard/api/save-file/(?P<count>[0-9]+)/(?P<entry_id>[0-9]+)/(?P<company_id>[0-9]+)/$',
-            dashboard.simple_upload, name="api-save-file-entries"),
+            dashboard.file_upload, name="api-save-file-entries"),
 
     # SHOULD BE THE LAST IN THIS LIST
     re_path(r'^$', home.index, name='index'),
