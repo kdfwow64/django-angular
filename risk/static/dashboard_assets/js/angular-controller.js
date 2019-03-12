@@ -3195,7 +3195,21 @@ colorAdminApp.controller('changeCompanyController', function($scope, $state, $ui
 /*-------------------------------------------------
     A02.0 List Entries Controller
 ---------------------------------------------------*/
+formatMoney = function(amount, decimalCount=2, decimal=".", thousands =",") {
+        try {
+            decimalCount = Math.abs(decimalCount);
+            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
 
+            const negativeSign = amount < 0 ? "-" : "";
+
+            i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+            j = (i.length > 3) ? i.length % 3 : 0;
+
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+        } catch (e) {
+            console.log(e)
+        }
+    };
 
 colorAdminApp.controller('registerListEntriresController',
     function($http, $scope, $rootScope, $state, responses, severities, users) {
@@ -3233,12 +3247,12 @@ colorAdminApp.controller('registerListEntriresController',
                 if(r) {
                     $scope.company_residual_ale_rate = r.data.company_residual_ale_rate;
                     $scope.company_residual_ale_rate_width = r.data.company_residual_ale_rate_width;
-                    $scope.highest_total_ale = r.data.highest_total_ale;
-                    $scope.highest_residual_ale_cost = r.data.highest_residual_ale_cost;
+                    $scope.highest_total_ale = formatMoney(parseFloat(r.data.highest_total_ale));
+                    $scope.highest_residual_ale_cost = formatMoney(parseFloat(r.data.highest_residual_ale_cost));
                     $scope.treated_entry_protection = r.data.treated_entry_protection;
                     $scope.treated_entry_protection_width = r.data.treated_entry_protection_width;
-                    $scope.inherent_ale_total = r.data.inherent_ale_total;
-                    $scope.mitigated_ale_total = r.data.mitigated_ale_total;
+                    $scope.inherent_ale_total = formatMoney(parseFloat(r.data.inherent_ale_total));
+                    $scope.mitigated_ale_total = formatMoney(parseFloat(r.data.mitigated_ale_total));
                     $scope.count_active_entries = r.data.count_active_entries;
                     $scope.count_active_entries_width = r.data.count_active_entries_width;
                     $scope.count_treat_entries = r.data.count_treat_entries;
@@ -4658,22 +4672,6 @@ colorAdminApp.controller('registerAddEntriresController',
         })
     };
 
-    $scope.formatMoney = function(amount, decimalCount=2, decimal=".", thousands =",") {
-        try {
-            decimalCount = Math.abs(decimalCount);
-            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
-
-            const negativeSign = amount < 0 ? "-" : "";
-
-            i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-            j = (i.length > 3) ? i.length % 3 : 0;
-
-            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
-        } catch (e) {
-            console.log(e)
-        }
-    };
-
     $scope.save_mitigating_controls = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -4693,7 +4691,7 @@ colorAdminApp.controller('registerAddEntriresController',
             if(r.data.code){
                 /*Inherent*/
                 inherent_ale_rate = $scope.affected_assets.total_ale_value / max_loss;
-                $scope.entry_overview.inherent_ale_monitized = $scope.formatMoney($scope.affected_assets.total_ale_value);
+                $scope.entry_overview.inherent_ale_monitized = formatMoney($scope.affected_assets.total_ale_value);
                 $scope.entry_overview.inherent_ale_rate = parseInt(inherent_ale_rate * 1000000) / 10000;
 
                 $http.post('/dashboard/api/severity-categories/')
@@ -4713,11 +4711,11 @@ colorAdminApp.controller('registerAddEntriresController',
                 });
 
                 inherent_sle_rate = $scope.affected_assets.total_sle_value / max_loss;
-                $scope.entry_overview.inherent_sle_monitized = $scope.formatMoney($scope.affected_assets.total_sle_value);
+                $scope.entry_overview.inherent_sle_monitized = formatMoney($scope.affected_assets.total_sle_value);
                 $scope.entry_overview.inherent_sle_rate = inherent_sle_rate.toFixed(5);
 
                 residual_sle_rate = $scope.entry_overview.inherent_sle_rate - ($scope.entry_overview.inherent_sle_rate * $scope.mitigating_controls.sle_rate / 100);
-                $scope.entry_overview.residual_sle_monitized = $scope.formatMoney($scope.affected_assets.total_sle_value - $scope.mitigating_controls.sle_cost);
+                $scope.entry_overview.residual_sle_monitized = formatMoney($scope.affected_assets.total_sle_value - $scope.mitigating_controls.sle_cost);
                 $scope.entry_overview.residual_sle_rate = residual_sle_rate.toFixed(5);
                 if( inherent_sle_rate >= 1 )
                     $scope.entry_overview.inherent_sle_category = 'Catastrophic';
@@ -4762,15 +4760,15 @@ colorAdminApp.controller('registerAddEntriresController',
                     return false;
                 });
                 /*Mitigated Risk*/
-                $scope.entry_overview.mitigated_ale_monitized = $scope.formatMoney($scope.mitigating_controls.total_ale);
+                $scope.entry_overview.mitigated_ale_monitized = formatMoney($scope.mitigating_controls.total_ale);
                 $scope.entry_overview.mitigated_ale_rate = $scope.mitigating_controls.total_ale / $scope.affected_assets.total_ale_value;
                 $scope.entry_overview.mitigated_ale_rate = $scope.entry_overview.mitigated_ale_rate.toFixed(5) * 100;
                 $scope.entry_overview.mitigated_ale_rate = parseInt($scope.entry_overview.mitigated_ale_rate * 100) / 100;
 
-                $scope.entry_overview.mitigated_sle_monitized = $scope.formatMoney(parseFloat($scope.mitigating_controls.sle_cost));
+                $scope.entry_overview.mitigated_sle_monitized = formatMoney(parseFloat($scope.mitigating_controls.sle_cost));
                 $scope.entry_overview.mitigated_sle_rate = $scope.mitigating_controls.sle_rate;
 
-                $scope.entry_overview.mitigated_aro_monitized = $scope.formatMoney(parseFloat($scope.mitigating_controls.aro_cost));
+                $scope.entry_overview.mitigated_aro_monitized = formatMoney(parseFloat($scope.mitigating_controls.aro_cost));
                 $scope.entry_overview.mitigated_aro_rate = $scope.mitigating_controls.aro_rate;
                 /*Inherent Risk Details*/
                 $scope.entry_overview.incident_response = $scope.basicinfo.incident_response;
