@@ -11,6 +11,10 @@ from risk.models.utility import (
 )
 
 
+def get_artifact_file_path(instance, filename):
+    return '{0}/artifacts/{1}'.format(instance.company_id, filename)
+
+
 class Company(DefaultFields):
     """Company."""
 
@@ -1029,6 +1033,9 @@ class CompanyArtifact(DefaultFieldsCompany):
     """
     artifact = models.CharField(
         max_length=100, blank=False, help_text=('Filename of the artifact'),)  # Using artifact instead of filename so no conflict occur with naming conventions.  IE.  mywordfile.doc
+    artifact_file = models.FileField(
+        upload_to=get_artifact_file_path, blank=False, null=True
+    )
 
     class Meta:
         """Meta class."""

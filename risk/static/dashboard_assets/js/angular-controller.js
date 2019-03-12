@@ -3373,6 +3373,7 @@ colorAdminApp.controller('registerListEntriresController',
 colorAdminApp.controller('registerAddEntriresController',
     function(
         $scope,
+        Upload,
         $http,
         $window,
         WizardValidatorService,
@@ -3434,6 +3435,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.basicinfo.created_date = '';
         $scope.basicinfo.modified_date = '';
         $scope.basicinfo.evaluated_date = '';
+        $scope.basicinfo.artifacts_files = [];
     }
 
     if(riskEntry.affected_assets){
@@ -3531,11 +3533,11 @@ colorAdminApp.controller('registerAddEntriresController',
         };
     }
 
-    if(riskEntry.add_file){
-        $scope.add_file = riskEntry.add_file;
+    if(riskEntry.artifact_file){
+        $scope.artifact_file = riskEntry.artifact_file;
     }
     else{
-        $scope.add_file = {
+        $scope.artifact_file = {
             edit_num: -1,
             name: '',
             file: null,
@@ -3864,22 +3866,19 @@ colorAdminApp.controller('registerAddEntriresController',
         });
         if(validation)
             return false;
-        var file = $scope.file_model; // $scope.myFile is set buy the directive
-        console.log('file is ' + $scope.file_model.name );
-        var uploadUrl = "/fileUpload";
-        // fileUpload.uploadFileToUrl(file, uploadUrl);
-        new_item = {
-            'name': $scope.add_file.name,
-            'file': $scope.add_file.file,
-            'desc': $scope.add_file.desc
-        };
-        index = $scope.add_file.edit_num;
-        if (index == '-1') {
-            $scope.basicinfo.files.push(new_item);
-        } else {
-            $scope.basicinfo.files[index] = new_item;
+        file = document.getElementById('file').files[0];
+        if (file) {
+            new_item = {
+                'name': $scope.artifact_file.name,
+                'desc': $scope.artifact_file.desc,
+                'file': file
+            }
+            $scope.basicinfo.artifacts_files.push(new_item);
         }
         $('#add_edit_file').modal('hide');
+    }
+    $scope.open_add_file_modal1 = function() {
+        $scope.save_file_formdata(1, 7);
     }
     /*Entry Url*/
     $scope.open_add_entry_url_modal = function () {
@@ -4465,6 +4464,31 @@ colorAdminApp.controller('registerAddEntriresController',
     }
     /* Ent Step 4*/
 
+    $scope.save_file_formdata = function(entry_id, company_id){
+        formdata = new FormData();
+        len = $scope.basicinfo.artifacts_files.length;
+        for( i = 0 ; i < len ; i++ ){
+            each_item = $scope.basicinfo.artifacts_files[i];
+            formdata.append('file_' + i, each_item.file);
+            formdata.append('file_' + i + '_name', each_item.name);
+            formdata.append('file_' + i + '_desc', each_item.desc);
+        }
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+        $http.post('/dashboard/api/save-file/' + len + '/' + entry_id + '/' + company_id + '/', formdata, {
+            headers: {
+                'Content-Type': undefined
+            },
+            transformRequest: angular.identity
+        })
+        .then(function(r){
+            // console.log(r);
+        }).catch(function(r){
+            return false;
+        })
+    }
+
     $scope.save_basic_info = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -4472,6 +4496,8 @@ colorAdminApp.controller('registerAddEntriresController',
             .then(function(r){
                 if(r.data.code == 200){
                     $scope.entry_id = r.data.id;
+                    $scope.save_file_formdata(r.data.id, r.data.company_id);
+
                     $scope.basicinfo.entry_id = r.data.id;  // In case of back button, do not create twice
                     if ($scope.basicinfo.aro_toggle == 'C') {
                         $http.post('/dashboard/api/frequencies/')

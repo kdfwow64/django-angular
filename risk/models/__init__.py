@@ -129,6 +129,7 @@ from .entry import (
     Response,
     ResponseVote,
     RiskType,
+    EntryCompanyArtifact
 )
 from .feedback import (
     Feedback,

@@ -38,12 +38,32 @@ from risk.models import (
     SeverityCategory,
     Company,
     Control,
-    Vendor
+    Vendor,
+    CompanyArtifact,
+    EntryCompanyArtifact
 )
 from risk.forms.entry import(
     RiskEntryBasicForm,
 )
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
+@login_required
+def simple_upload(request, count, entry_id, company_id):
+    if request.method == 'POST' and request.FILES:
+        st = 'file_'
+        for i in range(0, int(count)):
+            item = st + str(i)
+            file = request.FILES[item]
+            name = request.POST[item+'_name']
+            desc = request.POST[item+'_desc']
+            try:
+                artifact = CompanyArtifact.objects.get_or_create(artifact_file=file, name=name, description=desc, company_id=int(company_id))
+                EntryCompanyArtifact.objects.get_or_create(id_companyartifact_id=artifact[0].id, id_entry_id=int(entry_id))
+            except:
+                pass
+    return JsonResponse({'data': 'success'})
 
 @login_required
 def api_list_risk_entries(request):
@@ -114,6 +134,18 @@ def api_list_risk_entries(request):
         }
     return JsonResponse(data)
 
+@method_decorator(login_required, name='dispatch')
+class FileUploadView(View):
+    # parser_classes = (FileUploadParser,)
+
+    def put(self, request, filename, format=None):
+
+        file_obj = request.data['file']
+        str = ''
+        # ...
+        # do some stuff with uploaded file
+        # ...
+        return Response(status=204)
 
 @method_decorator(login_required, name='dispatch')
 class CreateRiskEntry(View):
@@ -124,7 +156,8 @@ class CreateRiskEntry(View):
     def post(self, request, *args, **kwargs):
         """Handle post requests."""
         request_data = json.loads(request.body.decode('utf-8'))
-
+        user = request.user
+        company = user.get_current_company()
         # return JsonResponse({})
         entry_id = request_data.get('entry_id')
         if entry_id is None:
@@ -204,7 +237,7 @@ class CreateRiskEntry(View):
                         entry=risk_entry, url=entry_url['url'], description=entry_url['desc'], name=entry_url['name'], is_internal=entry_url['type'])
                 except:
                     pass
-            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, 'created_date': risk_entry.date_created.strftime(
+            rv = {'status': 'success', 'code': 200, 'id': risk_entry.id, 'company_id': company.id, 'created_date': risk_entry.date_created.strftime(
                 "%m/%d/%Y"), 'modified_date': risk_entry.date_modified.strftime("%m/%d/%Y"), 'evaluated_date': risk_entry.date_evaluated.strftime("%m/%d/%Y") if risk_entry.date_evaluated else ''}
         else:
             rv = {'status': 'error', 'code': 400, 'errors': form.errors}

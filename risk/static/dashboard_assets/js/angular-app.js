@@ -9,7 +9,8 @@ var colorAdminApp = angular.module('colorAdminApp', [
     'ui.router',
     'ui.bootstrap',
     'oc.lazyLoad',
-    'NgSwitchery'
+    'NgSwitchery',
+    'ngFileUpload'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('{(');
     $interpolateProvider.endSymbol(')}');

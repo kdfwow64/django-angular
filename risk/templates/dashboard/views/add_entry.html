@@ -95,15 +95,15 @@
                             <input type="hidden" ng-model="add_file.edit_num">
                             <div class="col-md-3">
                                 <label>Name</label>
-                                <input type="text" ng-bind="add_file.name" class="form-control" required/>
+                                <input type="text" ng-model="artifact_file.name" class="form-control" required/>
                             </div>
                             <div class="col-md-3">
                                 <label>File</label>
-                                <input type="file" class="btn" file-model="file_model"/>
+                                <input type="file" id="file" class="btn" name="file" ng-model="artifact_file.file" accept="image/*" ngf-max-height="1000" ngf-max-size="1MB"/>
                             </div>
                             <div class="col-md-6">
                                 <label>Description</label>
-                                <input type="text" ng-model="add_file.desc" class="form-control" required/>
+                                <input type="text" ng-model="artifact_file.desc" class="form-control" required/>
                             </div>
                         </div>
                     </div>
@@ -748,6 +748,11 @@
                                     <div class="row" style="margin-bottom: 10px;">
                                         <div class="col-md-1 pull-right">
                                             <a class="btn btn-success" ng-click="open_add_file_modal()"><i class="fa fa-plus"></i>ADD</a>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-bottom: 10px;">
+                                        <div class="col-md-1 pull-right">
+                                            <a class="btn btn-success" ng-click="open_add_file_modal1()"><i class="fa fa-plus"></i>Save all Data</a>
                                         </div>
                                     </div>
                                     <!-- end row -->
