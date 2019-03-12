@@ -10,7 +10,6 @@ from risk.models import (
     Actor,
     ActorIntent,
     ActorMotive,
-    CompanyAsset,
     CompanyControl,
     CompanyControlMeasure,
     CompanyLocation,
@@ -23,9 +22,6 @@ from risk.models import (
     EntryCompanyControl,
     EntryCompanyControlMeasure,
     EntryCompanyLocation,
-    EntryCompliance,
-    EntryResponseSubmission,
-    EntryRiskType,
     Response,
     RiskType,
     TimeUnit,
@@ -45,9 +41,6 @@ from risk.models import (
 from risk.forms.entry import(
     RiskEntryBasicForm,
 )
-from django.shortcuts import render, redirect
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 
 @login_required
 def file_upload(request, count, entry_id, company_id):

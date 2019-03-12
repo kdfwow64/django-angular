@@ -143,7 +143,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'risk/static'),)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'risk/uploads')
 
 # from risk.models.auth import User
 AUTH_USER_MODEL = 'risk.User'
