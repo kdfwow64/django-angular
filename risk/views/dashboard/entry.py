@@ -1,7 +1,6 @@
 """All views related to Entry in models/entry.py."""
 import json
 import os
-import requests
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
