@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label>File</label>
-                                <input type="file" id="file" class="btn" name="file" ng-model="artifact_file.file" accept="image/*" ngf-max-height="1000" ngf-max-size="1MB"/>
+                                <input type="file" id="file" class="btn" name="file" ng-model="artifact_file.file" accept="" ngf-max-height="1000" ngf-max-size="1MB"/>
                             </div>
                             <div class="col-md-6">
                                 <label>Description</label>
@@ -716,20 +716,22 @@
                                                             <th width="15%">File</th>
                                                             <th width="70%">Description</th>
                                                             <th></th>
-                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr ng-repeat="file in basicinfo.artifacts_files">
                                                             <td ng-bind="file.name">
                                                             </td>
-                                                            <td ng-bind="file.file.name">
+                                                            <td>
+                                                                <a ng-bind="file.file.name" ng-click="file_download(file.file.path)"></a>
                                                             </td>
                                                             <td ng-bind="file.desc">
                                                             </td>
+                                                            <!--
                                                             <td>
-                                                                <a class="btn btn-primary" ng-click="open_edit_file_modal($index)">Edit</a>
+                                                                <a class="btn btn-primary" ng-if="file.company_artifact_id == 0" ng-click="open_edit_file_modal($index)">Edit</a>
                                                             </td>
+                                                            -->
                                                             <td>
                                                                 <a class="btn btn-danger" ng-click="remove_this_file($index)">Delete</a>
                                                             </td>

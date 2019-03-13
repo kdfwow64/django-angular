@@ -1,5 +1,7 @@
 """All views related to Entry in models/entry.py."""
 import json
+import os
+import requests
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
@@ -41,17 +43,42 @@ from risk.models import (
 from risk.forms.entry import(
     RiskEntryBasicForm,
 )
+from django.conf import settings
+from django.http import HttpResponse, Http404
+
+@login_required
+def file_download(request):
+    path = request.body.decode('utf-8')
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404
 
 @login_required
 def file_upload(request, count, entry_id, company_id):
+    try:
+        for each in EntryCompanyArtifact.objects.order_by('id').all():
+            deleted_items = request.POST['deleted_items']
+            try:
+                temp = 'Del' + str(each.id) + 'Item'
+                if temp in deleted_items:
+                    CompanyArtifact.objects.get(pk=each.id_companyartifact_id).delete()
+                    each.delete()
+            except:
+                pass
+    except:
+        pass
     if request.method == 'POST' and request.FILES:
         st = 'file_'
         for i in range(0, int(count)):
             item = st + str(i)
-            file = request.FILES[item]
-            name = request.POST[item+'_name']
-            desc = request.POST[item+'_desc']
             try:
+                file = request.FILES[item]
+                name = request.POST[item+'_name']
+                desc = request.POST[item+'_desc']
                 artifact = CompanyArtifact.objects.get_or_create(artifact_file=file, name=name, description=desc, company_id=int(company_id))
                 EntryCompanyArtifact.objects.get_or_create(id_companyartifact_id=artifact[0].id, id_entry_id=int(entry_id))
             except:
@@ -579,9 +606,13 @@ def api_get_risk_entry(request, entry_id):
                 for artifact_file in EntryCompanyArtifact.objects.filter(id_entry_id=risk_entry.id):
                     company_artifact = CompanyArtifact.objects.get(pk=artifact_file.id_companyartifact_id)
                     artifacts_files.append({
+                        'entry_company_artifact_id': artifact_file.id,
                         'name': company_artifact.name,
                         'desc': company_artifact.description,
-                        'file': {'name': company_artifact.artifact_file.name.split('/')[-1]}
+                        'file': {
+                            'name': company_artifact.artifact_file.name.split('/')[-1],
+                            'path': company_artifact.artifact_file.name
+                        }
                     })
             except:
                 pass

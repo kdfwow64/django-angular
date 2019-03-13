@@ -3453,6 +3453,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.basicinfo.modified_date = '';
         $scope.basicinfo.evaluated_date = '';
         $scope.basicinfo.artifacts_files = [];
+        $scope.basicinfo.artifacts_files_deleted_items = '';
     }
 
     if(riskEntry.affected_assets){
@@ -3671,6 +3672,9 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.basicinfo.entry_urls.splice(index, 1);
     }
     $scope.remove_this_file = function (index) {
+        var entry_company_artifact_id = $scope.basicinfo.artifacts_files[index].entry_company_artifact_id;
+        if( entry_company_artifact_id )
+            $scope.basicinfo.artifacts_files_deleted_items += 'Del' + entry_company_artifact_id + 'Item, ';
         $scope.basicinfo.artifacts_files.splice(index, 1);
     }
     $scope.add_more_threat_detail = function(){
@@ -3886,6 +3890,8 @@ colorAdminApp.controller('registerAddEntriresController',
         file = document.getElementById('file').files[0];
         if (file) {
             new_item = {
+                'entry_company_artifact_id': 0,
+                'company_artifact_id': 0,
                 'name': $scope.artifact_file.name,
                 'desc': $scope.artifact_file.desc,
                 'file': file
@@ -3897,6 +3903,27 @@ colorAdminApp.controller('registerAddEntriresController',
                 $scope.basicinfo.artifacts_files[index] = new_item;
         }
         $('#add_edit_file').modal('hide');
+    }
+
+    $scope.file_download = function(path) {
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.post('/dashboard/api/file-download/', path)
+        .then(function(r) {
+            if(r) {
+                var a = document.createElement('a');
+                var blob = new Blob([r.data], {'type':"application/octet-stream"});
+                a.href = URL.createObjectURL(blob);
+                var temp = r.config.data.split('/');
+                a.download = temp[temp.length - 1];
+                a.click();
+                return true;
+            } else {
+                return false;
+            }
+        }).catch(function(r){
+            return false;
+        })
     }
     /*Entry Url*/
     $scope.open_add_entry_url_modal = function () {
@@ -4496,9 +4523,9 @@ colorAdminApp.controller('registerAddEntriresController',
             formdata.append('file_' + i + '_name', each_item.name);
             formdata.append('file_' + i + '_desc', each_item.desc);
         }
+        formdata.append('deleted_items', $scope.basicinfo.artifacts_files_deleted_items);
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
-
         $http.post('/dashboard/api/save-file/' + len + '/' + entry_id + '/' + company_id + '/', formdata, {
             headers: {
                 'Content-Type': undefined
@@ -4526,8 +4553,8 @@ colorAdminApp.controller('registerAddEntriresController',
             .then(function(r){
                 if(r.data.code == 200){
                     $scope.entry_id = r.data.id;
-                    if( $scope.basicinfo.artifacts_files && $scope.basicinfo.artifacts_files.length > 0)
-                        $scope.save_file_formdata(r.data.id, r.data.company_id);
+                    // if( $scope.basicinfo.artifacts_files && $scope.basicinfo.artifacts_files.length > 0)
+                    $scope.save_file_formdata(r.data.id, r.data.company_id);
 
                     $scope.basicinfo.entry_id = r.data.id;  // In case of back button, do not create twice
                     if ($scope.basicinfo.aro_toggle == 'C') {
