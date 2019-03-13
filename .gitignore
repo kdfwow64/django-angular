@@ -1,7 +1,8 @@
 # Folders #
 ###################
 /venv
-/rlb/settings.py
+rlb/settings.py
+.idea/*.xml
 
 # Sublime #
 ############
