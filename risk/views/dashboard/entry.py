@@ -45,16 +45,28 @@ from risk.forms.entry import(
 from django.conf import settings
 from django.http import HttpResponse, Http404
 
-@login_required
-def file_download(request):
-    path = request.body.decode('utf-8')
-    file_path = os.path.join(settings.MEDIA_ROOT, path)
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            return response
-    raise Http404
+
+def __init__(self, location=None, base_url=None, file_permissions_mode=None,
+             directory_permissions_mode=None):
+    self.file_permissions_mode = (
+        file_permissions_mode if file_permissions_mode is not None
+        else settings.FILE_UPLOAD_PERMISSIONS
+    )
+    self.directory_permissions_mode = (
+        directory_permissions_mode if directory_permissions_mode is not None
+        else settings.FILE_UPLOAD_DIRECTORY_PERMISSIONS
+    )
+
+# @login_required
+# def file_download(request):
+#     path = request.body.decode('utf-8')
+#     file_path = os.path.join(settings.MEDIA_ROOT, path)
+#     if os.path.exists(file_path):
+#         with open(file_path, 'rb') as fh:
+#             response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+#             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+#             return response
+#     raise Http404
 
 @login_required
 def file_upload(request, count, entry_id, company_id):
@@ -64,7 +76,12 @@ def file_upload(request, count, entry_id, company_id):
             try:
                 temp = 'Del' + str(each.id) + 'Item'
                 if temp in deleted_items:
-                    CompanyArtifact.objects.get(pk=each.id_companyartifact_id).delete()
+                    file = CompanyArtifact.objects.get(pk=each.id_companyartifact_id)
+                    try:
+                        file.artifact_file.delete()
+                    except:
+                        pass
+                    file.delete()
                     each.delete()
             except:
                 pass

@@ -3906,24 +3906,12 @@ colorAdminApp.controller('registerAddEntriresController',
     }
 
     $scope.file_download = function(path) {
-        $http.defaults.xsrfCookieName = 'csrftoken';
-        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
-        $http.post('/dashboard/api/file-download/', path)
-        .then(function(r) {
-            if(r) {
-                var a = document.createElement('a');
-                var blob = new Blob([r.data], {'type':"application/octet-stream"});
-                a.href = URL.createObjectURL(blob);
-                var temp = r.config.data.split('/');
-                a.download = temp[temp.length - 1];
-                a.click();
-                return true;
-            } else {
-                return false;
-            }
-        }).catch(function(r){
-            return false;
-        })
+        var a = document.createElement('a');
+        a.href = '/media/' + path;
+        var temp = path.split('/');
+        a.download = temp[temp.length - 1];
+        a.click();
+        return true;
     }
     /*Entry Url*/
     $scope.open_add_entry_url_modal = function () {
