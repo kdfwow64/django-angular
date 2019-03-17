@@ -68,6 +68,7 @@ def __init__(self, location=None, base_url=None, file_permissions_mode=None,
 #             return response
 #     raise Http404
 
+
 @login_required
 def file_upload(request, count, entry_id, company_id):
     try:
@@ -76,7 +77,8 @@ def file_upload(request, count, entry_id, company_id):
             try:
                 temp = 'Del' + str(each.id) + 'Item'
                 if temp in deleted_items:
-                    file = CompanyArtifact.objects.get(pk=each.id_companyartifact_id)
+                    file = CompanyArtifact.objects.get(
+                        pk=each.id_companyartifact_id)
                     try:
                         file.artifact_file.delete()
                     except:
@@ -93,13 +95,16 @@ def file_upload(request, count, entry_id, company_id):
             item = st + str(i)
             try:
                 file = request.FILES[item]
-                name = request.POST[item+'_name']
-                desc = request.POST[item+'_desc']
-                artifact = CompanyArtifact.objects.get_or_create(artifact_file=file, name=name, description=desc, company_id=int(company_id))
-                EntryCompanyArtifact.objects.get_or_create(id_companyartifact_id=artifact[0].id, id_entry_id=int(entry_id))
+                name = request.POST[item + '_name']
+                desc = request.POST[item + '_desc']
+                artifact = CompanyArtifact.objects.get_or_create(
+                    artifact_file=file, name=name, description=desc, company_id=int(company_id))
+                EntryCompanyArtifact.objects.get_or_create(id_companyartifact_id=artifact[
+                                                           0].id, id_entry_id=int(entry_id))
             except:
                 pass
     return JsonResponse({'data': 'success'})
+
 
 @login_required
 def api_list_risk_entries(request):
@@ -170,6 +175,7 @@ def api_list_risk_entries(request):
         }
     return JsonResponse(data)
 
+
 @method_decorator(login_required, name='dispatch')
 class FileUploadView(View):
     # parser_classes = (FileUploadParser,)
@@ -182,6 +188,7 @@ class FileUploadView(View):
         # do some stuff with uploaded file
         # ...
         return Response(status=204)
+
 
 @method_decorator(login_required, name='dispatch')
 class CreateRiskEntry(View):
@@ -510,8 +517,8 @@ def api_update_measurements(request, entry_id):
 def get_all_risk_type_for_dropdown(request):
     """Get all risk types for dropdown."""
     data = []
-    for risk_type in RiskType.objects.order_by('name').all():
-        data.append({'id': risk_type.id, 'name': risk_type.name, 'sort_order': risk_type.sort_order})
+    for risk_type in RiskType.objects.order_by('sort_order').all():
+        data.append({'id': risk_type.id, 'name': risk_type.name})
     return JsonResponse(data, safe=False)
 
 
@@ -519,8 +526,8 @@ def get_all_risk_type_for_dropdown(request):
 def get_all_responses_for_dropdown(request):
     """Get all respose types for dropdown."""
     data = []
-    for response in Response.objects.order_by('name').all():
-        data.append({'id': response.id, 'name': response.name, 'sort_order': response.sort_order})
+    for response in Response.objects.order_by('sort_order').all():
+        data.append({'id': response.id, 'name': response.name})
     return JsonResponse(data, safe=False)
 
 
@@ -528,9 +535,9 @@ def get_all_responses_for_dropdown(request):
 def get_all_time_units_for_dropdown(request):
     """Get all time units for dropdown."""
     data = []
-    for unit in TimeUnit.objects.order_by('name').all():
+    for unit in TimeUnit.objects.order_by('sort_order').all():
         data.append({'id': unit.id, 'name': unit.name,
-                     'annual_units': unit.annual_units, 'sort_order': unit.sort_order})
+                     'annual_units': unit.annual_units})
     return JsonResponse(data, safe=False)
 
 
@@ -538,9 +545,9 @@ def get_all_time_units_for_dropdown(request):
 def get_all_frequencies_for_dropdown(request):
     """Get all frequency categories for dropdown."""
     data = []
-    for frequency in FrequencyCategory.objects.order_by('name').all():
-        data.append({'id': frequency.id, 'name': frequency.name,
-                     'min': frequency.minimum, 'max': frequency.maximum, 'sort_order': frequency.sort_order})
+    for frequency in FrequencyCategory.objects.order_by('sort_order').all():
+        data.append({'id': frequency.id, 'name': frequency.name, 'desc': frequency.description,
+                     'min': frequency.minimum, 'max': frequency.maximum})
     return JsonResponse(data, safe=False)
 
 
@@ -561,8 +568,9 @@ def get_all_entry_urls_for_dropdown(request):
 def get_all_compliance_types_for_dropdown(request):
     """Get all compliance types for dropdown."""
     data = []
-    for type in ComplianceType.objects.order_by('name').all():
-        data.append({'id': type.id, 'name': type.name})
+    for type in ComplianceType.objects.order_by('sort_order').all():
+        data.append({'id': type.id, 'name': type.name,
+                     'desc': type.description})
     return JsonResponse(data, safe=False)
 
 
@@ -583,7 +591,8 @@ def api_get_risk_entry(request, entry_id):
     if entry_id:
         try:
             # Get first register for company from entry.py/Register
-            risk_entry = request.user.get_current_company().get_active_register().entry.get(pk=entry_id)
+            risk_entry = request.user.get_current_company(
+            ).get_active_register().entry.get(pk=entry_id)
             compliance_requirements = []
             try:
                 for entry_compliance_requirement in EntryComplianceRequirement.objects.filter(id_entry_id=risk_entry.id):
@@ -620,7 +629,8 @@ def api_get_risk_entry(request, entry_id):
             artifacts_files = []
             try:
                 for artifact_file in EntryCompanyArtifact.objects.filter(id_entry_id=risk_entry.id):
-                    company_artifact = CompanyArtifact.objects.get(pk=artifact_file.id_companyartifact_id)
+                    company_artifact = CompanyArtifact.objects.get(
+                        pk=artifact_file.id_companyartifact_id)
                     artifacts_files.append({
                         'entry_company_artifact_id': artifact_file.id,
                         'name': company_artifact.name,

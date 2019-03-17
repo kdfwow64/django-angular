@@ -34,6 +34,12 @@ class ComplianceTypeAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
+        'abbrv',
+        'sort_order',
+        'keywords',
+        'under_review',
+        'example1',
+        'example2',
         'is_active',
     )
     search_fields = ('name',)

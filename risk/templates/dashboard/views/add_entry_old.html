@@ -22,7 +22,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label>Detail</label>
-                                <select name="entry_compliance_requirement" ng-model="entry_compliance.requirement" class="form-control" ng-options="k.id as (k.cid + ' - ' + k.detail) for k in compliance_requirements" data-parsley-group="wizard-add-entry-compliance" required ><option value=""></option></select>
+                                <select name="entry_compliance_requirement" ng-model="entry_compliance.requirement" class="form-control" ng-options="k.id as k.detail for k in compliance_requirements" data-parsley-group="wizard-add-entry-compliance" required ><option value=""></option></select>
                             </div>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label>File</label>
-                                <input type="file" id="file" class="btn" name="file" ng-model="artifact_file.file" accept="" ngf-max-height="1000" ngf-max-size="1MB"/>
+                                <input type="file" id="file" class="btn" name="file" ng-model="artifact_file.file" accept="image/*" ngf-max-height="1000" ngf-max-size="1MB"/>
                             </div>
                             <div class="col-md-6">
                                 <label>Description</label>
@@ -569,8 +569,8 @@
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label>By Annual Frequency Category</label>
-                                                                <select name="aro_frequency" ng-disabled="basicinfo.aro_toggle!='C'" ng-required="basicinfo.aro_toggle=='C'" ng-model="basicinfo.aro_frequency" class="form-control" ng-options="k.id as (k.name + ' - ' + k.desc) for k in aro_frequencies" data-parsley-group="wizard-step-1" /><option value=""></option></select>
+                                                                <label>By Frequency Category</label>
+                                                                <select name="aro_frequency" ng-disabled="basicinfo.aro_toggle!='C'" ng-required="basicinfo.aro_toggle=='C'" ng-model="basicinfo.aro_frequency" class="form-control" ng-options="k.id as k.name for k in aro_frequencies" data-parsley-group="wizard-step-1" /><option value=""></option></select>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -670,9 +670,9 @@
                                                     <thead>
                                                         <tr>
                                                             <!-- <th width="15%">URL</th> -->
-                                                            <th width="25%">Name</th>
+                                                            <th width="15%">Name</th>
                                                             <th width="10%">Type</th>
-                                                            <th width="45%">Description</th>
+                                                            <th width="55%">Description</th>
                                                             <th></th>
                                                             <th></th>
                                                         </tr>
@@ -682,7 +682,7 @@
                                                             <td><a ng-click="get_item_url(item.url)" ng-bind="item.name"></a></td>
                                                             <td ng-bind="item.type_name">
                                                             </td>
-                                                            <td ng-bind="item.desc" style="text-align: left !important;">
+                                                            <td ng-bind="item.desc">
                                                             </td>
                                                             <td>
                                                                 <a class="btn btn-primary" ng-click="open_edit_entry_url_modal($index)">Edit</a>
@@ -716,22 +716,20 @@
                                                             <th width="15%">File</th>
                                                             <th width="70%">Description</th>
                                                             <th></th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr ng-repeat="file in basicinfo.artifacts_files">
                                                             <td ng-bind="file.name">
                                                             </td>
-                                                            <td>
-                                                                <a ng-bind="file.file.name" ng-click="file_download(file.file.path)"></a>
+                                                            <td ng-bind="file.file.name">
                                                             </td>
                                                             <td ng-bind="file.desc">
                                                             </td>
-                                                            <!--
                                                             <td>
-                                                                <a class="btn btn-primary" ng-if="file.company_artifact_id == 0" ng-click="open_edit_file_modal($index)">Edit</a>
+                                                                <a class="btn btn-primary" ng-click="open_edit_file_modal($index)">Edit</a>
                                                             </td>
-                                                            -->
                                                             <td>
                                                                 <a class="btn btn-danger" ng-click="remove_this_file($index)">Delete</a>
                                                             </td>
@@ -794,7 +792,7 @@
                                                             <td ng-bind="threat.actor_name"></td>
                                                             <td ng-bind="threat.intentions" class="multiple-lines"></td>
                                                             <td ng-bind="threat.motives" class="multiple-lines"></td>
-                                                            <td ng-bind="threat.detail" style="text-align: left !important;"></td>
+                                                            <td ng-bind="threat.detail"></td>
                                                             <td>
                                                                 <a class="btn btn-primary" ng-click="open_edit_threat_detail_modal($index)">Edit</a>
                                                             </td>
@@ -843,7 +841,7 @@
                                                             <td ng-bind="asset.name"></td>
                                                             <td ng-bind="asset.asset_value_display"></td>
                                                             <td ng-bind="asset.factor"></td>
-                                                            <td ng-bind="asset.detail" style="text-align: left !important;"></td>
+                                                            <td ng-bind="asset.detail"></td>
                                                             <td ng-bind="asset.sle"></td>
                                                             <td ng-bind="asset.ale"></td>
                                                             <td>
@@ -998,7 +996,7 @@
                             <div class="wizard-step-5">
                                 <fieldset>
                                     <legend class="pull-left width-full">
-                                        Entry <label ng-bind="entry_id"> </label> Overview<label ng-bind="entry_overview.residual_ale_category" style="padding-left: 200px;"></label><label style="padding-left: 20px;" ng-bind="entry_overview.residual_ale_rate"></label><label style="padding-left: 400px;" pull-right ng-bind="todays_date | date:'MM/dd/yyyy'"></label>
+                                        Entry <label ng-bind="entry_id"> </label> Overview<label style="padding-left: 100px;" ng-bind="basicinfo.aro_rate + '%'"></label><label ng-bind="entry_overview.residual_ale_category" style="padding-left: 200px;"></label><label style="padding-left: 20px;" ng-bind="entry_overview.residual_ale_rate"></label><label style="padding-left: 100px;" ng-bind="entry_overview.date_created"></label>
                                     </legend>
                                     <!-- begin row -->
                                     <div class="row">
@@ -1102,7 +1100,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td>ARO in Days: </td>
-                                                                    <td ng-bind="'Every ' + entry_overview.inherent_aro_in_days + ' days'"></td>
+                                                                    <td ng-bind="'Every ' + entry_overview.inherent_aro_in_days + 'days'"></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>ARO Rate: </td>
@@ -1220,7 +1218,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td>ARO in Days: </td>
-                                                                    <td ng-bind="'Every ' + entry_overview.residual_aro_in_days + ' days'"></td>
+                                                                    <td ng-bind="'Every ' + entry_overview.residual_aro_in_days + 'days'"></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>ARO Rate: </td>
@@ -1311,7 +1309,7 @@
                                                                             <td ng-bind="asset.name"></td>
                                                                             <td ng-bind="asset.asset_value_display"></td>
                                                                             <td ng-bind="asset.factor"></td>
-                                                                            <td ng-bind="asset.detail" style="text-align: left !important;"></td>
+                                                                            <td ng-bind="asset.detail"></td>
                                                                             <td ng-bind="asset.sle"></td>
                                                                             <td ng-bind="asset.ale"></td>
                                                                         </tr>
@@ -1347,7 +1345,7 @@
                                                                                 <td ng-bind="threat.actor_name"></td>
                                                                                 <td ng-bind="threat.intentions" class="multiple-lines"></td>
                                                                                 <td ng-bind="threat.motives" class="multiple-lines"></td>
-                                                                                <td ng-bind="threat.detail" style="text-align: left !important;"></td>
+                                                                                <td ng-bind="threat.detail"></td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>

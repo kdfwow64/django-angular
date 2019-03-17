@@ -3795,12 +3795,6 @@ colorAdminApp.controller('registerAddEntriresController',
         if(validation)
             return false;
         requirement = $('select[name=entry_compliance_requirement] option:selected').html();
-        for( i = 0 ; i < $scope.compliance_requirements.length ; i++ ){
-            if( $scope.compliance_requirements[i].id = $scope.entry_compliance.requirement ) {
-                requirement = $scope.compliance_requirements[i].cid + ' - ' + requirement;
-                break;
-            }
-        }
         new_item = {
             type:  $('select[name=entry_compliance_type] option:selected').html(),
             type_id:  $scope.entry_compliance.type,
@@ -3810,6 +3804,12 @@ colorAdminApp.controller('registerAddEntriresController',
             requirement_id : $scope.entry_compliance.requirement,
             version: ''
         };
+        for( i = 0 ; i < $scope.compliance_requirements.length ; i++ ){
+            if( $scope.compliance_requirements[i].id = $scope.entry_compliance.requirement ) {
+                requirement = $scope.compliance_requirements[i].cid + ' - ' + requirement;
+                break;
+            }
+        }
         index = $('#compliance_requirement_edit_num').val();
         if (index == '-1') {
             $scope.basicinfo.compliance_requirements.push(new_item); //[...$scope.basicinfo.compliance_requirements, new_item]
@@ -4205,13 +4205,13 @@ colorAdminApp.controller('registerAddEntriresController',
         if ($scope.new_as.exposure_factor_toggle == 'F') {
             if ($scope.new_as.fixed_amount == '')
                 return false;
-            str = 'The monitized value expose is a Fixed amount of $' + $scope.new_as.fixed_amount;
+            str = 'The monitized value exposed is a Fixed amount of $' + $scope.new_as.fixed_amount;
             $scope.new_as.as_cal_res = str;
         } else {
             if ($scope.new_as.percent_asset_value == '')
                 return false;
             monetary_conversion = parseFloat($scope.new_as.asset_value) * parseFloat($scope.new_as.percent_asset_value) / 100;
-            str = 'The monitized value expose is a Percent amount of $' + monetary_conversion;
+            str = 'The monitized value exposed is a Percent amount of $' + monetary_conversion;
             $scope.new_as.as_cal_res = str;
         }
     }
@@ -4706,6 +4706,7 @@ colorAdminApp.controller('registerAddEntriresController',
             item = $scope.mitigating_controls.multidata[i];
             max_loss = max_loss > item.max_loss ? max_loss : item.max_loss;
         }
+        $scope.todays_date = new Date();
         $scope.mitigating_controls.max_loss = max_loss;
 
         residual_ale_rate = ($scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale) / max_loss;

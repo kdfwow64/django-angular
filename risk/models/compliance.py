@@ -29,7 +29,7 @@ class Compliance(DefaultFieldsCategory):
         return self.abbrv
 
 
-class ComplianceType(DefaultFieldsCompany):
+class ComplianceType(DefaultFieldsCategory):
     """ComplianceType."""
 
     def __str__(self):
