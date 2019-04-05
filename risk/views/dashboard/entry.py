@@ -141,9 +141,9 @@ def api_list_risk_entries(request):
             category_name = ''
             try:
                 for category in SeverityCategory.objects.order_by('name').all():
-                    if float(entry.residual_ale_rate) >= category.minimum and float(entry.residual_ale_rate) < category.maximum:
-                        category_name = category.name
-                if int(entry.residual_ale_rate) >= 1:
+                    if float(entry.residual_ale_rate / 100) >= category.minimum and float(entry.residual_ale_rate / 100) < category.maximum:
+                        category_name = category.name  # changed
+                if int(entry.residual_ale_rate / 100) >= 1:  # changed
                     category_name = 'Critical'
             except:
                 pass
@@ -155,7 +155,8 @@ def api_list_risk_entries(request):
                 'response': entry.response_name,
                 'mr': entry.mitigation_rate,  #
                 'residual_ale_category': category_name,  #
-                'residual_ale_rate': round(entry.residual_ale_rate, 5),
+                # changed
+                'residual_ale_rate': str(round(entry.residual_ale_rate, 3)) + '%',
                 'summary': entry.get_summary(),
                 'evaluated': entry.date_evaluated.strftime("%m/%d/%Y") if entry.date_evaluated else '',
                 'modified_date': entry.date_modified.strftime("%m/%d/%Y"),
@@ -735,25 +736,25 @@ def api_get_risk_entry(request, entry_id):
                         'asset_value': round(company_asset.asset_value_fixed, 2),
                         'exposure_factor_fixed': round(entry_company_asset.exposure_factor_fixed, 2),
                         'exposure_factor_rate': int(entry_company_asset.exposure_factor_rate),
-                        'asset_value_display': '$' + str(round(company_asset.asset_value_fixed, 2)),
+                        'asset_value_display': round(company_asset.asset_value_fixed, 2),
                         'factor': 'rate: ' + str(round(entry_company_asset.exposure_factor_rate, 3)) + '%' if entry_company_asset.exposure_factor_toggle == 'P' else 'fixed: $' + str(round(entry_company_asset.exposure_factor_fixed, 2)),
                         'detail': entry_company_asset.detail,
-                        'sle_value': sle_value,
-                        'sle': '$' + str(sle_value),
-                        'ale_value': ale_value,
-                        'ale': '$' + str(ale_value)
+                        'sle_value': sle_value,  # Need to validate the use of this value
+                        'sle': sle_value,
+                        'ale_value': ale_value,  # Need to validate the use of this value
+                        'ale': ale_value
                     })
                 total_factor = round(total_sle / total_asset_value * 100, 2)
                 rv.update({
                     'affected_assets': {
                         'multidata': affected_assets,
-                        'total_asset_value': '$' + str(round(total_asset_value, 2)),
+                        'total_asset_value': round(total_asset_value, 2),
                         'total_factor_value': total_factor,
                         'total_factor': str(total_factor) + '%',
-                        'total_sle_value': total_sle,
-                        'total_sle': '$' + str(total_sle),
-                        'total_ale_value': total_ale,
-                        'total_ale': '$' + str(total_ale)
+                        'total_sle_value': total_sle,  # Need to validate the use of this value
+                        'total_sle': total_sle,
+                        'total_ale_value': total_ale,  # Need to validate the use of this value
+                        'total_ale': total_ale
                     }
                 })
             except:
@@ -803,14 +804,14 @@ def api_get_risk_entry(request, entry_id):
                         'aro_mitigation_rate': mitigating_control.aro_mitigation_rate,
                         'aro_rate': mitigating_control.aro_mitigation_rate,
                         'aro_rate_display': str(mitigating_control.aro_mitigation_rate) + '%',
-                        'sle_cost_value': sle_cost_value,
-                        'sle_cost': '$' + str(sle_cost_value),
+                        'sle_cost_value': sle_cost_value,  # Need to validate the use of this value
+                        'sle_cost': sle_cost_value,
                         'aro_cost_value': aro_cost_value,
-                        'aro_cost': '$' + str(aro_cost_value),
+                        'aro_cost': aro_cost_value,  # Need to validate the use of this value
                         'total_cost_value': total_cost_value,
-                        'total_cost': '$' + str(total_cost_value),
+                        'total_cost': total_cost_value,
                         'total_ale_impact_value': total_ale_impact_value,
-                        'total_ale_impact': '$' + str(total_ale_impact_value),
+                        'total_ale_impact': total_ale_impact_value,
                         'notes': mitigating_control.notes
                     })
 

@@ -120,7 +120,7 @@ class EntryAdmin(admin.ModelAdmin):
         ('Threat Scenario', {
          'fields': ('aro_notes',)}),
         ('Advanced Options', {
-         'fields': ('is_completed', ('evaluation_flg', 'evaluation_days',), 'incident_response',)}),
+         'fields': ('is_completed', ('evaluation_flg', 'evaluation_days',), 'incident_response', 'residual_ale_rate',)}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
             'fields': (('is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),
