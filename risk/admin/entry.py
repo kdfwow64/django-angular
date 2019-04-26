@@ -117,8 +117,8 @@ class EntryAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Basic Info', {
          'fields': ('register', 'response', ('id', 'entry_number',), ('summary', 'description',), 'assumption', 'mitigation_notes', 'additional_mitigation',)}),
-        ('Threat Scenario', {
-         'fields': ('aro_notes',)}),
+        ('ARO', {
+         'fields': ('aro_notes', 'aro_toggle', 'aro_fixed', ('aro_known_multiplier', 'aro_known_unit_quantity', 'aro_time_unit',), 'aro_frequency',)}),
         ('Advanced Options', {
          'fields': ('is_completed', ('evaluation_flg', 'evaluation_days',), 'incident_response', 'residual_ale_rate',)}),
         ('Management Detail', {
@@ -277,6 +277,37 @@ class EntryEvaluationAdmin(admin.ModelAdmin):
     )
     list_filter = ('date_created', 'date_evaluated',
                    'entry', 'mitigation_adequacy', 'evaluator', 'approver',)
+
+
+class EntryAncillaryAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'ancillary_fixed',
+        'summary',
+        'description',
+        'ancillary_type',
+    )
+    list_filter = (
+
+        'ancillary_type',
+    )
+    search_fields = ('description',)
+
+
+class EntryAncillaryTypeAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'name',
+        'description',
+        'sort_order',
+        'keywords',
+        'company',
+    )
+    search_fields = ('name',)
 
 
 class EntryImpactAdmin(admin.ModelAdmin):

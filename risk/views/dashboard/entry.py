@@ -658,7 +658,7 @@ def api_get_risk_entry(request, entry_id):
                     'aro_known_unit_quantity': risk_entry.aro_known_unit_quantity,
                     'aro_time_unit': risk_entry.aro_time_unit_id,
                     'aro_frequency': risk_entry.aro_frequency_id,
-                    'aro_fixed': int(risk_entry.aro_fixed),
+                    'aro_fixed': float(risk_entry.aro_fixed),
                     'aro_notes': risk_entry.aro_notes,
                     'compliance_requirements': compliance_requirements,
                     'entry_urls': entry_urls,

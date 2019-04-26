@@ -448,11 +448,11 @@
                             <small></small>
                         </li>
                         <li>
-                            Threat Detail
+                            Threat Actor
                             <small></small>
                         </li>
                         <li>
-                            Affected Assets
+                            Assets and Ancillaries
                             <small></small>
                         </li>
                         <li>
@@ -582,7 +582,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Known annual rate of occurence</label>
-                                                        <input min="0" max="100" type="number" ng-disabled="basicinfo.aro_toggle!='K'" ng-required="basicinfo.aro_toggle=='K'" ng-model="basicinfo.aro_fixed" step=".001" name="aro_fixed" placeholder="%" class="form-control" data-parsley-group="wizard-step-1" />
+                                                        <input min="0" max="100" type="number" ng-disabled="basicinfo.aro_toggle!='K'" ng-required="basicinfo.aro_toggle=='K'" ng-model="basicinfo.aro_fixed" step=".001" name="aro_fixed" placeholder="percent" class="form-control" data-parsley-group="wizard-step-1" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-1">
@@ -975,7 +975,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Context</label>
-                                        <textarea rows="3" ng-model="mitigating_controls.notes_mitigation" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4" required/></textarea>
+                                        <textarea rows="3" ng-model="mitigating_controls.notes_mitigation" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -985,7 +985,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Additional Opportunities</label>
-                                        <textarea rows="3" ng-model="mitigating_controls.additional_mitigation" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4" required/></textarea>
+                                        <textarea rows="3" ng-model="mitigating_controls.additional_mitigation" placeholder="Notes" class="form-control" data-parsley-group="wizard-step-4"/></textarea>
                                     </div>
                                 </div>
                             </div>

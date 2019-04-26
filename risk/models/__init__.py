@@ -122,6 +122,8 @@ from .entry import (
     EntryIndicator,
     EntryResponseSubmission,
     EntryRiskType,
+    EntryAncillary,
+    EntryAncillaryType,
     EntryTask,
     EntryUrl,
     MitigationAdequacy,

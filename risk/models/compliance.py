@@ -26,7 +26,7 @@ class Compliance(DefaultFieldsCategory):
 
     def __str__(self):
         """String."""
-        return self.abbrv
+        return self.name
 
 
 class ComplianceType(DefaultFieldsCategory):

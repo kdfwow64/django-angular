@@ -157,6 +157,10 @@ class RAGIndicator(models.Model):
         max_length=45, blank=False, help_text=('Name of the RAG indicator'),)  # Not in use
     description = models.TextField(
         blank=False, help_text=('Description of the RAG indicator'),)  # Not in use
+    color = models.CharField(
+        max_length=45, blank=False, help_text=('Name of the color for RAG indicator'),)  # Not in use
+    color_hex = models.CharField(
+        max_length=45, blank=False, help_text=('Hex value of the color if not defined for the RAG indicator'),)  # Not in use
     # Foreign Key and Relationships
 
     def __str__(self):

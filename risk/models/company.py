@@ -284,9 +284,11 @@ class CompanyAssetType(DefaultFieldsCategory):
     """
     Asset Type.
 
-    Assets may come in many types both tangable (physical device)and
-    intangable (business process).  This table describes the asset type.
+    Assets may come in many types both tangible (physical device)and
+    intangible (business process).  This table describes the asset type.
     """
+    is_tangible = models.BooleanField(
+        default=True, help_text=('Designates whether asset should be considered tangible'),)  # It is assumed the segementation is logical unless this is set to True.
 
     def __str__(self):
         """String."""
@@ -373,7 +375,11 @@ class CompanyControl(DefaultFieldsCompany):
     process_vendor = models.ManyToManyField('Vendor', blank=True, through='CompanyControlVendorProcess', through_fields=(
         'id_companycontrol', 'id_vendor'), related_name='CompanyControl_VendorProcess', help_text=('Vendor processes that are required for the control to function effectively'),)  # This should default to the vendor for the control, however there may be a dependancy from other vendors for the control to function correctly.  IE.  Electric, Data Center, Control Vendor, etc.
     process_team = models.ManyToManyField('CompanyTeam', blank=True, through='CompanyControlTeamProcess', through_fields=(
-        'id_companycontrol', 'id_companyteam'), related_name='CompanyControl_TeamProcess', help_text=('Team processes that are required for the control to function effectively'),)  # Company controls may be dependent on other teams to function effectively.  For example, this could be a workflow process or a required task...
+        'id_companycontrol', 'id_companyteam'), related_name='CompanyControl_TeamProcess', help_text=('Team processes that are required for the control to function effectively'),)  # Company controls may be dependent on other teams to function effectively.  For example, this could be a workflow process or a required task.
+    poc_main = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, blank=True, related_name='poc_main_control', help_text=(
+        'Main point of contact for items related to the control'),)
+    poc_support = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, blank=True, related_name='poc_support_control', help_text=(
+        'Point of contact for support items related to the control'),)
 
     def __str__(self):
         """String."""

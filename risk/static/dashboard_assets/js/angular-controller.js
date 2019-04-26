@@ -4768,6 +4768,19 @@ colorAdminApp.controller('registerAddEntriresController',
                                     if (inherent_sle_rate >= d.data[i].min && inherent_sle_rate < d.data[i].max) {
                                         $scope.entry_overview.inherent_sle_category = d.data[i].name;
                                     }
+                                }
+                            }
+                        }).catch(function (d) {
+                        return false;
+                    });
+                }
+                if( residual_sle_rate >= 1 )
+                    $scope.entry_overview.residual_sle_category = 'Catastrophic';
+                else {
+                    $http.post('/dashboard/api/impact-categories/')
+                        .then(function (d) {
+                            if (d) {
+                                for (i = 0; i < d.data.length; i++) {
                                     if (residual_sle_rate >= d.data[i].min && residual_sle_rate < d.data[i].max) {
                                         $scope.entry_overview.residual_sle_category = d.data[i].name;
                                     }
@@ -4777,7 +4790,6 @@ colorAdminApp.controller('registerAddEntriresController',
                         return false;
                     });
                 }
-
                 inherent_aro_rate = $scope.basicinfo.aro_rate / 100;
                 $scope.entry_overview.inherent_aro_rate = $scope.basicinfo.aro_rate;
                 $scope.entry_overview.inherent_aro_in_days = parseInt(365 / $scope.basicinfo.aro_rate * 100);
