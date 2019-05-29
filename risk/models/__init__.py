@@ -122,6 +122,8 @@ from .entry import (
     EntryIndicator,
     EntryResponseSubmission,
     EntryRiskType,
+    EntryAncillary,
+    EntryAncillaryType,
     EntryTask,
     EntryUrl,
     MitigationAdequacy,
@@ -155,6 +157,8 @@ from .scenario import (
     FrequencyCategory,
     ImpactCategory,
     ImpactType,
+    MitigationImpactType,
+    MitigationFrequencyType,
     CIATriad,
     SeverityCategory,
 )

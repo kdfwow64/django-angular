@@ -100,6 +100,7 @@ class ProjectMilestoneAdmin(admin.ModelAdmin):
         'is_active',
         'summary',
         'detail',
+        'rag',
         'date_start',
         'date_created',
         'created_by',
@@ -108,6 +109,49 @@ class ProjectMilestoneAdmin(admin.ModelAdmin):
 
     list_filter = (
         'is_active',
+        'project',
+        'rag',
+    )
+    search_fields = ('summary', 'rag',)
+
+
+class ProjectProgressAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'is_active',
+        'is_enabled',
+        'summary',
+        'date_start',
+        'date_created',
+        'created_by',
+        'project',
+    )
+
+    list_filter = (
+        'is_active',
+        'is_enabled',
+        'project',
+    )
+    search_fields = ('summary',)
+
+
+class ProjectNextStepAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'is_active',
+        'is_enabled',
+        'summary',
+        'date_start',
+        'date_created',
+        'created_by',
+        'project',
+    )
+
+    list_filter = (
+        'is_active',
+        'is_enabled',
         'project',
     )
     search_fields = ('summary',)
@@ -231,13 +275,13 @@ class ProjectUpdateAdmin(admin.ModelAdmin):
         'description',
         'date_created',
         'created_by',
-        'indicator',
+        'rag',
         'project',
     )
 
     list_filter = (
         'is_active',
-        'indicator',
+        'rag',
         'project',
     )
-    search_fields = ('summary', 'indicator',)
+    search_fields = ('summary', 'rag',)

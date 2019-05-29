@@ -266,20 +266,6 @@ class CompanyArtifactAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class CompanyAssetTypeAdmin(admin.ModelAdmin):
-
-    list_select_related = []
-    list_display = (
-        'id',
-        'name',
-        'description',
-        'sort_order',
-        'keywords',
-        'company',
-    )
-    search_fields = ('name',)
-
-
 class CompanyAssetAdmin(admin.ModelAdmin):
 
     inlines = (CompanyAssetLocationInline, CompanyAssetSegmentInline)
@@ -290,6 +276,7 @@ class CompanyAssetAdmin(admin.ModelAdmin):
         'company',
         'asset_type',
         'asset_owner',
+        'summary_value',
     )
     list_filter = (
         'company',
@@ -297,6 +284,21 @@ class CompanyAssetAdmin(admin.ModelAdmin):
         'asset_owner',
     )
     search_fields = ('name', 'asset_owner')
+
+
+class CompanyAssetTypeAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'name',
+        'is_tangible',
+        'description',
+        'sort_order',
+        'keywords',
+        'company',
+    )
+    search_fields = ('name',)
 
 
 class CompanyObjectiveAdmin(admin.ModelAdmin):

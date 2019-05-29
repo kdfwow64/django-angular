@@ -224,20 +224,27 @@ class CompanyAsset(DefaultFieldsCompany):
     """Company Asset.
 
     This allows the company to add multiple asset types to their register
-    entries.  Companies will define the asset then determine what type of asset it is, along with the ability to group assets for reporting
+    entries.  Companies will define the asset then determine what type of asset it is, along with the ability to group assets for reporting.
+    In addition, the asset can have more than one monitized value.  Current choice include:
+    1.  Fixed value.  The company knows the value of the asset and it does not deviate
+    2.  Percentage of Revenue Value.  The assets may flucustate based on the percentage of annual revenue.
+    3.  Time Based Fixed.  The asset loses value over time but the value is consistent.
+    4.  Time Base Incremental.  The asset loses value over time but varies as more time has past.
     """
-    asset_value_fixed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
-        'The fixed monetary value of the asset in dollars'),)  # Asset value may be a fixed cost if monetary_value_toggle is set to False.
+    summary_value = models.TextField(blank=True, null=True, help_text=(
+        'Summary of how the value logic was derived'),)  # Description of the field.
+    asset_value_fixed = models.DecimalField(default=1, blank=False, max_digits=30, decimal_places=2, help_text=(
+        'The fixed monetary value of the asset in dollars'),)  # asset_value_fixed should not be 0.
+    asset_value_fixed_upto = models.DecimalField(null=True, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'The fixed monetary value an asset cannot exceed in dollars'),)  # This will set a limit when monetizing time based asset values, if null then it the value will leverage the max company loss.  This is used to set a cap on the amount of money an asset can be valued.
     asset_quantity_fixed = models.IntegerField(
         default=1, blank=False, help_text=('The quantity of fixed_monetary_value'),)  # This will be multipled by the fixed_monetary_value to get a total value of the asset(s) defined.
     asset_value_par = models.FloatField(blank=True, null=True, help_text=(
         'The percentage of monetary value of the asset to the annual revenue'),)  # Asset value may be a percentage of annual revenue if monetary_value_toggle is set to True.
-    asset_value_timed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
-        'The monetary value of the asset per unit of time'),)  # The monetary value for the unit of time chosen
-    asset_timed_quantity_relative = models.FloatField(blank=True, null=True, help_text=(
-        'Number of time units to be used from the avaliable pool'),)  # Based-off the asset_timed_quantity_avaliable, this is the amount of time that is relative to the asset to be used in the entry.  This value may represent a more realistic value based on the environment.  This value cannot exceed the quantity_avaliable value.
-    asset_timed_quantity_avaliable = models.FloatField(blank=True, null=True, help_text=(
-        'The amount of time units avaiable annually'),)  # This will be used to determine available pool of time units in a year.  This value cannot exceed the annual value  of the time unit in the time units model.
+    asset_time_unit_max = models.FloatField(blank=True, null=True, help_text=(
+        'Number of time units to be used for the timed based calculation'),)  # Based-off the time unit chosen.  This should be derived from a reasonable amount of time that defines the value of the asset to the company.
+    asset_time_unit_increment = models.FloatField(blank=True, null=True, help_text=(
+        'The monetary percentage of increment per time unit'),)  # If the asset value is time based with increase over time, this value will determine the amount of continous increase.
     asset_value_toggle = models.CharField(choices=Selector.ASSET, default='F', max_length=1,
                                           help_text=('Toggle to determine which formula is used to determine the assets value'),)  # This toggle defaults to '1' a fixed value.
     evaluation_days = models.IntegerField(blank=True, null=True,
@@ -277,16 +284,18 @@ class CompanyAsset(DefaultFieldsCompany):
         elif asset_value_toggle == 'T':
             # Time based  - The asset has a time based value.  The contributor
             # must determine what is relative.
-            return (self.asset_value_timed * self.asset_timed_quantity_relative)
+            return (self.asset_fixed_value * self.asset_time_unit_quantity)
 
 
 class CompanyAssetType(DefaultFieldsCategory):
     """
     Asset Type.
 
-    Assets may come in many types both tangable (physical device)and
-    intangable (business process).  This table describes the asset type.
+    Assets may come in many types both tangible (physical device)and
+    intangible (business process).  This table describes the asset type.
     """
+    is_tangible = models.BooleanField(
+        default=True, help_text=('Designates whether asset should be considered tangible'),)  # It is assumed the segementation is logical unless this is set to True.
 
     def __str__(self):
         """String."""
@@ -334,8 +343,12 @@ class CompanyControl(DefaultFieldsCompany):
         max_length=128, blank=True, help_text=('Alias'),)  # Alias used for the company control.  Will be used for reporting if present.
     version = models.CharField(
         max_length=100, blank=True, help_text=('Current version if applicable'),)  # Version used for the company control.  Could be policy version, release version,etc It depends on the control defined.
-    estimated_opex = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+    estimated_maint_opex = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
         'Annual cost for the control. subscription, licensing, etc. (-dependencies)'),)  # Normally 18% of capital expendure if applicable.  Control costs are captured in the CompanyControlCost table, this field is used for future projections.  Capex is handled via the CompanyControlCapex model.
+    estimated_dependency_opex = models.DecimalField(default=0, blank=True, max_digits=30, decimal_places=2, help_text=(
+        'Annual cost for the control. support staff, electric, footprint, etc. (-maintenance)'),)  # This will be replaced a different formula in the future.
+    opex_description = models.TextField(blank=True, null=True, help_text=(
+        'Description of the values for operational expenditures'),)  # Description itmes that were considered in the operational expenditures.
     date_maint = models.DateField(null=True, blank=True, help_text=(
         'Annual maintenance date'),)  # Used to determine annual date that maintenance is completed for the control.
     budgeted = models.BooleanField(default=True, help_text=(
@@ -373,7 +386,11 @@ class CompanyControl(DefaultFieldsCompany):
     process_vendor = models.ManyToManyField('Vendor', blank=True, through='CompanyControlVendorProcess', through_fields=(
         'id_companycontrol', 'id_vendor'), related_name='CompanyControl_VendorProcess', help_text=('Vendor processes that are required for the control to function effectively'),)  # This should default to the vendor for the control, however there may be a dependancy from other vendors for the control to function correctly.  IE.  Electric, Data Center, Control Vendor, etc.
     process_team = models.ManyToManyField('CompanyTeam', blank=True, through='CompanyControlTeamProcess', through_fields=(
-        'id_companycontrol', 'id_companyteam'), related_name='CompanyControl_TeamProcess', help_text=('Team processes that are required for the control to function effectively'),)  # Company controls may be dependent on other teams to function effectively.  For example, this could be a workflow process or a required task...
+        'id_companycontrol', 'id_companyteam'), related_name='CompanyControl_TeamProcess', help_text=('Team processes that are required for the control to function effectively'),)  # Company controls may be dependent on other teams to function effectively.  For example, this could be a workflow process or a required task.
+    poc_main = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, blank=True, related_name='poc_main_control', help_text=(
+        'Main point of contact for items related to the control'),)
+    poc_support = models.ForeignKey('CompanyContact', on_delete=models.PROTECT, null=True, blank=True, related_name='poc_support_control', help_text=(
+        'Point of contact for support items related to the control'),)
 
     def __str__(self):
         """String."""

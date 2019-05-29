@@ -5,8 +5,10 @@ Customized CSS by Randy 2/25/19
 /* For Register Entry */
 legend {
     padding-left: 8px;
-    font-size: 16px;
-    background-color: #d2d0d0;
+    padding-right: 8px;
+    font-size: 18px;
+    background-color: #C8C8C8;
+    vertical-align: middle !important;
 }
 .wizard-step-1 textarea {
     max-width: 100%;
@@ -107,15 +109,55 @@ legend {
 }
 
 /*Entry Detail View*/
+.page-section {
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 18px;
+    background-color: #C8C8C8;
+    vertical-align: middle !important;
+}
+.section {
+    margin-top: 20px;
+    font-size: 16px;
+}
+.sub-section {
+    font-size: 14px;
+    color: #414042;
+}
+.summary-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.summary {
+  flex: 0 0 50%;
+}
+.highlight {
+    font-weight: bold;
+}
+.columnheader {
+    font-weight: bold;
+    margin-bottom:5px !important;
+}
 .entry-view-table {
     font-size: 12px;
     margin-left: 10px;
 }
-.entry-view-table td {
-    padding-top: 5px;
+.entry-view-table tr {
+    display:flex;
+    border: none;
 }
-.entry-view-table tr td:nth-child(2) {
-    font-weight: bold;
+.entry-view-table tr td {
+    padding-top: 5px;
+    border: none;
+}
+.entry-view-table thead th {
+    text-align: left;
+}
+.entry-view-table tbody td {
+    padding: 3px !important;
+    text-align: left;
+    vertical-align: middle !important;
+/*    border: 1px solid #e2e7eb;*/
 }
 .top-bordered-div {
     border-top: 2px solid #ccd0d4;
@@ -127,9 +169,28 @@ legend {
 .top-bordered-div textarea {
     width: 100%;
 }
+.bottom-bordered-div-1 {
+    border-bottom: 1px dotted #ccd0d4;
+}
+.bottom-bordered-div-5 {
+    margin-top:5px !important;
+    border-bottom: 1px dotted #ccd0d4;
+    margin-bottom:5px !important;
+}
+.bottom-bordered-div-30 {
+    margin-top:15px !important;
+    border-bottom: 2px solid #ccd0d4;
+    margin-bottom:13px !important;
+}
+.bottom-bordered-div-10 {
+    margin-top:9px !important;
+    border-bottom: 1px dotted #ccd0d4;
+    margin-bottom:10px !important;
+}
 .bottom-10 {
     margin-bottom: 20px !important;
 }
+
 
 /*List Entry*/
 .widget-stats .stats-number label{

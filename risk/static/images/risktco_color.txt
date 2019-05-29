@@ -48,6 +48,9 @@ HEX - #FBB040
 RGB - 255,217,168
 HEX - #FFD9A8
 
+-- Risktco Purple --
+RGB - 77, 52,109
+HEX - #4D346D
 
 Awesome blue  #004887
 END PRIMARY ---------------

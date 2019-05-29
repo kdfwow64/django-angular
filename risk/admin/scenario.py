@@ -74,6 +74,34 @@ class ImpactTypeAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+class MitigationImpactTypeAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'name',
+        'description',
+        'sort_order',
+        'keywords',
+        'company',
+    )
+    search_fields = ('name',)
+
+
+class MitigationFrequencyTypeAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'id',
+        'name',
+        'description',
+        'sort_order',
+        'keywords',
+        'company',
+    )
+    search_fields = ('name',)
+
+
 class CIATriadAdmin(admin.ModelAdmin):
 
     list_select_related = []

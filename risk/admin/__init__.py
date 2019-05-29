@@ -10,10 +10,10 @@ from ..models.audit import Notification, NotificationGroup, AuditChange, Snapsho
 from ..models.common import Calendar, CurrencyType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus, JobTitle, Appetite
 from ..models.compliance import Compliance, ComplianceType, ComplianceRequirement, ComplianceVersion, KillChain, Naics, PyramidofPain
 from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomain, ControlFamily, ControlAlertMethod, ControlFunction, ControlFeature, ControlCategory, ControlCategoryType, ControlCategoryKPO, ControlCategorySLA, DependencyEffort, OnusMethod, DeliveryMethod, BillingMethod
-from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryComplianceRequirement, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponseSubmission, EntryRiskType, RiskType, Response, ResponseVote, EntryUrl, MitigationAdequacy
+from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryComplianceRequirement, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponseSubmission, EntryRiskType, RiskType, EntryAncillary, EntryAncillaryType, Response, ResponseVote, EntryUrl, MitigationAdequacy
 from ..models.feedback import Feedback, FeedbackStatus, FeedbackType, FeedbackQuestion, FeedbackAnswer, FeedbackCorrespondence
 from ..models.meeting import Meeting, MeetingTopicComment, MeetingTopicAction, MeetingTopic, MeetingType
-from ..models.scenario import EventType, FrequencyCategory, ImpactCategory, ImpactType, CIATriad, SeverityCategory
+from ..models.scenario import EventType, FrequencyCategory, ImpactCategory, ImpactType, MitigationImpactType, MitigationFrequencyType, CIATriad, SeverityCategory
 from ..models.ir import PlaybookRole, PlaybookRoleType, PlaybookActionType, PlaybookResponsibility
 from ..models.vendor import Vendor, VendorType, VendorCategory
 from ..models.project import Project, ProjectAssumption, ProjectSuccessCriteria, ProjectBenefit, ProjectMilestone, ProjectRisk, ProjectRiskType, ProjectBudgetChange, ProjectDateChange, ProjectUAT, ProjectUpdate
@@ -27,10 +27,10 @@ from .audit import NotificationAdmin, NotificationGroupAdmin, AuditChangeAdmin, 
 from .common import CalendarAdmin, CurrencyTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin, JobTitleAdmin, AppetiteAdmin
 from .compliance import ComplianceAdmin, ComplianceTypeAdmin, ComplianceVersionAdmin, ComplianceRequirementAdmin, KillChainAdmin, NaicsAdmin, PyramidofPainAdmin
 from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, ControlDomainAdmin, ControlFamilyAdmin, ControlAlertMethodAdmin, ControlFunctionAdmin, ControlFeatureAdmin, ControlCategoryAdmin, ControlCategoryTypeAdmin, ControlCategoryKPOAdmin, ControlCategorySLAAdmin, DependencyEffortAdmin, OnusMethodAdmin, DeliveryMethodAdmin, BillingMethodAdmin
-from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryComplianceRequirementAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseSubmissionAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
+from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryComplianceRequirementAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseSubmissionAdmin, EntryAncillaryAdmin, EntryAncillaryTypeAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
 from .feedback import FeedbackAdmin, FeedbackStatusAdmin, FeedbackTypeAdmin, FeedbackQuestionAdmin, FeedbackAnswerAdmin, FeedbackCorrespondenceAdmin
 from .meeting import MeetingAdmin, MeetingTopicCommentAdmin, MeetingTopicActionAdmin, MeetingTopicAdmin, MeetingTypeAdmin
-from .scenario import EventTypeAdmin, FrequencyCategoryAdmin, ImpactCategoryAdmin, ImpactTypeAdmin, CIATriadAdmin, SeverityCategoryAdmin
+from .scenario import EventTypeAdmin, FrequencyCategoryAdmin, ImpactCategoryAdmin, ImpactTypeAdmin, MitigationImpactTypeAdmin, MitigationFrequencyTypeAdmin, CIATriadAdmin, SeverityCategoryAdmin
 from .ir import PlaybookRoleAdmin, PlaybookRoleTypeAdmin, PlaybookActionTypeAdmin, PlaybookResponsibilityAdmin
 from .vendor import VendorAdmin, VendorTypeAdmin, VendorCategoryAdmin
 from .project import ProjectAdmin, ProjectAssumptionAdmin, ProjectSuccessCriteriaAdmin, ProjectBenefitAdmin, ProjectMilestoneAdmin, ProjectRiskAdmin, ProjectRiskTypeAdmin, ProjectBudgetChangeAdmin, ProjectDateChangeAdmin, ProjectUATAdmin, ProjectUpdateAdmin
@@ -118,6 +118,8 @@ admin.site.register(EntryCompliance, EntryComplianceAdmin)
 admin.site.register(EntryComplianceRequirement,
                     EntryComplianceRequirementAdmin)
 admin.site.register(EntryEvaluation, EntryEvaluationAdmin)
+admin.site.register(EntryAncillary, EntryAncillaryAdmin,)
+admin.site.register(EntryAncillaryType, EntryAncillaryTypeAdmin,)
 #admin.site.register(EntryImpact, EntryImpactAdmin)
 admin.site.register(EntryIndicator, EntryIndicatorAdmin)
 admin.site.register(EntryCompanyLocation, EntryCompanyLocationAdmin)
@@ -143,6 +145,8 @@ admin.site.register(EventType, EventTypeAdmin)
 admin.site.register(FrequencyCategory, FrequencyCategoryAdmin)
 admin.site.register(ImpactCategory, ImpactCategoryAdmin)
 admin.site.register(ImpactType, ImpactTypeAdmin)
+admin.site.register(MitigationImpactType, MitigationImpactTypeAdmin)
+admin.site.register(MitigationFrequencyType, MitigationFrequencyTypeAdmin)
 admin.site.register(CIATriad, CIATriadAdmin)
 admin.site.register(SeverityCategory, SeverityCategoryAdmin)
 admin.site.register(PlaybookRoleType, PlaybookRoleTypeAdmin)

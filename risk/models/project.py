@@ -138,6 +138,8 @@ class ProjectMilestone(DefaultFields):
     date_complete = models.DateTimeField(
         null=True, blank=True,  help_text=('Timestamp of the milestone target completition date'),)  # Timestamp the milestone was complete
     # Foreign Key and Relationships
+    rag = models.ForeignKey('RAGIndicator', on_delete=models.PROTECT, default=1, related_name='projectmilestone_rag', help_text=(
+        'RAG indicator of the milestone'),)  # Defines the current state of the project.
     completed_by = models.ForeignKey('User', on_delete=models.PROTECT, default=13, related_name='projectmilestone_usercompleted', help_text=(
         'User id of the user that completed the milestone'),)
     project = models.ForeignKey('Project', on_delete=models.PROTECT, related_name='project_milestone', help_text=(
@@ -146,6 +148,46 @@ class ProjectMilestone(DefaultFields):
     class Meta:
         """Meta class."""
         verbose_name_plural = "Project Milestones"
+
+    def __str__(self):
+        """String."""
+        return self.summary
+
+
+class ProjectProgress(DefaultFields):
+    """Project Progress topics used to determine the recent and current actions for milestones"""
+
+    summary = models.TextField(
+        blank=False, help_text=('Summary of the topics for the project'),)  # Detail of the milestone if more infromation is warranted
+    # Foreign Key and Relationships
+    is_enabled = models.BooleanField(default=True, help_text=(
+        'Designates whether this progress update should be present in the report'),)
+    project = models.ForeignKey('Project', on_delete=models.PROTECT, related_name='project_progress', help_text=(
+        'Project the milestone is associated'),)
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = "Project Progress"
+
+    def __str__(self):
+        """String."""
+        return self.summary
+
+
+class ProjectNextStep(DefaultFields):
+    """Project Next Steps topics used to define the upcoming items in a project"""
+
+    summary = models.TextField(
+        blank=False, help_text=('Summary of the next steps for the project'),)  # Detail of the milestone if more infromation is warranted
+    # Foreign Key and Relationships
+    is_enabled = models.BooleanField(default=True, help_text=(
+        'Designates whether this topic should be present in the report'),)
+    project = models.ForeignKey('Project', on_delete=models.PROTECT, related_name='project_nextstep', help_text=(
+        'Project the milestone is associated'),)
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = "Project Next Steps"
 
     def __str__(self):
         """String."""
@@ -274,8 +316,8 @@ class ProjectUpdate(DefaultFields):
         max_length=600, blank=False, help_text=('Summary of the update for the project'),)  # Summary of the update used for high level overview
     description = models.TextField(
         blank=False, help_text=('Additional detail of the update'),)  # Detail of the update if more infromation is warranted
-    indicator = models.CharField(choices=Selector.RAG, default='G', max_length=1,
-                                 help_text=('RAG indicator for the the current project status'),)  # Defines the current status of the project.
+    rag = models.ForeignKey('RAGIndicator', on_delete=models.PROTECT, default=1, related_name='project_rag', help_text=(
+        'RAG indicator of the project'),)  # Defines the current state of the project.
     # Foreign Key and Relationships
     project = models.ForeignKey('Project', on_delete=models.PROTECT, related_name='project_projectupdate', help_text=(
         'Project the update is associated'),)

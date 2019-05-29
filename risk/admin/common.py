@@ -73,7 +73,7 @@ class IntegerTypeAdmin(admin.ModelAdmin):
 class RAGIndicatorAdmin(admin.ModelAdmin):
 
     list_select_related = []
-    list_display = ('id', 'name', 'description')
+    list_display = ('id', 'name', 'description', 'color', 'color_hex')
     search_fields = ('name',)
 
 

@@ -74,7 +74,7 @@ class Entry(DefaultFields):
         blank=True, help_text=('Additional notes from the contributor regarding the frequency calculation.'),)  # Notes regarding the frequency of the threat event
     # This used to determine the number of times annual the risk may occur.
     # Logic in the application will be used to set the number
-    aro_fixed = models.DecimalField(default=1, max_digits=19, decimal_places=10, help_text=(
+    aro_fixed = models.FloatField(blank=True, default=1, help_text=(
         'Fixed number of occurrences on an annual basis to determine total frequency per year.'),)
     aro_known_multiplier = models.FloatField(
         blank=True, default=1, help_text=('The number of times per time unit.'),)  # The user will select the number of times per aro_unit the threat scenario may occur.  This will define the ARO value and provide every x number of aro_known_time_quantity days.
@@ -286,11 +286,64 @@ class Entry(DefaultFields):
             return 0
 
 
+class EntryAncillary(DefaultFields):
+    """Entry Ancillary.
+
+    This allows the company to add multiple business ancillary items to their register
+    entries.  When the event scenario is triggered there may be addtional items that need to be considered to recovery normal operations.
+    """
+    ancillary_fixed = models.DecimalField(blank=True, null=True, max_digits=30, decimal_places=2, help_text=(
+        'The fixed monetary value of the ancillary in dollars'),)  # This is a fixed cost for the ancillary item.
+    summary = models.CharField(
+        max_length=128, blank=False, help_text=('Brief description of the ancillary cost'),)  # Summary of the task for the entry
+    description = models.TextField(blank=True, null=True, help_text=(
+        'Description of the of the ancillary needed if the event is triggered'),)  # Description of the field.
+    cost_detail = models.TextField(blank=True, null=True, help_text=(
+        'Information regarding the elements used to determine the ancillary cost'),)  # Formula, elements, and logic used to determine the ancillary cost.
+    per_occurance = models.IntegerField(default=1, help_text=(
+        'Defines if an ancillary cost is based on a quantity of occurences'),)  # If True, evaluation is needed.
+    # Default value for field should be pulled from the
+    evaluation_days = models.IntegerField(blank=True, null=True, help_text=(
+        'Defines the default number of days an evaluation should occur'),)  # Company.evaluation_days value.
+    evaluation_flg = models.BooleanField(
+        default=False, help_text=('Defines if an evaluation is due for the ancillary cost'),)  # If True, evaluation is needed.
+    """Application Input"""
+    # Foreign Key and Relationships
+    ancillary_type = models.ForeignKey('EntryAncillaryType', on_delete=models.PROTECT, blank=False, related_name='entryancillarytype', help_text=(
+        'Type of ancillary being specified'),)  # The type of asset that was defined by CORE
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entryentryancillary', help_text=(
+        'Entry that the ancillary cost is mapped '),)
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Entry Ancillaires")
+
+
+class EntryAncillaryType(DefaultFieldsCategory):
+    """
+    Company Ancillary Type.
+
+    Company recovery may come in many types depending on the threat scenairo.  This table describes the recovery types.
+    """
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Entry Ancillary Types")
+
+
 class EntryTask(DefaultFields):
     """Entry Task.  This task will be managed by the entry owner."""
 
     summary = models.CharField(
-        max_length=128, blank=False, help_text=('Brief description of the entry'),)  # Summary of the task for the entry
+        max_length=600, blank=False, help_text=('Brief description of the entry'),)  # Summary of the task for the entry
     description = models.TextField(
         blank=False, help_text=('Description broader description of the task'),)  # More context for the task
     due_date = models.DateTimeField(
@@ -309,7 +362,7 @@ class EntryTask(DefaultFields):
     task_status = models.ForeignKey('TaskStatus', on_delete=models.CASCADE, default=1, null=True, related_name='entrytask_status', help_text=(
         'Current status of the task'),)
     entry = models.ForeignKey('Entry', on_delete=models.CASCADE, null=True, related_name='entrytask', help_text=(
-        'Entry that the registery is tied '),)
+        'Entry that the task is mapped'),)
 
     class Meta:
         """Meta class."""
@@ -348,7 +401,7 @@ class EntryActor(DefaultFields):
         'The entry associated to the actor'),)  # Id of the entry
     id_actor = models.ForeignKey('Actor', on_delete=models.CASCADE, related_name='entry_actor', help_text=(
         'The actor associated to the entry'),)  # Id of the actor
-    # Context to understand why the actor is tied to the entry
+    # Context to understand why the actor is mapped to the entry
     detail = models.TextField(blank=True, help_text=(
         'Additional detail the actor associated with the threat scenario.'),)
     intentions = models.ManyToManyField("ActorIntent", through='EntryActorIntent',
@@ -407,7 +460,7 @@ class EntryCompanyAsset(DefaultFields):
     exposure_factor_toggle = models.CharField(choices=Selector.EF, default='F', max_length=1,
                                               help_text=('Toggle to determine which formula is used to determine the exposure factor'),)  # Defines which logic to use when generating asset value against the entry threat scenario. This toggle defaults to '1' a percent of asset value.
     detail = models.TextField(blank=True, help_text=(
-        'Additional detail the asset associated with the threat scenario.'),)  # Context to understand why the asset is tied to the entry
+        'Additional detail the asset associated with the threat scenario.'),)  # Context to understand why the asset is mapped to the entry
 
     class Meta:
         """Meta class."""
@@ -786,7 +839,7 @@ class RiskType(DefaultFieldsCategory):
     """Risk Type.   The type of business risk associated to the threat scenerio"""
 
     context = models.TextField(
-        blank=True, help_text=('Information on how the entry is associated to the risk type'),)  # Context to better understand why the risk type is tied to the entry
+        blank=True, help_text=('Information on how the entry is associated to the risk type'),)  # Context to better understand why the risk type is mapped to the entry
 
     class Meta:
         """Meta class."""

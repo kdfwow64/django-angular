@@ -26,10 +26,10 @@ class Compliance(DefaultFieldsCategory):
 
     def __str__(self):
         """String."""
-        return self.abbrv
+        return self.name
 
 
-class ComplianceType(DefaultFieldsCompany):
+class ComplianceType(DefaultFieldsCategory):
     """ComplianceType."""
 
     def __str__(self):

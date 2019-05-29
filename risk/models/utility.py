@@ -26,7 +26,7 @@ class Selector(models.Model):
     HML = (('H', 'High'), ('M', 'Medium'), ('L', 'Low'), ('U', 'Unknown'))
     EF = (('R', 'Rate of Asset Value'), ('F', 'Fixed Impact Value'))
     ASSET = (('F', 'Fixed Value'), ('P', 'Percent of Revenue'),
-             ('T', 'Time Based Value'))
+             ('T', 'Time Based'))
     LOSS = (('F', 'Fixed Value'), ('P', 'Percent of Revenue'))
     ARO = (('K', 'Known ARO'), ('C', 'Frequency Category'),
            ('F', 'Annualized Percentage'))
