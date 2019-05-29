@@ -13,7 +13,7 @@ from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomai
 from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryComplianceRequirement, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponseSubmission, EntryRiskType, RiskType, EntryAncillary, EntryAncillaryType, Response, ResponseVote, EntryUrl, MitigationAdequacy
 from ..models.feedback import Feedback, FeedbackStatus, FeedbackType, FeedbackQuestion, FeedbackAnswer, FeedbackCorrespondence
 from ..models.meeting import Meeting, MeetingTopicComment, MeetingTopicAction, MeetingTopic, MeetingType
-from ..models.scenario import EventType, FrequencyCategory, ImpactCategory, ImpactType, CIATriad, SeverityCategory
+from ..models.scenario import EventType, FrequencyCategory, ImpactCategory, ImpactType, MitigationImpactType, MitigationFrequencyType, CIATriad, SeverityCategory
 from ..models.ir import PlaybookRole, PlaybookRoleType, PlaybookActionType, PlaybookResponsibility
 from ..models.vendor import Vendor, VendorType, VendorCategory
 from ..models.project import Project, ProjectAssumption, ProjectSuccessCriteria, ProjectBenefit, ProjectMilestone, ProjectRisk, ProjectRiskType, ProjectBudgetChange, ProjectDateChange, ProjectUAT, ProjectUpdate
@@ -30,7 +30,7 @@ from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, Contr
 from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryComplianceRequirementAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseSubmissionAdmin, EntryAncillaryAdmin, EntryAncillaryTypeAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
 from .feedback import FeedbackAdmin, FeedbackStatusAdmin, FeedbackTypeAdmin, FeedbackQuestionAdmin, FeedbackAnswerAdmin, FeedbackCorrespondenceAdmin
 from .meeting import MeetingAdmin, MeetingTopicCommentAdmin, MeetingTopicActionAdmin, MeetingTopicAdmin, MeetingTypeAdmin
-from .scenario import EventTypeAdmin, FrequencyCategoryAdmin, ImpactCategoryAdmin, ImpactTypeAdmin, CIATriadAdmin, SeverityCategoryAdmin
+from .scenario import EventTypeAdmin, FrequencyCategoryAdmin, ImpactCategoryAdmin, ImpactTypeAdmin, MitigationImpactTypeAdmin, MitigationFrequencyTypeAdmin, CIATriadAdmin, SeverityCategoryAdmin
 from .ir import PlaybookRoleAdmin, PlaybookRoleTypeAdmin, PlaybookActionTypeAdmin, PlaybookResponsibilityAdmin
 from .vendor import VendorAdmin, VendorTypeAdmin, VendorCategoryAdmin
 from .project import ProjectAdmin, ProjectAssumptionAdmin, ProjectSuccessCriteriaAdmin, ProjectBenefitAdmin, ProjectMilestoneAdmin, ProjectRiskAdmin, ProjectRiskTypeAdmin, ProjectBudgetChangeAdmin, ProjectDateChangeAdmin, ProjectUATAdmin, ProjectUpdateAdmin
@@ -145,6 +145,8 @@ admin.site.register(EventType, EventTypeAdmin)
 admin.site.register(FrequencyCategory, FrequencyCategoryAdmin)
 admin.site.register(ImpactCategory, ImpactCategoryAdmin)
 admin.site.register(ImpactType, ImpactTypeAdmin)
+admin.site.register(MitigationImpactType, MitigationImpactTypeAdmin)
+admin.site.register(MitigationFrequencyType, MitigationFrequencyTypeAdmin)
 admin.site.register(CIATriad, CIATriadAdmin)
 admin.site.register(SeverityCategory, SeverityCategoryAdmin)
 admin.site.register(PlaybookRoleType, PlaybookRoleTypeAdmin)

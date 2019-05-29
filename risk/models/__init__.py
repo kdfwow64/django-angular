@@ -157,6 +157,8 @@ from .scenario import (
     FrequencyCategory,
     ImpactCategory,
     ImpactType,
+    MitigationImpactType,
+    MitigationFrequencyType,
     CIATriad,
     SeverityCategory,
 )

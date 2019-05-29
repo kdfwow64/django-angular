@@ -300,10 +300,11 @@ class EntryAncillary(DefaultFields):
         'Description of the of the ancillary needed if the event is triggered'),)  # Description of the field.
     cost_detail = models.TextField(blank=True, null=True, help_text=(
         'Information regarding the elements used to determine the ancillary cost'),)  # Formula, elements, and logic used to determine the ancillary cost.
-    per_occurance = models.BooleanField(
-        default=False, help_text=('Defines if an ancillary cost is based on a quantity of occurences'),)  # If True, evaluation is needed.
-    evaluation_days = models.IntegerField(blank=True, null=True,
-                                          help_text=('Defines the default number of days an evaluation should occur'),)  # Default value for field should be pulled from the Company.evaluation_days value.
+    per_occurance = models.IntegerField(default=1, help_text=(
+        'Defines if an ancillary cost is based on a quantity of occurences'),)  # If True, evaluation is needed.
+    # Default value for field should be pulled from the
+    evaluation_days = models.IntegerField(blank=True, null=True, help_text=(
+        'Defines the default number of days an evaluation should occur'),)  # Company.evaluation_days value.
     evaluation_flg = models.BooleanField(
         default=False, help_text=('Defines if an evaluation is due for the ancillary cost'),)  # If True, evaluation is needed.
     """Application Input"""

@@ -276,6 +276,7 @@ class CompanyAssetAdmin(admin.ModelAdmin):
         'company',
         'asset_type',
         'asset_owner',
+        'summary_value',
     )
     list_filter = (
         'company',

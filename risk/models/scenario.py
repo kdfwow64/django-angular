@@ -116,6 +116,30 @@ class ImpactType(DefaultFieldsCategory):
         return self.name
 
 
+class MitigationImpactType(DefaultFieldsCategory):
+    """Impact Type."""
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Mitigation: Impact Types")
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+
+class MitigationFrequencyType(DefaultFieldsCategory):
+    """Impact Type."""
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Mitigaiton: Frequency Impact Types")
+
+    def __str__(self):
+        """String."""
+        return self.name
+
+
 class CIATriad(DefaultFieldsCategory):
     """CIATriad.  Should be used when determining the threat event."""
 
