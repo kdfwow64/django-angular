@@ -3407,6 +3407,7 @@ colorAdminApp.controller('registerAddEntriresController',
         actorIntents,
         actorMotives,
         companyAssets,
+        ancillaryItemTypes,
         companyControls,
         controlMeasures,
         riskEntry,
@@ -3433,6 +3434,7 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.actor_intents = actorIntents;
     $scope.actor_motives = actorMotives;
     $scope.company_assets = companyAssets;
+    $scope.ancillaryItem_types = ancillaryItemTypes;
     $scope.company_controls = companyControls;
     // $scope.entry_company_controls = entryCompanyControls;
     $scope.entry_company_controls = [];
@@ -3455,6 +3457,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.basicinfo.created_date = '';
         $scope.basicinfo.modified_date = '';
         $scope.basicinfo.evaluated_date = '';
+        $scope.basicinfo.evaluation_days = 0;
         $scope.basicinfo.artifacts_files = [];
         $scope.basicinfo.artifacts_files_deleted_items = '';
     }
@@ -3472,6 +3475,16 @@ colorAdminApp.controller('registerAddEntriresController',
             total_sle_value: 0,
             total_ale: '',
             total_ale_value: 0
+        };
+    }
+
+    if(riskEntry.ancillary_items){
+        $scope.ancillary_items = riskEntry.ancillary_items;
+    }
+    else{
+        $scope.ancillary_items = {
+            multidata: [],
+            total_cost_value: 0
         };
     }
 
@@ -3597,9 +3610,24 @@ colorAdminApp.controller('registerAddEntriresController',
             asset_value_display: '',
             exposure_factor_toggle: 'F',
             fixed_amount: null,  // may need to change to 0 so that the new asset doesnt error.
-            percent_asset_value: null,  // may need to change to 0 so that the new asset doesnt error.
+            percent_asset_value: 0,  // may need to change to 0 so that the new asset doesnt error.
             asset_detail: null,
             as_cal_res: null,
+            edit_num: -1
+        };
+    }
+
+    if(riskEntry.new_ancillary_item) {
+        $scope.new_ancillary_item = riskEntry.new_ancillary_item;
+    } else {
+        $scope.new_ancillary_item = {
+            type: null,
+            summary: null,
+            description: '',
+            occurences: 0,  // may need to change to 0 so that the new asset doesnt error.
+            cost: 0,  // may need to change to 0 so that the new asset doesnt error.
+            cost_detail: null,
+            evaluation_days: 0,
             edit_num: -1
         };
     }
@@ -4126,6 +4154,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.new_as.percent_asset_value = '';
         $scope.new_as.asset_detail = '';
         $scope.new_as.as_cal_res = '';
+        $scope.new_as.as_cal_res_value = 0;
         $scope.new_as.edit_num = -1;
         $("select[name=new_asset_name] option").each(function () {
             $(this).show();
@@ -4161,7 +4190,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.new_as.asset_value = edit_item.asset_value;
         $scope.new_as.exposure_factor_toggle = edit_item.exposure_factor_toggle;
         $scope.new_as.asset_value_display = edit_item.asset_value_display;
-        $scope.new_as.fixed_amount = edit_item.exposure_factor_fixed;
+        $scope.new_as.fixed_amount = parseFloat(edit_item.exposure_factor_fixed);
         $scope.new_as.percent_asset_value = edit_item.exposure_factor_rate;
         $scope.new_as.asset_detail = edit_item.detail;
         $('input[name=new_fixed_amount]').attr('max',parseFloat(edit_item.asset_value));
@@ -4208,14 +4237,16 @@ colorAdminApp.controller('registerAddEntriresController',
         if ($scope.new_as.exposure_factor_toggle == 'F') {
             if ($scope.new_as.fixed_amount == '')
                 return false;
-            str = 'The monitized value exposed is a Fixed amount of $' + $scope.new_as.fixed_amount;
+            str = 'The monitized value exposed is a Fixed amount of ';
             $scope.new_as.as_cal_res = str;
+            $scope.new_as.as_cal_res_value = $scope.new_as.fixed_amount;
         } else {
             if ($scope.new_as.percent_asset_value == '')
                 return false;
             monetary_conversion = parseFloat($scope.new_as.asset_value) * parseFloat($scope.new_as.percent_asset_value) / 100;
-            str = 'The monitized value exposed is a Percent amount of $' + monetary_conversion;
+            str = 'The monitized value exposed is a Percent amount of ';
             $scope.new_as.as_cal_res = str;
+            $scope.new_as.as_cal_res_value = monetary_conversion;
         }
     }
     $scope.add_edit_affected_asset = function() {
@@ -4284,6 +4315,76 @@ colorAdminApp.controller('registerAddEntriresController',
             $(this).parsley().reset();
         });
     }
+
+    /* Step 3- 2  Ancillary Item*/
+
+    $scope.open_add_ancillary_item_modal = function() {
+        $('#add_edit_ancillary_item .modal-title').html('Create Ancillary Item');
+        $('#add_edit_ancillary_item .add-edit-btn').html('Add');
+        $scope.new_ancillary_item.type = null;
+        $scope.new_ancillary_item.summary = '';
+        $scope.new_ancillary_item.description = '';
+        $scope.new_ancillary_item.occurences = 0;
+        $scope.new_ancillary_item.cost = 0;
+        $scope.new_ancillary_item.detail = '';
+        $scope.new_ancillary_item.evaluation_days = 0;
+        $scope.new_ancillary_item.edit_num = -1;
+
+        $('#add_edit_ancillary_item select, #add_edit_ancillary_item input, #add_edit_ancillary_item textarea').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#add_edit_ancillary_item').modal('show');
+    }
+    $scope.open_edit_ancillary_item_modal = function(index) {
+        $('#add_edit_ancillary_item .modal-title').html('Edit Ancillary Item');
+        $('#add_edit_ancillary_item .add-edit-btn').html('Save');
+        $scope.new_ancillary_item.edit_num = index;
+        edit_item = $scope.ancillary_items.multidata[index];
+
+        $scope.new_ancillary_item.type = edit_item.type_id;
+        $scope.new_ancillary_item.summary = edit_item.summary;
+        $scope.new_ancillary_item.description = edit_item.description;
+        $scope.new_ancillary_item.occurences = edit_item.occurences;
+        $scope.new_ancillary_item.cost = parseFloat(edit_item.cost);
+        $scope.new_ancillary_item.detail = edit_item.detail;
+        $scope.new_ancillary_item.evaluation_days = edit_item.evaluation_days;
+        $('#add_edit_ancillary_item select, #add_edit_ancillary_item input, #add_edit_ancillary_item textarea').each(function() {
+            $(this).parsley().reset();
+        });
+        $('#add_edit_ancillary_item').modal('show');
+    }
+
+    $scope.add_edit_ancillary_item = function() {
+        validation = false;
+        $('#add_edit_ancillary_item select, #add_edit_ancillary_item input').each(function(){
+            if ($(this).parsley().validate() != true)
+                validation = true;
+        });
+        if(validation)
+            return false;
+
+        edited_item = {
+            type_id: $scope.new_ancillary_item.type,
+            type: $('select[name=new_ancillary_item_name] option:selected').html(),
+            summary: $scope.new_ancillary_item.summary,
+            description: $scope.new_ancillary_item.description,
+            detail: $scope.new_ancillary_item.detail,
+            evaluation_days: $scope.new_ancillary_item.evaluation_days,
+            cost: $scope.new_ancillary_item.cost,
+            occurences: $scope.new_ancillary_item.occurences,
+            total_cost: $scope.new_ancillary_item.occurences * $scope.new_ancillary_item.cost
+        };
+        index = $scope.new_ancillary_item.edit_num;
+        if (index == -1)
+            $scope.ancillary_items.multidata.push(edited_item);
+        else
+            $scope.ancillary_items.multidata[index] = edited_item;
+        $('#add_edit_ancillary_item').modal('hide');
+    }
+
+    $scope.remove_this_ancillary_item = function(index) {
+        $scope.ancillary_items.multidata.splice(index, 1);
+    }
     /*--------End Step 3-----------*/
 
     /* Start Step 4 Mitigation Control*/
@@ -4301,10 +4402,10 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.add_control.company_id = null;
         $scope.add_control.sle_rate = sle_rate;
         $scope.add_control.sle_rate_display = 'Remaining ' + sle_rate + '%';
-        $scope.add_control.sle_mitigation_rate = null;
+        $scope.add_control.sle_mitigation_rate = 0;
         $scope.add_control.aro_rate = aro_rate;
         $scope.add_control.aro_rate_display = 'Remaining ' + aro_rate + '%';
-        $scope.add_control.aro_mitigation_rate = null;
+        $scope.add_control.aro_mitigation_rate = 0;
         $scope.add_control.sle_cost = '$0.00';
         $scope.add_control.sle_cost_value = 0;
         $scope.add_control.aro_cost = '$0.00';
@@ -4613,6 +4714,12 @@ colorAdminApp.controller('registerAddEntriresController',
                         $scope.entry_overview.locations.push($(this).html());
                     });
                     $scope.setServiceStatusFalse();
+
+                    if($scope.affected_assets.multidata) {
+                        $scope.affected_assets_update();
+                        if($scope.mitigating_controls.multidata)
+                            $scope.save_mitigating_controls();
+                    }
                     WizardValidatorService.status.basic_info = true;
                     $(element).bwizard("next");
                     return true;
@@ -4693,10 +4800,13 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.save_affected_assets = function(element){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $scope.affected_assets.ancillary_items = $scope.ancillary_items;
         $http.post('/dashboard/api/risk-entry/affected-assets/' + $scope.entry_id + '/', $scope.affected_assets)
         .then(function(r){
             if(r.data.code == 200){
                 $scope.affected_assets_update();
+                if($scope.mitigating_controls.multidata)
+                    $scope.save_mitigating_controls();
                 WizardValidatorService.status.affected_assets = true;
                 $(element).bwizard("next");
                 return true;
@@ -4867,4 +4977,67 @@ colorAdminApp.controller('registerAddEntriresController',
     //     FormWizardValidation.init();
     // });
 
+});
+
+
+colorAdminApp.controller('registerControlCheckInController',
+    function($http, $scope, $rootScope, $state) {
+    $scope.search = {};
+    // $scope.users = [];
+    angular.element(document).ready(function () {
+        $http.defaults.xsrfCookieName = 'csrftoken';
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        if ($('#vendor_lists_table').length !== 0) {
+            var table = $('#vendor_lists_table').DataTable({
+                "responsive": true,
+                // "processing": true,
+                // "serverSide": true,
+                "ajax": 'api/vendor-lists/',
+                "autoWidth": false,
+                "search": {
+                    regex: true
+                },
+                columns: [
+                    {"data": "id", "width": "5%"},
+                    {"data": "name", "name": "name", "width": "15%"},
+                    {"data": "abbrv", "name": "abbrv", "width": "15%"},
+                    {"data": "aka", "name": "aka", "width": "15%"},
+                    {"data": "url", "name": "url", "width": "15%"},
+                    {"data": "parent", "name": "parent", "width": "15%"}
+                ],
+                initComplete: function () {
+                    // table.column('compliance:name').search($scope.search.compliance ? 1 : '').draw();
+                    // table.column('completed:name').search($scope.search.completed ? 0 : '').draw();
+                    table.column('name:name').search('').draw();
+                    //table.column('completed:name').search('').draw();
+                }
+            });
+        }
+
+        if ($('#control_lists_table').length !== 0) {
+            var table = $('#control_lists_table').DataTable({
+                "responsive": true,
+                // "processing": true,
+                // "serverSide": true,
+                "ajax": 'api/control-lists/',
+                "autoWidth": false,
+                "search": {
+                    regex: true
+                },
+                columns: [
+                    {"data": "id", "width": "5%"},
+                    {"data": "name", "name": "response", "width": "5%"},
+                    {"data": "abbrv", "name": "abbrv", "width": "15%"},
+                    {"data": "aka", "name": "aka", "width": "15%"},
+                    {"data": "url", "name": "url", "width": "15%"}
+                ],
+                initComplete: function () {
+                    table.column('compliance:name').search($scope.search.compliance ? 1 : '').draw();
+                    table.column('completed:name').search($scope.search.completed ? 0 : '').draw();
+                    //table.column('compliance:name').search('').draw();
+                    //table.column('completed:name').search('').draw();
+                }
+            });
+        }
+    });
 });

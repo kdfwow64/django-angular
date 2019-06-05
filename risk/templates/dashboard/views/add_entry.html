@@ -175,7 +175,7 @@
                 </div>
                 <div class="col-md-1">
                     <div class="form-group">
-                        <label ng-bind="new_as.asset_value" class="as-asset-value-txt"></label>
+                        <label ng-bind="new_as.asset_value  | currency:USD$:2" class="as-asset-value-txt"></label>
                     </div>
                 </div>
             </div>
@@ -223,6 +223,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group aro-cal-res-div">
                                         <span ng-bind="new_as.as_cal_res"></span>
+                                        <span ng-bind="new_as.as_cal_res_value  | currency:USD$:2"></span>
                                     </div>
                                 </div>
                             </div>
@@ -241,6 +242,75 @@
     <div class="modal-footer">
         <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
         <a class="btn btn-success add-edit-btn" ng-click="add_edit_affected_asset()"><i class="fa fa-plus"></i>Add</a>
+    </div>
+</div>
+</div>
+</div>
+<!--Add or Edit Ancillary Item-->
+<div class="modal fade" id="add_edit_ancillary_item">
+<div class="modal-dialog">
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title">Create Ancillary Item</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    </div>
+    <div class="modal-body">
+        <div class="m-b-0">
+            <div class="row">
+                <input type="hidden" ng-model="new_ancillary_item.edit_num">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Ancillary Type</label>
+                        <select name="new_ancillary_item_name" ng-change="ancillary_type_change()" ng-model="new_ancillary_item.type" class="form-control" ng-options="k.id as k.name for k in ancillaryItem_types" required/><option value=""></option></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Summary</label>
+                        <input type="input" ng-model="new_ancillary_item.summary" placeholder="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea rows="5" ng-model="new_ancillary_item.description" placeholder="Description" class="form-control"/></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group col-md-4" style="padding-left: 0;">
+                        <label>Number of Occurences</label>
+                        <input type="number" ng-model="new_ancillary_item.occurences" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group col-md-4" style="padding-left: 0;">
+                        <label>Cost</label>
+                        <input type="number" step="0.01" ng-model="new_ancillary_item.cost" class="form-control">
+                    </div>
+                    <span class="btw-txt">$</span>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Cost Detail</label>
+                        <textarea rows="3" ng-model="new_ancillary_item.detail" placeholder="Cost Detail" class="form-control"/></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group col-md-4" style="padding-left: 0;">
+                        <label>Evaluation days</label>
+                        <input type="number" ng-model="new_ancillary_item.evaluation_days" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+        <a class="btn btn-success add-edit-btn" ng-click="add_edit_ancillary_item()"><i class="fa fa-plus"></i>Add</a>
     </div>
 </div>
 </div>
@@ -308,11 +378,11 @@
                                     </tr>
                                     <tr>
                                         <td>SLE Cost Reduction</td>
-                                        <td ng-bind="add_control.sle_cost"></td>
+                                        <td ng-bind="add_control.sle_cost_value  | currency:USD$:2"></td>
                                     </tr>
                                     <tr>
                                         <td>ARO Cost Reduction</td>
-                                        <td ng-bind="add_control.aro_cost"></td>
+                                        <td ng-bind="add_control.aro_cost_value  | currency:USD$:2"></td>
                                     </tr>
                                     <tr class="border-tr">
                                         <td></td>
@@ -320,7 +390,7 @@
                                     </tr>
                                     <tr>
                                         <td>Total Cost Reduction</td>
-                                        <td ng-bind="add_control.total_cost"></td>
+                                        <td ng-bind="add_control.total_cost_value  | currency:USD$:2"></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -328,7 +398,7 @@
                                     </tr>
                                     <tr>
                                         <td style="font-weight: bold;">Total ALE Impact</td>
-                                        <td ng-bind="add_control.total_ale_impact"></td>
+                                        <td ng-bind="add_control.total_ale_impact_value  | currency:USD$:2"></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -513,7 +583,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Evaluation Cadence in Days</label>
-                                    <input type="number" ng-model="basicinfo.evaluation_days" step="1" name="evaluation_days" placeholder="Evaluation Days" class="form-control" data-parsley-group="wizard-step-1" required />
+                                    <input type="number" ng-model="basicinfo.evaluation_days" min="0" step="1" name="evaluation_days" placeholder="Evaluation Days" class="form-control" data-parsley-group="wizard-step-1" required />
                                 </div>
                             </div>
                         </div>
@@ -871,6 +941,61 @@
                             <div class="row" style="margin-bottom: 10px;">
                                 <div class="col-md-1 pull-right">
                                     <a class="btn btn-success" ng-click="open_add_affected_asset_modal()"><i class="fa fa-plus"></i>ADD</a>
+                                </div>
+                            </div>
+                            <!-- end row -->
+
+                            <legend class="pull-left width-full">Ancillary Items </legend>
+                            <!-- begin row -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <table class="table add-entry-tb">
+                                            <thead>
+                                                <tr>
+                                                    <th>Type</th>
+                                                    <th>Summary</th>
+                                                    <th>Cost Detail</th>
+                                                    <th>Cost</th>
+                                                    <th>Occurence</th>
+                                                    <th>Total Cost</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="ancillary in ancillary_items.multidata">
+                                                    <td ng-bind="ancillary.type"></td>
+                                                    <td ng-bind="ancillary.summary"></td>
+                                                    <td ng-bind="ancillary.detail"></td>
+                                                    <td ng-bind="ancillary.cost  | currency:USD$:2"></td>
+                                                    <td ng-bind="ancillary.occurences"></td>
+                                                    <td ng-bind="ancillary.total_cost  | currency:USD$:2"></td>
+                                                    <td>
+                                                        <a class="btn btn-primary" ng-click="open_edit_ancillary_item_modal($index)">Edit</a>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-danger" ng-click="remove_this_ancillary_item($index)">Delete</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TOTALS</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td ng-bind="ancillary_items.total_cost  | currency:USD$:2"></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- start row -->
+                            <div class="row" style="margin-bottom: 10px;">
+                                <div class="col-md-1 pull-right">
+                                    <a class="btn btn-success" ng-click="open_add_ancillary_item_modal()"><i class="fa fa-plus"></i>ADD</a>
                                 </div>
                             </div>
                             <!-- end row -->

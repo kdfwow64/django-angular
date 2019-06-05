@@ -1,0 +1,182 @@
+{% load staticfiles %}
+<div ng-controller="dashboardV2Controller">
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li><a href="javascript:;">Home</a></li>
+        <li><a href="javascript:;">Dashboard</a></li>
+        <li class="active">Control Check-in</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Control Check-in&nbsp;&nbsp;<small>add Vendor, Control and Company Control</small></h1>
+    <!-- end page-header -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-green">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-globe fa-fw"></i></div>
+                <div class="stats-title">TODAY'S VISITS</div>
+                <div class="stats-number">7,842,900</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 70.1%;"></div>
+                </div>
+                <div class="stats-desc">Better than last week (70.1%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-blue">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-tags fa-fw"></i></div>
+                <div class="stats-title">TODAY'S PROFIT</div>
+                <div class="stats-number">180,200</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 40.5%;"></div>
+                </div>
+                <div class="stats-desc">Better than last week (40.5%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-purple">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-shopping-cart fa-fw"></i></div>
+                <div class="stats-title">NEW ORDERS</div>
+                <div class="stats-number">38,900</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 76.3%;"></div>
+                </div>
+                <div class="stats-desc">Better than last week (76.3%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-black">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-comments fa-fw"></i></div>
+                <div class="stats-title">NEW COMMENTS</div>
+                <div class="stats-number">3,988</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 54.9%;"></div>
+                </div>
+                <div class="stats-desc">Better than last week (54.9%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+    </div>
+    <!-- end row -->
+    <!--begin row -->
+    <div class="row">
+<!-- begin col-12 -->
+<div class="col-md-12">
+    <!-- begin panel -->
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+            </div>
+            <h4 class="panel-title">Add Items</h4>
+        </div>
+        <div class="panel-body">
+            <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">
+                <div>
+                    <!-- begin wizard step-1 Basic Info.-->
+                    <div class="wizard-step-1">
+                        <fieldset>
+                            <legend class="pull-left width-full">Submit a New Control</legend>
+                            <!-- begin Basic Information in Basic Info section -->
+                            <div class="well">
+                                <!--Define Vendor-->
+                                <div class="row">
+                                    <label class="sub-title-label">Define Vendor</label><span>company developed select in-house</span>
+                                </div>
+                                <div class="well">
+                                    <div class="row button-right">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Vendor Name</label>
+                                                <input type="text" ng-model="new_control.vendor_name" name="vendor_name" placeholder="" class="form-control" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <table class="table add-entry-tb compliance-tb" id="vendor_lists_table">
+                                                <thead>
+                                                    <th>Select</th>
+                                                    <th>Vendor Name</th>
+                                                    <th>Abbrv</th>
+                                                    <th>aka</th>
+                                                    <th>URL</th>
+                                                    <th>Parent</th>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button>Submit</button>
+                                            <button>Add a New Vendor</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Define Control-->
+                                <div class="row">
+                                    <label class="sub-title-label">Define Control</label>
+                                </div>
+                                <div class="well">
+                                    <div class="row button-right">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Control Name</label>
+                                                <input type="text" ng-model="new_control.control_name" name="control_name" placeholder="" class="form-control" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                           <table class="table add-entry-tb compliance-tb" id="control_lists_table">
+                                                <thead>
+                                                    <th>Select</th>
+                                                    <th>Control Name</th>
+                                                    <th>Category</th>
+                                                    <th>URL</th>
+                                                    <th>aka</th>
+                                                </thead>
+                                                <tbody></tbody>
+                                           </table>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button>Submit</button>
+                                            <button>Add a New Control</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Company Control Detail-->
+                                <div class="row">
+                                    <label class="sub-title-label">Company Control Detail</label>
+                                </div>
+                                <div class="well aro-bordered-div">
+                                    <div class="row button-right">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Vendor Name</label>
+                                                <input type="text" ng-model="new_control.vendor_name" name="vendor_name" placeholder="" class="form-control" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
+                        </fieldset>
+                    </div>
+                    <!-- end wizard step-1 -->
+                </div>
+            </div>
+            <!-- end row -->
+        </fieldset>
+    </div>
+    <!-- end wizard step-5 -->
+</div>
+    <!--end row -->
+</div>

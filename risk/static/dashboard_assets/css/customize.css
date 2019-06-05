@@ -203,3 +203,16 @@ legend {
     color: #fff;
     margin-bottom: 0;
 }
+
+.modal-dialog .modal-header h4.modal-title {
+    float: left;
+}
+
+/*  Control CSS */
+.sub-title-label {
+    font-size: 16px;
+    margin-right: 20px;
+}
+.button-right button {
+    float: right;
+}

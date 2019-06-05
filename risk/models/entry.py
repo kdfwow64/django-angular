@@ -316,7 +316,7 @@ class EntryAncillary(DefaultFields):
 
     def __str__(self):
         """String."""
-        return self.name
+        return self.summary
 
     class Meta:
         """Meta class."""

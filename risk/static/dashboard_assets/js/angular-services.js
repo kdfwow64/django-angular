@@ -18,7 +18,7 @@
    14.0 SERVICE - RiskEntryService
    15.0 SERVICE - ImpactTypeService
    16.0 SERVICE - WizardFormService
-
+   17.0 SERVICE - AncillaryItemsService
 */
 
 /* -------------------------------
@@ -541,6 +541,55 @@ function ComplianceTypeService($http){
     return service;
 }
 
+/* -----------------------------------
+   22.0 SERVICE - AncillaryItemsService
+--------------------------------------*/
+
+function AncillaryItemsService($http){
+    function get_all_ancillary_items(){
+        return $http.get('/dashboard/api/ancillary-items/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getAncillaryItems: get_all_ancillary_items
+    }
+    return service;
+}
+/* -----------------------------------
+   22.0 SERVICE - VendorListsService
+--------------------------------------*/
+
+// function VendorListsService($http){
+//     function get_all_vendor_lists(){
+//         return $http.get('/dashboard/api/vendor-lists/').then(function(r){
+//             return r.data;
+//         }, function(r){});
+//     }
+//
+//     var service = {
+//         getVendorLists: get_all_vendor_lists
+//     }
+//     return service;
+// }
+/* -----------------------------------
+   22.0 SERVICE - ControlListsService
+--------------------------------------*/
+
+// function ControlListsService($http){
+//     function get_all_control_lists(){
+//         return $http.get('/dashboard/api/control-lists/').then(function(r){
+//             return r.data;
+//         }, function(r){});
+//     }
+//
+//     var service = {
+//         getControlLists: get_all_control_lists
+//     }
+//     return service;
+// }
+
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseService', ['$http', ResponseService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
@@ -550,6 +599,7 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ActorIntentService', ['$http', ActorIntentService])
              .factory('ActorMotiveService', ['$http', ActorMotiveService])
              .factory('CompanyAssetsService', ['$http', CompanyAssetsService])
+             .factory('AncillaryItemsService', ['$http', AncillaryItemsService])
              .factory('CompanyControlsService', ['$http', CompanyControlsService])
              .factory('EntryCompanyControlsService', ['$http', EntryCompanyControlsService])
              .factory('CompanyControlMeasuresService', ['$http', CompanyControlMeasuresService])

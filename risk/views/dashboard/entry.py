@@ -3,6 +3,7 @@ import json
 import os
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+import traceback
 
 from django.http import JsonResponse
 from django.views import View
@@ -37,7 +38,11 @@ from risk.models import (
     Control,
     Vendor,
     CompanyArtifact,
-    EntryCompanyArtifact
+    EntryCompanyArtifact,
+    EntryAncillaryType,
+    EntryAncillary,
+    Vendor,
+    Control
 )
 from risk.forms.entry import(
     RiskEntryBasicForm,
@@ -162,6 +167,65 @@ def api_list_risk_entries(request):
                 'modified_date': entry.date_modified.strftime("%m/%d/%Y"),
                 'response_plan': 'Yes' if entry.incident_response else 'No',
                 'id': entry.id
+            })
+
+        data = {
+            'data': rows,
+            'draw': int(request.GET.get('draw', 0)),
+            'recordsTotal': total,
+            'recordsFiltered': len(rows),
+        }
+    except:
+        data = {
+
+        }
+    return JsonResponse(data)
+
+
+@login_required
+def api_list_vendors(request):
+    """List Vendors."""
+    user = request.user
+    try:
+        rows = []
+        total = Vendor.objects.count()
+        for vendor in Vendor.objects.order_by('id').all():
+            rows.append({
+                'id': vendor.id,
+                'name': vendor.name,
+                'abbrv': vendor.abbrv,
+                'aka': vendor.name_aka,
+                'url': vendor.url_main,
+                'parent': vendor.parent_id
+            })
+
+        data = {
+            'data': rows,
+            'draw': int(request.GET.get('draw', 0)),
+            'recordsTotal': total,
+            'recordsFiltered': len(rows),
+        }
+    except:
+        data = {
+
+        }
+    return JsonResponse(data)
+
+@login_required
+def api_list_controls(request):
+    """List Controls."""
+    user = request.user
+    try:
+        rows = []
+        total = Control.objects.count()
+        for control in Control.objects.order_by('id').all():
+
+            rows.append({
+                'id': control.id,
+                'name': control.name,
+                'abbrv': control.abbrv,
+                'aka': control.name_aka,
+                'url': control.url
             })
 
         data = {
@@ -402,6 +466,28 @@ def api_update_affected_assets(request, entry_id):
                     rv = {'status': 'error', 'code': 400,
                           'errors': ["Invalid asset"]}
 
+            ancillary_items = data.get("ancillary_items", [])
+            for del_item in EntryAncillary.objects.filter(entry_id=risk_entry.id):
+                del_item.delete()
+
+            for request_data in ancillary_items['multidata']:
+                # Get current company asset (if any)
+                try:
+                    EntryAncillary.objects.create(
+                        entry_id=risk_entry.id,
+                        ancillary_type_id=request_data.get('type_id'),
+                        summary=request_data.get('summary'),
+                        description=request_data.get('description'),
+                        ancillary_fixed=request_data.get('cost'),
+                        cost_detail=request_data.get('detail'),
+                        per_occurance=request_data.get('occurences'),
+                        evaluation_days=request_data.get('evaluation_days')
+                    )
+                except:
+                    print(traceback.format_exc())
+                    rv = {'status': 'error', 'code': 400,
+                          'errors': ["Invalid asset"]}
+
             rv = {'status': 'success', 'code': 200, 'id': risk_entry.id}
         else:
             rv = {'status': 'error', 'code': 400, 'errors': ["Invalid data"]}
@@ -584,6 +670,14 @@ def get_all_entry_company_control_for_dropdown(request):
             {'id': measures.id, 'name': measures.id_companycontrol.name})
     return JsonResponse(data, safe=False)
 
+@login_required
+def get_all_ancillary_items_for_dropdown(request):
+    """Get all ancillary items for dropdown."""
+    data = []
+    for item in EntryAncillaryType.objects.order_by('sort_order').all():
+        data.append({'id': item.id, 'name': item.name})
+    return JsonResponse(data, safe=False)
+
 
 @login_required
 def api_get_risk_entry(request, entry_id):
@@ -755,6 +849,29 @@ def api_get_risk_entry(request, entry_id):
                         'total_sle': total_sle,
                         'total_ale_value': total_ale,  # Need to validate the use of this value
                         'total_ale': total_ale
+                    }
+                })
+            except:
+                pass
+
+
+            try:
+                ancillary_items = []
+                for item in EntryAncillary.objects.filter(entry=risk_entry):
+                    ancillary_items.append({
+                        'type_id': item.ancillary_type_id,
+                        'type': EntryAncillaryType.objects.get(id=item.ancillary_type_id).name,
+                        'summary': item.summary,
+                        'description': item.description,
+                        'detail': item.cost_detail,
+                        'evaluation_days': item.evaluation_days,
+                        'cost': item.ancillary_fixed,
+                        'occurences': item.per_occurance,
+                        'total_cost': item.per_occurance * item.ancillary_fixed
+                    })
+                rv.update({
+                    'ancillary_items': {
+                        'multidata': ancillary_items
                     }
                 })
             except:

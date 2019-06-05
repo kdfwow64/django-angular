@@ -324,6 +324,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 companyAssets: function(CompanyAssetsService){
                     return CompanyAssetsService.getCompanyAssets();
                 },
+                ancillaryItemTypes: function(AncillaryItemsService){
+                    return AncillaryItemsService.getAncillaryItems();
+                },
                 companyControls: function(CompanyControlsService){
                     return CompanyControlsService.getCompanyControls();
                 },
@@ -395,6 +398,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 companyAssets: function(CompanyAssetsService){
                     return CompanyAssetsService.getCompanyAssets();
                 },
+                ancillaryItemTypes: function(AncillaryItemsService){
+                    return AncillaryItemsService.getAncillaryItems();
+                },
                 companyControls: function(CompanyControlsService){
                     return CompanyControlsService.getCompanyControls();
                 },
@@ -461,6 +467,26 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             //         });
             //     }]
             // }
+        })
+        .state('app.controls.control_check_in', {
+            url: '/control-check-in',
+            templateUrl: 'views/control_check_in.html',
+            data: { pageTitle: 'Control Check-In' },
+            controller: 'registerControlCheckInController',
+            resolve: {
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css',
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css',
+                            '/static/dashboard_assets/plugins/DataTables/media/js/jquery.dataTables.js',
+                            '/static/dashboard_assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js',
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js'
+                        ]
+                    });
+                }]
+            }
         })
         .state('app.controls.list_control_groups', {
             url: '/list-control-groups',
