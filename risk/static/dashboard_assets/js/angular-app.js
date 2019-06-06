@@ -447,26 +447,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
         .state('app.controls.list_controls', {
             url: '/list-controls',
             templateUrl: 'views/list_controls.html',
-            data: { pageTitle: 'List Controls' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'List Controls' }
         })
         .state('app.controls.control_check_in', {
             url: '/control-check-in',
@@ -474,6 +455,15 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             data: { pageTitle: 'Control Check-In' },
             controller: 'registerControlCheckInController',
             resolve: {
+                locations: function(CompanyLocationService){
+                    return CompanyLocationService.getCompanyLocations();
+                },
+                segments: function(CompanySegmentService){
+                    return CompanySegmentService.getCompanySegments();
+                },
+                recover_time_units: function(TimeUnitService){
+                    return TimeUnitService.getAllTimeUnits();
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,

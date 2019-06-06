@@ -4981,7 +4981,10 @@ colorAdminApp.controller('registerAddEntriresController',
 
 
 colorAdminApp.controller('registerControlCheckInController',
-    function($http, $scope, $rootScope, $state) {
+    function($http, $scope, $rootScope, $state, locations, recover_time_units, segments) {
+    $scope.company_segments = segments;
+    $scope.company_locations = locations;
+    $scope.recover_time_units = recover_time_units;
     $scope.search = {};
     // $scope.users = [];
     angular.element(document).ready(function () {
@@ -4997,13 +5000,33 @@ colorAdminApp.controller('registerControlCheckInController',
                 "search": {
                     regex: true
                 },
+                "sSearch": "Quick Search:",
                 columns: [
-                    {"data": "id", "width": "5%"},
+                    {
+                        "data": null,
+                        "searchable": false,
+                        "orderable": false,
+                        "width": "5%",
+                        "render":  function ( data, type, row, meta ) {
+                            // return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success btn-xs edit-risk-entry'>Edit</a>";
+                            return "<input name='vendor_select' type='radio' class='form-control' ng-model='new_cc.vendor_select' value='"+row['id']+"'>";
+                        }
+                    },
+                    // {"data": "id", "width": "5%"},
                     {"data": "name", "name": "name", "width": "15%"},
-                    {"data": "abbrv", "name": "abbrv", "width": "15%"},
-                    {"data": "aka", "name": "aka", "width": "15%"},
-                    {"data": "url", "name": "url", "width": "15%"},
-                    {"data": "parent", "name": "parent", "width": "15%"}
+                    {"data": "abbrv", "searchable": false, "name": "abbrv", "width": "10%"},
+                    {"data": "aka", "searchable": false, "name": "aka", "width": "10%"},
+                    {
+                        "data": null,
+                        "orderable": false,
+                        "width": "20%",
+                        "searchable": false,
+                        "render":  function ( data, type, row, meta ) {
+                            return "<a href='"+row['url']+"'>"+row['url']+"</a>";
+                        }
+                    },
+                    // {"data": "url", "name": "url", "width": "15%"},
+                    {"data": "parent", "searchable": false, "name": "parent", "width": "15%"}
                 ],
                 initComplete: function () {
                     // table.column('compliance:name').search($scope.search.compliance ? 1 : '').draw();
@@ -5025,17 +5048,30 @@ colorAdminApp.controller('registerControlCheckInController',
                     regex: true
                 },
                 columns: [
-                    {"data": "id", "width": "5%"},
-                    {"data": "name", "name": "response", "width": "5%"},
-                    {"data": "abbrv", "name": "abbrv", "width": "15%"},
-                    {"data": "aka", "name": "aka", "width": "15%"},
-                    {"data": "url", "name": "url", "width": "15%"}
+                    {
+                        "data": null,
+                        "searchable": false,
+                        "orderable": false,
+                        "width": "5%",
+                        "render":  function ( data, type, row, meta ) {
+                            // return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success btn-xs edit-risk-entry'>Edit</a>";
+                            return "<input name='control_select' type='radio' class='form-control' ng-model='new_cc.control_select' value='"+row['id']+"'>";
+                        }
+                    },
+                    {"data": "name", "name": "response", "width": "15%"},
+                    {"data": "abbrv", "searchable": false, "name": "abbrv", "width": "10%"},
+                    {
+                        "data": null,
+                        "orderable": false,
+                        "width": "20%",
+                        "searchable": false,
+                        "render":  function ( data, type, row, meta ) {
+                            return "<a href='"+row['url']+"'>"+row['url']+"</a>";
+                        }
+                    },
+                    {"data": "aka", "name": "aka", "width": "15%"}
                 ],
                 initComplete: function () {
-                    table.column('compliance:name').search($scope.search.compliance ? 1 : '').draw();
-                    table.column('completed:name').search($scope.search.completed ? 0 : '').draw();
-                    //table.column('compliance:name').search('').draw();
-                    //table.column('completed:name').search('').draw();
                 }
             });
         }

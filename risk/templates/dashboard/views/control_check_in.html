@@ -95,14 +95,14 @@
                                 </div>
                                 <div class="well">
                                     <div class="row button-right">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Vendor Name</label>
-                                                <input type="text" ng-model="new_control.vendor_name" name="vendor_name" placeholder="" class="form-control" required />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <table class="table add-entry-tb compliance-tb" id="vendor_lists_table">
+{#                                        <div class="col-md-4">#}
+{#                                            <div class="form-group">#}
+{#                                                <label>Vendor Name</label>#}
+{#                                                <input type="text" id="vendor_name_search" ng-model="new_cc.vendor_name" name="vendor_name" placeholder="" class="form-control" required />#}
+{#                                            </div>#}
+{#                                        </div>#}
+                                        <div class="col-md-12 cc-list-tbs" id="vendor_list_tb">
+                                            <table class="table vendor-list-tb" id="vendor_lists_table">
                                                 <thead>
                                                     <th>Select</th>
                                                     <th>Vendor Name</th>
@@ -115,8 +115,8 @@
                                             </table>
                                         </div>
                                         <div class="col-md-12">
-                                            <button>Submit</button>
-                                            <button>Add a New Vendor</button>
+                                            <button class="btn btn-primary">Submit</button>
+                                            <button class="btn btn-primary">Add a New Vendor</button>
                                         </div>
                                     </div>
                                 </div>
@@ -127,14 +127,14 @@
                                 </div>
                                 <div class="well">
                                     <div class="row button-right">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Control Name</label>
-                                                <input type="text" ng-model="new_control.control_name" name="control_name" placeholder="" class="form-control" required />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                           <table class="table add-entry-tb compliance-tb" id="control_lists_table">
+{#                                        <div class="col-md-4">#}
+{#                                            <div class="form-group">#}
+{#                                                <label>Control Name</label>#}
+{#                                                <input type="text" ng-model="new_cc.control_name" name="control_name" placeholder="" class="form-control" required />#}
+{#                                            </div>#}
+{#                                        </div>#}
+                                        <div class="col-md-12 cc-list-tbs">
+                                           <table class="table vendor-list-tb" id="control_lists_table">
                                                 <thead>
                                                     <th>Select</th>
                                                     <th>Control Name</th>
@@ -146,8 +146,8 @@
                                            </table>
                                         </div>
                                         <div class="col-md-12">
-                                            <button>Submit</button>
-                                            <button>Add a New Control</button>
+                                            <button class="btn btn-primary">Submit</button>
+                                            <button class="btn btn-primary">Add a New Control</button>
                                         </div>
                                     </div>
                                 </div>
@@ -157,12 +157,124 @@
                                     <label class="sub-title-label">Company Control Detail</label>
                                 </div>
                                 <div class="well aro-bordered-div">
-                                    <div class="row button-right">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Name</label>
+                                                        <input type="text" class="form-control" ng-model="new_cc.name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Alias</label>
+                                                        <input type="text" class="form-control" ng-model="new_cc.alias">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <textarea rows="5" class="form-control" ng-model="new_cc.description"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Version</label>
+                                                <input class="form-control" type="text" ng-model="new_cc.version">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Estimated Opex</label>
+                                                        <input type="text" class="form-control" ng-model="new_cc.opex">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Maintenance Date</label>
+                                                        <input type="text" class="form-control" ng-model="new_cc.maintenance_date">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Opex Description</label>
+                                                <textarea rows="5" class="form-control" ng-model="new_cc.opex_desc"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label>Estimated Recovery Time</label>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <input min="0" type="number" ng-model="new_cc.recovery_multiplier" step="1" name="recovery_multiplier" placeholder="# of units" class="form-control"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <select name="recover_time_unit" ng-model="new_cc.recover_time_unit" class="form-control" ng-options="k.id as k.name for k in recover_time_units | orderBy:'sort_order'"
+                                                    data-parsley-group="wizard-step-1" /><option value=""></option></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Vendor Name</label>
-                                                <input type="text" ng-model="new_control.vendor_name" name="vendor_name" placeholder="" class="form-control" required />
+                                                <label>Locations</label>
+                                                <select name="company_locations" ng-model="new_cc.company_locations" class="form-control" multiple=true ng-options="k.id as k.name for k in company_locations"/></select>
                                             </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Segments</label>
+                                                <select name="company_segments" ng-model="new_cc.company_segments" class="form-control" multiple=true ng-options="k.id as k.name for k in company_segments"/></select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Evaluation Days</label>
+                                                <input class="form-control" type="number" ng-model="new_cc.evaluation_days">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Primary Point of Contact</label>
+                                                <input class="form-control" type="text" ng-model="new_cc.poc_main">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Primary Support Team</label>
+                                                <input class="form-control" type="text" ng-model="new_cc.poc_support">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 button-right">
+                                            <button class="btn btn-primary">Create</button>
                                         </div>
                                     </div>
                                 </div>

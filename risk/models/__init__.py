@@ -57,6 +57,7 @@ from .company import (
     CompanyAssetType,
     CompanyObjective,
     CompanyControl,
+    CompanySegment,
     CompanyControlMeasure,
     CompanyControlMeasurementResult,
     CompanyControlCapex,

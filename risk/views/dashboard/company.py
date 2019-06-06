@@ -7,6 +7,7 @@ from risk.models import (
     CompanyControl,
     CompanyControlMeasure,
     CompanyLocation,
+    CompanySegment,
     Company,
     Control,
     Vendor,
@@ -88,9 +89,19 @@ def get_all_impact_categories(request):
     return JsonResponse(data, safe=False)
 
 
+@login_required
 def get_all_severity_categories(request):
     """Get all Severity categories."""
     data = []
     for category in SeverityCategory.objects.order_by('name').all():
         data.append({'id': category.id, 'name': category.name, 'min': category.minimum, 'max': category.maximum})
+    return JsonResponse(data, safe=False)
+
+@login_required
+def get_all_company_segments_for_dropdown(request):
+    """Get all company segments for dropdown."""
+    data = []
+    for segment in CompanySegment.objects.order_by('name').all():
+        data.append({'id': segment.id, 'name': segment.name})
+
     return JsonResponse(data, safe=False)

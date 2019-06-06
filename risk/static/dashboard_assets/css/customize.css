@@ -215,4 +215,29 @@ legend {
 }
 .button-right button {
     float: right;
+    margin-left:10px;
+}
+
+.vendor-list-tb thead th {
+    text-align: center;
+}
+.vendor-list-tb tbody {
+    border: 1px solid #ccd0d4 !important;
+}
+.vendor-list-tb tbody td {
+    padding: 0px !important;
+    text-align: center;
+    vertical-align: middle !important;
+    border: 1px solid #e2e7eb;
+}
+
+.cc-list-tbs .col-sm-6 {
+    float: right !important;
+}
+.cc-list-tbs .col-sm-6 .dataTables_length{
+    float: right !important;
+}
+.cc-list-tbs .col-sm-6 .dataTables_filter{
+    /*display: none !important;*/
+    float: left !important;
 }

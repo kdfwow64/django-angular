@@ -46,6 +46,8 @@ urlpatterns = [
             dashboard.get_all_company_control_measures_for_dropdown, name="company-control-measures-dropdown-list"),
     re_path(r'^dashboard/api/company-locations/$',
             dashboard.get_all_company_locations_for_dropdown, name="company-locations-dropdown-list"),
+    re_path(r'^dashboard/api/company-segments/$',
+            dashboard.get_all_company_segments_for_dropdown, name="company-segments-dropdown-list"),
     re_path(r'^dashboard/api/compliances/$',
             dashboard.get_all_compliances_for_dropdown, name="compliance-dropdown-list"),
     re_path(r'^dashboard/api/users/$',

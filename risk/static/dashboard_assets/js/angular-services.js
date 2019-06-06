@@ -558,21 +558,21 @@ function AncillaryItemsService($http){
     return service;
 }
 /* -----------------------------------
-   22.0 SERVICE - VendorListsService
+   22.0 SERVICE - Company Segments
 --------------------------------------*/
 
-// function VendorListsService($http){
-//     function get_all_vendor_lists(){
-//         return $http.get('/dashboard/api/vendor-lists/').then(function(r){
-//             return r.data;
-//         }, function(r){});
-//     }
-//
-//     var service = {
-//         getVendorLists: get_all_vendor_lists
-//     }
-//     return service;
-// }
+function CompanySegmentService($http){
+    function get_all_company_segments(){
+        return $http.get('/dashboard/api/company-segments/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getCompanySegments: get_all_company_segments
+    }
+    return service;
+}
 /* -----------------------------------
    22.0 SERVICE - ControlListsService
 --------------------------------------*/
@@ -593,6 +593,7 @@ function AncillaryItemsService($http){
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseService', ['$http', ResponseService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
+             .factory('CompanySegmentService', ['$http', CompanySegmentService])
              .factory('ComplianceService', ['$http', ComplianceService])
              .factory('UserService', ['$http', UserService])
              .factory('ActorService', ['$http', ActorService])
