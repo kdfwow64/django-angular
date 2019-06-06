@@ -283,15 +283,15 @@
                 <div class="col-md-12">
                     <div class="form-group col-md-4" style="padding-left: 0;">
                         <label>Number of Occurences</label>
-                        <input type="number" ng-model="new_ancillary_item.occurences" class="form-control">
+                        <input type="number" min="1" ng-model="new_ancillary_item.occurences" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group col-md-4" style="padding-left: 0;">
                         <label>Cost</label>
                         <input type="number" step="0.01" ng-model="new_ancillary_item.cost" class="form-control">
+                        <span class="btw-txt">$</span>
                     </div>
-                    <span class="btw-txt">$</span>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
@@ -983,7 +983,7 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td ng-bind="ancillary_items.total_cost  | currency:USD$:2"></td>
+                                                    <td ng-bind="ancillary_items.total_cost_value  | currency:USD$:2"></td>
                                                     <td></td>
                                                     <td></td>
                                                 </tr>
@@ -1015,7 +1015,7 @@
                                     <div class="form-group">
                                         <div class="col-md-4">
                                             <label>Inherent ALE: </label>
-                                            <label style="font-weight: bold" ng-bind=" affected_assets.total_ale  | currency:USD$:2"></label>
+                                            <label style="font-weight: bold" ng-bind=" affected_assets.total_ale_with_ancillary  | currency:USD$:2"></label>
                                         </div>
                                         <div class="col-md-4">
                                             <label>Mitigated ALE: </label>
@@ -1023,7 +1023,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label>Residual ALE: </label>
-                                            <label style="font-weight: bold" ng-bind="(affected_assets.total_ale_value - mitigating_controls.total_ale)  | currency:USD$:2"></label>
+                                            <label style="font-weight: bold" ng-bind="(affected_assets.total_ale_with_ancillary - mitigating_controls.total_ale)  | currency:USD$:2"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -1512,6 +1512,75 @@
                                             <div class="col-md-1" ng-bind="affected_assets.total_sle  | currency:USD$:2">
                                             </div>
                                             <div class="col-md-1" ng-bind="affected_assets.total_ale  | currency:USD$:2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 bottom-10"></div>
+                            </div>
+                            <!-- Ancillary Items (Entry Overview) -->
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10">
+                                        <label class="section">Ancillary Item Details</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1 sub-section">Ancillary:</div>
+                                    <div class="col-md-11">
+                                        <div class="row columnheader">
+                                            <div class="col-md-2">
+                                                Type
+                                            </div>
+                                            <div class="col-md-3">
+                                                Summary
+                                            </div>
+                                            <div class="col-md-3">
+                                                Cost Detail
+                                            </div>
+                                            <div class="col-md-1">
+                                                Cost
+                                            </div>
+                                            <div class="col-md-1">
+                                                Occurence
+                                            </div>
+                                            <div class="col-md-2">
+                                                Total Cost
+                                            </div>
+                                        </div>
+                                        <div class="row" ng-repeat="item in ancillary_items.multidata">
+                                            <div class="col-md-2"ng-bind="item.type">
+                                            </div>
+                                            <div class="col-md-3" ng-bind="item.summary">
+                                            </div>
+                                            <div class="col-md-3" ng-bind="item.detail">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="item.cost  |  currency:USD$:2">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="item.occurences">
+                                            </div>
+                                            <div class="col-md-2" ng-bind="item.total_cost  |  currency:USD$:2">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 bottom-bordered-div-5">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                TOTALS
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-1">
+                                            </div>
+                                            <div class="col-md-1">
+                                            </div>
+                                            <div class="col-md-2" ng-bind="ancillary_items.total_cost_value  |  currency:USD$:2">
                                             </div>
                                         </div>
                                     </div>

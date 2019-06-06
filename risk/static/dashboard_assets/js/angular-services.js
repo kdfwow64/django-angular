@@ -577,23 +577,41 @@ function CompanySegmentService($http){
    22.0 SERVICE - ControlListsService
 --------------------------------------*/
 
-// function ControlListsService($http){
-//     function get_all_control_lists(){
-//         return $http.get('/dashboard/api/control-lists/').then(function(r){
-//             return r.data;
-//         }, function(r){});
-//     }
-//
-//     var service = {
-//         getControlLists: get_all_control_lists
-//     }
-//     return service;
-// }
+function ControlCategoryService($http){
+    function get_all_control_categories(){
+        return $http.get('/dashboard/api/control-categories/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getAllControlCategories: get_all_control_categories
+    }
+    return service;
+}
+/* -----------------------------------
+   23.0 SERVICE - CompanyContactService
+--------------------------------------*/
+
+function CompanyContactService($http){
+    function get_all_contact_contact(){
+        return $http.get('/dashboard/api/get-company-contact/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getAllCompanyContact: get_all_contact_contact
+    }
+    return service;
+}
 
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseService', ['$http', ResponseService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
              .factory('CompanySegmentService', ['$http', CompanySegmentService])
+             .factory('CompanyContactService', ['$http', CompanyContactService])
+             .factory('ControlCategoryService', ['$http', ControlCategoryService])
              .factory('ComplianceService', ['$http', ComplianceService])
              .factory('UserService', ['$http', UserService])
              .factory('ActorService', ['$http', ActorService])

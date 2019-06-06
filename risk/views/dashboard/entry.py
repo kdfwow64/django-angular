@@ -13,6 +13,9 @@ from risk.models import (
     ActorIntent,
     ActorMotive,
     CompanyControl,
+    CompanyContact,
+    CompanyControlLocation,
+    CompanyControlSegment,
     CompanyControlMeasure,
     CompanyLocation,
     Compliance,
@@ -35,14 +38,14 @@ from risk.models import (
     CompanyAsset,
     SeverityCategory,
     Company,
-    Control,
-    Vendor,
     CompanyArtifact,
     EntryCompanyArtifact,
     EntryAncillaryType,
     EntryAncillary,
     Vendor,
-    Control
+    Control,
+    ControlCategory,
+    ControlCategoryControl
 )
 from risk.forms.entry import(
     RiskEntryBasicForm,
@@ -185,11 +188,11 @@ def api_list_risk_entries(request):
 @login_required
 def api_list_vendors(request):
     """List Vendors."""
-    user = request.user
+    company = request.user.get_current_company()
     try:
         rows = []
-        total = Vendor.objects.count()
-        for vendor in Vendor.objects.order_by('id').all():
+        total = 0
+        for vendor in Vendor.objects.filter(company_id__in=[1, company.id]):
             rows.append({
                 'id': vendor.id,
                 'name': vendor.name,
@@ -198,6 +201,7 @@ def api_list_vendors(request):
                 'url': vendor.url_main,
                 'parent': vendor.parent_id
             })
+            total +=1
 
         data = {
             'data': rows,
@@ -212,21 +216,32 @@ def api_list_vendors(request):
     return JsonResponse(data)
 
 @login_required
-def api_list_controls(request):
+def api_list_controls(request, vendor_id):
     """List Controls."""
-    user = request.user
+    company_id = request.user.get_current_company().id
     try:
         rows = []
-        total = Control.objects.count()
-        for control in Control.objects.order_by('id').all():
+        total = 0
+        for control in Control.objects.filter(company_id__in=[1, company_id], vendor_id=vendor_id):
+            try:
+                controlcategory = ''
+                for cc in ControlCategoryControl.objects.filter(id_control_id=control.id):
+                    controlcategory = controlcategory + ControlCategory.objects.get(id=cc.id_controlcategory_id).name + '\n'
 
-            rows.append({
-                'id': control.id,
-                'name': control.name,
-                'abbrv': control.abbrv,
-                'aka': control.name_aka,
-                'url': control.url
-            })
+                rows.append({
+                    'id': control.id,
+                    'name': control.name,
+                    'category': controlcategory,
+                    'aka': control.name_aka,
+                    'url': control.url,
+                    'abbrv': control.abbrv,
+                    'description': control.description
+                })
+                total += 1
+            except:
+                data = {
+
+                }
 
         data = {
             'data': rows,
@@ -680,6 +695,132 @@ def get_all_ancillary_items_for_dropdown(request):
 
 
 @login_required
+def api_control_categories(request):
+    """Get all control categories for dropdown."""
+    data = []
+    for item in ControlCategory.objects.order_by('sort_order').all():
+        data.append({'id': item.id, 'name': item.name})
+    return JsonResponse(data, safe=False)
+
+
+@login_required
+def api_get_company_contact(request):
+    """Get all control contacts for dropdown."""
+    company = request.user.get_current_company()
+    data = []
+    for item in CompanyContact.objects.filter(company_id=company):
+        data.append({'id': item.id, 'name': item.first_name+item.last_name})
+    return JsonResponse(data, safe=False)
+
+
+@login_required
+def api_save_new_vendor(request):
+    """Save new Vendor."""
+    company_id = request.user.get_current_company().id
+    request_data = json.loads(request.body.decode('utf-8'))
+    try:
+        new_vendor = Vendor.objects.create(
+            name=request_data.get('name'),
+            url_main=request_data.get('url'),
+            description=request_data.get('description'),
+            company_id=company_id
+        )
+        rv = {
+            'status': 'success',
+            'code': 200,
+            'new_vendor': {
+                'id': new_vendor.id,
+                'name': new_vendor.name,
+                'url': new_vendor.description
+            }
+        }
+    except:
+        rv = {'status': 'error', 'code':400, 'errors': ["Invalid control"]}
+    return JsonResponse(rv)
+
+@login_required
+def api_save_new_control(request, vendor_id):
+    """Save new Control."""
+    company_id = request.user.get_current_company().id
+    request_data = json.loads(request.body.decode('utf-8'))
+    try:
+        new_control = Control.objects.create(
+            name=request_data.get('name'),
+            url=request_data.get('url'),
+            company_id=company_id,
+            vendor_id=vendor_id
+        )
+        ControlCategoryControl.objects.create(
+            id_control_id=new_control.id,
+            id_controlcategory_id=request_data.get('category')
+        )
+        rv = {
+            'status': 'success',
+            'code': 200,
+            'new_control': {
+                'id': new_control.id,
+                'name': new_control.name,
+                'category': request_data.get('category_name'),
+                'url': new_control.url,
+                'aka': '',
+                'description': '',
+                'abbrv': ''
+            }
+        }
+    except:
+        rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+    return JsonResponse(rv)
+
+@login_required
+def api_save_new_company_control(request):
+    """Save New Company Control"""
+    request_data = json.loads(request.body.decode('utf-8'))
+    try:
+        cc = CompanyControl.objects.create(
+            name=request_data.get('name'),
+            alias=request_data.get('alias'),
+            description=request_data.get('description'),
+            version=request_data.get('version'),
+            estimated_maint_opex=request_data.get('opex'),
+            opex_description=request_data.get('opex_desc'),
+            date_maint=request_data.get('maintenance_date')[:10],
+            recovery_multiplier=request_data.get('recovery_multiplier'),
+            recovery_time_unit_id=request_data.get('recovery_time_unit'),
+            evaluation_days=request_data.get('evaluation_days'),
+            poc_main_id=request_data.get('poc_main'),
+            poc_support_id=request_data.get('poc_support')
+        )
+        selected_locations = request_data.get('company_locations',[])
+        for location in selected_locations:
+            try:
+                CompanyControlLocation.objects.create(
+                    id_companycontrol_id=cc.id,
+                    id_companylocation_id=location
+                )
+            except:
+                ''
+
+        selected_segments = request_data.get('company_segments',[])
+        try:
+            for segment in selected_segments:
+                try:
+                    CompanyControlSegment.objects.create(
+                        id_companycontrol_id=cc.id,
+                        id_companysegment_id=segment
+                    )
+                except:
+                    rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+        except:
+            ''
+        rv = {
+            'status': 'success',
+            'code': 200
+        }
+    except:
+        rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+    return JsonResponse(rv)
+
+@login_required
 def api_get_risk_entry(request, entry_id):
     """Get risk entry by id."""
     rv = {}
@@ -857,6 +998,7 @@ def api_get_risk_entry(request, entry_id):
 
             try:
                 ancillary_items = []
+                total_cost_value = 0
                 for item in EntryAncillary.objects.filter(entry=risk_entry):
                     ancillary_items.append({
                         'type_id': item.ancillary_type_id,
@@ -869,9 +1011,11 @@ def api_get_risk_entry(request, entry_id):
                         'occurences': item.per_occurance,
                         'total_cost': item.per_occurance * item.ancillary_fixed
                     })
+                    total_cost_value += float(item.per_occurance * item.ancillary_fixed)
                 rv.update({
                     'ancillary_items': {
-                        'multidata': ancillary_items
+                        'multidata': ancillary_items,
+                        'total_cost_value': total_cost_value
                     }
                 })
             except:

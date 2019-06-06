@@ -461,13 +461,24 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 segments: function(CompanySegmentService){
                     return CompanySegmentService.getCompanySegments();
                 },
-                recover_time_units: function(TimeUnitService){
+                recovery_time_units: function(TimeUnitService){
                     return TimeUnitService.getAllTimeUnits();
+                },
+                control_categories: function(ControlCategoryService){
+                    return ControlCategoryService.getAllControlCategories();
+                },
+                company_contacts: function(CompanyContactService){
+                    return CompanyContactService.getAllCompanyContact();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,
                         files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
                             '/static/dashboard_assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css',
                             '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css',
                             '/static/dashboard_assets/plugins/DataTables/media/js/jquery.dataTables.js',

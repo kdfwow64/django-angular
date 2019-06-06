@@ -217,6 +217,10 @@ legend {
     float: right;
     margin-left:10px;
 }
+.modal-toggle {
+    float: right;
+    margin-left:10px;
+}
 
 .vendor-list-tb thead th {
     text-align: center;
@@ -240,4 +244,21 @@ legend {
 .cc-list-tbs .col-sm-6 .dataTables_filter{
     /*display: none !important;*/
     float: left !important;
+}
+
+.inside-button {
+    float: left;
+    margin-top: -24px;
+    margin-left: 5px;
+}
+
+#control_lists_table tbody tr td:nth-child(2) {
+    white-space: pre-wrap;
+}
+
+.control-section {
+    display: none;
+}
+.company-control-section {
+    display: none;
 }

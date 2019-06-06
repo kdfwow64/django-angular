@@ -3484,7 +3484,7 @@ colorAdminApp.controller('registerAddEntriresController',
     else{
         $scope.ancillary_items = {
             multidata: [],
-            total_cost_value: 0
+            total_cost_value: 0.0
         };
     }
 
@@ -4324,7 +4324,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.new_ancillary_item.type = null;
         $scope.new_ancillary_item.summary = '';
         $scope.new_ancillary_item.description = '';
-        $scope.new_ancillary_item.occurences = 0;
+        $scope.new_ancillary_item.occurences = 1;
         $scope.new_ancillary_item.cost = 0;
         $scope.new_ancillary_item.detail = '';
         $scope.new_ancillary_item.evaluation_days = 0;
@@ -4379,12 +4379,18 @@ colorAdminApp.controller('registerAddEntriresController',
             $scope.ancillary_items.multidata.push(edited_item);
         else
             $scope.ancillary_items.multidata[index] = edited_item;
+        $scope.ancillary_items.total_cost_value = 0;
+        for(i=0;i<$scope.ancillary_items.multidata.length;i++)
+            $scope.ancillary_items.total_cost_value += parseFloat(parseFloat($scope.ancillary_items.multidata[i].total_cost));
         $('#add_edit_ancillary_item').modal('hide');
     }
 
     $scope.remove_this_ancillary_item = function(index) {
         $scope.ancillary_items.multidata.splice(index, 1);
+        for(i=0;i<$scope.ancillary_items.multidata.length;i++)
+            $scope.ancillary_items.total_cost_value += parseFloat($scope.ancillary_items.multidata[i].total_cost);
     }
+
     /*--------End Step 3-----------*/
 
     /* Start Step 4 Mitigation Control*/
@@ -4607,9 +4613,9 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.add_control.aro_cost_value = ($scope.affected_assets.total_sle_value - sle_cost - $scope.add_control.sle_cost_value) * $scope.add_control.aro_mitigation_rate / 100;
         $scope.add_control.aro_cost_value = parseFloat($scope.add_control.aro_cost_value).toFixed(2);
         $scope.add_control.aro_cost = '-$' + $scope.add_control.aro_cost_value;
-        $scope.add_control.total_cost_value = parseFloat($scope.add_control.sle_cost_value + $scope.add_control.aro_cost_value).toFixed(2);
+        $scope.add_control.total_cost_value = parseFloat(parseFloat($scope.add_control.sle_cost_value) + parseFloat($scope.add_control.aro_cost_value)).toFixed(2);
         $scope.add_control.total_cost = '-$' + $scope.add_control.total_cost_value;
-        $scope.add_control.total_ale_impact_value = parseFloat($scope.add_control.total_cost_value * $scope.basicinfo.aro_rate / 100).toFixed(2);
+        $scope.add_control.total_ale_impact_value = parseFloat(parseFloat($scope.add_control.total_cost_value) * parseFloat($scope.basicinfo.aro_rate) / 100).toFixed(2);
         $scope.add_control.total_ale_impact = '-$' + $scope.add_control.total_ale_impact_value;
     }
     /* Ent Step 4*/
@@ -4775,6 +4781,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.affected_assets.total_sle = total_sle;
         $scope.affected_assets.total_sle_value = total_sle;
         $scope.affected_assets.total_ale = parseFloat(total_ale);
+        $scope.affected_assets.total_ale_with_ancillary = $scope.affected_assets.total_ale + parseFloat($scope.ancillary_items.total_cost_value * $scope.basicinfo.aro_rate / 100);
         $scope.affected_assets.total_ale_value = total_ale;
         $scope.mitigating_controls_update();
     }
@@ -4832,7 +4839,7 @@ colorAdminApp.controller('registerAddEntriresController',
 
         residual_ale_rate = ($scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale) / max_loss;
         residual_ale_rate_percent = residual_ale_rate * 100;
-        $scope.entry_overview.residual_ale_monitized = $scope.affected_assets.total_ale_value - $scope.mitigating_controls.total_ale;
+        $scope.entry_overview.residual_ale_monitized = $scope.affected_assets.total_ale_with_ancillary - $scope.mitigating_controls.total_ale;
         $scope.entry_overview.residual_ale_rate = residual_ale_rate_percent.toFixed(3);
         $scope.mitigating_controls.residual_ale_rate = $scope.entry_overview.residual_ale_rate;
         $http.post('/dashboard/api/risk-entry/mitigating-controls/' + $scope.entry_id + '/', $scope.mitigating_controls)
@@ -4841,7 +4848,7 @@ colorAdminApp.controller('registerAddEntriresController',
                 /*Inherent*/
                 inherent_ale_rate = $scope.affected_assets.total_ale_value / max_loss;
                 inherent_ale_rate_percent = inherent_ale_rate * 100;
-                $scope.entry_overview.inherent_ale_monitized = $scope.affected_assets.total_ale_value;
+                $scope.entry_overview.inherent_ale_monitized = $scope.affected_assets.total_ale_with_ancillary;
                 // $scope.entry_overview.inherent_ale_rate = parseInt(inherent_ale_rate * 1000000) / 10000;
                 $scope.entry_overview.inherent_ale_rate = inherent_ale_rate_percent.toFixed(3);
                 $http.post('/dashboard/api/severity-categories/')
@@ -4981,17 +4988,48 @@ colorAdminApp.controller('registerAddEntriresController',
 
 
 colorAdminApp.controller('registerControlCheckInController',
-    function($http, $scope, $rootScope, $state, locations, recover_time_units, segments) {
+    function($http, $scope, $rootScope, $state, locations, recovery_time_units, segments, control_categories, company_contacts) {
     $scope.company_segments = segments;
     $scope.company_locations = locations;
-    $scope.recover_time_units = recover_time_units;
+    $scope.recovery_time_units = recovery_time_units;
+    $scope.control_categories = control_categories;
+    $scope.company_contacts = company_contacts;
+    $scope.new_cc = {
+        vendor_select: null,
+        control_select: null,
+        name: '',
+        alias: '',
+        description: '',
+        version: '',
+        opex: '',
+        opex_desc: '',
+        maintenance_date: null,
+        recovery_multiplier: 0,
+        recovery_time_units: null,
+        company_locations: null,
+        company_segments: null,
+        evaluation_days: 0,
+        poc_main: '',
+        poc_support: ''
+    };
     $scope.search = {};
+    $scope.new_vendor = {
+        name: '',
+        url: '',
+        description: ''
+    }
+    $scope.new_control = {
+        name: '',
+        category: null,
+        url: ''
+    }
     // $scope.users = [];
     angular.element(document).ready(function () {
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        var vendor_table, control_table;
         if ($('#vendor_lists_table').length !== 0) {
-            var table = $('#vendor_lists_table').DataTable({
+             vendor_table = $('#vendor_lists_table').DataTable({
                 "responsive": true,
                 // "processing": true,
                 // "serverSide": true,
@@ -5004,6 +5042,7 @@ colorAdminApp.controller('registerControlCheckInController',
                 columns: [
                     {
                         "data": null,
+                        "name": "id",
                         "searchable": false,
                         "orderable": false,
                         "width": "5%",
@@ -5014,12 +5053,13 @@ colorAdminApp.controller('registerControlCheckInController',
                     },
                     // {"data": "id", "width": "5%"},
                     {"data": "name", "name": "name", "width": "15%"},
-                    {"data": "abbrv", "searchable": false, "name": "abbrv", "width": "10%"},
-                    {"data": "aka", "searchable": false, "name": "aka", "width": "10%"},
+                    {"data": "abbrv", "name": "abbrv", "width": "10%"},
+                    {"data": "aka", "name": "aka", "width": "10%"},
                     {
                         "data": null,
                         "orderable": false,
                         "width": "20%",
+                        "name": 'url',
                         "searchable": false,
                         "render":  function ( data, type, row, meta ) {
                             return "<a href='"+row['url']+"'>"+row['url']+"</a>";
@@ -5031,48 +5071,148 @@ colorAdminApp.controller('registerControlCheckInController',
                 initComplete: function () {
                     // table.column('compliance:name').search($scope.search.compliance ? 1 : '').draw();
                     // table.column('completed:name').search($scope.search.completed ? 0 : '').draw();
-                    table.column('name:name').search('').draw();
+                    // table.column('name:name').search('').draw();
                     //table.column('completed:name').search('').draw();
                 }
             });
         }
 
-        if ($('#control_lists_table').length !== 0) {
-            var table = $('#control_lists_table').DataTable({
-                "responsive": true,
-                // "processing": true,
-                // "serverSide": true,
-                "ajax": 'api/control-lists/',
-                "autoWidth": false,
-                "search": {
-                    regex: true
-                },
-                columns: [
-                    {
-                        "data": null,
-                        "searchable": false,
-                        "orderable": false,
-                        "width": "5%",
-                        "render":  function ( data, type, row, meta ) {
-                            // return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success btn-xs edit-risk-entry'>Edit</a>";
-                            return "<input name='control_select' type='radio' class='form-control' ng-model='new_cc.control_select' value='"+row['id']+"'>";
+        $scope.show_control_list = function() {
+            if($('input[name=vendor_select]:checked').val()) {
+                $('.control-section').show();
+                if ($('#control_lists_table').length !== 0) {
+                    if (control_table instanceof $.fn.dataTable.Api) {
+                        control_table.destroy();
+                    }
+                    control_table = $('#control_lists_table').DataTable({
+                        "destroy": true,
+                        "responsive": true,
+                        // "processing": true,
+                        // "serverSide": true,
+                        "ajax": 'api/control-lists/' + parseInt($('input[name=vendor_select]:checked').val()),
+                        "autoWidth": false,
+                        "search": {
+                            regex: true
+                        },
+                        columns: [
+                            {
+                                "data": null,
+                                "searchable": false,
+                                "orderable": false,
+                                "width": "1%",
+                                "render": function (data, type, row, meta) {
+                                    // return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success btn-xs edit-risk-entry'>Edit</a>";
+                                    return "<input name='control_select' type='radio' class='form-control' ng-model='new_cc.control_select' value='" + row['id'] + "'>";
+                                }
+                            },
+                            {"data": "name", "name": "response", "width": "10%"},
+                            {"data": "category", "name": "category", "width": "25%"},
+                            {
+                                "data": null,
+                                "orderable": false,
+                                "width": "20%",
+                                "searchable": false,
+                                "render": function (data, type, row, meta) {
+                                    return "<a href='" + row['url'] + "'>" + row['url'] + "</a>";
+                                }
+                            },
+                            {"data": "aka", "searchable": false, "name": "aka", "width": "15%"},
+                            {"data": "abbrv", "name": "abbrv", 'visible': false},
+                            {"data": "description", "name": "description", 'visible': false}
+                        ],
+                        initComplete: function () {
                         }
-                    },
-                    {"data": "name", "name": "response", "width": "15%"},
-                    {"data": "abbrv", "searchable": false, "name": "abbrv", "width": "10%"},
-                    {
-                        "data": null,
-                        "orderable": false,
-                        "width": "20%",
-                        "searchable": false,
-                        "render":  function ( data, type, row, meta ) {
-                            return "<a href='"+row['url']+"'>"+row['url']+"</a>";
-                        }
-                    },
-                    {"data": "aka", "name": "aka", "width": "15%"}
-                ],
-                initComplete: function () {
+                    });
                 }
+            } else{
+                alert('Vendor not selected');
+            }
+        }
+
+        $scope.show_company_control_section = function() {
+            if($('input[name=control_select]:checked').val()) {
+                $('.company-control-section').show();
+            } else{
+                alert('Control not selected');
+            }
+        }
+        $scope.add_new_vendor = function() {
+            validation = false;
+            $('#add_new_vendor input').each(function() {
+                if($(this).parsley().validate() != true)
+                    validation = true;
+            });
+            if(validation)
+                return false;
+            $http.post('/dashboard/api/save-new-vendor/', $scope.new_vendor)
+                .then(function(result){
+                    if(result){
+                        vendor_table.row.add({
+                            id: result['data']['new_vendor']['id'],
+                            name: result['data']['new_vendor']['name'],
+                            abbrv: '',
+                            aka: '',
+                            url: result['data']['new_vendor']['url'],
+                            parent: ''
+                        }).draw(false);
+                        $('#add_new_vendor').modal('hide');
+                    } else {
+                        alert('Something wrong');
+                        return false;
+                    }
+                }).catch(function(error){
+                    alert('Something wrong');
+                    return false;
+            });
+        }
+
+        $scope.add_new_control = function() {
+            // result['data']['new_vendor']['id']
+            validation = false;
+            $('#add_new_control input').each(function() {
+                if($(this).parsley().validate() != true)
+                    validation = true;
+            });
+            if(validation)
+                return false;
+            $scope.new_control.category_name = $('select[name=control_category] option:selected').html();
+            $http.post('/dashboard/api/save-new-control/'+parseInt($('input[name=vendor_select]:checked').val())+'/', $scope.new_control)
+                .then(function(result){
+                    if(result){
+                        control_table.row.add({
+                            id: result['data']['new_control']['id'],
+                            name: result['data']['new_control']['name'],
+                            category: result['data']['new_control']['category'],
+                            url: result['data']['new_control']['url'],
+                            abbrv: '',
+                            description: '',
+                            aka: ''
+                        }).draw(false);
+                        $('#add_new_control').modal('hide');
+                    } else {
+                        alert('Something wrong');
+                        return false;
+                    }
+                }).catch(function(error){
+                    alert('Something wrong');
+                    return false;
+            });
+        }
+
+        $scope.add_new_company_control = function(){
+            $scope.new_cc.vendor_id = parseInt($('input[name=vendor_select]:checked').val());
+            $scope.new_cc.control_id = parseInt($('input[name=control_select]:checked').val());
+            $http.post('/dashboard/api/save-new-company-control/', $scope.new_cc)
+                .then(function(result){
+                    if(result['data']['status'] == 'success'){
+                        alert('Success');
+                    } else {
+                        alert('Something wrong');
+                        return false;
+                    }
+                }).catch(function(error){
+                    alert('Something wrong');
+                    return false;
             });
         }
     });
