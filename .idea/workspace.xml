@@ -28,15 +28,16 @@
       <file leaf-file-name="angular-controller.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="5327" column="73" lean-forward="true" selection-start-line="5327" selection-start-column="73" selection-end-line="5327" selection-end-column="73" />
+            <state relative-caret-position="238">
+              <caret line="5330" column="51" lean-forward="false" selection-start-line="5330" selection-start-column="51" selection-end-line="5330" selection-end-column="51" />
               <folding>
                 <element signature="e#128554#136458#0" expanded="false" />
                 <element signature="e#137196#210432#0" expanded="false" />
-                <element signature="e#210626#221812#0" expanded="false" />
                 <element signature="e#217809#218019#0" expanded="false" />
-                <element signature="e#221978#224282#0" expanded="false" />
-                <element signature="e#228377#229167#0" expanded="false" />
+                <element signature="e#222053#224357#0" expanded="false" />
+                <element signature="e#225610#226176#0" expanded="false" />
+                <element signature="e#228437#229296#0" expanded="false" />
+                <element signature="e#229405#231014#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -71,8 +72,8 @@
       <file leaf-file-name="add_company_asset.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/templates/dashboard/views/add_company_asset.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="203" column="70" lean-forward="true" selection-start-line="203" selection-start-column="70" selection-end-line="203" selection-end-column="70" />
+            <state relative-caret-position="176">
+              <caret line="79" column="122" lean-forward="false" selection-start-line="79" selection-start-column="122" selection-end-line="79" selection-end-column="122" />
               <folding />
             </state>
           </provider>
@@ -81,11 +82,10 @@
       <file leaf-file-name="angular-app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="523">
-              <caret line="606" column="51" lean-forward="false" selection-start-line="606" selection-start-column="25" selection-end-line="606" selection-end-column="51" />
+            <state relative-caret-position="11040">
+              <caret line="518" column="58" lean-forward="false" selection-start-line="518" selection-start-column="25" selection-end-line="518" selection-end-column="58" />
               <folding>
                 <element signature="e#25506#27589#0" expanded="false" />
-                <element signature="e#27648#29391#0" expanded="false" />
                 <element signature="e#29444#30944#0" expanded="false" />
                 <element signature="e#30999#32504#0" expanded="false" />
                 <element signature="e#34410#34522#0" expanded="false" />
@@ -133,9 +133,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get_all_company_assets_for_dropdown</find>
-      <find>company_control_list</find>
-      <find>entryancillary</find>
       <find>entryancill</find>
       <find>open_add_affected_asset_modal</find>
       <find>&quot;ttr</find>
@@ -146,7 +143,6 @@
       <find>check</find>
       <find>addcompany</find>
       <find>company-asset</find>
-      <find>registerAddCompanyAssetController</find>
       <find>CompanyContactService</find>
       <find>asset_quantity_fixed</find>
       <find>time_unit</find>
@@ -163,6 +159,10 @@
       <find>registerControlCheckInController</find>
       <find>define</find>
       <find>time based</find>
+      <find>add_company_asset</find>
+      <find>redirect</find>
+      <find>registerAddCompanyAssetController</find>
+      <find>add_new_company_control</find>
     </findStrings>
     <replaceStrings>
       <replace>compliance_requirements</replace>
@@ -444,7 +444,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32649842" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15299684" sideWeight="0.4974208" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19400631" sideWeight="0.4974208" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38012618" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -782,23 +782,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="606" column="51" lean-forward="false" selection-start-line="606" selection-start-column="25" selection-end-line="606" selection-end-column="51" />
-          <folding>
-            <element signature="e#25506#27589#0" expanded="false" />
-            <element signature="e#27648#29391#0" expanded="false" />
-            <element signature="e#29444#30944#0" expanded="false" />
-            <element signature="e#30999#32504#0" expanded="false" />
-            <element signature="e#34410#34522#0" expanded="false" />
-            <element signature="e#34567#36043#0" expanded="false" />
-            <element signature="e#36076#36189#0" expanded="false" />
-            <element signature="e#36236#37715#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="523">
@@ -833,25 +816,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11040">
+          <caret line="518" column="58" lean-forward="false" selection-start-line="518" selection-start-column="25" selection-end-line="518" selection-end-column="58" />
+          <folding>
+            <element signature="e#25506#27589#0" expanded="false" />
+            <element signature="e#29444#30944#0" expanded="false" />
+            <element signature="e#30999#32504#0" expanded="false" />
+            <element signature="e#34410#34522#0" expanded="false" />
+            <element signature="e#34567#36043#0" expanded="false" />
+            <element signature="e#36076#36189#0" expanded="false" />
+            <element signature="e#36236#37715#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/risk/templates/dashboard/views/add_company_asset.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="203" column="70" lean-forward="true" selection-start-line="203" selection-start-column="70" selection-end-line="203" selection-end-column="70" />
+        <state relative-caret-position="176">
+          <caret line="79" column="122" lean-forward="false" selection-start-line="79" selection-start-column="122" selection-end-line="79" selection-end-column="122" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="5327" column="73" lean-forward="true" selection-start-line="5327" selection-start-column="73" selection-end-line="5327" selection-end-column="73" />
+        <state relative-caret-position="238">
+          <caret line="5330" column="51" lean-forward="false" selection-start-line="5330" selection-start-column="51" selection-end-line="5330" selection-end-column="51" />
           <folding>
             <element signature="e#128554#136458#0" expanded="false" />
             <element signature="e#137196#210432#0" expanded="false" />
-            <element signature="e#210626#221812#0" expanded="false" />
             <element signature="e#217809#218019#0" expanded="false" />
-            <element signature="e#221978#224282#0" expanded="false" />
-            <element signature="e#228377#229167#0" expanded="false" />
+            <element signature="e#222053#224357#0" expanded="false" />
+            <element signature="e#225610#226176#0" expanded="false" />
+            <element signature="e#228437#229296#0" expanded="false" />
+            <element signature="e#229405#231014#0" expanded="false" />
           </folding>
         </state>
       </provider>

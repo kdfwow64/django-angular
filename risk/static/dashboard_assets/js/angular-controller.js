@@ -5190,7 +5190,8 @@ colorAdminApp.controller('registerControlCheckInController',
             $http.post('/dashboard/api/save-new-company-control/', $scope.new_cc)
                 .then(function(result){
                     if(result['data']['status'] == 'success'){
-                        alert('Success');
+                        window.location.href = "#!/app/controls/list-controls";
+                        return true;
                     } else {
                         alert('Something wrong');
                         return false;
@@ -5321,13 +5322,13 @@ colorAdminApp.controller('registerAddCompanyAssetController',
                         start = $scope.new_ca.asset_value_fixed * $scope.new_ca.asset_quantity_fixed;
                         for(i=0 ;i<$scope.new_ca.asset_time_unit ; i++) {
                             amount += start;
-                            start = start * parseFloat($scope.new_ca.time_unit_increment) / 100;
+                            start = start * parseFloat($scope.new_ca.time_unit_increment) / 100 + start;
                         }
                     } else {
-                        start = $scope.new_ca.asset_value_fixed * $scope.new_ca.asset_quantity_fixed * $scope.new_ca.time_unit_max;
-                        for(i=0 ;i<$scope.new_ca.asset_time_unit ; i++) {
+                        start = $scope.new_ca.asset_value_fixed * $scope.new_ca.asset_quantity_fixed ;
+                        for(i=0 ;i<$scope.new_ca.time_unit_max ; i++) {
                             amount += start;
-                            start = start * parseFloat($scope.new_ca.time_unit_increment) / 100;
+                            start = start * parseFloat($scope.new_ca.time_unit_increment) / 100 + start;
                         }
                     }
                 }
@@ -5346,7 +5347,7 @@ colorAdminApp.controller('registerAddCompanyAssetController',
             $http.post('/dashboard/api/add-company-asset/', $scope.new_ca)
             .then(function(r) {
                 if(r) {
-
+                    window.location.href="#!/app/assets/list-assets";
                     return true;
                 } else {
                     alert("Backend saving error");
