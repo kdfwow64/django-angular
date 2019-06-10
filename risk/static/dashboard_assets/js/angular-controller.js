@@ -5318,9 +5318,17 @@ colorAdminApp.controller('registerAddCompanyAssetController',
                     }
                 } else {
                     if(parseInt($scope.new_ca.time_unit_max) ===0 ) {
-
+                        start = $scope.new_ca.asset_value_fixed * $scope.new_ca.asset_quantity_fixed;
+                        for(i=0 ;i<$scope.new_ca.asset_time_unit ; i++) {
+                            amount += start;
+                            start = start * parseFloat($scope.new_ca.time_unit_increment) / 100;
+                        }
                     } else {
-
+                        start = $scope.new_ca.asset_value_fixed * $scope.new_ca.asset_quantity_fixed * $scope.new_ca.time_unit_max;
+                        for(i=0 ;i<$scope.new_ca.asset_time_unit ; i++) {
+                            amount += start;
+                            start = start * parseFloat($scope.new_ca.time_unit_increment) / 100;
+                        }
                     }
                 }
             }
