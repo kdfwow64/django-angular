@@ -605,13 +605,47 @@ function CompanyContactService($http){
     }
     return service;
 }
+/* -----------------------------------
+   24.0 SERVICE - CompanyAssetTypeService
+--------------------------------------*/
+
+function CompanyAssetTypeService($http){
+    function get_all_company_asset_type(){
+        return $http.get('/dashboard/api/get-company-asset-type/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getAllCompanyAssetType: get_all_company_asset_type
+    }
+    return service;
+}
+/* -----------------------------------
+   24.0 SERVICE - CompanyAssetTypeService
+--------------------------------------*/
+
+function CompanyDetailService($http){
+    function get_company_annual_revenue(){
+        return $http.get('/dashboard/api/get-company-annual-revenue/').then(function(r){
+            return r.data.annual_revenue;
+        }, function(r){});
+    }
+
+    var service = {
+        getCompanyAnnualRevenue: get_company_annual_revenue
+    }
+    return service;
+}
 
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseService', ['$http', ResponseService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
              .factory('CompanySegmentService', ['$http', CompanySegmentService])
              .factory('CompanyContactService', ['$http', CompanyContactService])
+             .factory('CompanyAssetTypeService', ['$http', CompanyAssetTypeService])
              .factory('ControlCategoryService', ['$http', ControlCategoryService])
+             .factory('CompanyDetailService', ['$http', CompanyDetailService])
              .factory('ComplianceService', ['$http', ComplianceService])
              .factory('UserService', ['$http', UserService])
              .factory('ActorService', ['$http', ActorService])

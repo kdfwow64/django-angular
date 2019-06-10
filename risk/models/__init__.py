@@ -54,6 +54,7 @@ from .company import (
     CompanyProfile,
     CompanyArtifact,
     CompanyAsset,
+    CompanyAssetLocation,
     CompanyAssetType,
     CompanyObjective,
     CompanyControl,

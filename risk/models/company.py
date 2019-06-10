@@ -273,15 +273,15 @@ class CompanyAsset(DefaultFieldsCompany):
         verbose_name_plural = ("Company Assets")
 
     def get_asset_value(self):
-        if asset_value_toggle == 'F':
+        if self.asset_value_toggle == 'F':
             # Fixed - The asset value has a fixed cost.  Total value may
             # flucuate based on quantity
             return (self.asset_value_fixed * self.asset_quantity_fixed)
-        elif asset_value_toggle == 'P':
+        elif self.asset_value_toggle == 'P':
             # PAR -  The asset value is based on a percentage of revenue for
             # the company
             return (self.asset_value_par * self.id_company.annual_revenue)
-        elif asset_value_toggle == 'T':
+        elif self.asset_value_toggle == 'T':
             # Time based  - The asset has a time based value.  The contributor
             # must determine what is relative.
             return (self.asset_fixed_value * self.asset_time_unit_quantity)

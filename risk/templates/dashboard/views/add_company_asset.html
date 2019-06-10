@@ -1,0 +1,252 @@
+{% load staticfiles %}
+
+<div>
+    <!-- begin breadcrumb -->
+    <ol class="breadcrumb pull-right">
+        <li><a href="javascript:;">Home</a></li>
+        <li><a href="javascript:;">Dashboard</a></li>
+        <li class="active">Add Assets</li>
+    </ol>
+    <!-- end breadcrumb -->
+    <!-- begin page-header -->
+    <h1 class="page-header">Control Check-in&nbsp;&nbsp;<small>add Vendor, Control and Company Control</small></h1>
+    <!-- end page-header -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-green">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-globe fa-fw"></i></div>
+                <div class="stats-title">TODAY'S VISITS</div>
+                <div class="stats-number">7,842,900</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 70.1%;"></div>
+                </div>
+                <div class="stats-desc">Better than last week (70.1%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-blue">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-tags fa-fw"></i></div>
+                <div class="stats-title">TODAY'S PROFIT</div>
+                <div class="stats-number">180,200</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 40.5%;"></div>
+                </div>
+                <div class="stats-desc">Better than last week (40.5%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-purple">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-shopping-cart fa-fw"></i></div>
+                <div class="stats-title">NEW ORDERS</div>
+                <div class="stats-number">38,900</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 76.3%;"></div>
+                </div>
+                <div class="stats-desc">Better than last week (76.3%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-black">
+                <div class="stats-icon stats-icon-lg"><i class="fa fa-comments fa-fw"></i></div>
+                <div class="stats-title">NEW COMMENTS</div>
+                <div class="stats-number">3,988</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 54.9%;"></div>
+                </div>
+                <div class="stats-desc">Better than last week (54.9%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+    </div>
+    <!-- end row -->
+    <!--begin row -->
+    <div class="row">
+    <!-- begin col-12 -->
+        <div class="col-md-12">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    </div>
+                    <h4 class="panel-title">Add Items</h4>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <fieldset>
+                            <legend class="pull-left width-full">Create Company Asset</legend>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group block1">
+                                        <label>Asset Name</label>
+                                        <input type="text" pattern=".{25,255}" ng-model="new_ca.name" name="new_company_asset_name" placeholder="Name" class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Asset Type</label>
+                                        <select name="new_company_asset_type" ng-model="new_ca.type" class="form-control" ng-options="k.id as k.name for k in company_asset_types" required/><option value=""></option></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Asset Description</label>
+                                        <textarea rows="3" ng-model="new_ca.description" name="new_company_asset_description" placeholder="Description" class="form-control" required/></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Locations in Scope</label>
+                                        <select name="new_company_asset_locations" ng-model="new_ca.locations" class="form-control" multiple=true ng-options="k.id as k.name for k in company_asset_locations"/></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Asset Owner</label>
+                                        <select name="new_company_asset_owner" ng-model="new_ca.owner" class="form-control" ng-options="k.id as k.name for k in company_asset_owners" required/><option value=""></option></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Evaluation Cadence in Days</label>
+                                        <input type="number" ng-model="new_ca.evaluation_days" min="0" step="1" name="new_company_asset_evaluation_days" placeholder="Evaluation Days" class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 wizard-company-asset">
+                                    <div class="form-group">
+                                        <label>Define annual value from the following methods</label>
+                                        <div class="col-md-12 aro-bordered-div">
+                                            <div class="row" ng-class="f_class">
+                                                <div class="col-md-1">
+                                                    <div class="form-group">
+                                                        <input type="radio" ng-change="aro_toggle_change()" ng-model="new_ca.toggle" value="F" name="toggle" class="form-control aro-radio-btn" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label>Annual Fixed Value</label>
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='F'" ng-required="new_ca.toggle=='F'" ng-model="new_ca.asset_value_fixed" step="0.01" name="asset_value_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='F'" ng-required="new_ca.toggle=='F'" ng-model="new_ca.asset_quantity_fixed" step="1" name="asset_quantity_fixed" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-class="p_class">
+                                                <div class="col-md-1">
+                                                    <div class="form-group">
+                                                        <input type="radio" ng-change="aro_toggle_change()" ng-model="new_ca.toggle" value="P" name="toggle" class="form-control aro-radio-btn" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Annual Percentage of revenus</label>
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='P'" ng-required="new_ca.toggle=='P'" ng-model="new_ca.asset_percent" step="0.01" name="asset_percent" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 letter-margin-top">
+                                                    <span>%</span>
+                                                </div>
+                                                <div class="col-md-1 letter-margin-top">
+                                                    <span>of</span>
+                                                </div>
+                                                <div class="col-md-1 letter-margin-top">
+                                                    $<span ng-bind="annual_revenue"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-class="t_class">
+                                                <div class="col-md-1">
+                                                    <div class="form-group">
+                                                        <input type="radio" ng-change="aro_toggle_change()" ng-model="new_ca.toggle" value="T" name="toggle" class="form-control aro-radio-btn" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label>Time Based</label>
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_value_fixed" step="0.01" name="asset_value_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <select name="asset_time_unit" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_time_unit" class="form-control input-without-label" ng-options="k.annual_units as k.name for k in time_units | orderBy:'sort_order'" data-parsley-group="wizard-company-asset"/><option value=""></option></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_quantity_fixed" step="1" name="asset_quantity_fixed" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.time_unit_max" step="1" name="time_unit_max" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.time_unit_increment" step="0.01" name="time_unit_increment" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 div-right">
+                                                    <a class="btn btn-success input-without-label" ng-click="get_result_from_aro()">Calculate</a>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group aro-cal-res-div">
+                                                        <span ng-bind="preview_value_txt"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Value Summary</label>
+                                                        <textarea rows="3" ng-model="new_ca.summary" name="new_company_asset_summary" placeholder="Summary" class="form-control" required/></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- start row -->
+                                <div class="col-md-12" style="margin-bottom: 10px;">
+                                    <div class="col-md-1">
+                                        <a class="btn btn-success" ng-click="add_company_asset()">Add a Company Asset</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--end row -->
+    </div>
+</div>

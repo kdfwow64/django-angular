@@ -18,6 +18,7 @@ from risk.models import (
     CompanyControlSegment,
     CompanyControlMeasure,
     CompanyLocation,
+    CompanyAssetType,
     Compliance,
     Entry,
     EntryActor,
@@ -193,13 +194,19 @@ def api_list_vendors(request):
         rows = []
         total = 0
         for vendor in Vendor.objects.filter(company_id__in=[1, company.id]):
+            parent_name = ''
+            if vendor.parent_id is not None:
+                try:
+                    parent_name = Vendor.objects.get(id=vendor.parent_id).name
+                except:
+                    parent_name = ''
             rows.append({
                 'id': vendor.id,
                 'name': vendor.name,
                 'abbrv': vendor.abbrv,
                 'aka': vendor.name_aka,
                 'url': vendor.url_main,
-                'parent': vendor.parent_id
+                'parent': parent_name
             })
             total +=1
 
@@ -214,6 +221,347 @@ def api_list_vendors(request):
 
         }
     return JsonResponse(data)
+
+@login_required
+def api_company_control_list(request):
+    """Company Control List."""
+    company = request.user.get_current_company()
+    user = request.user
+    try:
+        rows = []
+        total = 0
+        for cc in CompanyControl.objects.filter(company_id__in=[1, company.id]):
+            vendor_name = ''
+            vendor_abbrv = ''
+            vendor_aka = ''
+            try:
+                control_ob = Control.objects.get(id=cc.control_id)
+                control_name = control_ob.name
+                control_abbrv = control_ob.abbrv
+                control_description = control_ob.description
+                try:
+                    vendor_ob = Vendor.objects.get(id=control_ob.vendor_id)
+                    vendor_name = vendor_ob.name
+                    vendor_abbrv = vendor_ob.abbrv
+                    vendor_aka = vendor_ob.name_aka
+                except:
+                    pass
+            except:
+                control_name = ''
+                control_description = ''
+                control_abbrv = ''
+
+            try:
+                company_contact = CompanyContact.objects.get(id=cc.poc_main_id)
+                poc_main = company_contact.first_name + company_contact.last_name
+            except:
+                poc_main = ''
+
+            protection_mitigated_ale_cost_sum = 0
+            protection_inherent_ale_cost_sum = 0
+
+            try:
+                for e_cc in EntryCompanyControl.objects.filter(id_companycontrol_id=cc.id):
+                    entry = Entry.objects.get(id=e_cc.id_entry_id)
+
+                    aro_rate = 0
+                    rate_relation = {}
+                    if entry.aro_toggle == 'C':
+                        frequency_category = FrequencyCategory.objects.get(
+                            id=entry.aro_frequency_id)
+                        rate_relation = {
+                            'minimum': frequency_category.minimum,
+                            'maximum': frequency_category.maximum
+                        }
+                        aro_rate = (frequency_category.minimum +
+                                    frequency_category.maximum) / 2 * 100
+                        if frequency_category.minimum == 1:
+                            aro_rate = 100
+                    elif entry.aro_toggle == 'K':
+                        aro_rate = entry.aro_fixed
+                    else:
+                        time_unit = TimeUnit.objects.get(
+                            id=entry.aro_time_unit_id)
+                        rate_relation = {
+                            'annual_units': time_unit.annual_units
+                        }
+                        aro_rate = entry.aro_known_multiplier * \
+                                   time_unit.annual_units / entry.aro_known_unit_quantity
+                        if aro_rate >= 1:
+                            aro_rate = 100
+                        else:
+                            aro_rate *= 100
+                    aro_rate = Decimal(aro_rate)
+                    if entry.is_qualified(rate_relation):
+                        # Total SLE
+                        total_sle = 0
+                        total_ale = 0
+                        try:
+                            total_asset_value = 0
+                            for entry_company_asset in entry.companyasset_entry.order_by('id').all():
+                                company_asset = CompanyAsset.objects.get(
+                                    pk=entry_company_asset.id_companyasset_id)
+                                sle_value = round(
+                                    Decimal(company_asset.asset_value_fixed) *
+                                    Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                                    2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                    entry_company_asset.exposure_factor_fixed, 2)
+                                ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(
+                                    entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
+                                                  2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                    Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
+                                total_asset_value += round(
+                                    company_asset.asset_value_fixed, 2)
+                                total_sle += sle_value
+                                total_ale += ale_value
+
+                            for ancillary in entry.entryentryancillary.order_by('id').all():
+                                try:
+                                    total_sle += ancillary.per_occurance * ancillary.ancillary_fixed
+                                except:
+                                    pass
+
+                                try:
+                                    total_ale += ancillary.per_occurance * ancillary.ancillary_fixed * aro_rate / 100
+                                except:
+                                    pass
+                        except:
+                            pass
+                        # Mitigating Info
+                        total_ale_impact = 0
+                        try:
+                            total_sle_rate = 0
+                            for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                                total_sle_rate += mitigating_control.sle_mitigation_rate
+                            total_sle_rate = Decimal(total_sle_rate)
+                            total_aro_rate = 0
+                            total_sle_cost = 0
+                            total_aro_cost = 0
+                            total_cost = 0
+                            for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                                company_control = CompanyControl.objects.get(
+                                    pk=mitigating_control.id_companycontrol_id)
+                                company = Company.objects.get(
+                                    pk=company_control.company_id)
+                                control = Control.objects.get(
+                                    pk=company_control.control_id)
+                                vendor = Vendor.objects.get(pk=control.vendor_id)
+                                sle_cost_value = round(
+                                    total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
+                                aro_cost_value = round(
+                                    total_sle * (100 - total_sle_rate) * Decimal(
+                                        mitigating_control.aro_mitigation_rate) / 10000, 2)
+                                total_cost_value = sle_cost_value + aro_cost_value
+                                impact_value = round(total_cost_value * aro_rate / 100, 2)
+                                total_sle_cost += sle_cost_value
+                                total_aro_cost += aro_cost_value
+                                total_cost += total_cost_value
+                                total_ale_impact += impact_value
+                                total_aro_rate += mitigating_control.aro_mitigation_rate
+                        except:
+                            pass
+                        # protection_inherent_ale_cost_sum += total_ale if entry.response_name == 'Treat' else 0
+                        # protection_residual_ale_cost_sum += Decimal(
+                        #     total_ale - total_ale_impact) if entry.response_name == 'Treat' else 0
+                        protection_mitigated_ale_cost_sum += total_ale_impact
+                        protection_inherent_ale_cost_sum += total_ale
+                    else:
+                        pass
+            except:
+                pass
+
+
+            try:
+                ttr = cc.recovery_multiplier + cc.recovery_time_unit.name
+            except:
+                ttr = ''
+
+            try:
+                annual_cost = cc.estimated_maint_opex + cc.estimated_dependency_opex
+            except:
+                annual_cost = 0;
+            rows.append({
+                'id': cc.id,
+                'cc_name': cc.name,
+                'control_name': control_name,
+                'cc_poc_main': poc_main,
+                'annual_mitigation': protection_mitigated_ale_cost_sum,
+                'annual_cost': annual_cost,
+                'ttr': ttr,
+                'abbrv': cc.abbrv,
+                'alias': cc.alias,
+                'description': cc.description,
+                'control_abbrv': control_abbrv,
+                'control_description': control_description,
+                'vendor_name': vendor_name,
+                'vendor_abbrv': vendor_abbrv,
+                'vendor_aka': vendor_aka
+            })
+            total += 1
+
+        data = {
+            'data': rows,
+            'draw': int(request.GET.get('draw', 0)),
+            'recordsTotal': total,
+            'recordsFiltered': len(rows),
+        }
+    except:
+        data = {
+
+        }
+    return JsonResponse(data)
+
+
+@login_required
+def api_company_asset_list(request):
+    """Company Asset List."""
+    company = request.user.get_current_company()
+    user = request.user
+    try:
+        rows = []
+        total = 0
+        for asset in CompanyAsset.objects.filter(company_id=company.id):
+            protection_mitigated_ale_cost_sum = 0
+            protection_inherent_ale_cost_sum = 0
+            try:
+                for e_ca in EntryCompanyAsset.objects.filter(id_companyasset_id=asset.id):
+                    entry = Entry.objects.get(id=e_ca.id_entry_id)
+                    aro_rate = 0
+                    rate_relation = {}
+                    if entry.aro_toggle == 'C':
+                        frequency_category = FrequencyCategory.objects.get(
+                            id=entry.aro_frequency_id)
+                        rate_relation = {
+                            'minimum': frequency_category.minimum,
+                            'maximum': frequency_category.maximum
+                        }
+                        aro_rate = (frequency_category.minimum +
+                                    frequency_category.maximum) / 2 * 100
+                        if frequency_category.minimum == 1:
+                            aro_rate = 100
+                    elif entry.aro_toggle == 'K':
+                        aro_rate = entry.aro_fixed
+                    else:
+                        time_unit = TimeUnit.objects.get(
+                            id=entry.aro_time_unit_id)
+                        rate_relation = {
+                            'annual_units': time_unit.annual_units
+                        }
+                        aro_rate = entry.aro_known_multiplier * \
+                                   time_unit.annual_units / entry.aro_known_unit_quantity
+                        if aro_rate >= 1:
+                            aro_rate = 100
+                        else:
+                            aro_rate *= 100
+                    aro_rate = Decimal(aro_rate)
+                    if entry.is_qualified(rate_relation):
+                        # Total SLE
+                        total_sle = 0
+                        total_ale = 0
+                        try:
+                            total_asset_value = 0
+                            for entry_company_asset in entry.companyasset_entry.order_by('id').all():
+                                company_asset = CompanyAsset.objects.get(
+                                    pk=entry_company_asset.id_companyasset_id)
+                                sle_value = round(
+                                    Decimal(company_asset.asset_value_fixed) *
+                                    Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                                    2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                    entry_company_asset.exposure_factor_fixed, 2)
+                                ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(
+                                    entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
+                                                  2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                    Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
+                                total_asset_value += round(
+                                    company_asset.asset_value_fixed, 2)
+                                total_sle += sle_value
+                                total_ale += ale_value
+
+                            for ancillary in entry.entryentryancillary.order_by('id').all():
+                                try:
+                                    total_sle += ancillary.per_occurance * ancillary.ancillary_fixed
+                                except:
+                                    pass
+
+                                try:
+                                    total_ale += ancillary.per_occurance * ancillary.ancillary_fixed * aro_rate / 100
+                                except:
+                                    pass
+                        except:
+                            pass
+                        # Mitigating Info
+                        total_ale_impact = 0
+                        try:
+                            total_sle_rate = 0
+                            for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                                total_sle_rate += mitigating_control.sle_mitigation_rate
+                            total_sle_rate = Decimal(total_sle_rate)
+                            total_aro_rate = 0
+                            total_sle_cost = 0
+                            total_aro_cost = 0
+                            total_cost = 0
+                            for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                                company_control = CompanyControl.objects.get(
+                                    pk=mitigating_control.id_companycontrol_id)
+                                company = Company.objects.get(
+                                    pk=company_control.company_id)
+                                control = Control.objects.get(
+                                    pk=company_control.control_id)
+                                vendor = Vendor.objects.get(pk=control.vendor_id)
+                                sle_cost_value = round(
+                                    total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
+                                aro_cost_value = round(
+                                    total_sle * (100 - total_sle_rate) * Decimal(
+                                        mitigating_control.aro_mitigation_rate) / 10000, 2)
+                                total_cost_value = sle_cost_value + aro_cost_value
+                                impact_value = round(total_cost_value * aro_rate / 100, 2)
+                                total_sle_cost += sle_cost_value
+                                total_aro_cost += aro_cost_value
+                                total_cost += total_cost_value
+                                total_ale_impact += impact_value
+                                total_aro_rate += mitigating_control.aro_mitigation_rate
+                        except:
+                            pass
+                        protection_mitigated_ale_cost_sum += total_ale_impact
+                        protection_inherent_ale_cost_sum += total_ale
+                    else:
+                        pass
+            except:
+                pass
+
+            try:
+                asset_type = CompanyAssetType.objects.get(id=asset.asset_type_id).name
+            except:
+                asset_type = ''
+
+            try:
+                owner = CompanyContact.objects.get(id=asset.asset_owner_id)
+                asset_owner = owner.first_name + owner.last_name
+            except:
+                asset_owner = ''
+            rows.append({
+                'id': asset.id,
+                'name': asset.name,
+                'type': asset_type,
+                'owner': asset_owner,
+                'toggle': asset.asset_value_toggle,
+                'asset_value': asset.get_asset_value(),
+                'annual_exposure': protection_inherent_ale_cost_sum
+            })
+            total += 1
+
+        data = {
+            'data': rows,
+            'draw': int(request.GET.get('draw', 0)),
+            'recordsTotal': total,
+            'recordsFiltered': len(rows),
+        }
+    except:
+        print(traceback.format_exc())
+        data = {
+        }
+    return JsonResponse(data)
+
 
 @login_required
 def api_list_controls(request, vendor_id):
@@ -776,19 +1124,61 @@ def api_save_new_company_control(request):
     """Save New Company Control"""
     request_data = json.loads(request.body.decode('utf-8'))
     try:
+        date_maint = None
+        try:
+            date_maint = request_data.get('maintenance_date')[:10]
+        except:
+            pass
+
+        estimated_maint_opex = 0
+        recovery_multiplier = 0
+        recovery_time_unit_id = None
+        evaluation_days = 0
+        poc_main_id = None
+        poc_support_id = None
+        try:
+            estimated_maint_opex = Decimal(float(request_data.get('opex')), 2)
+        except:
+            pass
+
+        try:
+            recovery_multiplier = int(request_data.get('recovery_multiplier'))
+        except:
+            pass
+
+        try:
+            recovery_time_unit_id = int(request_data.get('recovery_time_unit_id'))
+        except:
+            pass
+
+        try:
+            evaluation_days = int(request_data.get('evaluation_days'))
+        except:
+            pass
+
+        try:
+            poc_main_id = int(request_data.get('poc_main_id'))
+        except:
+            pass
+
+        try:
+            poc_support_id = int(request_data.get('poc_support_id'))
+        except:
+            pass
         cc = CompanyControl.objects.create(
+            control_id=request_data.get('control_id'),
             name=request_data.get('name'),
             alias=request_data.get('alias'),
             description=request_data.get('description'),
             version=request_data.get('version'),
-            estimated_maint_opex=request_data.get('opex'),
+            estimated_maint_opex=estimated_maint_opex,
             opex_description=request_data.get('opex_desc'),
-            date_maint=request_data.get('maintenance_date')[:10],
-            recovery_multiplier=request_data.get('recovery_multiplier'),
-            recovery_time_unit_id=request_data.get('recovery_time_unit'),
-            evaluation_days=request_data.get('evaluation_days'),
-            poc_main_id=request_data.get('poc_main'),
-            poc_support_id=request_data.get('poc_support')
+            date_maint=date_maint,
+            recovery_multiplier=recovery_multiplier,
+            recovery_time_unit_id=recovery_time_unit_id,
+            evaluation_days=evaluation_days,
+            poc_main_id=poc_main_id,
+            poc_support_id=poc_support_id
         )
         selected_locations = request_data.get('company_locations',[])
         for location in selected_locations:

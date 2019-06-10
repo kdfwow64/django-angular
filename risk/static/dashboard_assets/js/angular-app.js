@@ -447,7 +447,30 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
         .state('app.controls.list_controls', {
             url: '/list-controls',
             templateUrl: 'views/list_controls.html',
-            data: { pageTitle: 'List Controls' }
+            data: { pageTitle: 'List Controls' },
+            controller: 'CompanyControlListController',
+            resolve: {
+                company_contacts: function(CompanyContactService){
+                    return CompanyContactService.getAllCompanyContact();
+                },
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
+                            '/static/dashboard_assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css',
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css',
+                            '/static/dashboard_assets/plugins/DataTables/media/js/jquery.dataTables.js',
+                            '/static/dashboard_assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js',
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js'
+                        ]
+                    });
+                }]
+            }
         })
         .state('app.controls.control_check_in', {
             url: '/control-check-in',
@@ -484,6 +507,41 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                             '/static/dashboard_assets/plugins/DataTables/media/js/jquery.dataTables.js',
                             '/static/dashboard_assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js',
                             '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.assets.add_company_asset', {
+            url: '/add-company-asset',
+            templateUrl: 'views/add_company_asset.html',
+            data: { pageTitle: 'Add Company Asset' },
+            controller: 'registerAddCompanyAssetController',
+            resolve: {
+                company_asset_types: function(CompanyAssetTypeService){
+                    return CompanyAssetTypeService.getAllCompanyAssetType();
+                },
+                locations: function(CompanyLocationService){
+                    return CompanyLocationService.getCompanyLocations();
+                },
+                company_asset_owners: function(CompanyContactService){
+                    return CompanyContactService.getAllCompanyContact();
+                },
+                time_units: function(TimeUnitService){
+                    return TimeUnitService.getAllTimeUnits();
+                },
+                annual_revenue: function(CompanyDetailService){
+                    return CompanyDetailService.getCompanyAnnualRevenue();
+                },
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js'
                         ]
                     });
                 }]
@@ -546,25 +604,29 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             url: '/list-assets',
             templateUrl: 'views/list_assets.html',
             data: { pageTitle: 'List Assets' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            controller: 'CompanyAssetListController',
+            resolve: {
+                company_contacts: function(CompanyContactService){
+                    return CompanyContactService.getAllCompanyContact();
+                },
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
+                            '/static/dashboard_assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css',
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css',
+                            '/static/dashboard_assets/plugins/DataTables/media/js/jquery.dataTables.js',
+                            '/static/dashboard_assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js',
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js'
+                        ]
+                    });
+                }]
+            }
         })
         .state('app.vendors', {
             url: '/vendors',

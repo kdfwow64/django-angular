@@ -152,208 +152,193 @@
                     <h4 class="panel-title">Add Items</h4>
                 </div>
                 <div class="panel-body">
-        {#            <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">#}
-                    <div>
-                        <!-- begin wizard step-1 Basic Info.-->
-                        <div class="wizard-step-1">
-                            <fieldset>
-                                <legend class="pull-left width-full">Submit a New Control</legend>
-                                <!-- begin Basic Information in Basic Info section -->
+                    <div class="wizard-step-1">
+                        <fieldset>
+                            <legend class="pull-left width-full">Submit a New Control</legend>
+                            <div class="well">
+                                <!--Define Vendor-->
+                                <div class="row">
+                                    <label class="sub-title-label">Define Vendor</label><span>company developed select in-house</span>
+                                </div>
                                 <div class="well">
-                                    <!--Define Vendor-->
-                                    <div class="row">
-                                        <label class="sub-title-label">Define Vendor</label><span>company developed select in-house</span>
-                                    </div>
-                                    <div class="well">
-                                        <div class="row button-right">
-        {#                                        <div class="col-md-4">#}
-        {#                                            <div class="form-group">#}
-        {#                                                <label>Vendor Name</label>#}
-        {#                                                <input type="text" id="vendor_name_search" ng-model="new_cc.vendor_name" name="vendor_name" placeholder="" class="form-control" required />#}
-        {#                                            </div>#}
-        {#                                        </div>#}
-                                            <div class="col-md-12 cc-list-tbs" id="vendor_list_tb">
-                                                <table class="table vendor-list-tb" id="vendor_lists_table">
-                                                    <thead>
-                                                        <th>Select</th>
-                                                        <th>Vendor Name</th>
-                                                        <th>Abbrv</th>
-                                                        <th>aka</th>
-                                                        <th>URL</th>
-                                                        <th>Parent</th>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <button class="btn btn-primary" ng-click="show_control_list()">Submit</button>
-                                                <a href="#" class="btn btn-primary modal-toggle" data-target="#add_new_vendor" data-toggle="modal">Add a New Vendor</a>
-        {#                                            <button class="btn btn-primary">Add a New Vendor</button>#}
-                                            </div>
+                                    <div class="row button-right">
+                                        <div class="col-md-12 cc-list-tbs" id="vendor_list_tb">
+                                            <table class="table vendor-list-tb" id="vendor_lists_table">
+                                                <thead>
+                                                    <th>Select</th>
+                                                    <th>Vendor Name</th>
+                                                    <th>Abbrv</th>
+                                                    <th>aka</th>
+                                                    <th>URL</th>
+                                                    <th>Parent</th>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
                                         </div>
-                                    </div>
-
-                                    <!--Define Control-->
-                                    <div class="row control-section">
-                                        <label class="sub-title-label">Define Control</label>
-                                    </div>
-                                    <div class="well control-section">
-                                        <div class="row button-right">
-                                            <div class="col-md-12 cc-list-tbs">
-                                               <table class="table vendor-list-tb" id="control_lists_table">
-                                                    <thead>
-                                                        <th>Select</th>
-                                                        <th>Control Name</th>
-                                                        <th>Category</th>
-                                                        <th>URL</th>
-                                                        <th>aka</th>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                               </table>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <button class="btn btn-primary" ng-click="show_company_control_section()">Submit</button>
-                                                <a href="#" class="btn btn-primary modal-toggle" data-target="#add_new_control" data-toggle="modal">Add a New Control</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--Company Control Detail-->
-                                    <div class="row company-control-section">
-                                        <label class="sub-title-label">Company Control Detail</label>
-                                    </div>
-                                    <div class="well aro-bordered-div company-control-section">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Name</label>
-                                                            <input type="text" class="form-control" ng-model="new_cc.name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Alias</label>
-                                                            <input type="text" class="form-control" ng-model="new_cc.alias">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label>Description</label>
-                                                    <textarea rows="5" class="form-control" ng-model="new_cc.description"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Version</label>
-                                                    <input class="form-control" type="text" ng-model="new_cc.version">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Estimated Opex</label>
-                                                            <input type="number" step="0.01" class="form-control" ng-model="new_cc.opex">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Maintenance Date</label>
-                                                            <input type="date" class="form-control" ng-model="new_cc.maintenance_date">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label>Opex Description</label>
-                                                    <textarea rows="5" class="form-control" ng-model="new_cc.opex_desc"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <label>Estimated Recovery Time</label>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <input min="0" type="number" ng-model="new_cc.recovery_multiplier" step="1" name="recovery_multiplier" placeholder="# of units" class="form-control"/>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <select name="recovery_time_unit" ng-model="new_cc.recovery_time_unit" class="form-control" ng-options="k.id as k.name for k in recovery_time_units | orderBy:'sort_order'"
-                                                        data-parsley-group="wizard-step-1" /><option value=""></option></select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Locations</label>
-                                                    <select name="company_locations" ng-model="new_cc.company_locations" class="form-control" multiple=true ng-options="k.id as k.name for k in company_locations"/><option value="-1">All Locations</option></select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Segments</label>
-                                                    <select name="company_segments" ng-model="new_cc.company_segments" class="form-control" multiple=true ng-options="k.id as k.name for k in company_segments"/><option value="-1">All Locations</option></select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <label>Evaluation Days</label>
-                                                    <input class="form-control" min="0" type="number" ng-model="new_cc.evaluation_days">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <label>Primary Point of Contact</label>
-                                                    <select name="poc_main" ng-model="new_cc.poc_main" class="form-control" ng-options="k.id as k.name for k in company_contacts" required></select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <label>Primary Support Team</label>
-                                                    <select name="poc_support" ng-model="new_cc.poc_support" class="form-control" ng-options="k.id as k.name for k in company_contacts" required></select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12 button-right">
-                                                <button class="btn btn-primary" ng-click="add_new_company_control()">Create</button>
-                                            </div>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary" ng-click="show_control_list()">Submit</button>
+                                            <a href="#" class="btn btn-primary modal-toggle" data-target="#add_new_vendor" data-toggle="modal">Add a New Vendor</a>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- end row -->
-                            </fieldset>
-                        </div>
-                        <!-- end wizard step-1 -->
+
+                                <!--Define Control-->
+                                <div class="row control-section">
+                                    <label class="sub-title-label">Define Control</label>
+                                </div>
+                                <div class="well control-section">
+                                    <div class="row button-right">
+                                        <div class="col-md-12 cc-list-tbs">
+                                           <table class="table vendor-list-tb" id="control_lists_table">
+                                                <thead>
+                                                    <th>Select</th>
+                                                    <th>Control Name</th>
+                                                    <th>Category</th>
+                                                    <th>URL</th>
+                                                    <th>aka</th>
+                                                </thead>
+                                                <tbody></tbody>
+                                           </table>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary" ng-click="show_company_control_section()">Submit</button>
+                                            <a href="#" class="btn btn-primary modal-toggle" data-target="#add_new_control" data-toggle="modal">Add a New Control</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Company Control Detail-->
+                                <div class="row company-control-section">
+                                    <label class="sub-title-label">Company Control Detail</label>
+                                </div>
+                                <div class="well aro-bordered-div company-control-section">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Name</label>
+                                                        <input type="text" class="form-control" ng-model="new_cc.name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Alias</label>
+                                                        <input type="text" class="form-control" ng-model="new_cc.alias">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <textarea rows="5" class="form-control" ng-model="new_cc.description"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Version</label>
+                                                <input class="form-control" type="text" ng-model="new_cc.version">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Estimated Opex</label>
+                                                        <input type="number" step="0.01" class="form-control" ng-model="new_cc.opex">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Maintenance Date</label>
+                                                        <input type="date" class="form-control" ng-model="new_cc.maintenance_date">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Opex Description</label>
+                                                <textarea rows="5" class="form-control" ng-model="new_cc.opex_desc"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label>Estimated Recovery Time</label>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <input min="0" type="number" ng-model="new_cc.recovery_multiplier" step="1" name="recovery_multiplier" placeholder="# of units" class="form-control"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <select name="recovery_time_unit" ng-model="new_cc.recovery_time_unit" class="form-control" ng-options="k.id as k.name for k in recovery_time_units | orderBy:'sort_order'"
+                                                    data-parsley-group="wizard-step-1" /><option value=""></option></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Locations</label>
+                                                <select name="company_locations" ng-model="new_cc.company_locations" class="form-control" multiple=true ng-options="k.id as k.name for k in company_locations"/><option value="-1">All Locations</option></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Segments</label>
+                                                <select name="company_segments" ng-model="new_cc.company_segments" class="form-control" multiple=true ng-options="k.id as k.name for k in company_segments"/><option value="-1">All Locations</option></select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Evaluation Days</label>
+                                                <input class="form-control" min="0" type="number" ng-model="new_cc.evaluation_days">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Primary Point of Contact</label>
+                                                <select name="poc_main" ng-model="new_cc.poc_main" class="form-control" ng-options="k.id as k.name for k in company_contacts" required></select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Primary Support Team</label>
+                                                <select name="poc_support" ng-model="new_cc.poc_support" class="form-control" ng-options="k.id as k.name for k in company_contacts" required></select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 button-right">
+                                            <button class="btn btn-primary" ng-click="add_new_company_control()">Create</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
+                        </fieldset>
                     </div>
                 </div>
-                    <!-- end row -->
             </div>
-            <!-- end wizard step-5 -->
         </div>
     <!--end row -->
     </div>
