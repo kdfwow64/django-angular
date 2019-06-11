@@ -3453,7 +3453,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.affected_assets = {
             multidata: [],
             total_asset_value: 0,
-            total_factor: '',
+            total_factor: '0%',
             total_factor_value: 0,
             total_sle: '',
             total_sle_value: 0,
@@ -4342,6 +4342,7 @@ colorAdminApp.controller('registerAddEntriresController',
 
     $scope.remove_this_ancillary_item = function(index) {
         $scope.ancillary_items.multidata.splice(index, 1);
+        $scope.ancillary_items.total_cost_value = 0;
         for(i=0;i<$scope.ancillary_items.multidata.length;i++)
             $scope.ancillary_items.total_cost_value += parseFloat($scope.ancillary_items.multidata[i].total_cost);
     }
@@ -4768,7 +4769,7 @@ colorAdminApp.controller('registerAddEntriresController',
         });
     }
 
-    $scope.save_affected_assets = function(element){
+    $scope.save_affected_assets = function(element, flag=false){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
         $scope.affected_assets.ancillary_items = $scope.ancillary_items;
@@ -4778,8 +4779,11 @@ colorAdminApp.controller('registerAddEntriresController',
                 $scope.affected_assets_update();
                 if($scope.mitigating_controls.multidata)
                     $scope.save_mitigating_controls();
-                WizardValidatorService.status.affected_assets = true;
-                $(element).bwizard("next");
+                if(flag) {
+                    WizardValidatorService.status.affected_assets = true;
+                    $(element).bwizard("next");
+                } else
+                    WizardValidatorService.status.affected_assets = false;
                 return true;
             }
             else{
@@ -4790,7 +4794,7 @@ colorAdminApp.controller('registerAddEntriresController',
         })
     };
 
-    $scope.save_mitigating_controls = function(element){
+    $scope.save_mitigating_controls = function(element, flag=false){
         $http.defaults.xsrfCookieName = 'csrftoken';
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
         max_loss = 0;
@@ -4798,6 +4802,8 @@ colorAdminApp.controller('registerAddEntriresController',
             item = $scope.mitigating_controls.multidata[i];
             max_loss = max_loss > item.max_loss ? max_loss : item.max_loss;
         }
+        if(max_loss === 0)
+            max_loss = 1;
         $scope.todays_date = new Date();
         $scope.mitigating_controls.max_loss = max_loss;
 
@@ -4908,9 +4914,13 @@ colorAdminApp.controller('registerAddEntriresController',
                 /*Inherent Risk Details*/
                 $scope.entry_overview.incident_response = $scope.basicinfo.incident_response;
 
-                WizardValidatorService.status.mitigating_controls = true;
                 $scope.entry_company_controls = r.data.entry_control;
-                $(element).bwizard("next");
+                if(flag) {
+                    WizardValidatorService.status.mitigating_controls = true;
+                    $(element).bwizard("next");
+                } else {
+                    WizardValidatorService.status.mitigating_controls = false;
+                }
                 return true;
             } else{
                 return false;
@@ -4952,12 +4962,13 @@ colorAdminApp.controller('registerAddEntriresController',
 
 
 colorAdminApp.controller('registerControlCheckInController',
-    function($http, $scope, $rootScope, $state, locations, recovery_time_units, segments, control_categories, company_contacts) {
+    function($http, $scope, $rootScope, $state, locations, recovery_time_units, segments, control_categories, company_contacts, company_control) {
     $scope.company_segments = segments;
     $scope.company_locations = locations;
     $scope.recovery_time_units = recovery_time_units;
     $scope.control_categories = control_categories;
     $scope.company_contacts = company_contacts;
+    $scope.maintitle = "Submit a New Control";
     $scope.new_cc = {
         vendor_select: null,
         control_select: null,
@@ -4981,11 +4992,18 @@ colorAdminApp.controller('registerControlCheckInController',
         name: '',
         url: '',
         description: ''
-    }
+    };
     $scope.new_control = {
         name: '',
         category: null,
         url: ''
+    };
+    $scope.SubmitButton = "Create";
+    if(company_control.new_cc) {
+        $scope.new_cc = company_control.new_cc;
+        console.log($scope.new_cc);
+        $scope.maintitle = "Edit Company Control";
+        $scope.SubmitButton = "Save";
     }
     // $scope.users = [];
     angular.element(document).ready(function () {
@@ -5026,17 +5044,69 @@ colorAdminApp.controller('registerControlCheckInController',
                         "name": 'url',
                         "searchable": false,
                         "render":  function ( data, type, row, meta ) {
-                            return "<a target='_blank' href='"+row['url']+"'>"+row['url']+"</a>";
+                            return "<a ng-click='url_click()' onclick='if("+row['url_validation']+"==1) {} else {return false;}' target='_blank' href='"+row['url']+"'>"+row['url']+"</a>";
                         }
                     },
                     // {"data": "url", "name": "url", "width": "15%"},
                     {"data": "parent", "searchable": false, "name": "parent", "width": "15%"}
                 ],
                 initComplete: function () {
-                    // table.column('compliance:name').search($scope.search.compliance ? 1 : '').draw();
-                    // table.column('completed:name').search($scope.search.completed ? 0 : '').draw();
-                    // table.column('name:name').search('').draw();
-                    //table.column('completed:name').search('').draw();
+                    if(company_control.new_cc) {
+                        setTimeout(function(){
+                            $("#vendor_lists_table input[value="+company_control.new_cc.vendor_select+"]").prop('checked', true);
+                        }, 50);
+
+                        $('.control-section').show();
+                        if ($('#control_lists_table').length !== 0) {
+                            if (control_table instanceof $.fn.dataTable.Api) {
+                                control_table.destroy();
+                            }
+                            control_table = $('#control_lists_table').DataTable({
+                                "destroy": true,
+                                "responsive": true,
+                                // "processing": true,
+                                // "serverSide": true,
+                                "ajax": 'api/control-lists/' + company_control.new_cc.vendor_select,
+                                "autoWidth": false,
+                                "search": {
+                                    regex: true
+                                },
+                                columns: [
+                                    {
+                                        "data": null,
+                                        "searchable": false,
+                                        "orderable": false,
+                                        "width": "1%",
+                                        "render": function (data, type, row, meta) {
+                                            // return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success btn-xs edit-risk-entry'>Edit</a>";
+                                            return "<input name='control_select' type='radio' class='form-control' ng-model='new_cc.control_select' value='" + row['id'] + "'>";
+                                        }
+                                    },
+                                    {"data": "name", "name": "response", "width": "10%"},
+                                    {"data": "category", "name": "category", "width": "25%"},
+                                    {
+                                        "data": null,
+                                        "orderable": false,
+                                        "width": "20%",
+                                        "searchable": false,
+                                        "render": function (data, type, row, meta) {
+                                            return "<a target='_blank' href='" + row['url'] + "'>" + row['url'] + "</a>";
+                                        }
+                                    },
+                                    {"data": "aka", "searchable": false, "name": "aka", "width": "15%"},
+                                    {"data": "abbrv", "name": "abbrv", 'visible': false},
+                                    {"data": "description", "name": "description", 'visible': false}
+                                ],
+                                initComplete: function () {
+                                    setTimeout(function(){
+                                        $("#control_lists_table input[value="+company_control.new_cc.control_select+"]").prop('checked', true);
+                                    }, 50);
+                                    $('.company-control-section').show();
+                                }
+                            });
+                        }
+
+                    }
                 }
             });
         }
@@ -5150,6 +5220,10 @@ colorAdminApp.controller('registerControlCheckInController',
             });
         }
 
+
+        $scope.url_click = function() {
+            console.log(222);
+        }
         $scope.add_new_control = function() {
             // result['data']['new_vendor']['id']
             validation = false;
@@ -5175,11 +5249,11 @@ colorAdminApp.controller('registerControlCheckInController',
                         $("#control_lists_table input[value="+result['data']['new_control']['id']+"]").prop('checked', true);
                         $('#add_new_control').modal('hide');
                     } else {
-                        alert('Something wrong');
+                        alert('Issues while inserting data into DB');
                         return false;
                     }
                 }).catch(function(error){
-                    alert('Something wrong');
+                    alert('API issue');
                     return false;
             });
         }
@@ -5233,7 +5307,7 @@ colorAdminApp.controller('CompanyControlListController',
                            "name": "id",
                            "width": "5%",
                            "render": function(data, type, row, meta) {
-                               return "<button class='btn btn-primary' ng-click='open_edit_cc_modal("+row['id']+")'>Edit</button>";
+                               return "<a href='/dashboard/#!/app/controls/edit-company-control/" + row['id'] +"' class='btn btn-primary'>Edit</a>";
                            }
                         },
                         {"data": "abbrv", "name": "abbrv", 'visible': false},
@@ -5255,7 +5329,7 @@ colorAdminApp.controller('CompanyControlListController',
 });
 
 colorAdminApp.controller('registerAddCompanyAssetController',
-    function($http, $scope, $rootScope, $state, company_asset_types, locations, company_asset_owners, time_units, annual_revenue) {
+    function($http, $scope, $rootScope, $state, company_asset_types, locations, company_asset_owners, time_units, annual_revenue, CompanyAsset) {
         $scope.company_asset_types = company_asset_types;
         $scope.company_asset_locations = locations;
         $scope.company_asset_owners = company_asset_owners;
@@ -5265,21 +5339,29 @@ colorAdminApp.controller('registerAddCompanyAssetController',
         $scope.f_class = 'validation-need';
         $scope.p_class = '';
         $scope.t_class = '';
-        $scope.new_ca = {
-            name: '',
-            type: null,
-            description: '',
-            locations: null,
-            owner: null,
-            evaluation_days: 0,
-            toggle: 'F',
-            asset_value_fixed: 0,
-            asset_quantity_fixed: 1,
-            asset_percent: 0,
-            asset_time_unit: null,
-            time_unit_max: 0,
-            time_unit_increment: 0
-        };
+        $scope.maintitle = "Create Company Asset";
+        $scope.SubmitButton = "Add a Company Asset";
+        if(CompanyAsset.new_ca){
+            $scope.maintitle = "Edit Company Asset";
+            $scope.SubmitButton = "Save Company Asset";
+            $scope.new_ca = CompanyAsset.new_ca;
+        }else {
+            $scope.new_ca = {
+                name: '',
+                type: null,
+                description: '',
+                locations: null,
+                owner: null,
+                evaluation_days: 0,
+                toggle: 'F',
+                asset_value_fixed: 0,
+                asset_quantity_fixed: 1,
+                asset_percent: 0,
+                asset_time_unit: null,
+                time_unit_max: 0,
+                time_unit_increment: 0
+            };
+        }
         angular.element(document).ready(function () {
             $http.defaults.xsrfCookieName = 'csrftoken';
             $http.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -5387,7 +5469,7 @@ colorAdminApp.controller('CompanyAssetListController',
                            "name": "id",
                            "width": "5%",
                            "render": function(data, type, row, meta) {
-                               return "<button class='btn btn-primary' ng-click='open_edit_ca_modal("+row['id']+")'>Edit</button>";
+                               return "<a href='/dashboard/#!/app/assets/edit-company-asset/"+row['id']+"' class='btn btn-primary'>Edit</a>";
                            }
                         }
 

@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-md-4">
                             <label>Vendor URL</label>
-                            <input class="form-control" type="text" ng-model="new_vendor.url" data-parsley-group="new-vendor-wizard" required>
+                            <input class="form-control" type="url" ng-model="new_vendor.url" data-parsley-group="new-vendor-wizard" required>
                         </div>
                         <div class="col-md-4">
                             <label>Vendor Description</label>
@@ -57,7 +57,7 @@
                         </div>
                         <div class="col-md-4">
                             <label>Control URL</label>
-                            <input class="form-control" type="text" ng-model="new_control.url">
+                            <input class="form-control" type="url" ng-model="new_control.url">
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                 <div class="panel-body">
                     <div class="wizard-step-1">
                         <fieldset>
-                            <legend class="pull-left width-full">Submit a New Control</legend>
+                            <legend class="pull-left width-full" ng-bind="maintitle">Submit a New Control</legend>
                             <div class="well">
                                 <!--Define Vendor-->
                                 <div class="row">
@@ -329,7 +329,7 @@
 
                                     <div class="row">
                                         <div class="col-md-12 button-right">
-                                            <button class="btn btn-primary" ng-click="add_new_company_control()">Create</button>
+                                            <button class="btn btn-primary" ng-click="add_new_company_control()" ng-bind="SubmitButton">Create</button>
                                         </div>
                                     </div>
                                 </div>

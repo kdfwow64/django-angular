@@ -6,6 +6,9 @@ from django.utils.decorators import method_decorator
 import traceback
 
 from django.http import JsonResponse
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
+from django.forms import URLField
 from django.views import View
 from decimal import *
 from risk.models import (
@@ -200,13 +203,23 @@ def api_list_vendors(request):
                     parent_name = Vendor.objects.get(id=vendor.parent_id).name
                 except:
                     parent_name = ''
+
+            url_form_field = URLField()
+            try:
+                url = url_form_field.clean(vendor.url_main)
+                url_validation = 1
+            except:
+                url_validation = 0
+
+
             rows.append({
                 'id': vendor.id,
                 'name': vendor.name,
                 'abbrv': vendor.abbrv,
                 'aka': vendor.name_aka,
                 'url': vendor.url_main,
-                'parent': parent_name
+                'parent': parent_name,
+                'url_validation': url_validation
             })
             total +=1
 
@@ -217,6 +230,7 @@ def api_list_vendors(request):
             'recordsFiltered': len(rows),
         }
     except:
+        print(traceback.format_exc())
         data = {
 
         }
@@ -385,8 +399,8 @@ def api_company_control_list(request):
                 'cc_name': cc.name,
                 'control_name': control_name,
                 'cc_poc_main': poc_main,
-                'annual_mitigation': protection_mitigated_ale_cost_sum,
-                'annual_cost': annual_cost,
+                'annual_mitigation': '$' + '{:,}'.format(protection_mitigated_ale_cost_sum),
+                'annual_cost': '$' + '{:,}'.format(annual_cost),
                 'ttr': ttr,
                 'abbrv': cc.abbrv,
                 'alias': cc.alias,
@@ -545,8 +559,8 @@ def api_company_asset_list(request):
                 'type': asset_type,
                 'owner': asset_owner,
                 'toggle': asset.asset_value_toggle,
-                'asset_value': asset.get_asset_value(),
-                'annual_exposure': protection_inherent_ale_cost_sum
+                'asset_value': '$' + '{:,}'.format(asset.get_asset_value()),
+                'annual_exposure': '$' + '{:,}'.format(protection_inherent_ale_cost_sum)
             })
             total += 1
 
@@ -794,41 +808,32 @@ def api_update_affected_assets(request, entry_id):
             risk_entry = Entry.objects.get(pk=entry_id)
             data = json.loads(request.body.decode('utf-8'))
             payload = data.get("multidata", [])
-            for del_item in EntryCompanyAsset.objects.filter(id_entry_id=risk_entry.id):
-                del_item.delete()
+            try:
+                for del_item in EntryCompanyAsset.objects.filter(id_entry_id=risk_entry.id):
+                    del_item.delete()
 
-            for request_data in payload:
-                # Get current company asset (if any)
-                try:
-                    asset = CompanyAsset.objects.get(
-                        pk=int(request_data.get('name_id')))
-                    toggle = request_data.get('exposure_factor_toggle')
-                    entry_asset_id = request_data.get('entry_asset_id')
-                    # try:
-                    #     entry_asset = EntryCompanyAsset.objects.get(
-                    #         id=entry_asset_id, id_entry=risk_entry)
-                    #     entry_asset.id_companyasset = asset
-                    #     entry_asset.detail = request_data.get('detail')
-                    #     entry_asset.exposure_factor_toggle = toggle
-                    #     entry_asset.exposure_factor_fixed = 0 if toggle == 'P' else request_data.get('exposure_factor_fixed')
-                    #     entry_asset.exposure_factor_rate = 0 if toggle == 'F' else request_data.get('exposure_factor_rate')
-                    #     entry_asset.exposure_factor = request_data.get('exposure_factor')
-                    #     entry_asset.save()
-                    # except:
-                    EntryCompanyAsset.objects.create(
-                        id_entry=risk_entry,
-                        id_companyasset=asset,
-                        detail=request_data.get('detail'),
-                        exposure_factor_toggle=toggle,
-                        exposure_factor_fixed=0 if toggle == 'P' else request_data.get(
-                            'exposure_factor_fixed'),
-                        exposure_factor_rate=0 if toggle == 'F' else request_data.get(
-                            'exposure_factor_rate')
-                    )
-                except:
-                    rv = {'status': 'error', 'code': 400,
-                          'errors': ["Invalid asset"]}
-
+                for request_data in payload:
+                    # Get current company asset (if any)
+                    try:
+                        asset = CompanyAsset.objects.get(
+                            pk=int(request_data.get('name_id')))
+                        toggle = request_data.get('exposure_factor_toggle')
+                        entry_asset_id = request_data.get('entry_asset_id')
+                        EntryCompanyAsset.objects.create(
+                            id_entry=risk_entry,
+                            id_companyasset=asset,
+                            detail=request_data.get('detail'),
+                            exposure_factor_toggle=toggle,
+                            exposure_factor_fixed=0 if toggle == 'P' else request_data.get(
+                                'exposure_factor_fixed'),
+                            exposure_factor_rate=0 if toggle == 'F' else request_data.get(
+                                'exposure_factor_rate')
+                        )
+                    except:
+                        rv = {'status': 'error', 'code': 400,
+                              'errors': ["Invalid asset"]}
+            except:
+                pass
             ancillary_items = data.get("ancillary_items", [])
             for del_item in EntryAncillary.objects.filter(entry_id=risk_entry.id):
                 del_item.delete()
@@ -1079,7 +1084,7 @@ def api_save_new_vendor(request):
             'new_vendor': {
                 'id': new_vendor.id,
                 'name': new_vendor.name,
-                'url': new_vendor.description
+                'url': new_vendor.url_main
             }
         }
     except:
@@ -1157,30 +1162,60 @@ def api_save_new_company_control(request):
             pass
 
         try:
-            poc_main_id = int(request_data.get('poc_main_id'))
+            poc_main_id = int(request_data.get('poc_main'))
         except:
             pass
 
         try:
-            poc_support_id = int(request_data.get('poc_support_id'))
+            poc_support_id = int(request_data.get('poc_support'))
         except:
             pass
-        cc = CompanyControl.objects.create(
-            control_id=request_data.get('control_id'),
-            name=request_data.get('name'),
-            alias=request_data.get('alias'),
-            description=request_data.get('description'),
-            version=request_data.get('version'),
-            estimated_maint_opex=estimated_maint_opex,
-            opex_description=request_data.get('opex_desc'),
-            date_maint=date_maint,
-            recovery_multiplier=recovery_multiplier,
-            recovery_time_unit_id=recovery_time_unit_id,
-            evaluation_days=evaluation_days,
-            poc_main_id=poc_main_id,
-            poc_support_id=poc_support_id
-        )
-        selected_locations = request_data.get('company_locations',[])
+
+        cc_id = request_data.get('id')
+        if cc_id is None:
+            cc = CompanyControl.objects.create(
+                control_id=request_data.get('control_id'),
+                name=request_data.get('name'),
+                alias=request_data.get('alias'),
+                description=request_data.get('description'),
+                version=request_data.get('version'),
+                estimated_maint_opex=estimated_maint_opex,
+                opex_description=request_data.get('opex_desc'),
+                date_maint=date_maint,
+                recovery_multiplier=recovery_multiplier,
+                recovery_time_unit_id=recovery_time_unit_id,
+                evaluation_days=evaluation_days,
+                poc_main_id=poc_main_id,
+                poc_support_id=poc_support_id
+            )
+        else:
+            cc = CompanyControl.objects.get(pk=cc_id)
+            cc.control_id = request_data.get('control_id')
+            cc.name = request_data.get('name')
+            cc.alias = request_data.get('alias')
+            cc.description = request_data.get('description')
+            cc.version = request_data.get('version')
+            cc.estimated_maint_opex = estimated_maint_opex
+            cc.opex_description = request_data.get('opex_desc')
+            cc.date_maint = date_maint
+            cc.recovery_multiplier = recovery_multiplier
+            cc.recovery_time_unit_id = recovery_time_unit_id
+            cc.evaluation_days = evaluation_days
+            cc.poc_main_id = poc_main_id
+            cc.poc_support_id = poc_support_id
+            cc.save()
+
+        selected_locations = request_data.get('company_locations', [])
+        try:
+            for ccl in CompanyControlLocation.objects.filter(id_companycontrol_id=cc_id):
+                try:
+                    selected_locations.remove(ccl.id)
+                except:
+                    ccl.delete()
+        except:
+            print(traceback.format_exc())
+            pass
+
         for location in selected_locations:
             try:
                 CompanyControlLocation.objects.create(
@@ -1192,6 +1227,14 @@ def api_save_new_company_control(request):
 
         selected_segments = request_data.get('company_segments',[])
         try:
+            for ccs in CompanyControlSegment.objects.filter(id_companycontrol_id=cc_id):
+                try:
+                    selected_segments.remove(ccs.id)
+                except:
+                    ccs.delete()
+        except:
+            pass
+        try:
             for segment in selected_segments:
                 try:
                     CompanyControlSegment.objects.create(
@@ -1199,14 +1242,15 @@ def api_save_new_company_control(request):
                         id_companysegment_id=segment
                     )
                 except:
-                    rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+                    pass
         except:
-            ''
+            pass
         rv = {
             'status': 'success',
             'code': 200
         }
     except:
+        print(traceback.format_exc())
         rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
     return JsonResponse(rv)
 

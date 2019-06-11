@@ -38,98 +38,22 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
         .state('app.openitems.evaluations', {
             url: '/evaluations',
             templateUrl: 'views/evaluations.html',
-            data: { pageTitle: 'Evaluations' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'Evaluations' }
         })
         .state('app.openitems.reminders', {
             url: '/reminders',
             templateUrl: 'views/reminders.html',
-            data: { pageTitle: 'Reminders' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'Reminders' }
         })
         .state('app.openitems.tasks', {
             url: '/tasks',
             templateUrl: 'views/tasks.html',
-            data: { pageTitle: 'Tasks' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'Tasks' }
         })
         .state('app.openitems.completions', {
             url: '/completions',
             templateUrl: 'views/completions.html',
-            data: { pageTitle: 'Completions' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'Completions' }
         })
         .state('app.meetings', {
             url: '/meetings',
@@ -139,74 +63,17 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
         .state('app.meetings.list_meetings', {
             url: '/list-meetings',
             templateUrl: 'views/list_meetings.html',
-            data: { pageTitle: 'List Meetings' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'List Meetings' }
         })
         .state('app.meetings.create_meeting', {
             url: '/create-meeting',
             templateUrl: 'views/create_meeting.html',
-            data: { pageTitle: 'Create Meeting' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'Create Meeting' }
         })
         .state('app.meetings.search_meetings', {
             url: '/search-meeting',
             templateUrl: 'views/search_meeting.html',
-            data: { pageTitle: 'Search Meeting' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'Search Meeting' }
         })
         .state('app.calendar', {
             url: '/calendar',
@@ -233,26 +100,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
         .state('app.contacts.list_contacts', {
             url: '/list-contacts',
             templateUrl: 'views/list_contacts.html',
-            data: { pageTitle: 'List Contacts' },
-            // resolve: {
-            //     service: ['$ocLazyLoad', function($ocLazyLoad) {
-            //         return $ocLazyLoad.load({
-            //             serie: true,
-            //             files: [
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.css',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css',
-            //                 '/static/dashboard_assets/plugins/gritter/css/jquery.gritter.css',
-            //                 '/static/dashboard_assets/plugins/morris/morris.css',
-            //                 '/static/dashboard_assets/plugins/morris/raphael.min.js',
-            //                 '/static/dashboard_assets/plugins/morris/morris.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js',
-            //                 '/static/dashboard_assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js',
-            //                 '/static/dashboard_assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js',
-            //                 '/static/dashboard_assets/plugins/gritter/js/jquery.gritter.js'
-            //             ]
-            //         });
-            //     }]
-            // }
+            data: { pageTitle: 'List Contacts' }
         })
         .state('app.entries', {
             url: '/entries',
@@ -493,6 +341,52 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 company_contacts: function(CompanyContactService){
                     return CompanyContactService.getAllCompanyContact();
                 },
+                company_control: function($stateParams, CompanyControlService){
+                    return CompanyControlService.getSelectedCompanyControl(0);
+                },
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
+                            '/static/dashboard_assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css',
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css',
+                            '/static/dashboard_assets/plugins/DataTables/media/js/jquery.dataTables.js',
+                            '/static/dashboard_assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js',
+                            '/static/dashboard_assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.controls.edit_company_control', {
+            url: '/edit-company-control/:id',
+            templateUrl: 'views/control_check_in.html',
+            data: { pageTitle: 'Edit Company Control' },
+            controller: 'registerControlCheckInController',
+            resolve: {
+                locations: function(CompanyLocationService){
+                    return CompanyLocationService.getCompanyLocations();
+                },
+                segments: function(CompanySegmentService){
+                    return CompanySegmentService.getCompanySegments();
+                },
+                recovery_time_units: function(TimeUnitService){
+                    return TimeUnitService.getAllTimeUnits();
+                },
+                control_categories: function(ControlCategoryService){
+                    return ControlCategoryService.getAllControlCategories();
+                },
+                company_contacts: function(CompanyContactService){
+                    return CompanyContactService.getAllCompanyContact();
+                },
+                company_control: function($stateParams, CompanyControlService){
+                    return CompanyControlService.getSelectedCompanyControl($stateParams.id);
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,
@@ -532,6 +426,44 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 },
                 annual_revenue: function(CompanyDetailService){
                     return CompanyDetailService.getCompanyAnnualRevenue();
+                },
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.assets.edit_company_asset', {
+            url: '/edit-company-asset/:id',
+            templateUrl: 'views/add_company_asset.html',
+            data: { pageTitle: 'Edit Company Asset' },
+            controller: 'registerAddCompanyAssetController',
+            resolve: {
+                company_asset_types: function(CompanyAssetTypeService){
+                    return CompanyAssetTypeService.getAllCompanyAssetType();
+                },
+                locations: function(CompanyLocationService){
+                    return CompanyLocationService.getCompanyLocations();
+                },
+                company_asset_owners: function(CompanyContactService){
+                    return CompanyContactService.getAllCompanyContact();
+                },
+                time_units: function(TimeUnitService){
+                    return TimeUnitService.getAllTimeUnits();
+                },
+                annual_revenue: function(CompanyDetailService){
+                    return CompanyDetailService.getCompanyAnnualRevenue();
+                },
+                CompanyAsset: function($stateParams, CompanyAssetService){
+                    return CompanyAssetService.getSelectedCompanyAsset($stateParams.id);
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({

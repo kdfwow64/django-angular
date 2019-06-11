@@ -9,6 +9,8 @@ from risk.models import (
     CompanyAssetLocation,
     CompanyControl,
     CompanyControlMeasure,
+    CompanyControlLocation,
+    CompanyControlSegment,
     CompanyLocation,
     CompanyAssetType,
     CompanySegment,
@@ -135,31 +137,91 @@ def api_save_company_asset(request):
     company = request.user.get_current_company()
     dat = json.loads(request.body.decode('utf-8'))
     try:
-        evaluation_days = int(dat.get('evaluation_days', '0'))
-        asset_value_fixed = float(dat.get('asset_value_fixed', '0'))
-        asset_quantity_fixed = float(dat.get('asset_quantity_fixed', '0'))
-        asset_percent = float(dat.get('asset_percent', '0'))
-        time_unit_max = int(dat.get('time_unit_max', '0'))
-        time_unit_increment = float(dat.get('time_unit_increment', '0'))
+        try:
+            evaluation_days = int(dat.get('evaluation_days', '0'))
+        except:
+            evaluation_days = 0
+        try:
+            type = dat.get('type')
+        except:
+            type = None
+        try:
+            owner = dat.get('owner')
+        except:
+            owner = None
+        try:
+            asset_time_unit = dat.get('asset_time_unit')
+        except:
+            asset_time_unit = None
+        try:
+            asset_value_fixed = float(dat.get('asset_value_fixed', '0'))
+        except:
+            asset_value_fixed = 0
+        try:
+            asset_quantity_fixed = float(dat.get('asset_quantity_fixed', '0'))
+        except:
+            asset_quantity_fixed = 0
+        try:
+            asset_percent = float(dat.get('asset_percent', '0'))
+        except:
+            asset_percent = 0
+        try:
+            time_unit_max = int(dat.get('time_unit_max', '0'))
+        except:
+            time_unit_max = 0
+        try:
+            time_unit_increment = float(dat.get('time_unit_increment', '0'))
+        except:
+            time_unit_increment = 0
 
-        new_company_asset = CompanyAsset.objects.create(
-            company_id=company.id,
-            name=dat.get('name'),
-            asset_type_id=dat.get('type'),
-            description=dat.get('description'),
-            asset_owner_id=dat.get('owner'),
-            evaluation_days=evaluation_days,
-            asset_value_toggle=dat.get('toggle'),
-            asset_value_fixed=asset_value_fixed,
-            asset_quantity_fixed=asset_quantity_fixed,
-            asset_value_par=asset_percent,
-            asset_timed_unit_id=dat.get('asset_time_unit'),
-            asset_time_unit_max=time_unit_max,
-            asset_time_unit_increment=time_unit_increment,
-            summary_value=dat.get('summary')
-        )
+        ca_id = dat.get('id')
+        if ca_id is None:
+            new_company_asset = CompanyAsset.objects.create(
+                company_id=company.id,
+                name=dat.get('name'),
+                asset_type_id=type,
+                description=dat.get('description'),
+                asset_owner_id=owner,
+                evaluation_days=evaluation_days,
+                asset_value_toggle=dat.get('toggle'),
+                asset_value_fixed=asset_value_fixed,
+                asset_quantity_fixed=asset_quantity_fixed,
+                asset_value_par=asset_percent,
+                asset_timed_unit_id=asset_time_unit,
+                asset_time_unit_max=time_unit_max,
+                asset_time_unit_increment=time_unit_increment,
+                summary_value=dat.get('summary')
+            )
+        else:
+            new_company_asset = CompanyAsset.objects.get(pk=ca_id)
+            new_company_asset.company_id = company.id
+            new_company_asset.name = dat.get('name')
+            new_company_asset.asset_type_id = dat.get('type')
+            new_company_asset.description = dat.get('description')
+            new_company_asset.asset_owner_id = dat.get('owner')
+            new_company_asset.evaluation_days = evaluation_days
+            new_company_asset.asset_value_toggle = dat.get('toggle')
+            new_company_asset.asset_value_fixed = asset_value_fixed
+            new_company_asset.asset_quantity_fixed = asset_quantity_fixed
+            new_company_asset.asset_value_par = asset_percent
+            new_company_asset.asset_timed_unit_id = dat.get('asset_time_unit')
+            new_company_asset.asset_time_unit_max = time_unit_max
+            new_company_asset.asset_time_unit_increment = time_unit_increment
+            new_company_asset.summary_value = dat.get('summary')
+            new_company_asset.save()
 
         locations = dat.get('locations', [1,])
+
+        try:
+            for cal in CompanyAssetLocation.objects.filter(id_companyasset_id=ca_id):
+                try:
+                    locations.remove(cal.id)
+                except:
+                    cal.delete()
+        except:
+            print(traceback.format_exc())
+            pass
+
         try:
             for loc in locations:
                 try:
@@ -183,4 +245,89 @@ def api_save_company_asset(request):
     except:
         print(traceback.format_exc())
         rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+    return JsonResponse(rv)
+
+
+@login_required
+def api_get_company_control(request, cc_id):
+    """Get Company Control by id"""
+    company = request.user.get_current_company()
+    rv = {}
+    if cc_id:
+        try:
+            cc = CompanyControl.objects.get(id=cc_id)
+            try:
+                company_locations = [loc.id_companylocation_id for loc in CompanyControlLocation.objects.filter(id_companycontrol_id=cc_id)] or [1, ]
+            except:
+                company_locations = None
+
+            try:
+                company_segments = [loc.id_companysegment_id for loc in CompanyControlSegment.objects.filter(id_companycontrol_id=cc_id)] or [1, ]
+            except:
+                company_segments = None
+            rv = {
+                'status': 'success',
+                'code': 200,
+                'new_cc': {
+                    'id': cc_id,
+                    'vendor_select': Control.objects.get(id=cc.control_id).vendor_id,
+                    'control_select': cc.control_id,
+                    'name': cc.name,
+                    'alias': cc.alias,
+                    'description': cc.description,
+                    'version': cc.version,
+                    'opex': cc.estimated_maint_opex,
+                    'opex_desc': cc.opex_description,
+                    'maintenance_date': cc.date_maint,
+                    'recovery_multiplier': cc.recovery_multiplier,
+                    'recovery_time_units': cc.recovery_time_unit_id,
+                    'company_locations': company_locations,
+                    'company_segments': company_segments,
+                    'evaluation_days': 0,
+                    'poc_main': cc.poc_main_id,
+                    'poc_support': cc.poc_support_id
+                }
+            }
+        except:
+            print(traceback.format_exc())
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+    return JsonResponse(rv)
+
+
+@login_required
+def api_get_company_asset(request, ca_id):
+    """Get Company Asset by id"""
+    company = request.user.get_current_company()
+    rv = {}
+    if ca_id:
+        try:
+            ca = CompanyAsset.objects.get(id=ca_id)
+            try:
+                company_locations = [loc.id_companylocation_id for loc in CompanyAssetLocation.objects.filter(id_companyasset_id=ca_id)] or [1, ]
+            except:
+                company_locations = None
+
+            rv = {
+                'status': 'success',
+                'code': 200,
+                'new_ca': {
+                    'id': ca.id,
+                    'name': ca.name,
+                    'type': ca.asset_type_id,
+                    'description': ca.description,
+                    'locations': company_locations,
+                    'owner': ca.asset_owner_id,
+                    'evaluation_days': ca.evaluation_days,
+                    'toggle': ca.asset_value_toggle,
+                    'asset_value_fixed': ca.asset_value_fixed,
+                    'asset_quantity_fixed': ca.asset_quantity_fixed,
+                    'asset_percent': ca.asset_value_par,
+                    'asset_time_unit': ca.asset_timed_unit_id,
+                    'time_unit_max': ca.asset_time_unit_max,
+                    'time_unit_increment': ca.asset_time_unit_increment
+                }
+            }
+        except:
+            print(traceback.format_exc())
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
     return JsonResponse(rv)

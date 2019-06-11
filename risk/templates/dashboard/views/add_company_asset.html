@@ -84,7 +84,7 @@
                 <div class="panel-body">
                     <div>
                         <fieldset>
-                            <legend class="pull-left width-full">Create Company Asset</legend>
+                            <legend class="pull-left width-full" ng-bind="maintitle">Create Company Asset</legend>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group block1">
@@ -238,7 +238,7 @@
                                 <!-- start row -->
                                 <div class="col-md-12" style="margin-bottom: 10px;">
                                     <div class="col-md-1">
-                                        <a class="btn btn-success" ng-click="add_company_asset()">Add a Company Asset</a>
+                                        <a class="btn btn-success" ng-click="add_company_asset()" ng-bind="SubmitButton">Add a Company Asset</a>
                                     </div>
                                 </div>
                             </div>

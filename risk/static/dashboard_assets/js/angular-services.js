@@ -271,11 +271,12 @@ function WizardValidatorService(){
             if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-3')) {
                 return false;
             }else if(service.status.affected_assets == false){
-                $scope.save_affected_assets(this);
+                $scope.save_affected_assets(this, true);
                 $scope.setServiceStatusFalse();
                 return false;
             }
             else{
+                $scope.save_affected_assets(this);
                 return true;
             }
         }else if (ui.index == 3) {
@@ -283,11 +284,12 @@ function WizardValidatorService(){
             if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-4')) {
                 return false;
             }else if(service.status.mitigating_controls == false){
-                $scope.save_mitigating_controls(this);
+                $scope.save_mitigating_controls(this, true);
                 $scope.setServiceStatusFalse();
                 return false;
             }
             else{
+                $scope.save_mitigating_controls(this);
                 return true;
             }
         }else if (ui.index == 4) {
@@ -637,12 +639,46 @@ function CompanyDetailService($http){
     }
     return service;
 }
+/* -----------------------------------
+   25.0 SERVICE - CompanyControlService
+--------------------------------------*/
+
+function CompanyControlService($http){
+    function get_selected_company_control(id){
+        return $http.get('/dashboard/api/company-control/' + id + '/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getSelectedCompanyControl: get_selected_company_control
+    }
+    return service;
+}
+/* -----------------------------------
+   26.0 SERVICE - CompanyAssetService
+--------------------------------------*/
+
+function CompanyAssetService($http){
+    function get_selected_company_asset(id){
+        return $http.get('/dashboard/api/company-asset/' + id + '/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getSelectedCompanyAsset: get_selected_company_asset
+    }
+    return service;
+}
 
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseService', ['$http', ResponseService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
              .factory('CompanySegmentService', ['$http', CompanySegmentService])
              .factory('CompanyContactService', ['$http', CompanyContactService])
+             .factory('CompanyControlService', ['$http', CompanyControlService])
+             .factory('CompanyAssetService', ['$http', CompanyAssetService])
              .factory('CompanyAssetTypeService', ['$http', CompanyAssetTypeService])
              .factory('ControlCategoryService', ['$http', ControlCategoryService])
              .factory('CompanyDetailService', ['$http', CompanyDetailService])
