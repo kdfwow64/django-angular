@@ -435,6 +435,7 @@ def api_company_asset_list(request):
     try:
         rows = []
         total = 0
+        total_ale_sum = 0
         for asset in CompanyAsset.objects.filter(company_id=company.id):
             protection_mitigated_ale_cost_sum = 0
             protection_inherent_ale_cost_sum = 0
@@ -540,6 +541,7 @@ def api_company_asset_list(request):
                         #     pass
                         # protection_mitigated_ale_cost_sum += total_ale_impact
                         # protection_inherent_ale_cost_sum += total_ale
+                        total_ale_sum += total_ale
                     else:
                         pass
             except:
@@ -562,7 +564,7 @@ def api_company_asset_list(request):
                 'owner': asset_owner,
                 'toggle': asset.asset_value_toggle,
                 'asset_value': '$' + '{:,}'.format(asset.get_asset_value()),
-                'annual_exposure': '$' + '{:,}'.format(total_ale)
+                'annual_exposure': '$' + '{:,}'.format(total_ale_sum)
             })
             total += 1
 
