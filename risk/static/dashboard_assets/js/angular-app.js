@@ -427,6 +427,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 annual_revenue: function(CompanyDetailService){
                     return CompanyDetailService.getCompanyAnnualRevenue();
                 },
+                CompanyAsset: function($stateParams, CompanyAssetService){
+                    return CompanyAssetService.getSelectedCompanyAsset(0);
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,

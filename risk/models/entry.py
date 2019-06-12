@@ -172,8 +172,7 @@ class Entry(DefaultFields):
                     aro_rate = 100
                 else:
                     aro_rate *= 100
-
-            response = int(all([
+            response = all([
                 self.summary,
                 self.description,
                 aro_rate,
@@ -181,9 +180,9 @@ class Entry(DefaultFields):
                 EntryActor.objects.filter(id_entry_id=self.id).count() > 0,
                 EntryCompanyAsset.objects.filter(
                     id_entry_id=self.id).count() > 0
-            ]))
+            ])
         except:
-            response = 0
+            response = False
         return response
 
     def is_qualified(self, rate_relation):

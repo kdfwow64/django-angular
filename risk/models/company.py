@@ -280,7 +280,7 @@ class CompanyAsset(DefaultFieldsCompany):
         elif self.asset_value_toggle == 'P':
             # PAR -  The asset value is based on a percentage of revenue for
             # the company
-            return (self.asset_value_par * self.id_company.annual_revenue)
+            return (self.asset_value_par * float(self.company.annual_revenue))
         elif self.asset_value_toggle == 'T':
             # Time based  - The asset has a time based value.  The contributor
             # must determine what is relative.

@@ -353,25 +353,26 @@ def api_company_control_list(request):
                             total_aro_cost = 0
                             total_cost = 0
                             for mitigating_control in entry.companycontrol_entry.order_by('id').all():
-                                company_control = CompanyControl.objects.get(
-                                    pk=mitigating_control.id_companycontrol_id)
-                                company = Company.objects.get(
-                                    pk=company_control.company_id)
-                                control = Control.objects.get(
-                                    pk=company_control.control_id)
-                                vendor = Vendor.objects.get(pk=control.vendor_id)
-                                sle_cost_value = round(
-                                    total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
-                                aro_cost_value = round(
-                                    total_sle * (100 - total_sle_rate) * Decimal(
-                                        mitigating_control.aro_mitigation_rate) / 10000, 2)
-                                total_cost_value = sle_cost_value + aro_cost_value
-                                impact_value = round(total_cost_value * aro_rate / 100, 2)
-                                total_sle_cost += sle_cost_value
-                                total_aro_cost += aro_cost_value
-                                total_cost += total_cost_value
-                                total_ale_impact += impact_value
-                                total_aro_rate += mitigating_control.aro_mitigation_rate
+                                if mitigating_control.id == cc.id:
+                                    company_control = CompanyControl.objects.get(
+                                        pk=mitigating_control.id_companycontrol_id)
+                                    company = Company.objects.get(
+                                        pk=company_control.company_id)
+                                    control = Control.objects.get(
+                                        pk=company_control.control_id)
+                                    vendor = Vendor.objects.get(pk=control.vendor_id)
+                                    sle_cost_value = round(
+                                        total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
+                                    aro_cost_value = round(
+                                        total_sle * (100 - total_sle_rate) * Decimal(
+                                            mitigating_control.aro_mitigation_rate) / 10000, 2)
+                                    total_cost_value = sle_cost_value + aro_cost_value
+                                    impact_value = round(total_cost_value * aro_rate / 100, 2)
+                                    total_sle_cost += sle_cost_value
+                                    total_aro_cost += aro_cost_value
+                                    total_cost += total_cost_value
+                                    total_ale_impact += impact_value
+                                    total_aro_rate += mitigating_control.aro_mitigation_rate
                         except:
                             pass
                         # protection_inherent_ale_cost_sum += total_ale if entry.response_name == 'Treat' else 0
@@ -1127,6 +1128,7 @@ def api_save_new_control(request, vendor_id):
 @login_required
 def api_save_new_company_control(request):
     """Save New Company Control"""
+    company_id = request.user.get_current_company().id
     request_data = json.loads(request.body.decode('utf-8'))
     try:
         date_maint = None
@@ -1174,6 +1176,7 @@ def api_save_new_company_control(request):
         cc_id = request_data.get('id')
         if cc_id is None:
             cc = CompanyControl.objects.create(
+                company_id=company_id,
                 control_id=request_data.get('control_id'),
                 name=request_data.get('name'),
                 alias=request_data.get('alias'),
@@ -1215,15 +1218,17 @@ def api_save_new_company_control(request):
         except:
             print(traceback.format_exc())
             pass
-
-        for location in selected_locations:
-            try:
-                CompanyControlLocation.objects.create(
-                    id_companycontrol_id=cc.id,
-                    id_companylocation_id=location
-                )
-            except:
-                ''
+        try:
+            for location in selected_locations:
+                try:
+                    CompanyControlLocation.objects.create(
+                        id_companycontrol_id=cc.id,
+                        id_companylocation_id=location
+                    )
+                except:
+                    pass
+        except:
+            pass
 
         selected_segments = request_data.get('company_segments',[])
         try:
@@ -1662,8 +1667,8 @@ def api_list_entries_info(request):
             count_avoid_entries += 1 if entry.response_name == 'Avoid' else 0
             count_qualified_entries += 1 if entry.is_qualified(
                 rate_relation) else 0
-            count_not_completed_entries += 1 if entry.has_completed(
-                rate_relation) else 0
+            count_not_completed_entries += 0 if entry.has_completed(
+                rate_relation) else 1
             count_require_evaluation_entries += 1 if entry.evaluation_flg else 0
 
         try:

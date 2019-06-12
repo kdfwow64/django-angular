@@ -4122,7 +4122,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.new_as.percent_asset_value = '';
         $scope.new_as.asset_detail = '';
         $scope.new_as.as_cal_res = '';
-        $scope.new_as.as_cal_res_value = 0;
+        $scope.new_as.as_cal_res_value = null;
         $scope.new_as.edit_num = -1;
         $("select[name=new_asset_name] option").each(function () {
             $(this).show();
@@ -4142,6 +4142,8 @@ colorAdminApp.controller('registerAddEntriresController',
         $('#add_edit_affected_asset .modal-title').html('Edit Affected Asset');
         $('#add_edit_affected_asset .add-edit-btn').html('Save');
         $scope.new_as.edit_num = index;
+        $scope.new_as.as_cal_res = '';
+        $scope.new_as.as_cal_res_value = null;
         edit_item = $scope.affected_assets.multidata[index];
         $("select[name=new_asset_name] option").each(function () {
             $(this).show();
@@ -4380,6 +4382,15 @@ colorAdminApp.controller('registerAddEntriresController',
         $('#add_edit_mitigation_control select, #add_edit_mitigation_control input, #add_edit_mitigation_control textarea').each(function() {
             $(this).parsley().reset();
         });
+        $("#add_edit_mitigation_control select[name=control_name] option").each(function () {
+            $(this).show();
+        });
+        for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+            item = $scope.mitigating_controls.multidata[i];
+            value = 'number:' + item.company_id;
+            remove_item = "#add_edit_mitigation_control select[name=control_name] option[value='"+value+"']";
+            $(remove_item).hide();
+        }
         $('#add_edit_mitigation_control').modal('show');
     }
     $scope.open_edit_control_modal = function(index) {
@@ -4428,6 +4439,17 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.add_control.total_ale_impact = '-$' + $scope.add_control.total_ale_impact_value;
 
         $scope.add_control.notes = edit_item.notes;
+        $("#add_edit_mitigation_control select[name=control_name] option").each(function () {
+            $(this).show();
+        });
+        for( i = 0 ; i < $scope.mitigating_controls.multidata.length ; i++ ){
+            if(i!=index) {
+                item = $scope.mitigating_controls.multidata[i];
+                value = 'number:' + item.company_id;
+                remove_item = "#add_edit_mitigation_control select[name=control_name] option[value='" + value + "']";
+                $(remove_item).hide();
+            }
+        }
         $('#add_edit_mitigation_control').modal('show');
     }
     $scope.add_control_mitigation = function() {
@@ -5054,7 +5076,7 @@ colorAdminApp.controller('registerControlCheckInController',
                     if(company_control.new_cc) {
                         setTimeout(function(){
                             $("#vendor_lists_table input[value="+company_control.new_cc.vendor_select+"]").prop('checked', true);
-                        }, 50);
+                        }, 100);
 
                         $('.control-section').show();
                         if ($('#control_lists_table').length !== 0) {
@@ -5267,11 +5289,11 @@ colorAdminApp.controller('registerControlCheckInController',
                         window.location.href = "#!/app/controls/list-controls";
                         return true;
                     } else {
-                        alert('Something wrong');
+                        alert('Issue while inserting into DB');
                         return false;
                     }
                 }).catch(function(error){
-                    alert('Something wrong');
+                    alert('API error');
                     return false;
             });
         }
@@ -5345,6 +5367,9 @@ colorAdminApp.controller('registerAddCompanyAssetController',
             $scope.maintitle = "Edit Company Asset";
             $scope.SubmitButton = "Save Company Asset";
             $scope.new_ca = CompanyAsset.new_ca;
+            $scope.new_ca.asset_value_fixed = parseFloat($scope.new_ca.asset_value_fixed);
+            $scope.new_ca.time_unit_increment = parseFloat($scope.new_ca.time_unit_increment);
+            $scope.new_ca.asset_percent = parseFloat($scope.new_ca.asset_percent);
         }else {
             $scope.new_ca = {
                 name: '',
