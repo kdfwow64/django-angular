@@ -340,7 +340,8 @@ class CompanyControlAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Company Control Specific', {
          'fields': (('control', 'version',), 'name', 'abbrv', 'description', 'company',)}),
-        ('Cost Detail', {'fields': ('budgeted', 'estimated_opex', )}),
+        ('Cost Detail', {'fields': ('budgeted',
+                                    'estimated_maint_opex', 'estimated_dependency_opex', )}),
         ('Advanced options', {
             'classes': ('grp-collapse grp-closed',),
             'fields': (('recovery_time_unit', 'recovery_multiplier',), 'inline_after',),
