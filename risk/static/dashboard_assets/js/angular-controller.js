@@ -3404,9 +3404,9 @@ colorAdminApp.controller('registerAddEntriresController',
         aro_frequencies,
         artifacts,
         compliance_types,
-        severities
+        severities,
+        current_company_max_loss
     ){
-
     $scope.basicinfo = {};
     $scope.risk_types = riskTypes;
     $scope.responses = responses;
@@ -4824,8 +4824,9 @@ colorAdminApp.controller('registerAddEntriresController',
             item = $scope.mitigating_controls.multidata[i];
             max_loss = max_loss > item.max_loss ? max_loss : item.max_loss;
         }
-        if(max_loss === 0)
-            max_loss = 1;
+        if(max_loss === 0) {
+            max_loss = parseFloat(current_company_max_loss);
+        }
         $scope.todays_date = new Date();
         $scope.mitigating_controls.max_loss = max_loss;
 

@@ -199,6 +199,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 severities: function(SeverityService){
                     return SeverityService.getAllSeverities();
                 },
+                current_company_max_loss: function(CompanyService){
+                    return CompanyService.getCompanyMaxLoss();
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,
@@ -272,6 +275,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 },
                 severities: function(SeverityService){
                     return SeverityService.getAllSeverities();
+                },
+                current_company_max_loss: function(CompanyService){
+                    return CompanyService.getCompanyMaxLoss();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({

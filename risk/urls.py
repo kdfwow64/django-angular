@@ -117,6 +117,8 @@ urlpatterns = [
             dashboard.api_get_company_control, name="api-get-company-control"),
     re_path(r'^dashboard/api/company-asset/(?P<ca_id>[0-9]+)/$',
             dashboard.api_get_company_asset, name="api-get-company-asset"),
+    re_path(r'^dashboard/api/company-max-loss/$',
+            dashboard.api_company_max_loss, name="api-list-company-max-loss"),
     # re_path(r'^dashboard/api/file-download/$',
     #         dashboard.file_download, name="api-download-file-entries"),
 

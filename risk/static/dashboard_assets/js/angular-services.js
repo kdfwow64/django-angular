@@ -671,9 +671,26 @@ function CompanyAssetService($http){
     }
     return service;
 }
+/* -----------------------------------
+   26.0 SERVICE - CompanyAssetService
+--------------------------------------*/
+
+function CompanyService($http){
+    function get_company_max_loss(){
+        return $http.get('/dashboard/api/company-max-loss/').then(function(r){
+            return r.data.max_loss;
+        }, function(r){});
+    }
+
+    var service = {
+        getCompanyMaxLoss: get_company_max_loss
+    }
+    return service;
+}
 
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseService', ['$http', ResponseService])
+             .factory('CompanyService', ['$http', CompanyService])
              .factory('CompanyLocationService', ['$http', CompanyLocationService])
              .factory('CompanySegmentService', ['$http', CompanySegmentService])
              .factory('CompanyContactService', ['$http', CompanyContactService])

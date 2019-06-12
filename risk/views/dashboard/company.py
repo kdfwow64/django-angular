@@ -333,3 +333,13 @@ def api_get_company_asset(request, ca_id):
             print(traceback.format_exc())
             rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
     return JsonResponse(rv)
+
+
+@login_required
+def api_company_max_loss(request):
+    """Get Company MAx Loss"""
+    company = request.user.get_current_company()
+    data = {
+        'max_loss': company.get_company_max_loss()
+    }
+    return JsonResponse(data, safe=False)
