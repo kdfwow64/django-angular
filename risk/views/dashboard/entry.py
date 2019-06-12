@@ -476,69 +476,70 @@ def api_company_asset_list(request):
                         try:
                             total_asset_value = 0
                             for entry_company_asset in entry.companyasset_entry.order_by('id').all():
-                                company_asset = CompanyAsset.objects.get(
-                                    pk=entry_company_asset.id_companyasset_id)
-                                sle_value = round(
-                                    Decimal(company_asset.asset_value_fixed) *
-                                    Decimal(entry_company_asset.exposure_factor_rate) / 100,
-                                    2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
-                                    entry_company_asset.exposure_factor_fixed, 2)
-                                ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(
-                                    entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
-                                                  2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
-                                    Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
-                                total_asset_value += round(
-                                    company_asset.asset_value_fixed, 2)
-                                total_sle += sle_value
-                                total_ale += ale_value
+                                if entry_company_asset.id_companyasset_id == asset.id:
+                                    company_asset = CompanyAsset.objects.get(
+                                        pk=entry_company_asset.id_companyasset_id)
+                                    sle_value = round(
+                                        Decimal(company_asset.asset_value_fixed) *
+                                        Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                                        2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                        entry_company_asset.exposure_factor_fixed, 2)
+                                    ale_value = round(Decimal(company_asset.asset_value_fixed) * Decimal(
+                                        entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
+                                                      2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                        Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
+                                    total_asset_value += round(
+                                        company_asset.asset_value_fixed, 2)
+                                    total_sle += sle_value
+                                    total_ale += ale_value
 
-                            for ancillary in entry.entryentryancillary.order_by('id').all():
-                                try:
-                                    total_sle += ancillary.per_occurance * ancillary.ancillary_fixed
-                                except:
-                                    pass
-
-                                try:
-                                    total_ale += ancillary.per_occurance * ancillary.ancillary_fixed * aro_rate / 100
-                                except:
-                                    pass
+                            # for ancillary in entry.entryentryancillary.order_by('id').all():
+                            #     try:
+                            #         total_sle += ancillary.per_occurance * ancillary.ancillary_fixed
+                            #     except:
+                            #         pass
+                            #
+                            #     try:
+                            #         total_ale += ancillary.per_occurance * ancillary.ancillary_fixed * aro_rate / 100
+                            #     except:
+                            #         pass
                         except:
                             pass
                         # Mitigating Info
-                        total_ale_impact = 0
-                        try:
-                            total_sle_rate = 0
-                            for mitigating_control in entry.companycontrol_entry.order_by('id').all():
-                                total_sle_rate += mitigating_control.sle_mitigation_rate
-                            total_sle_rate = Decimal(total_sle_rate)
-                            total_aro_rate = 0
-                            total_sle_cost = 0
-                            total_aro_cost = 0
-                            total_cost = 0
-                            for mitigating_control in entry.companycontrol_entry.order_by('id').all():
-                                company_control = CompanyControl.objects.get(
-                                    pk=mitigating_control.id_companycontrol_id)
-                                company = Company.objects.get(
-                                    pk=company_control.company_id)
-                                control = Control.objects.get(
-                                    pk=company_control.control_id)
-                                vendor = Vendor.objects.get(pk=control.vendor_id)
-                                sle_cost_value = round(
-                                    total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
-                                aro_cost_value = round(
-                                    total_sle * (100 - total_sle_rate) * Decimal(
-                                        mitigating_control.aro_mitigation_rate) / 10000, 2)
-                                total_cost_value = sle_cost_value + aro_cost_value
-                                impact_value = round(total_cost_value * aro_rate / 100, 2)
-                                total_sle_cost += sle_cost_value
-                                total_aro_cost += aro_cost_value
-                                total_cost += total_cost_value
-                                total_ale_impact += impact_value
-                                total_aro_rate += mitigating_control.aro_mitigation_rate
-                        except:
-                            pass
-                        protection_mitigated_ale_cost_sum += total_ale_impact
-                        protection_inherent_ale_cost_sum += total_ale
+                        # total_ale_impact = 0
+                        # try:
+                        #     total_sle_rate = 0
+                        #     for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                        #         total_sle_rate += mitigating_control.sle_mitigation_rate
+                        #     total_sle_rate = Decimal(total_sle_rate)
+                        #     total_aro_rate = 0
+                        #     total_sle_cost = 0
+                        #     total_aro_cost = 0
+                        #     total_cost = 0
+                        #     for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                        #         company_control = CompanyControl.objects.get(
+                        #             pk=mitigating_control.id_companycontrol_id)
+                        #         company = Company.objects.get(
+                        #             pk=company_control.company_id)
+                        #         control = Control.objects.get(
+                        #             pk=company_control.control_id)
+                        #         vendor = Vendor.objects.get(pk=control.vendor_id)
+                        #         sle_cost_value = round(
+                        #             total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
+                        #         aro_cost_value = round(
+                        #             total_sle * (100 - total_sle_rate) * Decimal(
+                        #                 mitigating_control.aro_mitigation_rate) / 10000, 2)
+                        #         total_cost_value = sle_cost_value + aro_cost_value
+                        #         impact_value = round(total_cost_value * aro_rate / 100, 2)
+                        #         total_sle_cost += sle_cost_value
+                        #         total_aro_cost += aro_cost_value
+                        #         total_cost += total_cost_value
+                        #         total_ale_impact += impact_value
+                        #         total_aro_rate += mitigating_control.aro_mitigation_rate
+                        # except:
+                        #     pass
+                        # protection_mitigated_ale_cost_sum += total_ale_impact
+                        # protection_inherent_ale_cost_sum += total_ale
                     else:
                         pass
             except:
@@ -561,7 +562,7 @@ def api_company_asset_list(request):
                 'owner': asset_owner,
                 'toggle': asset.asset_value_toggle,
                 'asset_value': '$' + '{:,}'.format(asset.get_asset_value()),
-                'annual_exposure': '$' + '{:,}'.format(protection_inherent_ale_cost_sum)
+                'annual_exposure': '$' + '{:,}'.format(total_ale)
             })
             total += 1
 
