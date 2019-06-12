@@ -5075,8 +5075,11 @@ colorAdminApp.controller('registerControlCheckInController',
                 initComplete: function () {
                     if(company_control.new_cc) {
                         setTimeout(function(){
-                            $("#vendor_lists_table input[value="+company_control.new_cc.vendor_select+"]").prop('checked', true);
-                        }, 100);
+                            // vendor_table.column(1).search(company_control.new_cc.vendor_name).draw();
+                            vendor_table.search(company_control.new_cc.vendor_name).draw();
+                            var sel = "#vendor_lists_table input[value="+company_control.new_cc.vendor_select+"]";
+                            $(sel).prop('checked', true);
+                        }, 50);
 
                         $('.control-section').show();
                         if ($('#control_lists_table').length !== 0) {
@@ -5121,6 +5124,8 @@ colorAdminApp.controller('registerControlCheckInController',
                                 ],
                                 initComplete: function () {
                                     setTimeout(function(){
+                                        // control_table.column(1).search(company_control.new_cc.control_name).draw();
+                                        control_table.search(company_control.new_cc.control_name).draw();
                                         $("#control_lists_table input[value="+company_control.new_cc.control_select+"]").prop('checked', true);
                                     }, 50);
                                     $('.company-control-section').show();
@@ -5218,7 +5223,7 @@ colorAdminApp.controller('registerControlCheckInController',
             if(validation)
                 return false;
 
-
+            $scope.new_vendor.url = $('#vendor_url_name').val();
             $http.post('/dashboard/api/save-new-vendor/', $scope.new_vendor)
                 .then(function(result){
                     if(result){
@@ -5256,6 +5261,7 @@ colorAdminApp.controller('registerControlCheckInController',
             if(validation)
                 return false;
             $scope.new_control.category_name = $('select[name=control_category] option:selected').html();
+            $scope.new_control.url = $('#control_url_name').val();
             $http.post('/dashboard/api/save-new-control/'+parseInt($('input[name=vendor_select]:checked').val())+'/', $scope.new_control)
                 .then(function(result){
                     if(result){

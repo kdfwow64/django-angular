@@ -271,7 +271,9 @@ def api_get_company_control(request, cc_id):
                 'new_cc': {
                     'id': cc_id,
                     'vendor_select': Control.objects.get(id=cc.control_id).vendor_id,
+                    'vendor_name': Vendor.objects.get(pk=Control.objects.get(id=cc.control_id).vendor_id).name,
                     'control_select': cc.control_id,
+                    'control_name': Control.objects.get(id=cc.control_id).name,
                     'name': cc.name,
                     'alias': cc.alias,
                     'description': cc.description,
