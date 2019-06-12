@@ -353,7 +353,7 @@ def api_company_control_list(request):
                             total_aro_cost = 0
                             total_cost = 0
                             for mitigating_control in entry.companycontrol_entry.order_by('id').all():
-                                if mitigating_control.id == cc.id:
+                                if mitigating_control.id_companycontrol_id == cc.id:
                                     company_control = CompanyControl.objects.get(
                                         pk=mitigating_control.id_companycontrol_id)
                                     company = Company.objects.get(
