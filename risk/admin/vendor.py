@@ -39,6 +39,7 @@ class VendorAdmin(admin.ModelAdmin):
     )
     list_select_related = []
     list_display = (
+        'id',
         'get_vendor_acronym',
         'show_vendor_url',
         'show_about_url',
