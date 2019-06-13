@@ -18,7 +18,8 @@ from risk.models import (
     Control,
     Vendor,
     ImpactCategory,
-    SeverityCategory
+    SeverityCategory,
+    TimeUnit
 )
 
 
@@ -70,7 +71,7 @@ def get_company_asset(request, company_asset_id):
     if not asset:
         data = []
     else:
-        data = ({'asset_id': asset.id, 'asset_value': asset.asset_value_fixed, 'asset_percent': asset.asset_value_par, 'asset_detail': asset.description, 'asset_value_toggle': asset.asset_value_toggle})
+        data = ({'asset_id': asset.id, 'asset_value': asset.get_asset_value(), 'asset_percent': asset.asset_value_par, 'asset_detail': asset.description, 'asset_value_toggle': asset.asset_value_toggle})
 
     return JsonResponse(data, safe=False)
 
@@ -204,7 +205,7 @@ def api_save_company_asset(request):
             new_company_asset.asset_value_fixed = asset_value_fixed
             new_company_asset.asset_quantity_fixed = asset_quantity_fixed
             new_company_asset.asset_value_par = asset_percent
-            new_company_asset.asset_timed_unit_id = dat.get('asset_time_unit')
+            new_company_asset.asset_timed_unit_id = TimeUnit.objects.get(annual_units=int(dat.get('asset_time_unit')))
             new_company_asset.asset_time_unit_max = time_unit_max
             new_company_asset.asset_time_unit_increment = time_unit_increment
             new_company_asset.summary_value = dat.get('summary')
@@ -324,7 +325,7 @@ def api_get_company_asset(request, ca_id):
                     'asset_value_fixed': ca.asset_value_fixed,
                     'asset_quantity_fixed': ca.asset_quantity_fixed,
                     'asset_percent': ca.asset_value_par,
-                    'asset_time_unit': ca.asset_timed_unit_id,
+                    'asset_time_unit': TimeUnit.objects.get(id=ca.asset_timed_unit_id).annual_units,
                     'time_unit_max': ca.asset_time_unit_max,
                     'time_unit_increment': ca.asset_time_unit_increment
                 }

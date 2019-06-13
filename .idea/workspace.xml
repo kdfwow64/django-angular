@@ -8,11 +8,11 @@
   <component name="ChangeListManager">
     <list default="true" id="411607c5-1d72-45b2-8946-9847e3f2b403" name="Default Changelist" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js" afterPath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/models/company.py" afterPath="$PROJECT_DIR$/risk/models/company.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" afterPath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js" afterPath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/urls.py" afterPath="$PROJECT_DIR$/risk/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/views/dashboard/company.py" afterPath="$PROJECT_DIR$/risk/views/dashboard/company.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/views/dashboard/entry.py" afterPath="$PROJECT_DIR$/risk/views/dashboard/entry.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -32,15 +32,17 @@
       <file leaf-file-name="angular-controller.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="111">
-              <caret line="4827" column="60" lean-forward="false" selection-start-line="4827" selection-start-column="60" selection-end-line="4827" selection-end-column="60" />
+            <state relative-caret-position="445">
+              <caret line="5272" column="29" lean-forward="true" selection-start-line="5272" selection-start-column="29" selection-end-line="5272" selection-end-column="29" />
               <folding>
                 <element signature="e#128554#136458#0" expanded="false" />
-                <element signature="e#219891#222619#0" expanded="false" />
-                <element signature="e#226967#227755#0" expanded="false" />
-                <element signature="e#227876#230256#0" expanded="false" />
-                <element signature="e#232169#232735#0" expanded="false" />
-                <element signature="e#235964#237583#0" expanded="false" />
+                <element signature="e#220183#222911#0" expanded="false" />
+                <element signature="e#222975#223685#0" expanded="false" />
+                <element signature="e#223999#225566#0" expanded="false" />
+                <element signature="e#227547#228335#0" expanded="false" />
+                <element signature="e#228456#230836#0" expanded="false" />
+                <element signature="e#232749#233315#0" expanded="false" />
+                <element signature="e#236544#238163#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -49,8 +51,8 @@
       <file leaf-file-name="control_check_in.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/templates/dashboard/views/control_check_in.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="64" column="38" lean-forward="true" selection-start-line="64" selection-start-column="38" selection-end-line="64" selection-end-column="38" />
+            <state relative-caret-position="23">
+              <caret line="64" column="38" lean-forward="false" selection-start-line="64" selection-start-column="38" selection-end-line="64" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -59,8 +61,8 @@
       <file leaf-file-name="angular-services.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="680" column="34" lean-forward="false" selection-start-line="680" selection-start-column="34" selection-end-line="680" selection-end-column="34" />
+            <state relative-caret-position="106">
+              <caret line="647" column="56" lean-forward="false" selection-start-line="647" selection-start-column="41" selection-end-line="647" selection-end-column="56" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -71,13 +73,11 @@
       <file leaf-file-name="angular-app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="280" column="18" lean-forward="false" selection-start-line="280" selection-start-column="18" selection-end-line="280" selection-end-column="18" />
+            <state relative-caret-position="129">
+              <caret line="393" column="67" lean-forward="false" selection-start-line="393" selection-start-column="67" selection-end-line="393" selection-end-column="67" />
               <folding>
                 <element signature="e#13181#14878#0" expanded="false" />
                 <element signature="e#14928#17429#0" expanded="false" />
-                <element signature="e#17483#20010#0" expanded="false" />
-                <element signature="e#22021#23953#0" expanded="false" />
                 <element signature="e#24006#25506#0" expanded="false" />
                 <element signature="e#25561#27066#0" expanded="false" />
                 <element signature="e#27251#28940#0" expanded="false" />
@@ -93,8 +93,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="120" column="42" lean-forward="false" selection-start-line="120" selection-start-column="22" selection-end-line="120" selection-end-column="42" />
+            <state relative-caret-position="129">
+              <caret line="116" column="36" lean-forward="false" selection-start-line="116" selection-start-column="36" selection-end-line="116" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -103,10 +103,22 @@
       <file leaf-file-name="company.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/views/dashboard/company.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="345" column="0" lean-forward="true" selection-start-line="345" selection-start-column="0" selection-end-line="345" selection-end-column="0" />
+            <state relative-caret-position="238">
+              <caret line="278" column="38" lean-forward="true" selection-start-line="278" selection-start-column="38" selection-end-line="278" selection-end-column="38" />
               <folding>
                 <element signature="e#57#68#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="company.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/risk/models/company.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="103">
+              <caret line="297" column="39" lean-forward="true" selection-start-line="297" selection-start-column="39" selection-end-line="297" selection-end-column="39" />
+              <folding>
+                <element signature="e#32#60#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -115,11 +127,12 @@
       <file leaf-file-name="entry.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/views/dashboard/entry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="1063" column="11" lean-forward="false" selection-start-line="1063" selection-start-column="4" selection-end-line="1063" selection-end-column="11" />
+            <state relative-caret-position="106">
+              <caret line="950" column="45" lean-forward="true" selection-start-line="950" selection-start-column="45" selection-end-line="950" selection-end-column="45" />
               <folding>
                 <element signature="e#53#64#0" expanded="true" />
-                <element signature="e#18582#19120#0" expanded="false" />
+                <element signature="e#17977#18526#0" expanded="false" />
+                <element signature="e#18678#19216#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -129,36 +142,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>check-in</find>
-      <find>save_new_com</find>
-      <find>annual_mit</find>
-      <find>api_get_company_aset</find>
-      <find>controlcheck</find>
-      <find>registeradd</find>
-      <find>maintitle</find>
-      <find>of</find>
-      <find>company_asset_list</find>
-      <find>api_save_new_company</find>
-      <find>open_edit_affected_asset_modal</find>
-      <find>remove</find>
-      <find>open_add_control</find>
-      <find>add</find>
-      <find>count_not_completed_entries</find>
-      <find>vendor_list</find>
-      <find>api_get_</find>
-      <find>Vendor</find>
-      <find>add_new_vendor</find>
-      <find>api_save_new</find>
-      <find>new_vendor.url</find>
-      <find>api_company</find>
-      <find>api_save_ve</find>
-      <find>CompanyService</find>
-      <find>api_get</find>
-      <find>max_loss</find>
-      <find>'</find>
-      <find>current_company_max_loss</find>
-      <find>list-entries-info</find>
-      <find>compliance_types</find>
+      <find>vendor_table</find>
+      <find>api_get_ven</find>
+      <find>api_vendor</find>
+      <find>vendor-lists</find>
+      <find>api_company_asset</find>
+      <find>companyasset</find>
+      <find>CompanyAssetsService</find>
+      <find>get_all_company_assets</find>
+      <find>get_company_asset</find>
+      <find>new_as.asset_value</find>
+      <find>for i</find>
+      <find>for i in</find>
+      <find>api_company_asset_lst</find>
+      <find>asset_value_fixed</find>
+      <find>api_list_en</find>
+      <find>get_asset_value()</find>
+      <find>add_company_asset</find>
+      <find>add-company-asset</find>
+      <find>TimeUnit</find>
+      <find>get_all_time_units</find>
+      <find>asset_time_unit</find>
+      <find>addcompany</find>
+      <find>get_selected_company_asset</find>
+      <find>edit_company_as</find>
+      <find>company-asset</find>
+      <find>company_control</find>
+      <find>CompanyAsset</find>
+      <find>company-control</find>
+      <find>row['id</find>
+      <find>add_new_ven</find>
     </findStrings>
     <replaceStrings>
       <replace>compliance_requirements</replace>
@@ -222,16 +235,16 @@
         <option value="$PROJECT_DIR$/risk/templates/dashboard/views/list_assets.html" />
         <option value="$PROJECT_DIR$/risk/static/dashboard_assets/css/customize.css" />
         <option value="$PROJECT_DIR$/risk/templates/dashboard/views/add_company_asset.html" />
-        <option value="$PROJECT_DIR$/risk/models/company.py" />
         <option value="$PROJECT_DIR$/risk/templates/dashboard/views/list_entries.html" />
         <option value="$PROJECT_DIR$/risk/models/entry.py" />
         <option value="$PROJECT_DIR$/rlb/settings.py" />
         <option value="$PROJECT_DIR$/risk/templates/dashboard/views/control_check_in.html" />
-        <option value="$PROJECT_DIR$/risk/views/dashboard/entry.py" />
         <option value="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js" />
         <option value="$PROJECT_DIR$/risk/urls.py" />
-        <option value="$PROJECT_DIR$/risk/views/dashboard/company.py" />
+        <option value="$PROJECT_DIR$/risk/views/dashboard/entry.py" />
+        <option value="$PROJECT_DIR$/risk/models/company.py" />
         <option value="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js" />
+        <option value="$PROJECT_DIR$/risk/views/dashboard/company.py" />
         <option value="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" />
       </list>
     </option>
@@ -432,7 +445,7 @@
     <frame x="121" y="73" width="1327" height="780" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1745908" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07248636" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32898173" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.57310706" sideWeight="0.5025792" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -440,9 +453,9 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27602524" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.170347" sideWeight="0.4974208" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2933754" sideWeight="0.4974208" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3533123" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0851735" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -468,11 +481,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="228" />
+      <option name="time" value="232" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
-        <watch expression="request_data" language="Python" />
+        <watch expression="cc.control_id" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -720,7 +733,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
           <caret line="271" column="1" lean-forward="false" selection-start-line="271" selection-start-column="1" selection-end-line="271" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -728,7 +740,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="46">
           <caret line="2" column="22" lean-forward="false" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -736,15 +747,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="227">
           <caret line="69" column="21" lean-forward="true" selection-start-line="69" selection-start-column="21" selection-end-line="69" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/risk/models/company.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="283" column="39" lean-forward="true" selection-start-line="283" selection-start-column="39" selection-end-line="283" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -768,7 +770,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="129">
           <caret line="205" column="181" lean-forward="false" selection-start-line="205" selection-start-column="181" selection-end-line="205" selection-end-column="181" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -776,56 +777,46 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="86">
           <caret line="62" column="22" lean-forward="true" selection-start-line="62" selection-start-column="22" selection-end-line="62" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/entry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="1063" column="11" lean-forward="false" selection-start-line="1063" selection-start-column="4" selection-end-line="1063" selection-end-column="11" />
-          <folding>
-            <element signature="e#53#64#0" expanded="true" />
-            <element signature="e#18582#19120#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/risk/templates/dashboard/views/control_check_in.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="64" column="38" lean-forward="true" selection-start-line="64" selection-start-column="38" selection-end-line="64" selection-end-column="38" />
+        <state relative-caret-position="23">
+          <caret line="64" column="38" lean-forward="false" selection-start-line="64" selection-start-column="38" selection-end-line="64" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/risk/urls.py">
+    <entry file="file://$PROJECT_DIR$/risk/models/company.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="120" column="42" lean-forward="false" selection-start-line="120" selection-start-column="22" selection-end-line="120" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/company.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="345" column="0" lean-forward="true" selection-start-line="345" selection-start-column="0" selection-end-line="345" selection-end-column="0" />
+        <state relative-caret-position="103">
+          <caret line="297" column="39" lean-forward="true" selection-start-line="297" selection-start-column="39" selection-end-line="297" selection-end-column="39" />
           <folding>
-            <element signature="e#57#68#0" expanded="true" />
+            <element signature="e#32#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/entry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="950" column="45" lean-forward="true" selection-start-line="950" selection-start-column="45" selection-end-line="950" selection-end-column="45" />
+          <folding>
+            <element signature="e#53#64#0" expanded="true" />
+            <element signature="e#17977#18526#0" expanded="false" />
+            <element signature="e#18678#19216#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="280" column="18" lean-forward="false" selection-start-line="280" selection-start-column="18" selection-end-line="280" selection-end-column="18" />
+        <state relative-caret-position="129">
+          <caret line="393" column="67" lean-forward="false" selection-start-line="393" selection-start-column="67" selection-end-line="393" selection-end-column="67" />
           <folding>
             <element signature="e#13181#14878#0" expanded="false" />
             <element signature="e#14928#17429#0" expanded="false" />
-            <element signature="e#17483#20010#0" expanded="false" />
-            <element signature="e#22021#23953#0" expanded="false" />
             <element signature="e#24006#25506#0" expanded="false" />
             <element signature="e#25561#27066#0" expanded="false" />
             <element signature="e#27251#28940#0" expanded="false" />
@@ -839,25 +830,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="680" column="34" lean-forward="false" selection-start-line="680" selection-start-column="34" selection-end-line="680" selection-end-column="34" />
+        <state relative-caret-position="106">
+          <caret line="647" column="56" lean-forward="false" selection-start-line="647" selection-start-column="41" selection-end-line="647" selection-end-column="56" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/risk/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="116" column="36" lean-forward="false" selection-start-line="116" selection-start-column="36" selection-end-line="116" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/company.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="278" column="38" lean-forward="true" selection-start-line="278" selection-start-column="38" selection-end-line="278" selection-end-column="38" />
+          <folding>
+            <element signature="e#57#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="111">
-          <caret line="4827" column="60" lean-forward="false" selection-start-line="4827" selection-start-column="60" selection-end-line="4827" selection-end-column="60" />
+        <state relative-caret-position="445">
+          <caret line="5272" column="29" lean-forward="true" selection-start-line="5272" selection-start-column="29" selection-end-line="5272" selection-end-column="29" />
           <folding>
             <element signature="e#128554#136458#0" expanded="false" />
-            <element signature="e#219891#222619#0" expanded="false" />
-            <element signature="e#226967#227755#0" expanded="false" />
-            <element signature="e#227876#230256#0" expanded="false" />
-            <element signature="e#232169#232735#0" expanded="false" />
-            <element signature="e#235964#237583#0" expanded="false" />
+            <element signature="e#220183#222911#0" expanded="false" />
+            <element signature="e#222975#223685#0" expanded="false" />
+            <element signature="e#223999#225566#0" expanded="false" />
+            <element signature="e#227547#228335#0" expanded="false" />
+            <element signature="e#228456#230836#0" expanded="false" />
+            <element signature="e#232749#233315#0" expanded="false" />
+            <element signature="e#236544#238163#0" expanded="false" />
           </folding>
         </state>
       </provider>

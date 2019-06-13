@@ -1,6 +1,7 @@
 """Company & related models."""
 from django.db import models
 from risk.models.auth import User, UserGrant
+from decimal import *
 from risk.models.utility import (
     Selector,
     DefaultFields,
@@ -276,15 +277,32 @@ class CompanyAsset(DefaultFieldsCompany):
         if self.asset_value_toggle == 'F':
             # Fixed - The asset value has a fixed cost.  Total value may
             # flucuate based on quantity
-            return (self.asset_value_fixed * self.asset_quantity_fixed)
+            return Decimal(self.asset_value_fixed * self.asset_quantity_fixed)
         elif self.asset_value_toggle == 'P':
             # PAR -  The asset value is based on a percentage of revenue for
             # the company
-            return (self.asset_value_par * float(self.company.annual_revenue))
+            return (Decimal(self.asset_value_par) * self.company.annual_revenue / 100)
         elif self.asset_value_toggle == 'T':
             # Time based  - The asset has a time based value.  The contributor
             # must determine what is relative.
-            return (self.asset_fixed_value * self.asset_time_unit_quantity)
+            amount = 0
+            if self.asset_time_unit_increment == 0:
+                if self.asset_time_unit_max == 0:
+                    amount = self.asset_value_fixed * self.asset_quantity_fixed * self.asset_timed_unit.annual_units
+                else:
+                    amount = self.asset_value_fixed * self.asset_quantity_fixed * self.asset_time_unit_max
+            else:
+                if self.asset_time_unit_max == 0:
+                    start = self.asset_value_fixed * self.asset_quantity_fixed
+                    for i in range(0, self.asset_timed_unit.annual_units):
+                        amount += start
+                        start = start * ( 1 + Decimal(self.asset_time_unit_increment) / 100 )
+                else:
+                    start = self.asset_value_fixed * self.asset_quantity_fixed
+                    for i in range(0, int(self.asset_time_unit_max)):
+                        amount += start
+                        start = start * (1 + Decimal(self.asset_time_unit_increment) / 100)
+            return Decimal(amount)
 
 
 class CompanyAssetType(DefaultFieldsCategory):

@@ -5024,10 +5024,9 @@ colorAdminApp.controller('registerControlCheckInController',
     $scope.SubmitButton = "Create";
     if(company_control.new_cc) {
         $scope.new_cc = company_control.new_cc;
-        console.log($scope.new_cc);
         $scope.maintitle = "Edit Company Control";
         $scope.SubmitButton = "Save";
-    }
+    };
     // $scope.users = [];
     angular.element(document).ready(function () {
         $http.defaults.xsrfCookieName = 'csrftoken';
@@ -5053,7 +5052,7 @@ colorAdminApp.controller('registerControlCheckInController',
                         "width": "5%",
                         "render":  function ( data, type, row, meta ) {
                             // return "<a href='/dashboard/#!/app/entries/edit-entry/"+ row['id'] +"'class='btn btn-success btn-xs edit-risk-entry'>Edit</a>";
-                            return "<input name='vendor_select' type='radio' class='form-control' ng-model='new_cc.vendor_select' value='"+row['id']+"'>";
+                            return "<input name='vendor_select' onchange='$("+'".control-section"'+").hide(); $("+'".company-control-section"'+").hide();' ng-change='vendor_selection_change()' type='radio' class='form-control' ng-model='new_cc.vendor_select' value='"+row['id']+"'>";
                         }
                     },
                     // {"data": "id", "width": "5%"},
@@ -5071,7 +5070,9 @@ colorAdminApp.controller('registerControlCheckInController',
                         }
                     },
                     // {"data": "url", "name": "url", "width": "15%"},
-                    {"data": "parent", "searchable": false, "name": "parent", "width": "15%"}
+                    {"data": "parent", "searchable": false, "name": "parent", "width": "15%"},
+                    {"data": "description", "name": "description", "visible": false, "width": "15%"},
+                    {"data": "keywords", "name": "keywords", "visible": false, "width": "15%"}
                 ],
                 initComplete: function () {
                     if(company_control.new_cc) {
@@ -5225,6 +5226,12 @@ colorAdminApp.controller('registerControlCheckInController',
                 return false;
 
             $scope.new_vendor.url = $('#vendor_url_name').val();
+            if($scope.new_vendor.url.substring(0, 4) === "http") {
+
+            } else {
+                alert("Please use http or https");
+                return false;
+            }
             $http.post('/dashboard/api/save-new-vendor/', $scope.new_vendor)
                 .then(function(result){
                     if(result){
@@ -5248,10 +5255,6 @@ colorAdminApp.controller('registerControlCheckInController',
             });
         }
 
-
-        $scope.url_click = function() {
-            console.log(222);
-        }
         $scope.add_new_control = function() {
             // result['data']['new_vendor']['id']
             validation = false;
@@ -5263,6 +5266,12 @@ colorAdminApp.controller('registerControlCheckInController',
                 return false;
             $scope.new_control.category_name = $('select[name=control_category] option:selected').html();
             $scope.new_control.url = $('#control_url_name').val();
+            if($scope.new_control.url.substring(0, 4) === "http") {
+
+            } else {
+                alert("Please use http or https");
+                return false;
+            }
             $http.post('/dashboard/api/save-new-control/'+parseInt($('input[name=vendor_select]:checked').val())+'/', $scope.new_control)
                 .then(function(result){
                     if(result){

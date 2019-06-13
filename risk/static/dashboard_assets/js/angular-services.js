@@ -168,7 +168,7 @@ function CompanyAssetsService($http){
     }
 
     var service = {
-        getCompanyAssets: get_all_company_assets,
+        getCompanyAssets: get_all_company_assets
     }
     return service;
 }
@@ -489,7 +489,7 @@ function TimeUnitService($http){
     }
 
     var service = {
-        getAllTimeUnits: get_all_time_units,
+        getAllTimeUnits: get_all_time_units
     }
     return service;
 }
