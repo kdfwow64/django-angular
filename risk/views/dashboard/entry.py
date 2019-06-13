@@ -389,7 +389,7 @@ def api_company_control_list(request):
 
 
             try:
-                ttr = cc.recovery_multiplier + cc.recovery_time_unit.name
+                ttr = str(int(cc.recovery_multiplier)) + ' ' + cc.recovery_time_unit.name
             except:
                 ttr = ''
 
