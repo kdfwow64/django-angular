@@ -288,9 +288,9 @@ class CompanyAsset(DefaultFieldsCompany):
             amount = 0
             if self.asset_time_unit_increment == 0:
                 if self.asset_time_unit_max == 0:
-                    amount = self.asset_value_fixed * self.asset_quantity_fixed * self.asset_timed_unit.annual_units
+                    amount = self.asset_value_fixed * Decimal(self.asset_quantity_fixed) * Decimal(self.asset_timed_unit.annual_units)
                 else:
-                    amount = self.asset_value_fixed * self.asset_quantity_fixed * self.asset_time_unit_max
+                    amount = self.asset_value_fixed * Decimal(self.asset_quantity_fixed) * Decimal(self.asset_time_unit_max)
             else:
                 if self.asset_time_unit_max == 0:
                     start = self.asset_value_fixed * self.asset_quantity_fixed

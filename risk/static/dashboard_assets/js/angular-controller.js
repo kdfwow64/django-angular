@@ -5024,8 +5024,12 @@ colorAdminApp.controller('registerControlCheckInController',
     $scope.SubmitButton = "Create";
     if(company_control.new_cc) {
         $scope.new_cc = company_control.new_cc;
+        $scope.new_cc.opex = parseFloat($scope.new_cc.opex);
         $scope.maintitle = "Edit Company Control";
         $scope.SubmitButton = "Save";
+        $('#maint_date').val($scope.new_cc.maintenance_date);
+
+        console.log($scope.new_cc);
     };
     // $scope.users = [];
     angular.element(document).ready(function () {

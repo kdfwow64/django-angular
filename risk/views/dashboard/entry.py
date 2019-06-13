@@ -1104,7 +1104,7 @@ def api_save_new_company_control(request):
         poc_main_id = None
         poc_support_id = None
         try:
-            estimated_maint_opex = Decimal(float(request_data.get('opex')), 2)
+            estimated_maint_opex = Decimal(float(request_data.get('opex')))
         except:
             pass
 
@@ -1114,7 +1114,7 @@ def api_save_new_company_control(request):
             pass
 
         try:
-            recovery_time_unit_id = int(request_data.get('recovery_time_unit_id'))
+            recovery_time_unit_id = int(request_data.get('recovery_time_unit'))
         except:
             pass
 

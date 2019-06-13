@@ -268,9 +268,9 @@ def api_get_company_control(request, cc_id):
                 company_segments = None
             try:
                 vendor_select = Control.objects.get(id=cc.control_id).vendor_id
-                vendor_name: Vendor.objects.get(pk=vendor_select).name
-                control_select: cc.control_id
-                control_name: Control.objects.get(id=cc.control_id).name
+                vendor_name= Vendor.objects.get(pk=vendor_select).name
+                control_select= cc.control_id
+                control_name= Control.objects.get(id=cc.control_id).name
             except:
                 vendor_select = None
                 vendor_name = ''
@@ -293,10 +293,10 @@ def api_get_company_control(request, cc_id):
                     'opex_desc': cc.opex_description,
                     'maintenance_date': cc.date_maint,
                     'recovery_multiplier': cc.recovery_multiplier,
-                    'recovery_time_units': cc.recovery_time_unit_id,
+                    'recovery_time_unit': cc.recovery_time_unit_id,
                     'company_locations': company_locations,
                     'company_segments': company_segments,
-                    'evaluation_days': 0,
+                    'evaluation_days': cc.evaluation_days,
                     'poc_main': cc.poc_main_id,
                     'poc_support': cc.poc_support_id
                 }
