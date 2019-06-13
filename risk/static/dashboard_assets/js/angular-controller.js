@@ -4827,6 +4827,7 @@ colorAdminApp.controller('registerAddEntriresController',
         if(max_loss === 0) {
             max_loss = parseFloat(current_company_max_loss);
         }
+        max_loss = parseFloat(current_company_max_loss);
         $scope.todays_date = new Date();
         $scope.mitigating_controls.max_loss = max_loss;
 
@@ -5471,7 +5472,7 @@ colorAdminApp.controller('registerAddCompanyAssetController',
                     }
                 }
             }
-            $scope.preview_value_txt = 'Annualized value would be $' + amount;
+            $scope.preview_value_txt = amount;
         }
 
         $scope.add_company_asset = function() {
