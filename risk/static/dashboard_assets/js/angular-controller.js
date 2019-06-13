@@ -5241,7 +5241,9 @@ colorAdminApp.controller('registerControlCheckInController',
                             abbrv: '',
                             aka: '',
                             url: result['data']['new_vendor']['url'],
-                            parent: ''
+                            parent: '',
+                            description: '',
+                            keywords: ''
                         }).draw().show().draw(false);
                         $("#vendor_lists_table input[value="+result['data']['new_vendor']['id']+"]").prop('checked', true);
                         $('#add_new_vendor').modal('hide');
