@@ -168,7 +168,7 @@ def api_list_risk_entries(request):
                 'mr': entry.mitigation_rate,  #
                 'residual_ale_category': category_name,  #
                 # changed
-                'residual_ale_rate': str(round(entry.residual_ale_rate, 3)) + '%',
+                'residual_ale_rate': str(round(entry.get_residual_ale_rate() / company.get_company_max_loss() * 100, 3)) + '%',
                 'summary': entry.get_summary(),
                 'evaluated': entry.date_evaluated.strftime("%m/%d/%Y") if entry.date_evaluated else '',
                 'modified_date': entry.date_modified.strftime("%m/%d/%Y"),

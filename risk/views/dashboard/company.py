@@ -266,15 +266,25 @@ def api_get_company_control(request, cc_id):
                 company_segments = [loc.id_companysegment_id for loc in CompanyControlSegment.objects.filter(id_companycontrol_id=cc_id)] or [1, ]
             except:
                 company_segments = None
+            try:
+                vendor_select = Control.objects.get(id=cc.control_id).vendor_id
+                vendor_name: Vendor.objects.get(pk=vendor_select).name
+                control_select: cc.control_id
+                control_name: Control.objects.get(id=cc.control_id).name
+            except:
+                vendor_select = None
+                vendor_name = ''
+                control_select = None
+                control_name = ''
             rv = {
                 'status': 'success',
                 'code': 200,
                 'new_cc': {
                     'id': cc_id,
-                    'vendor_select': Control.objects.get(id=cc.control_id).vendor_id,
-                    'vendor_name': Vendor.objects.get(pk=Control.objects.get(id=cc.control_id).vendor_id).name,
-                    'control_select': cc.control_id,
-                    'control_name': Control.objects.get(id=cc.control_id).name,
+                    'vendor_select': vendor_select,
+                    'vendor_name': vendor_name,
+                    'control_select': control_select,
+                    'control_name': control_name,
                     'name': cc.name,
                     'alias': cc.alias,
                     'description': cc.description,

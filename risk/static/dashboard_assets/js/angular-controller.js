@@ -5088,12 +5088,14 @@ colorAdminApp.controller('registerControlCheckInController',
                             if (control_table instanceof $.fn.dataTable.Api) {
                                 control_table.destroy();
                             }
+                            api_url = 'api/control-lists/' + company_control.new_cc.vendor_select;
+                            if(company_control.new_cc.vendor_select){} else api_url = '';
                             control_table = $('#control_lists_table').DataTable({
                                 "destroy": true,
                                 "responsive": true,
                                 // "processing": true,
                                 // "serverSide": true,
-                                "ajax": 'api/control-lists/' + company_control.new_cc.vendor_select,
+                                "ajax": api_url,
                                 "autoWidth": false,
                                 "search": {
                                     regex: true
@@ -5299,6 +5301,13 @@ colorAdminApp.controller('registerControlCheckInController',
         }
 
         $scope.add_new_company_control = function(){
+            if($('input[name=vendor_select]:checked').length === 0) {
+                alert("Vendor not Selected");
+                return false;
+            } else if($('input[name=control_select]:checked').length === 0 ) {
+                alert("Control not Selected");
+                return false;
+            }
             $scope.new_cc.vendor_id = parseInt($('input[name=vendor_select]:checked').val());
             $scope.new_cc.control_id = parseInt($('input[name=control_select]:checked').val());
             $http.post('/dashboard/api/save-new-company-control/', $scope.new_cc)

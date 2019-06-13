@@ -6,7 +6,15 @@ from risk.models.utility import (
     DefaultFieldsEntry,
     DefaultFieldsCompany,
     DefaultFieldsCategory,
-    DefaultFieldsContext,
+    DefaultFieldsContext
+)
+import traceback
+from decimal import *
+from risk.models.scenario import FrequencyCategory
+from risk.models.common import TimeUnit
+from risk.models.company import (
+    CompanyAsset,
+    CompanyControl
 )
 
 
@@ -119,6 +127,85 @@ class Entry(DefaultFields):
         verbose_name_plural = ("Entries")
         unique_together = (('register', 'entry_number'),)
 
+    def get_aro_rate(self):
+        aro_rate = 0
+        if self.aro_toggle == 'C':
+            frequency_category = FrequencyCategory.objects.get(
+                id=self.aro_frequency_id)
+            aro_rate = (frequency_category.minimum +
+                        frequency_category.maximum) / 2 * 100
+            if frequency_category.minimum == 1:
+                aro_rate = 100
+        elif self.aro_toggle == 'K':
+            aro_rate = self.aro_fixed
+        else:
+            time_unit = TimeUnit.objects.get(
+                id=self.aro_time_unit_id)
+            aro_rate = self.aro_known_multiplier * \
+                       time_unit.annual_units / self.aro_known_unit_quantity
+            if aro_rate >= 1:
+                aro_rate = 100
+            else:
+                aro_rate *= 100
+        return Decimal(aro_rate)
+    def get_residual_ale_rate(self):
+        aro_rate = self.get_aro_rate()
+        total_sle = 0
+        total_ale = 0
+        total_ale_mitigating = 0
+        try:
+            try:
+                for entry_company_asset in self.companyasset_entry.order_by('id').all():
+                    company_asset = CompanyAsset.objects.get(
+                        pk=entry_company_asset.id_companyasset_id)
+                    sle_value = round(
+                        Decimal(company_asset.get_asset_value()) * Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                        2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                        entry_company_asset.exposure_factor_fixed, 2)
+                    ale_value = round(Decimal(company_asset.get_asset_value()) * Decimal(
+                        entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
+                                      2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                        Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
+                    total_sle += sle_value
+                    total_ale += ale_value
+            except:
+                pass
+
+            try:
+                for item in EntryAncillary.objects.filter(entry=self):
+                    total_sle += Decimal(item.per_occurance * item.ancillary_fixed)
+                    total_ale += Decimal(item.per_occurance * item.ancillary_fixed * aro_rate / 100)
+            except:
+                pass
+
+            try:
+                total_sle_rate = 0
+                for mitigating_control in self.companycontrol_entry.order_by('id').all():
+                    total_sle_rate += mitigating_control.sle_mitigation_rate
+                total_sle_rate = Decimal(total_sle_rate)
+                total_sle_cost = 0
+                total_aro_cost = 0
+                total_cost = 0
+                for mitigating_control in self.companycontrol_entry.order_by('id').all():
+                    company_control = CompanyControl.objects.get(
+                        pk=mitigating_control.id_companycontrol_id)
+                    sle_cost_value = round(
+                        total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
+                    aro_cost_value = round(
+                        total_sle * (100 - total_sle_rate) * Decimal(mitigating_control.aro_mitigation_rate) / 10000, 2)
+                    total_cost_value = sle_cost_value + aro_cost_value
+                    total_ale_impact_value = round(
+                        total_cost_value * aro_rate / 100, 2)
+                    total_sle_cost += sle_cost_value
+                    total_aro_cost += aro_cost_value
+                    total_cost += total_cost_value
+                    total_ale_mitigating += total_ale_impact_value
+            except:
+                pass
+        except:
+            print(traceback.format_exc())
+            pass
+        return Decimal(total_ale - total_ale_mitigating)
     def __str__(self):
         """String."""
         return self.summary
