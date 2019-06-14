@@ -521,7 +521,7 @@ def api_company_asset_list(request):
                 'owner': asset_owner,
                 'toggle': asset.asset_value_toggle,
                 'asset_value': '$' + '{:,}'.format(round(asset.get_asset_value(), 2)),  # str(round(asset.get_asset_value(), 2))
-                'annual_exposure': '$' + '{:,}'.format(round(total_ale_sum,2 ))
+                'annual_exposure': '$' + '{:,}'.format(round(total_ale_sum, 2))
             })
             total += 1
 

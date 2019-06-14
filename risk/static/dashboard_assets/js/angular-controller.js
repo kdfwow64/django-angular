@@ -4848,14 +4848,29 @@ colorAdminApp.controller('registerAddEntriresController',
                 $http.post('/dashboard/api/severity-categories/')
                     .then(function (d) {
                         if (d) {
+                            $scope.entry_overview.inherent_ale_category = '';
+                            inherent_ale_category_temp = '';
+                            $scope.entry_overview.residual_ale_category = '';
+                            residual_ale_category_temp = '';
                             for (i = 0; i < d.data.length; i++) {
                                 if (inherent_ale_rate >= d.data[i].min && inherent_ale_rate < d.data[i].max) {
                                     $scope.entry_overview.inherent_ale_category = d.data[i].name;
+                                } else if(inherent_ale_rate>=d.data[i].max) {
+                                    inherent_ale_category_temp = d.data[i].name;
                                 }
+
                                 if (residual_ale_rate >= d.data[i].min && residual_ale_rate < d.data[i].max) {
                                     $scope.entry_overview.residual_ale_category = d.data[i].name;
+                                } else if(residual_ale_rate>=d.data[i].max) {
+                                    residual_ale_category_temp = d.data[i].name;
                                 }
                             }
+
+                            if($scope.entry_overview.inherent_ale_category === '')
+                                $scope.entry_overview.inherent_ale_category = inherent_ale_category_temp;
+
+                            if($scope.entry_overview.residual_ale_category === '')
+                                $scope.entry_overview.residual_ale_category = residual_ale_category_temp;
                         }
                     }).catch(function (d) {
                     return false;

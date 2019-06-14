@@ -102,7 +102,7 @@ def get_all_impact_categories(request):
 def get_all_severity_categories(request):
     """Get all Severity categories."""
     data = []
-    for category in SeverityCategory.objects.order_by('name').all():
+    for category in SeverityCategory.objects.order_by('minimum').all():
         data.append({'id': category.id, 'name': category.name, 'min': category.minimum, 'max': category.maximum})
     return JsonResponse(data, safe=False)
 
