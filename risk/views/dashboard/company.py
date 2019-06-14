@@ -26,8 +26,9 @@ from risk.models import (
 @login_required
 def get_all_company_locations_for_dropdown(request):
     """Get all company locations for dropdown."""
+    company = request.user.get_current_company()
     data = []
-    for company in CompanyLocation.objects.order_by('name').all():
+    for company in CompanyLocation.objects.filter(company_id__in=[1, company.id]):
         data.append({'id': company.id, 'name': company.name})
 
     return JsonResponse(data, safe=False)
@@ -109,8 +110,9 @@ def get_all_severity_categories(request):
 @login_required
 def get_all_company_segments_for_dropdown(request):
     """Get all company segments for dropdown."""
+    company = request.user.get_current_company()
     data = []
-    for segment in CompanySegment.objects.order_by('name').all():
+    for segment in CompanySegment.objects.filter(company_id=company.id):
         data.append({'id': segment.id, 'name': segment.name})
 
     return JsonResponse(data, safe=False)
