@@ -5368,7 +5368,15 @@ colorAdminApp.controller('CompanyControlListController',
                         {"data": "cc_name", "name": "cc_name", "width": "10%"},
                         {"data": "control_name", "name": "control_name", "width": "10%"},
                         {"data": "cc_poc_main", "name": "cc_poc_main", "width": "10%"},
-                        {"data": "annual_mitigation", "name": "annual_mitigation", "width": "10%"},
+                        // {"data": "annual_mitigation", "name": "annual_mitigation", "width": "10%"},
+                        {
+                           "data": null,
+                           "name": "annual_mitigation",
+                           "width": "10%",
+                           "render": function(data, type, row, meta) {
+                               return "<a href='#' data-target='#annual_mitigation_detail' data-toggle='modal' class='modal-toggle'>"+row['annual_mitigation']+"</a>";
+                           }
+                        },
                         {"data": "annual_cost", "name": "annual_cost", "width": "10%"},
                         {"data": "ttr", "name": "ttr", "width": "10%"},
                         {
