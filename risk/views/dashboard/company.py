@@ -151,7 +151,8 @@ def api_save_company_asset(request):
         except:
             owner = None
         try:
-            asset_time_unit = dat.get('asset_time_unit')
+            asset_time_unit = int(dat.get('asset_time_unit'))
+            asset_time_unit = TimeUnit.objects.get(annual_units=asset_time_unit).id
         except:
             asset_time_unit = None
         try:
@@ -319,7 +320,10 @@ def api_get_company_asset(request, ca_id):
                 company_locations = [loc.id_companylocation_id for loc in CompanyAssetLocation.objects.filter(id_companyasset_id=ca_id)] or [1, ]
             except:
                 company_locations = None
-
+            try:
+                asset_time_unit = TimeUnit.objects.get(id=ca.asset_timed_unit_id).annual_units
+            except:
+                asset_time_unit = None
             rv = {
                 'status': 'success',
                 'code': 200,
@@ -335,7 +339,7 @@ def api_get_company_asset(request, ca_id):
                     'asset_value_fixed': ca.asset_value_fixed,
                     'asset_quantity_fixed': ca.asset_quantity_fixed,
                     'asset_percent': ca.asset_value_par,
-                    'asset_time_unit': TimeUnit.objects.get(id=ca.asset_timed_unit_id).annual_units,
+                    'asset_time_unit': asset_time_unit,
                     'time_unit_max': ca.asset_time_unit_max,
                     'time_unit_increment': ca.asset_time_unit_increment
                 }

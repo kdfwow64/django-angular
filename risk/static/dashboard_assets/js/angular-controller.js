@@ -3437,15 +3437,19 @@ colorAdminApp.controller('registerAddEntriresController',
             // $('.wizard-step-1').hide();
             // $('#wizard ol li').removeClass('active');
             // $('#wizard ol li').eq(3).addClass('active');
+            console.log(1);
             setTimeout(function(){
                 $('#wizard ol li').eq(1).click();
+                console.log(2);
                 setTimeout(function(){
                     $('#wizard ol li').eq(2).click();
+                    console.log(3);
                     setTimeout(function(){
                         $('#wizard ol li').eq(3).click();
-                    }, 50);
-                }, 50);
-            }, 50);
+                        console.log(4);
+                    }, 500);
+                }, 500);
+            }, 500);
         } else if(window.location.href.indexOf('edit-entry-show-assets') !== -1) {
             $scope.affected_assets.multidata.sort(function(a, b) {
                 if(parseFloat(a.ale_value) > parseFloat(b.ale_value)) return -1;
@@ -3456,8 +3460,8 @@ colorAdminApp.controller('registerAddEntriresController',
                 $('#wizard ol li').eq(1).click();
                 setTimeout(function(){
                     $('#wizard ol li').eq(2).click();
-                }, 50);
-            }, 50);
+                }, 500);
+            }, 500);
         }
     });
     if(riskEntry.basicinfo){
@@ -5584,7 +5588,7 @@ colorAdminApp.controller('registerAddCompanyAssetController',
             $http.defaults.xsrfHeaderName = 'X-CSRFToken';
             $http.post('/dashboard/api/add-company-asset/', $scope.new_ca)
             .then(function(r) {
-                if(r) {
+                if(r.data.status == 'success') {
                     window.location.href="#!/app/assets/list-assets";
                     return true;
                 } else {
