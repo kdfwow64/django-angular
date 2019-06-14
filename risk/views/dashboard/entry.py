@@ -1670,5 +1670,6 @@ def api_list_entries_info(request):
             'count_require_evaluation_entries': count_require_evaluation_entries
         }
     except:
+        print(traceback.format_exc())
         pass
     return JsonResponse(data, safe=False)
