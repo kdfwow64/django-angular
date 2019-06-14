@@ -272,3 +272,7 @@ legend {
 .letter-margin-top {
     margin-top: 30px;
 }
+
+.delete-txt {
+    color: #ac2925;
+}

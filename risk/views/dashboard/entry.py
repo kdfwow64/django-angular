@@ -22,6 +22,8 @@ from risk.models import (
     CompanyControlMeasure,
     CompanyLocation,
     CompanyAssetType,
+    CompanyAssetLocation,
+    # CompanyAssetSegment,
     Compliance,
     Entry,
     EntryActor,
@@ -1903,3 +1905,52 @@ def api_list_entries_info(request):
         print(traceback.format_exc())
         pass
     return JsonResponse(data, safe=False)
+
+
+
+@login_required
+def api_delete_company_control(request, cc_id):
+    """Delete Company Control by id"""
+    company = request.user.get_current_company()
+    rv = {}
+    if cc_id:
+        try:
+            for e_cc in EntryCompanyControl.objects.filter(id_companycontrol_id=cc_id):
+                try:
+                    e_cc.delete()
+                except:
+                    pass
+            CompanyControlLocation.objects.filter(id_companycontrol_id=cc_id).delete()
+            CompanyControlSegment.objects.filter(id_companycontrol_id=cc_id).delete()
+            CompanyControl.objects.get(id=cc_id).delete()
+            rv = {
+                'status': 'success',
+                'code': 200
+            }
+        except:
+            print(traceback.format_exc())
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+    return JsonResponse(rv)
+
+@login_required
+def api_delete_company_asset(request, ca_id):
+    """Delete Company Asset by id"""
+    company = request.user.get_current_company()
+    rv = {}
+    if ca_id:
+        try:
+            for e_ca in EntryCompanyAsset.objects.filter(id_companyasset_id=ca_id):
+                try:
+                    e_ca.delete()
+                except:
+                    pass
+            CompanyAssetLocation.objects.filter(id_companyasset_id=ca_id).delete()
+            CompanyAsset.objects.get(id=ca_id).delete()
+            rv = {
+                'status': 'success',
+                'code': 200
+            }
+        except:
+            print(traceback.format_exc())
+            rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+    return JsonResponse(rv)

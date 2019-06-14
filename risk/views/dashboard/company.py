@@ -358,3 +358,4 @@ def api_company_max_loss(request):
         'max_loss': company.get_company_max_loss()
     }
     return JsonResponse(data, safe=False)
+

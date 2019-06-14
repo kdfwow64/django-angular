@@ -3435,18 +3435,14 @@ colorAdminApp.controller('registerAddEntriresController',
             });
             // $('.wizard-step-4').removeClass('hide');
             // $('.wizard-step-1').hide();
-            // $('#wizard ol li').removeClass('active');
+            // $('#wizard ol li').re    moveClass('active');
             // $('#wizard ol li').eq(3).addClass('active');
-            console.log(1);
             setTimeout(function(){
                 $('#wizard ol li').eq(1).click();
-                console.log(2);
                 setTimeout(function(){
                     $('#wizard ol li').eq(2).click();
-                    console.log(3);
                     setTimeout(function(){
                         $('#wizard ol li').eq(3).click();
-                        console.log(4);
                     }, 500);
                 }, 500);
             }, 500);
@@ -3460,7 +3456,7 @@ colorAdminApp.controller('registerAddEntriresController',
                 $('#wizard ol li').eq(1).click();
                 setTimeout(function(){
                     $('#wizard ol li').eq(2).click();
-                }, 500);
+                }, 1500);
             }, 500);
         }
     });
@@ -5421,6 +5417,10 @@ function open_company_control_detail_modal(id) {
     $('#annual_mitigation_detail').modal('show');
 }
 
+function delete_company_control(id) {
+    $('#delete_cc_confirm_dialog #del_cc_id').val(id);
+    $('#delete_cc_confirm_dialog').modal('show');
+}
 colorAdminApp.controller('CompanyControlListController',
     function($http, $scope, $rootScope, $state) {
 
@@ -5428,6 +5428,25 @@ colorAdminApp.controller('CompanyControlListController',
             $http.defaults.xsrfCookieName = 'csrftoken';
             $http.defaults.xsrfHeaderName = 'X-CSRFToken';
             var table;
+            $scope.delete_cc_confirm = function() {
+                id = $('#delete_cc_confirm_dialog #del_cc_id').val();
+                $http.defaults.xsrfCookieName = 'csrftoken';
+                $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+                $http.post('/dashboard/api/delete-company-control/'+id+'/')
+                .then(function(r) {
+                    if(r.data.status == 'success') {
+                        console.log("Deleted");
+                        table.row($('.'+id+'_cname').parents('tr')).remove().draw(false);
+                        return true;
+                    } else {
+                        alert("Backend error");
+                        return false;
+                    }
+                }).catch(function(r){
+                    alert("API error");
+                    return false;
+                })
+            };
             if($('#company_control_list_tb').length !== 0) {
                 table = $('#company_control_list_tb').DataTable({
                     "responsive": true,
@@ -5465,6 +5484,14 @@ colorAdminApp.controller('CompanyControlListController',
                            "width": "5%",
                            "render": function(data, type, row, meta) {
                                return "<a href='/dashboard/#!/app/controls/edit-company-control/" + row['id'] +"' class='btn btn-primary'>Edit</a>";
+                           }
+                        },
+                        {
+                           "data": null,
+                           "name": "delete",
+                           "width": "5%",
+                           "render": function(data, type, row, meta) {
+                               return "<a onclick='delete_company_control("+row['id']+")' class='btn btn-danger'>Delete</a>";
                            }
                         },
                         {"data": "abbrv", "name": "abbrv", 'visible': false},
@@ -5634,6 +5661,11 @@ function open_company_asset_detail_modal(id) {
     $('#company_asset_detail .modal-title').html(ca_name);
     $('#company_asset_detail').modal('show');
 }
+
+function delete_company_asset(id) {
+    $('#delete_ca_confirm_dialog #del_ca_id').val(id);
+    $('#delete_ca_confirm_dialog').modal('show');
+}
 colorAdminApp.controller('CompanyAssetListController',
     function($http, $scope, $rootScope, $state) {
 
@@ -5641,6 +5673,25 @@ colorAdminApp.controller('CompanyAssetListController',
             $http.defaults.xsrfCookieName = 'csrftoken';
             $http.defaults.xsrfHeaderName = 'X-CSRFToken';
             var table;
+            $scope.delete_ca_confirm = function() {
+                id = $('#delete_ca_confirm_dialog #del_ca_id').val();
+                $http.defaults.xsrfCookieName = 'csrftoken';
+                $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+                $http.post('/dashboard/api/delete-company-asset/'+id+'/')
+                .then(function(r) {
+                    if(r.data.status == 'success') {
+                        console.log("Deleted");
+                        table.row($('.'+id+'_asset_name').parents('tr')).remove().draw(false);
+                        return true;
+                    } else {
+                        alert("Backend error");
+                        return false;
+                    }
+                }).catch(function(r){
+                    alert("API error");
+                    return false;
+                })
+            };
             if($('#company_asset_list_tb').length !== 0) {
                 table = $('#company_asset_list_tb').DataTable({
                     "responsive": true,
@@ -5676,6 +5727,14 @@ colorAdminApp.controller('CompanyAssetListController',
                            "width": "5%",
                            "render": function(data, type, row, meta) {
                                return "<a href='/dashboard/#!/app/assets/edit-company-asset/"+row['id']+"' class='btn btn-primary'>Edit</a>";
+                           }
+                        },
+                        {
+                           "data": null,
+                           "name": "delete",
+                           "width": "5%",
+                           "render": function(data, type, row, meta) {
+                               return "<a onclick='delete_company_asset("+row['id']+")' class='btn btn-danger'>Delete</a>";
                            }
                         }
 
