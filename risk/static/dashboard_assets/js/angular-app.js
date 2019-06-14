@@ -293,6 +293,160 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 }]
             }
         })
+        .state('app.entries.edit_entry_show_mitigation', {
+            url: '/edit-entry-show-mitigation/:id',
+            templateUrl: 'views/add_entry.html',
+            data: { pageTitle: 'Edit Entry' },
+            controller: 'registerAddEntriresController',
+            resolve: {
+                riskTypes: function(RiskTypeService){
+                    return RiskTypeService.getAllMyRiskTypes();
+                },
+                responses: function(ResponseService){
+                    return ResponseService.getAllResponses();
+                },
+                companyLocations: function(CompanyLocationService){
+                    return CompanyLocationService.getCompanyLocations();
+                },
+                compliances: function(ComplianceService){
+                    return ComplianceService.getCompliances();
+                },
+                users: function(UserService){
+                    return UserService.getUsers();
+                },
+                actors: function(ActorService){
+                    return ActorService.getActors();
+                },
+                actorIntents: function(ActorIntentService){
+                    return ActorIntentService.getActorIntents();
+                },
+                actorMotives: function(ActorMotiveService){
+                    return ActorMotiveService.getActorMotives();
+                },
+                companyAssets: function(CompanyAssetsService){
+                    return CompanyAssetsService.getCompanyAssets();
+                },
+                ancillaryItemTypes: function(AncillaryItemsService){
+                    return AncillaryItemsService.getAncillaryItems();
+                },
+                companyControls: function(CompanyControlsService){
+                    return CompanyControlsService.getCompanyControls();
+                },
+                controlMeasures: function(CompanyControlMeasuresService){
+                    return CompanyControlMeasuresService.getCompanyControlMeasures();
+                },
+                riskEntry: function($stateParams, RiskEntryService){
+                    return RiskEntryService.getselectedRiskEntry($stateParams.id);
+                },
+                aro_time_units: function(TimeUnitService){
+                    return TimeUnitService.getAllTimeUnits();
+                },
+                aro_frequencies: function(FrequencyCategoryService){
+                    return FrequencyCategoryService.getAllFrequencies();
+                },
+                artifacts: function(EntryUrlService){
+                    return EntryUrlService.getAllEntryUrls();
+                },
+                compliance_types: function(ComplianceTypeService){
+                    return ComplianceTypeService.getAllComplianceTypes();
+                },
+                severities: function(SeverityService){
+                    return SeverityService.getAllSeverities();
+                },
+                current_company_max_loss: function(CompanyService){
+                    return CompanyService.getCompanyMaxLoss();
+                },
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.entries.edit_entry_show_assets', {
+            url: '/edit-entry-show-assets/:id',
+            templateUrl: 'views/add_entry.html',
+            data: { pageTitle: 'Edit Entry' },
+            controller: 'registerAddEntriresController',
+            resolve: {
+                riskTypes: function(RiskTypeService){
+                    return RiskTypeService.getAllMyRiskTypes();
+                },
+                responses: function(ResponseService){
+                    return ResponseService.getAllResponses();
+                },
+                companyLocations: function(CompanyLocationService){
+                    return CompanyLocationService.getCompanyLocations();
+                },
+                compliances: function(ComplianceService){
+                    return ComplianceService.getCompliances();
+                },
+                users: function(UserService){
+                    return UserService.getUsers();
+                },
+                actors: function(ActorService){
+                    return ActorService.getActors();
+                },
+                actorIntents: function(ActorIntentService){
+                    return ActorIntentService.getActorIntents();
+                },
+                actorMotives: function(ActorMotiveService){
+                    return ActorMotiveService.getActorMotives();
+                },
+                companyAssets: function(CompanyAssetsService){
+                    return CompanyAssetsService.getCompanyAssets();
+                },
+                ancillaryItemTypes: function(AncillaryItemsService){
+                    return AncillaryItemsService.getAncillaryItems();
+                },
+                companyControls: function(CompanyControlsService){
+                    return CompanyControlsService.getCompanyControls();
+                },
+                controlMeasures: function(CompanyControlMeasuresService){
+                    return CompanyControlMeasuresService.getCompanyControlMeasures();
+                },
+                riskEntry: function($stateParams, RiskEntryService){
+                    return RiskEntryService.getselectedRiskEntry($stateParams.id);
+                },
+                aro_time_units: function(TimeUnitService){
+                    return TimeUnitService.getAllTimeUnits();
+                },
+                aro_frequencies: function(FrequencyCategoryService){
+                    return FrequencyCategoryService.getAllFrequencies();
+                },
+                artifacts: function(EntryUrlService){
+                    return EntryUrlService.getAllEntryUrls();
+                },
+                compliance_types: function(ComplianceTypeService){
+                    return ComplianceTypeService.getAllComplianceTypes();
+                },
+                severities: function(SeverityService){
+                    return SeverityService.getAllSeverities();
+                },
+                current_company_max_loss: function(CompanyService){
+                    return CompanyService.getCompanyMaxLoss();
+                },
+                service: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        serie: true,
+                        files: [
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/css/bwizard.min.css',
+                            '/static/dashboard_assets/plugins/parsley/src/parsley.css',
+                            '/static/dashboard_assets/plugins/pace/pace.min.js',
+                            '/static/dashboard_assets/plugins/parsley/dist/parsley.min.js',
+                            '/static/dashboard_assets/plugins/bootstrap-wizard/js/bwizard.js',
+                        ]
+                    });
+                }]
+            }
+        })
         .state('app.controls', {
             url: '/controls',
             template: '<div ui-view></div>',

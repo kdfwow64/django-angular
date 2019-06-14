@@ -1,4 +1,36 @@
 {% load staticfiles %}
+
+<!--Show Details-->
+<div class="modal fade" id="company_asset_detail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="m-b-0">
+                    <div class="row">
+                        <table class="table vendor-list-tb" id="company_asset_detail_tb">
+                            <thead>
+                                <tr>
+                                    <th>Summary</th>
+                                    <th>Aro Toggle</th>
+                                    <th>SLE Cost</th>
+                                    <th>ALE Cost</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div ng-controller="dashboardV2Controller">
     <!-- begin breadcrumb -->
     <ol class="breadcrumb pull-right">

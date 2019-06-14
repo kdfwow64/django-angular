@@ -1,35 +1,32 @@
 {% load staticfiles %}
 
-<!--Add New Vendor-->
+<!--Show Details-->
 <div class="modal fade" id="annual_mitigation_detail">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Quick Vendor Submit</h4> <span>provide these details and we will take care of the rest</span>
+                <h4 class="modal-title"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <!--                <form action="/" method="POST" data-parsley-validate="true" name="form-wizard">-->
                 <div class="m-b-0">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Vendor Name</label>
-                            <input class="form-control" type="text" ng-model="new_vendor.name" data-parsley-group="new-vendor-wizard" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label>Vendor URL</label>
-                            <input class="form-control" type="url" id="vendor_url_name" ng-model="new_vendor.url" data-parsley-group="new-vendor-wizard" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label>Vendor Description</label>
-                            <input class="form-control" type="text" ng-model="new_vendor.description">
-                        </div>
+                    <div class="row well">
+                        <table class="table vendor-list-tb" id="company_control_detail_tb">
+                            <thead>
+                                <tr>
+                                    <th>Summary</th>
+                                    <th>SLE Cost</th>
+                                    <th>ARO Cost</th>
+                                    <th>ALE Mitigation</th>
+                                    <th>Compliance Entry</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Close</a>
-                <a class="btn btn-success add-edit-btn" ng-click="add_new_vendor()">Submit</a>
             </div>
         </div>
     </div>

@@ -241,6 +241,7 @@ function WizardValidatorService(){
             }
             return true;
         }
+        // debugger;
         if (ui.index == 0) {
             // step-1 validation
             if (false === $('form[name="form-wizard"]').parsley().validate('wizard-step-1')) {
@@ -349,7 +350,7 @@ function EntryCompanyControlsService($http){
     }
 
     var service = {
-        getEntryCompanyControls: get_all_entry_company_controls,
+        getEntryCompanyControls: get_all_entry_company_controls
     }
     return service;
 }

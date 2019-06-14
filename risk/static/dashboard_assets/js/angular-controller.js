@@ -3426,6 +3426,40 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.entry_company_controls = [];
     $scope.control_measures = controlMeasures;
     $scope.severities = severities;
+    $scope.$on('$viewContentLoaded', function(){
+        if(window.location.href.indexOf('edit-entry-show-mitigation') !== -1) {
+            $scope.mitigating_controls.multidata.sort(function(a, b) {
+                if(parseFloat(a.total_ale_impact) > parseFloat(b.total_ale_impact)) return -1;
+                else if(parseFloat(a.total_ale_impact) < parseFloat(b.total_ale_impact)) return 1;
+                return 0;
+            });
+            // $('.wizard-step-4').removeClass('hide');
+            // $('.wizard-step-1').hide();
+            // $('#wizard ol li').removeClass('active');
+            // $('#wizard ol li').eq(3).addClass('active');
+            setTimeout(function(){
+                $('#wizard ol li').eq(1).click();
+                setTimeout(function(){
+                    $('#wizard ol li').eq(2).click();
+                    setTimeout(function(){
+                        $('#wizard ol li').eq(3).click();
+                    }, 50);
+                }, 50);
+            }, 50);
+        } else if(window.location.href.indexOf('edit-entry-show-assets') !== -1) {
+            $scope.affected_assets.multidata.sort(function(a, b) {
+                if(parseFloat(a.ale_value) > parseFloat(b.ale_value)) return -1;
+                else if(parseFloat(a.ale_value) < parseFloat(b.ale_value)) return 1;
+                return 0;
+            });
+            setTimeout(function(){
+                $('#wizard ol li').eq(1).click();
+                setTimeout(function(){
+                    $('#wizard ol li').eq(2).click();
+                }, 50);
+            }, 50);
+        }
+    });
     if(riskEntry.basicinfo){
         $scope.basicinfo = riskEntry.basicinfo;
     } else{
@@ -5347,7 +5381,41 @@ colorAdminApp.controller('registerControlCheckInController',
     });
 });
 
+var cc_detail_tb;
+function open_company_control_detail_modal(id) {
+    if (cc_detail_tb instanceof $.fn.dataTable.Api) {
+        cc_detail_tb.destroy();
+    }
+    cc_detail_tb = $('#company_control_detail_tb').DataTable({
+        "responsive": true,
+        "ajax": 'api/company-control-detail/'+id,
+        'autoWidth': false,
+        'search': {
+           regex: true
+        },
+        columns: [
+            {
+               "data": null,
+               "name": "summary",
+               "width": "65%",
+               "render": function(data, type, row, meta) {
+                   return "<a target='_blank' href='#!/app/entries/edit-entry-show-mitigation/"+row['id']+"'>"+row['summary']+"</a>"; //$("+'"#annual_mitigation_detail"'+").modal("+'"show"'+");
+               }
+            },
+            {"data": "sle_cost", "name": "sle_cost", "width": "10%"},
+            {"data": "aro_cost", "name": "aro_cost", "width": "10%"},
+            {"data": "ale_mitigation", "name": "ale_mitigation", "width": "10%"},
+            {"data": "compliance_entry", "name": "compliance_entry", "width": "5%"}
+        ],
+        initComplete: function() {
 
+        }
+    });
+    cc_name = $('.'+id+'_cname').html();
+    console.log(cc_name);
+    $('#annual_mitigation_detail .modal-title').html(cc_name);
+    $('#annual_mitigation_detail').modal('show');
+}
 
 colorAdminApp.controller('CompanyControlListController',
     function($http, $scope, $rootScope, $state) {
@@ -5365,16 +5433,24 @@ colorAdminApp.controller('CompanyControlListController',
                        regex: true
                     },
                     columns: [
-                        {"data": "cc_name", "name": "cc_name", "width": "10%"},
+                        {
+                           "data": null,
+                           "name": "cc_name",
+                           "width": "10%",
+                           "render": function(data, type, row, meta) {
+                               return "<span class='"+row['id']+"_cname'>"+row['cc_name']+"</span>";
+                           }
+                        },
+                        // {"data": "cc_name", "name": "cc_name", "width": "10%"},
                         {"data": "control_name", "name": "control_name", "width": "10%"},
                         {"data": "cc_poc_main", "name": "cc_poc_main", "width": "10%"},
-                        // {"data": "annual_mitigation", "name": "annual_mitigation", "width": "10%"},
                         {
                            "data": null,
                            "name": "annual_mitigation",
                            "width": "10%",
                            "render": function(data, type, row, meta) {
-                               return "<a href='#' data-target='#annual_mitigation_detail' data-toggle='modal' class='modal-toggle'>"+row['annual_mitigation']+"</a>";
+                               // return "<a onclick='open_company_control_detail_modal("+'"'+remove_sp(row['cc_name'])+'"'+","+row['id']+");'>"+row['annual_mitigation']+"</a>"; //$("+'"#annual_mitigation_detail"'+").modal("+'"show"'+");
+                               return "<a onclick='open_company_control_detail_modal("+row['id']+");'>"+row['annual_mitigation']+"</a>"; //$("+'"#annual_mitigation_detail"'+").modal("+'"show"'+");
                            }
                         },
                         {"data": "annual_cost", "name": "annual_cost", "width": "10%"},
@@ -5521,7 +5597,39 @@ colorAdminApp.controller('registerAddCompanyAssetController',
             })
         }
 });
+var ca_detail_tb;
+function open_company_asset_detail_modal(id) {
+    if (ca_detail_tb instanceof $.fn.dataTable.Api) {
+        ca_detail_tb.destroy();
+    }
+    ca_detail_tb = $('#company_asset_detail_tb').DataTable({
+        "responsive": true,
+        "ajax": 'api/company-asset-detail/'+id,
+        'autoWidth': false,
+        'search': {
+           regex: true
+        },
+        columns: [
+            {
+               "data": null,
+               "name": "summary",
+               "width": "70%",
+               "render": function(data, type, row, meta) {
+                   return "<a target='_blank' href='#!/app/entries/edit-entry-show-assets/"+row['id']+"'>"+row['summary']+"</a>"; //$("+'"#annual_mitigation_detail"'+").modal("+'"show"'+");
+               }
+            },
+            {"data": "aro_toggle", "name": "aro_toggle", "width": "10%"},
+            {"data": "sle_cost", "name": "sle_cost", "width": "10%"},
+            {"data": "ale_cost", "name": "ale_cost", "width": "10%"}
+        ],
+        initComplete: function() {
 
+        }
+    });
+    ca_name = $('.'+id+'_asset_name').html();
+    $('#company_asset_detail .modal-title').html(ca_name);
+    $('#company_asset_detail').modal('show');
+}
 colorAdminApp.controller('CompanyAssetListController',
     function($http, $scope, $rootScope, $state) {
 
@@ -5538,12 +5646,26 @@ colorAdminApp.controller('CompanyAssetListController',
                        regex: true
                     },
                     columns: [
-                        {"data": "name", "name": "name", "width": "10%"},
+                        {
+                           "data": null,
+                           "name": "name",
+                           "width": "10%",
+                           "render": function(data, type, row, meta) {
+                               return "<span class='"+row['id']+"_asset_name'>"+row['name']+"</span>";
+                           }
+                        },
                         {"data": "type", "name": "type", "width": "10%"},
                         {"data": "owner", "name": "owner", "width": "10%"},
                         {"data": "toggle", "name": "toggle", "width": "10%"},
                         {"data": "asset_value", "name": "asset_value", "width": "10%"},
-                        {"data": "annual_exposure", "name": "annual_exposure", "width": "10%"},
+                        {
+                           "data": null,
+                           "name": "annual_exposure",
+                           "width": "10%",
+                           "render": function(data, type, row, meta) {
+                               return "<a onclick='open_company_asset_detail_modal("+row['id']+");'>"+row['annual_exposure']+"</a>"; //$("+'"#annual_mitigation_detail"'+").modal("+'"show"'+");
+                           }
+                        },
                         {
                            "data": null,
                            "name": "id",

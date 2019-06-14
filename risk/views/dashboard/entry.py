@@ -38,6 +38,7 @@ from risk.models import (
     EntryUrl,
     ComplianceType,
     ComplianceRequirement,
+    EntryCompliance,
     EntryComplianceRequirement,
     CompanyAsset,
     SeverityCategory,
@@ -428,6 +429,229 @@ def api_company_control_list(request):
 
         }
     return JsonResponse(data)
+
+
+
+@login_required
+def api_get_company_control_detail(request, cc_id):
+    """Get Company Control by id"""
+    company = request.user.get_current_company()
+    rows = []
+    total = 0
+    data = {}
+    if cc_id:
+        try:
+            for e_cc in EntryCompanyControl.objects.filter(id_companycontrol_id=cc_id):
+                entry = Entry.objects.get(id=e_cc.id_entry_id)
+                aro_rate = 0
+                rate_relation = {}
+                if entry.aro_toggle == 'C':
+                    frequency_category = FrequencyCategory.objects.get(
+                        id=entry.aro_frequency_id)
+                    rate_relation = {
+                        'minimum': frequency_category.minimum,
+                        'maximum': frequency_category.maximum
+                    }
+                    aro_rate = (frequency_category.minimum +
+                                frequency_category.maximum) / 2 * 100
+                    if frequency_category.minimum == 1:
+                        aro_rate = 100
+                elif entry.aro_toggle == 'K':
+                    aro_rate = entry.aro_fixed
+                else:
+                    time_unit = TimeUnit.objects.get(
+                        id=entry.aro_time_unit_id)
+                    rate_relation = {
+                        'annual_units': time_unit.annual_units
+                    }
+                    aro_rate = entry.aro_known_multiplier * \
+                               time_unit.annual_units / entry.aro_known_unit_quantity
+                    if aro_rate >= 1:
+                        aro_rate = 100
+                    else:
+                        aro_rate *= 100
+                aro_rate = Decimal(aro_rate)
+                if entry.is_qualified(rate_relation):
+                    total_sle = 0
+                    total_ale = 0
+                    try:
+                        total_asset_value = 0
+                        for entry_company_asset in entry.companyasset_entry.order_by('id').all():
+                            company_asset = CompanyAsset.objects.get(
+                                pk=entry_company_asset.id_companyasset_id)
+                            sle_value = round(
+                                Decimal(company_asset.get_asset_value()) *
+                                Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                                2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                entry_company_asset.exposure_factor_fixed, 2)
+                            ale_value = round(Decimal(company_asset.get_asset_value()) * Decimal(
+                                entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
+                                              2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
+                            total_asset_value += round(
+                                company_asset.get_asset_value(), 2)
+                            total_sle += sle_value
+                            total_ale += ale_value
+
+                        for ancillary in entry.entryentryancillary.order_by('id').all():
+                            try:
+                                total_sle += ancillary.per_occurance * ancillary.ancillary_fixed
+                            except:
+                                pass
+
+                            try:
+                                total_ale += ancillary.per_occurance * ancillary.ancillary_fixed * aro_rate / 100
+                            except:
+                                pass
+                    except:
+                        pass
+                    # Mitigating Info
+
+                    total_aro_rate = 0
+                    total_sle_cost = 0
+                    total_aro_cost = 0
+                    total_cost = 0
+                    total_ale_impact = 0
+                    try:
+                        total_sle_rate = 0
+                        for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                            total_sle_rate += mitigating_control.sle_mitigation_rate
+                        total_sle_rate = Decimal(total_sle_rate)
+                        for mitigating_control in entry.companycontrol_entry.order_by('id').all():
+                            if mitigating_control.id_companycontrol_id == int(cc_id):
+                                company_control = CompanyControl.objects.get(
+                                    pk=mitigating_control.id_companycontrol_id)
+                                company = Company.objects.get(
+                                    pk=company_control.company_id)
+                                control = Control.objects.get(
+                                    pk=company_control.control_id)
+                                vendor = Vendor.objects.get(pk=control.vendor_id)
+                                sle_cost_value = round(
+                                    total_sle * Decimal(mitigating_control.sle_mitigation_rate) / 100, 2)
+                                aro_cost_value = round(
+                                    total_sle * (100 - total_sle_rate) * Decimal(
+                                        mitigating_control.aro_mitigation_rate) / 10000, 2)
+                                total_cost_value = sle_cost_value + aro_cost_value
+                                impact_value = round(total_cost_value * aro_rate / 100, 2)
+                                total_sle_cost += sle_cost_value
+                                total_aro_cost += aro_cost_value
+                                total_cost += total_cost_value
+                                total_ale_impact += impact_value
+                                total_aro_rate += mitigating_control.aro_mitigation_rate
+                    except:
+                        pass
+
+                    rows.append({
+                        'id': entry.id,
+                        'summary': entry.summary,
+                        'sle_cost': '($' + '{:,}'.format(total_sle_cost) + ')',
+                        'aro_cost': '($' + '{:,}'.format(total_aro_cost) + ')',
+                        'ale_mitigation': '($' + '{:,}'.format(total_ale_impact) + ')',
+                        'compliance_entry': 'Yes' if EntryCompliance.objects.filter(id_entry_id=entry.id).count() > 0 else 'No'
+                    })
+                    total += 1
+                else:
+                    pass
+
+            data = {
+                'data': rows,
+                'draw': int(request.GET.get('draw', 0)),
+                'recordsTotal': total,
+                'recordsFiltered': len(rows),
+            }
+        except:
+            print(traceback.format_exc())
+            data = {}
+
+    return JsonResponse(data)
+
+@login_required
+def api_get_company_asset_detail(request, ca_id):
+    """Company Asset Detail."""
+    company = request.user.get_current_company()
+    user = request.user
+    rows = []
+    total = 0
+    data = {}
+    if ca_id:
+        try:
+            for e_ca in EntryCompanyAsset.objects.filter(id_companyasset_id=ca_id):
+                entry = Entry.objects.get(id=e_ca.id_entry_id)
+                aro_rate = 0
+                rate_relation = {}
+                if entry.aro_toggle == 'C':
+                    frequency_category = FrequencyCategory.objects.get(
+                        id=entry.aro_frequency_id)
+                    rate_relation = {
+                        'minimum': frequency_category.minimum,
+                        'maximum': frequency_category.maximum
+                    }
+                    aro_rate = (frequency_category.minimum +
+                                frequency_category.maximum) / 2 * 100
+                    if frequency_category.minimum == 1:
+                        aro_rate = 100
+                elif entry.aro_toggle == 'K':
+                    aro_rate = entry.aro_fixed
+                else:
+                    time_unit = TimeUnit.objects.get(
+                        id=entry.aro_time_unit_id)
+                    rate_relation = {
+                        'annual_units': time_unit.annual_units
+                    }
+                    aro_rate = entry.aro_known_multiplier * \
+                               time_unit.annual_units / entry.aro_known_unit_quantity
+                    if aro_rate >= 1:
+                        aro_rate = 100
+                    else:
+                        aro_rate *= 100
+                aro_rate = Decimal(aro_rate)
+                if entry.is_qualified(rate_relation):
+                    # Total SLE
+                    total_sle = 0
+                    total_ale = 0
+                    try:
+                        total_asset_value = 0
+                        for entry_company_asset in entry.companyasset_entry.order_by('id').all():
+                            if entry_company_asset.id_companyasset_id == int(ca_id):
+                                company_asset = CompanyAsset.objects.get(
+                                    pk=entry_company_asset.id_companyasset_id)
+                                sle_value = round(
+                                    Decimal(company_asset.get_asset_value()) *
+                                    Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                                    2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                    entry_company_asset.exposure_factor_fixed, 2)
+                                ale_value = round(Decimal(company_asset.get_asset_value()) * Decimal(
+                                    entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
+                                                  2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                                    Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
+                                total_asset_value += round(
+                                    company_asset.get_asset_value(), 2)
+                                total_sle += sle_value
+                                total_ale += ale_value
+                    except:
+                        pass
+
+                    rows.append({
+                        'id': entry.id,
+                        'summary': entry.summary,
+                        'aro_toggle': 'Frequency' if entry.aro_toggle == 'C' else 'Percent' if entry.aro_toggle == 'K' else 'Time Based',
+                        'sle_cost': '$' + '{:,}'.format(total_sle),
+                        'ale_cost': '$' + '{:,}'.format(total_ale)
+                    })
+                    total += 1
+                else:
+                    pass
+            data = {
+                'data': rows,
+                'draw': int(request.GET.get('draw', 0)),
+                'recordsTotal': total,
+                'recordsFiltered': len(rows),
+            }
+        except:
+            print(traceback.format_exc())
+            data = {}
+    return JsonResponse(data)
+
 
 
 @login_required
@@ -1347,6 +1571,35 @@ def api_get_risk_entry(request, entry_id):
                 else:
                     aro_rate *= 100
             aro_rate = Decimal(aro_rate)
+
+            total_cost_value_an = 0
+            total_ale_value_an = 0
+            try:
+                ancillary_items = []
+                for item in EntryAncillary.objects.filter(entry=risk_entry):
+                    ancillary_items.append({
+                        'type_id': item.ancillary_type_id,
+                        'type': EntryAncillaryType.objects.get(id=item.ancillary_type_id).name,
+                        'summary': item.summary,
+                        'description': item.description,
+                        'detail': item.cost_detail,
+                        'evaluation_days': item.evaluation_days,
+                        'cost': item.ancillary_fixed,
+                        'occurences': item.per_occurance,
+                        'total_cost': item.per_occurance * item.ancillary_fixed
+                    })
+                    total_cost_value_an += float(item.per_occurance * item.ancillary_fixed)
+                    total_ale_value_an += float(item.per_occurance * item.ancillary_fixed) * float(aro_rate) / 100
+                rv.update({
+                    'ancillary_items': {
+                        'multidata': ancillary_items,
+                        'total_cost_value': total_cost_value_an
+                    }
+                })
+            except:
+                pass
+
+
             total_sle = 0
             total_ale = 0
             try:
@@ -1389,39 +1642,15 @@ def api_get_risk_entry(request, entry_id):
                         'total_sle_value': total_sle,  # Need to validate the use of this value
                         'total_sle': total_sle,
                         'total_ale_value': total_ale,  # Need to validate the use of this value
-                        'total_ale': total_ale
+                        'total_ale': total_ale,
+                        'total_ale_with_ancillary': total_ale + Decimal(total_ale_value_an)
                     }
                 })
             except:
                 print(traceback.format_exc())
                 pass
 
-
-            try:
-                ancillary_items = []
-                total_cost_value = 0
-                for item in EntryAncillary.objects.filter(entry=risk_entry):
-                    ancillary_items.append({
-                        'type_id': item.ancillary_type_id,
-                        'type': EntryAncillaryType.objects.get(id=item.ancillary_type_id).name,
-                        'summary': item.summary,
-                        'description': item.description,
-                        'detail': item.cost_detail,
-                        'evaluation_days': item.evaluation_days,
-                        'cost': item.ancillary_fixed,
-                        'occurences': item.per_occurance,
-                        'total_cost': item.per_occurance * item.ancillary_fixed
-                    })
-                    total_cost_value += float(item.per_occurance * item.ancillary_fixed)
-                rv.update({
-                    'ancillary_items': {
-                        'multidata': ancillary_items,
-                        'total_cost_value': total_cost_value
-                    }
-                })
-            except:
-                pass
-
+            total_sle += Decimal(total_cost_value_an)
             try:
                 mitigating_controls = []
                 total_sle_rate = 0
