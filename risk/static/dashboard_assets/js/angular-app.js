@@ -111,7 +111,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             url: '/list-entries',
             templateUrl: 'views/list_entries.html',
             data: { pageTitle: 'List Entries' },
-            controller: 'registerListEntriresController',
+            controller: 'registerListEntriesController',
             resolve: {
                 responses: function(ResponseService){
                     return ResponseService.getAllResponses();
@@ -143,7 +143,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             url: '/add-entry',
             templateUrl: 'views/add_entry.html',
             data: { pageTitle: 'Add Entry' },
-            controller: 'registerAddEntriresController',
+            controller: 'registerAddEntriesController',
             resolve: {
                 riskTypes: function(RiskTypeService){
                     return RiskTypeService.getAllMyRiskTypes();

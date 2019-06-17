@@ -166,7 +166,7 @@ colorAdminApp.controller('sidebarController', function($scope, $uibModal, $rootS
     $scope.open_company_controller = function (size, parentSelector) {
         var parentElem = parentSelector ?
             angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
-        var modalInstance = $uibModal.open({
+        $uibModal.open({
             animation: $ctrl.animationsEnabled,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -174,7 +174,7 @@ colorAdminApp.controller('sidebarController', function($scope, $uibModal, $rootS
             controller: 'changeCompanyController',
             controllerAs: '$ctrl',
             size: size,
-            appendTo: parentElem,
+            appendTo: parentElem
         });
     };
     angular.element(document).ready(function () {
@@ -3214,14 +3214,18 @@ isUrl = function(s) {
    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
    return regexp.test(s);
 }
-colorAdminApp.controller('registerListEntriresController',
+/*-------------------------------------------------
+    A02.0 List Entries Controller
+---------------------------------------------------*/
+colorAdminApp.controller('registerListEntriesController',
     function($http, $scope, $rootScope, $state, responses, severities, users) {
     $scope.responses = responses;
     $scope.users = users;
     $scope.severities = severities;
-    $scope.search = {};
-    $scope.search.compliance = false;
-    $scope.search.completed = false;
+    $scope.search = {
+        compliance: false,
+        completed: false
+    };
     $scope.company_residual_ale_rate = 0;
     $scope.company_residual_ale_rate_width = 0;
     $scope.highest_total_ale = 0;
@@ -3305,8 +3309,6 @@ colorAdminApp.controller('registerListEntriresController',
                 initComplete: function () {
                     table.column('compliance:name').search($scope.search.compliance?1:'').draw();
                     table.column('completed:name').search($scope.search.completed?0:'').draw();
-                    //table.column('compliance:name').search('').draw();
-                    //table.column('completed:name').search('').draw();
                 }
             });
 
@@ -3353,23 +3355,14 @@ colorAdminApp.controller('registerListEntriresController',
                 }
             });
 
-            // $('#search_owner').change( function() {
-            //     if($scope.search.owner){
-            //         table.column('owner_id:name').search($scope.search.owner).draw();
-            //     }
-            //     else{
-            //         table.column('owner_id:name').search('').draw();
-            //     }
-            // } );
             $('#search_completed').change( function() {
                table.column('completed:name').search($scope.search.completed?0:'').draw(); // revoked is when active is 0
-               // table.column('completed:name').search($scope.search.completed?0:1).draw();
-            } );
+            });
 
             $("#list-entry_title").text("Risk Entries - " + $("#current_company").text());
             $('#risk-entry-table tbody').on( 'click', '.edit-risk-entry', function () {
                 var data = table.row( $(this).parents('tr') ).data();
-            } );
+            });
         }
     });
 });
@@ -3379,7 +3372,7 @@ colorAdminApp.controller('registerListEntriresController',
     A03.0 Add Entries Controller
 ---------------------------------------------------*/
 
-colorAdminApp.controller('registerAddEntriresController',
+colorAdminApp.controller('registerAddEntriesController',
     function(
         $scope,
         Upload,
@@ -3407,7 +3400,6 @@ colorAdminApp.controller('registerAddEntriresController',
         severities,
         current_company_max_loss
     ){
-    $scope.basicinfo = {};
     $scope.risk_types = riskTypes;
     $scope.responses = responses;
     $scope.aro_frequencies = aro_frequencies;
@@ -3426,59 +3418,28 @@ colorAdminApp.controller('registerAddEntriresController',
     $scope.entry_company_controls = [];
     $scope.control_measures = controlMeasures;
     $scope.severities = severities;
-    $scope.$on('$viewContentLoaded', function(){
-        if(window.location.href.indexOf('edit-entry-show-mitigation') !== -1) {
-            $scope.mitigating_controls.multidata.sort(function(a, b) {
-                if(parseFloat(a.total_ale_impact) > parseFloat(b.total_ale_impact)) return -1;
-                else if(parseFloat(a.total_ale_impact) < parseFloat(b.total_ale_impact)) return 1;
-                return 0;
-            });
-            // $('.wizard-step-4').removeClass('hide');
-            // $('.wizard-step-1').hide();
-            // $('#wizard ol li').re    moveClass('active');
-            // $('#wizard ol li').eq(3).addClass('active');
-            setTimeout(function(){
-                $('#wizard ol li').eq(1).click();
-                setTimeout(function(){
-                    $('#wizard ol li').eq(2).click();
-                    setTimeout(function(){
-                        $('#wizard ol li').eq(3).click();
-                    }, 500);
-                }, 500);
-            }, 500);
-        } else if(window.location.href.indexOf('edit-entry-show-assets') !== -1) {
-            $scope.affected_assets.multidata.sort(function(a, b) {
-                if(parseFloat(a.ale_value) > parseFloat(b.ale_value)) return -1;
-                else if(parseFloat(a.ale_value) < parseFloat(b.ale_value)) return 1;
-                return 0;
-            });
-            setTimeout(function(){
-                $('#wizard ol li').eq(1).click();
-                setTimeout(function(){
-                    $('#wizard ol li').eq(2).click();
-                }, 1500);
-            }, 500);
-        }
-    });
+
     if(riskEntry.basicinfo){
         $scope.basicinfo = riskEntry.basicinfo;
     } else{
-        $scope.basicinfo.locations = [1];
-        $scope.basicinfo.aro_toggle = 'F';
-        $scope.basicinfo.incident_response = '1';
-        $scope.basicinfo.entry_owner = $scope.users[0].id;
-        $scope.basicinfo.compliance_requirements = [];
-        $scope.basicinfo.entry_urls = [];
-        $scope.basicinfo.files = [];
-        $scope.basicinfo.aro_rate = 100;
-        $scope.basicinfo.response_name = '';
-        $scope.basicinfo.entry_owner_name = '';
-        $scope.basicinfo.created_date = '';
-        $scope.basicinfo.modified_date = '';
-        $scope.basicinfo.evaluated_date = '';
-        $scope.basicinfo.evaluation_days = 0;
-        $scope.basicinfo.artifacts_files = [];
-        $scope.basicinfo.artifacts_files_deleted_items = '';
+        $scope.basicinfo = {
+            locations: [1],
+            aro_toggle: 'F',
+            incident_response: '1',
+            entry_owner: users[0].id,
+            compliance_requirements: [],
+            entry_urls: [],
+            files: [],
+            aro_rate: 100,
+            response_name: '',
+            entry_owner_name: '',
+            created_date: '',
+            modified_date: '',
+            evaluated_date: '',
+            evaluation_days: 0,
+            artifacts_files: [],
+            artifacts_files_deleted_items: ''
+        };
     }
 
     if(riskEntry.affected_assets){
@@ -3498,7 +3459,7 @@ colorAdminApp.controller('registerAddEntriresController',
 
     if(riskEntry.ancillary_items){
         $scope.ancillary_items = riskEntry.ancillary_items;
-    }else{
+    } else{
         $scope.ancillary_items = {
             multidata: [],
             total_cost_value: 0.0
@@ -3534,18 +3495,18 @@ colorAdminApp.controller('registerAddEntriresController',
             vendor_name: null,
             max_loss: null,
             sle_rate: 0,
-            sle_rate_display: 'Remaining 70.000%',
+            sle_rate_display: '',
             sle_mitigation_rate: 0,
             aro_rate: 0,
-            aro_rate_display: 'Remaining 53.000%',
+            aro_rate_display: '',
             aro_mitigation_rate: 0,
-            sle_cost: '-$378.31',
+            sle_cost: '',
             sle_cost_value: 0,
-            aro_cost: '-$3526.60',
+            aro_cost: '',
             aro_cost_value: 0,
-            total_cost: '-$3904.91',
+            total_cost: '',
             total_cost_value: 0,
-            total_ale_impact: '$390.49',
+            total_ale_impact: '',
             total_ale_impact_value: 0,
             notes: '',
             edit_num: -1
@@ -3614,7 +3575,7 @@ colorAdminApp.controller('registerAddEntriresController',
 
     if(riskEntry.new_as) {
         $scope.new_as = riskEntry.new_as;
-    } else {
+    } else{
         $scope.new_as = {
             asset_name: null,
             asset_value: null,
@@ -3630,7 +3591,7 @@ colorAdminApp.controller('registerAddEntriresController',
 
     if(riskEntry.new_ancillary_item) {
         $scope.new_ancillary_item = riskEntry.new_ancillary_item;
-    } else {
+    } else{
         $scope.new_ancillary_item = {
             type: null,
             summary: null,
@@ -3641,6 +3602,28 @@ colorAdminApp.controller('registerAddEntriresController',
             evaluation_days: 0,
             edit_num: -1
         };
+    }
+
+    if(riskEntry.entry_list){
+        $scope.entry_list = riskEntry.entry_list;
+    } else{
+        $scope.entry_list = {
+            response: [],
+            severity: [],
+            owner: null,
+            sortType: 'response',
+            sortReverse: false,
+            searchFish: ''
+        };
+    }
+
+    if(riskEntry.measurements){
+        $scope.measurements = riskEntry.measurements;
+        if(riskEntry.measurement_controls){
+            $scope.entry_company_controls = riskEntry.measurement_controls;
+        }
+    } else{
+        $scope.measurements = {multidata: [WizardFormService.get_measurements_form()]};
     }
 
     if(riskEntry.entry_overview){
@@ -3681,27 +3664,40 @@ colorAdminApp.controller('registerAddEntriresController',
         };
     }
 
-    if(riskEntry.entry_list){
-        $scope.entry_list = riskEntry.entry_list;
-    } else{
-        $scope.entry_list = {
-            response: [],
-            severity: [],
-            owner: null,
-            sortType: 'response',
-            sortReverse: false,
-            searchFish: ''
-        };
-    }
-
-    if(riskEntry.measurements){
-        $scope.measurements = riskEntry.measurements;
-        if(riskEntry.measurement_controls){
-            $scope.entry_company_controls = riskEntry.measurement_controls;
+    $scope.$on('$viewContentLoaded', function(){
+        if(window.location.href.indexOf('edit-entry-show-mitigation') !== -1) {
+            $scope.mitigating_controls.multidata.sort(function(a, b) {
+                if(parseFloat(a.total_ale_impact) > parseFloat(b.total_ale_impact)) return -1;
+                else if(parseFloat(a.total_ale_impact) < parseFloat(b.total_ale_impact)) return 1;
+                return 0;
+            });
+            // $('.wizard-step-4').removeClass('hide');
+            // $('.wizard-step-1').hide();
+            // $('#wizard ol li').re    moveClass('active');
+            // $('#wizard ol li').eq(3).addClass('active');
+            setTimeout(function(){
+                $('#wizard ol li').eq(1).click();
+                setTimeout(function(){
+                    $('#wizard ol li').eq(2).click();
+                    setTimeout(function(){
+                        $('#wizard ol li').eq(3).click();
+                    }, 500);
+                }, 500);
+            }, 500);
+        } else if(window.location.href.indexOf('edit-entry-show-assets') !== -1) {
+            $scope.affected_assets.multidata.sort(function(a, b) {
+                if(parseFloat(a.ale_value) > parseFloat(b.ale_value)) return -1;
+                else if(parseFloat(a.ale_value) < parseFloat(b.ale_value)) return 1;
+                return 0;
+            });
+            setTimeout(function(){
+                $('#wizard ol li').eq(1).click();
+                setTimeout(function(){
+                    $('#wizard ol li').eq(2).click();
+                }, 1500);
+            }, 500);
         }
-    } else{
-        $scope.measurements = {multidata: [WizardFormService.get_measurements_form()]};
-    }
+    });
 
     $scope.remove_this_entry_url = function (index) {
         $scope.basicinfo.entry_urls.splice(index, 1);
@@ -3750,6 +3746,7 @@ colorAdminApp.controller('registerAddEntriresController',
         $scope.mitigating_controls.multidata.splice(index, 1);
         $scope.mitigating_controls_update();
     }
+    // First Step - Basic Info
     $scope.aro_toggle_change = function () {
         $('.wizard-step-1 .aro-bordered-div input, .wizard-step-1 .aro-bordered-div select').each(function(){
             $(this).parsley().reset();
