@@ -4859,7 +4859,6 @@ colorAdminApp.controller('registerAddEntriesController',
                         residual_ale_category_temp = severity_categories[i].name;
                     }
                 }
-
                 if($scope.entry_overview.inherent_ale_category === '')
                     $scope.entry_overview.inherent_ale_category = inherent_ale_category_temp;
 
@@ -4901,7 +4900,13 @@ colorAdminApp.controller('registerAddEntriesController',
                 residual_aro_rate_percent = residual_aro_rate * 100;
                 $scope.entry_overview.residual_aro_rate = residual_aro_rate_percent.toFixed(3);
                 $scope.entry_overview.residual_aro_in_days = parseInt(365 / residual_aro_rate);
+                fre_max_name = '';
+                fre_max_val = 0;
                 for( j = 0 ; j < frequencies.length ; j++){
+                    if( frequencies[j].min > fre_max_val ) {
+                        fre_max_val = frequencies[j].min;
+                        fre_max_name = frequencies[j].name;
+                    }
                     if ( frequencies[j].min <= inherent_aro_rate && frequencies[j].max > inherent_aro_rate) {
                         $scope.entry_overview.inherent_aro_category = frequencies[j].name;
                     }
@@ -4909,6 +4914,10 @@ colorAdminApp.controller('registerAddEntriesController',
                         $scope.entry_overview.residual_aro_category = frequencies[j].name;
                     }
                 }
+                if($scope.entry_overview.inherent_aro_category === '' || $scope.entry_overview.inherent_aro_category === null)
+                    $scope.entry_overview.inherent_aro_category = fre_max_name;
+                if($scope.entry_overview.residual_aro_category === '' || $scope.entry_overview.residual_aro_category === null)
+                    $scope.entry_overview.residual_aro_category = fre_max_name;
                 /*Mitigated Risk*/
                 $scope.entry_overview.mitigated_ale_monitized = $scope.mitigating_controls.total_ale;
                 $scope.entry_overview.mitigated_ale_rate = ($scope.mitigating_controls.total_ale / $scope.affected_assets.total_ale_with_ancillary);

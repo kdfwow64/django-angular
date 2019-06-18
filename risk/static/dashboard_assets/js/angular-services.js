@@ -396,13 +396,13 @@ function ImpactTypeService($http){
 
 function SeverityService($http){
     function get_all_severities(id){
-        return $http.get('/dashboard/api/severity/').then(function(r){
+        return $http.get('/dashboard/api/severity-categories/').then(function(r){
             return r.data;
         }, function(r){return {}});
     }
 
     var service = {
-        getAllSeverities: get_all_severities,
+        getAllSeverities: get_all_severities
     }
     return service;
 }
@@ -688,6 +688,22 @@ function CompanyService($http){
     }
     return service;
 }
+/* -----------------------------------
+   27.0 SERVICE - ImpactCategoryService
+--------------------------------------*/
+
+function ImpactCategoryService($http){
+    function get_all_impact_categories(){
+        return $http.get('/dashboard/api/impact-categories/').then(function(r){
+            return r.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getAllImpactCategories: get_all_impact_categories
+    }
+    return service;
+}
 
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseService', ['$http', ResponseService])
@@ -713,6 +729,7 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('WizardValidatorService', [WizardValidatorService])
              .factory('RiskEntryService', ['$http', RiskEntryService])
              .factory('ImpactTypeService', ['$http', ImpactTypeService])
+             .factory('ImpactCategoryService', ['$http', ImpactCategoryService])
              .factory('SeverityService', ['$http', SeverityService])
              .factory('WizardFormService', [WizardFormService])
              .factory('TimeUnitService', ['$http', TimeUnitService])

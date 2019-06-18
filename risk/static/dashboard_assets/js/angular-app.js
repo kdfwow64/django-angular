@@ -208,8 +208,8 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 severity_categories: function(SeverityService){
                     return SeverityService.getAllSeverities();
                 },
-                impact_categories: function(ImpactTypeService){
-                    return ImpactTypeService.getAllImpactTypes();
+                impact_categories: function(ImpactCategoryService){
+                    return ImpactCategoryService.getAllImpactCategories();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -294,8 +294,8 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 severity_categories: function(SeverityService){
                     return SeverityService.getAllSeverities();
                 },
-                impact_categories: function(ImpactTypeService){
-                    return ImpactTypeService.getAllImpactTypes();
+                impact_categories: function(ImpactCategoryService){
+                    return ImpactCategoryService.getAllImpactCategories();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
