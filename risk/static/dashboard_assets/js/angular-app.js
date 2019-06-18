@@ -220,7 +220,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             url: '/edit-entry/:id',
             templateUrl: 'views/add_entry.html',
             data: { pageTitle: 'Edit Entry' },
-            controller: 'registerAddEntriresController',
+            controller: 'registerAddEntriesController',
             resolve: {
                 riskTypes: function(RiskTypeService){
                     return RiskTypeService.getAllMyRiskTypes();

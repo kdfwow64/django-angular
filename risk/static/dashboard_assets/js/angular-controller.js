@@ -4150,7 +4150,7 @@ colorAdminApp.controller('registerAddEntriesController',
         $scope.new_as.exposure_factor_toggle = 'F';
         $scope.new_as.asset_value_display = '';
         $scope.new_as.fixed_amount = '';
-        $scope.new_as.percent_asset_value = '';
+        $scope.new_as.percent_asset_value = 0;
         $scope.new_as.asset_detail = '';
         $scope.new_as.as_cal_res = '';
         $scope.new_as.as_cal_res_value = null;
@@ -4192,7 +4192,7 @@ colorAdminApp.controller('registerAddEntriesController',
         $scope.new_as.exposure_factor_toggle = edit_item.exposure_factor_toggle;
         $scope.new_as.asset_value_display = edit_item.asset_value_display;
         $scope.new_as.fixed_amount = parseFloat(edit_item.exposure_factor_fixed);
-        $scope.new_as.percent_asset_value = edit_item.exposure_factor_rate;
+        $scope.new_as.percent_asset_value = parseFloat(edit_item.exposure_factor_rate);
         $scope.new_as.asset_detail = edit_item.detail;
         $('input[name=new_fixed_amount]').attr('max',parseFloat(edit_item.asset_value));
         $('#add_edit_affected_asset select, #add_edit_affected_asset input, #add_edit_affected_asset textarea').each(function() {
@@ -4205,7 +4205,7 @@ colorAdminApp.controller('registerAddEntriesController',
         if($('select[name=new_asset_name]').parsley().validate() != true) {
             $scope.new_as.asset_value_display = '';
             $scope.new_as.fixed_amount = '';
-            $scope.new_as.percent_asset_value = '';
+            $scope.new_as.percent_asset_value = 0;
             return false;
         }
         $http.defaults.xsrfCookieName = 'csrftoken';
@@ -4269,7 +4269,7 @@ colorAdminApp.controller('registerAddEntriesController',
             ale = ale_value;
         } else {
             factor = 'rate: ' + $scope.new_as.percent_asset_value + '%';
-            monetary_conversion = $scope.new_as.asset_value * $scope.new_as.percent_asset_value / 100;
+            monetary_conversion = $scope.new_as.asset_value * parseFloat($scope.new_as.percent_asset_value) / 100;
             sle = monetary_conversion;
             sle_value = monetary_conversion; // validate the use of this value
             ale_value = monetary_conversion * $scope.basicinfo.aro_rate/100; //validate the use of this value
@@ -4281,7 +4281,7 @@ colorAdminApp.controller('registerAddEntriesController',
             exposure_factor_toggle: $scope.new_as.exposure_factor_toggle,
             asset_value: $scope.new_as.asset_value,
             exposure_factor_fixed: $scope.new_as.fixed_amount,
-            exposure_factor_rate: $scope.new_as.percent_asset_value,
+            exposure_factor_rate: parseFloat($scope.new_as.percent_asset_value),
             asset_value_display: '$' + $scope.new_as.asset_value,
             factor: factor,
             detail: $scope.new_as.asset_detail,

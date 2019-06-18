@@ -1625,7 +1625,7 @@ def api_get_risk_entry(request, entry_id):
                         'exposure_factor_toggle': entry_company_asset.exposure_factor_toggle,
                         'asset_value': round(company_asset.get_asset_value(), 2),
                         'exposure_factor_fixed': round(entry_company_asset.exposure_factor_fixed, 2),
-                        'exposure_factor_rate': int(entry_company_asset.exposure_factor_rate),
+                        'exposure_factor_rate': round(entry_company_asset.exposure_factor_rate, 2),
                         'asset_value_display': round(company_asset.get_asset_value(), 2),
                         'factor': 'rate: ' + str(round(entry_company_asset.exposure_factor_rate, 3)) + '%' if entry_company_asset.exposure_factor_toggle == 'P' else 'fixed: $' + str(round(entry_company_asset.exposure_factor_fixed, 2)),
                         'detail': entry_company_asset.detail,
@@ -1634,7 +1634,12 @@ def api_get_risk_entry(request, entry_id):
                         'ale_value': ale_value,  # Need to validate the use of this value
                         'ale': ale_value
                     })
-                total_factor = round(total_sle / total_asset_value * 100, 2)
+                try:
+                    total_factor = round(total_sle / total_asset_value * 100, 2)
+                except:
+                    total_factor = total_sle
+                    print("total_factor Calc error")
+                    pass
                 rv.update({
                     'affected_assets': {
                         'multidata': affected_assets,
