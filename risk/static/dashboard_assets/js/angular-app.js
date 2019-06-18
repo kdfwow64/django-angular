@@ -202,6 +202,15 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 current_company_max_loss: function(CompanyService){
                     return CompanyService.getCompanyMaxLoss();
                 },
+                frequencies: function(FrequencyCategoryService){
+                    return FrequencyCategoryService.getAllFrequencies();
+                },
+                severity_categories: function(SeverityService){
+                    return SeverityService.getAllSeverities();
+                },
+                impact_categories: function(ImpactTypeService){
+                    return ImpactTypeService.getAllImpactTypes();
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,
@@ -278,6 +287,15 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 },
                 current_company_max_loss: function(CompanyService){
                     return CompanyService.getCompanyMaxLoss();
+                },
+                frequencies: function(FrequencyCategoryService){
+                    return FrequencyCategoryService.getAllFrequencies();
+                },
+                severity_categories: function(SeverityService){
+                    return SeverityService.getAllSeverities();
+                },
+                impact_categories: function(ImpactTypeService){
+                    return ImpactTypeService.getAllImpactTypes();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({

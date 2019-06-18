@@ -3398,7 +3398,10 @@ colorAdminApp.controller('registerAddEntriesController',
         artifacts,
         compliance_types,
         severities,
-        current_company_max_loss
+        current_company_max_loss,
+        frequencies,
+        severity_categories,
+        impact_categories
     ){
     $scope.risk_types = riskTypes;
     $scope.responses = responses;
@@ -4011,73 +4014,50 @@ colorAdminApp.controller('registerAddEntriesController',
         });
         if(validation)
             return false;
-        $http.defaults.xsrfCookieName = 'csrftoken';
-        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
-        $http.post('/dashboard/api/frequencies/')
-        .then(function(r) {
-            if (r) {
-                if ($scope.basicinfo.aro_toggle == 'F') {
-                    $http.post('/dashboard/api/time-units/')
-                        .then(function(d){
-                            if ( d ) {
-                                for ( i = 0 ; i < d.data.length ; i++ ) {
-                                    if ( d.data[i].id == $scope.basicinfo.aro_time_unit ) {
-                                        percent = $scope.basicinfo.aro_known_multiplier * d.data[i].annual_units / $scope.basicinfo.aro_known_unit_quantity;
-                                        if ( percent >= 1 )
-                                             $('#aro_cal_res').html('There is a ' + 100 + '% of this event occuring annually. It is considered Certain' );
-                                        else {
-                                            for (j = 0; j < r.data.length; j++) {
-                                                if (r.data[j].min <= percent && r.data[j].max > percent) {
-                                                    percent = percent * 100;
-                                                    percent = percent.toFixed(3);
-                                                    $('#aro_cal_res').html('There is a ' + percent + '% of this event occuring annually. It is considered ' + r.data[j].name);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-                                return true;
-                            }
-                            else{
-                                return false;
-                            }
-                        }).catch(function(d){
-                            return false;
-                    })
-                } else if ($scope.basicinfo.aro_toggle == 'C') {
-                    for ( i = 0 ; i < r.data.length ; i++ ) {
-                        if ( r.data[i].id == $scope.basicinfo.aro_frequency ) {
-                            percent = ( r.data[i].min + r.data[i].max ) / 2 * 100;
-                            if ( r.data[i].min == 1 )
-                                percent = 100;
-                            percent = percent.toFixed(3);
-                            $('#aro_cal_res').html('There is a ' + percent + '% of this event occuring annually. It is considered ' + r.data[i].name );
-                            break;
-                        }
-                    }
-                } else if ($scope.basicinfo.aro_toggle == 'K') {
-                    if ( $scope.basicinfo.aro_fixed == 100 ) {
-                        $('#aro_cal_res').html('There is a ' + $scope.basicinfo.aro_fixed + '% of this event occuring annually. It is considered Certain' );
-                    } else {
-                        fixed = parseFloat($scope.basicinfo.aro_fixed);
-                        fixed = fixed / 100;
-                        for (i = 0; i < r.data.length; i++) {
-                            if (r.data[i].min <= fixed && r.data[i].max > fixed) {
-                                $('#aro_cal_res').html('There is a ' + $scope.basicinfo.aro_fixed + '% of this event occuring annually. It is considered ' + r.data[i].name);
+        if ($scope.basicinfo.aro_toggle == 'F') {
+            for ( i = 0 ; i < aro_time_units.length ; i++ ) {
+                if ( aro_time_units[i].id == $scope.basicinfo.aro_time_unit ) {
+                    percent = $scope.basicinfo.aro_known_multiplier * aro_time_units[i].annual_units / $scope.basicinfo.aro_known_unit_quantity;
+                    if ( percent >= 1 )
+                         $('#aro_cal_res').html('There is a ' + 100 + '% of this event occuring annually. It is considered Certain' );
+                    else {
+                        for (j = 0; j < frequencies.length; j++) {
+                            if (frequencies[j].min <= percent && frequencies[j].max > percent) {
+                                percent = percent * 100;
+                                percent = percent.toFixed(3);
+                                $('#aro_cal_res').html('There is a ' + percent + '% of this event occuring annually. It is considered ' + frequencies[j].name);
                                 break;
                             }
                         }
                     }
+                    break;
                 }
-                return true;
-            } else{
-                return false;
             }
-        }).catch(function(r){
-            return false;
-        });
+        } else if ($scope.basicinfo.aro_toggle == 'C') {
+            for ( i = 0 ; i < frequencies.length ; i++ ) {
+                if ( frequencies[i].id == $scope.basicinfo.aro_frequency ) {
+                    percent = ( frequencies[i].min + frequencies[i].max ) / 2 * 100;
+                    if ( frequencies[i].min == 1 )
+                        percent = 100;
+                    percent = percent.toFixed(3);
+                    $('#aro_cal_res').html('There is a ' + percent + '% of this event occuring annually. It is considered ' + frequencies[i].name );
+                    break;
+                }
+            }
+        } else if ($scope.basicinfo.aro_toggle == 'K') {
+            if ( $scope.basicinfo.aro_fixed == 100 ) {
+                $('#aro_cal_res').html('There is a ' + $scope.basicinfo.aro_fixed + '% of this event occuring annually. It is considered Certain' );
+            } else {
+                fixed = parseFloat($scope.basicinfo.aro_fixed);
+                fixed = fixed / 100;
+                for (i = 0; i < frequencies.length; i++) {
+                    if (frequencies[i].min <= fixed && frequencies[i].max > fixed) {
+                        $('#aro_cal_res').html('There is a ' + $scope.basicinfo.aro_fixed + '% of this event occuring annually. It is considered ' + frequencies[i].name);
+                        break;
+                    }
+                }
+            }
+        }
     }
     /*Threat Detail*/
     $scope.open_add_threat_detail_modal = function () {
@@ -4273,7 +4253,7 @@ colorAdminApp.controller('registerAddEntriesController',
             sle = monetary_conversion;
             sle_value = monetary_conversion; // validate the use of this value
             ale_value = monetary_conversion * $scope.basicinfo.aro_rate/100; //validate the use of this value
-            ale = monetary_conversion * $scope.basicinfo.aro_rate/100;;
+            ale = monetary_conversion * $scope.basicinfo.aro_rate/100;
         }
         edited_item = {
             name_id: $scope.new_as.asset_name,
@@ -4673,51 +4653,35 @@ colorAdminApp.controller('registerAddEntriesController',
 
                     $scope.basicinfo.entry_id = r.data.id;  // In case of back button, do not create twice
                     if ($scope.basicinfo.aro_toggle == 'C') {
-                        $http.post('/dashboard/api/frequencies/')
-                            .then(function (r) {
-                                if (r) {
-                                    for (i = 0; i < r.data.length ; i++) {
-                                        if ( r.data[i].id == $scope.basicinfo.aro_frequency) {
-                                            percent = ( r.data[i].min + r.data[i].max ) / 2 * 100;
-                                            if ( r.data[i].min == 1 )
-                                                percent = 100;
-                                            $scope.basicinfo.aro_rate = percent;
-                                            if( $scope.affected_assets )
-                                                $scope.affected_assets_update();
-                                            break;
-                                        }
-                                    }
-                                }
-                            }).catch(function(r){
-                                return false;
-                        });
+                        for (i = 0; i < frequencies.length ; i++) {
+                            if ( frequencies[i].id == $scope.basicinfo.aro_frequency) {
+                                percent = ( frequencies[i].min + frequencies[i].max ) / 2 * 100;
+                                if ( frequencies[i].min == 1 )
+                                    percent = 100;
+                                $scope.basicinfo.aro_rate = percent;
+                                if( $scope.affected_assets )
+                                    $scope.affected_assets_update();
+                                break;
+                            }
+                        }
                     } else if ($scope.basicinfo.aro_toggle == 'K') {
                         $scope.basicinfo.aro_rate = $scope.basicinfo.aro_fixed;
                     } else {
-                        $http.post('/dashboard/api/time-units/')
-                            .then(function(d){
-                                if ( d ) {
-                                    for ( i = 0 ; i < d.data.length ; i++ ) {
-                                        if ( d.data[i].id == $scope.basicinfo.aro_time_unit ) {
-                                            percent = $scope.basicinfo.aro_known_multiplier * d.data[i].annual_units / $scope.basicinfo.aro_known_unit_quantity;
-                                            if ( percent >= 1 )
-                                                 $scope.basicinfo.aro_rate = 100;
-                                            else {
-                                                 percent = percent * 100;
-                                                 $scope.basicinfo.aro_rate = percent.toFixed(3);
-                                            }
-                                            if( $scope.affected_assets )
-                                                $scope.affected_assets_update();
-                                            break;
-                                        }
-                                    }
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            }).catch(function(d) {
-                                return false;
-                        });
+                        for ( i = 0 ; i < aro_time_units.length ; i++ ) {
+                            if ( aro_time_units[i].id == $scope.basicinfo.aro_time_unit ) {
+                                percent = $scope.basicinfo.aro_known_multiplier * aro_time_units[i].annual_units / $scope.basicinfo.aro_known_unit_quantity * 100;
+                                $scope.basicinfo.aro_rate = percent.toFixed(3);
+                                // if ( percent >= 1 )
+                                //      $scope.basicinfo.aro_rate = 100;
+                                // else {
+                                //      percent = percent * 100;
+                                //      $scope.basicinfo.aro_rate = percent.toFixed(3);
+                                // }
+                                if( $scope.affected_assets )
+                                    $scope.affected_assets_update();
+                                break;
+                            }
+                        }
                     }
                     $scope.entry_overview.response = $('.wizard-step-1 select[name=response] option:selected').html();
                     $scope.entry_overview.entry_owner = $('.wizard-step-1 select[name=entry_owner] option:selected').html();
@@ -4876,36 +4840,32 @@ colorAdminApp.controller('registerAddEntriesController',
                 $scope.entry_overview.inherent_ale_monitized = $scope.affected_assets.total_ale_with_ancillary;
                 // $scope.entry_overview.inherent_ale_rate = parseInt(inherent_ale_rate * 1000000) / 10000;
                 $scope.entry_overview.inherent_ale_rate = inherent_ale_rate_percent.toFixed(3);
-                $http.post('/dashboard/api/severity-categories/')
-                    .then(function (d) {
-                        if (d) {
-                            $scope.entry_overview.inherent_ale_category = '';
-                            inherent_ale_category_temp = '';
-                            $scope.entry_overview.residual_ale_category = '';
-                            residual_ale_category_temp = '';
-                            for (i = 0; i < d.data.length; i++) {
-                                if (inherent_ale_rate >= d.data[i].min && inherent_ale_rate < d.data[i].max) {
-                                    $scope.entry_overview.inherent_ale_category = d.data[i].name;
-                                } else if(inherent_ale_rate>=d.data[i].max) {
-                                    inherent_ale_category_temp = d.data[i].name;
-                                }
 
-                                if (residual_ale_rate >= d.data[i].min && residual_ale_rate < d.data[i].max) {
-                                    $scope.entry_overview.residual_ale_category = d.data[i].name;
-                                } else if(residual_ale_rate>=d.data[i].max) {
-                                    residual_ale_category_temp = d.data[i].name;
-                                }
-                            }
 
-                            if($scope.entry_overview.inherent_ale_category === '')
-                                $scope.entry_overview.inherent_ale_category = inherent_ale_category_temp;
+                $scope.entry_overview.inherent_ale_category = '';
+                inherent_ale_category_temp = '';
+                $scope.entry_overview.residual_ale_category = '';
+                residual_ale_category_temp = '';
+                for (i = 0; i < severity_categories.length; i++) {
+                    if (inherent_ale_rate >= severity_categories[i].min && inherent_ale_rate < severity_categories[i].max) {
+                        $scope.entry_overview.inherent_ale_category = severity_categories[i].name;
+                    } else if(inherent_ale_rate>=severity_categories[i].max) {
+                        inherent_ale_category_temp = severity_categories[i].name;
+                    }
 
-                            if($scope.entry_overview.residual_ale_category === '')
-                                $scope.entry_overview.residual_ale_category = residual_ale_category_temp;
-                        }
-                    }).catch(function (d) {
-                    return false;
-                });
+                    if (residual_ale_rate >= severity_categories[i].min && residual_ale_rate < severity_categories[i].max) {
+                        $scope.entry_overview.residual_ale_category = severity_categories[i].name;
+                    } else if(residual_ale_rate>=severity_categories[i].max) {
+                        residual_ale_category_temp = severity_categories[i].name;
+                    }
+                }
+
+                if($scope.entry_overview.inherent_ale_category === '')
+                    $scope.entry_overview.inherent_ale_category = inherent_ale_category_temp;
+
+                if($scope.entry_overview.residual_ale_category === '')
+                    $scope.entry_overview.residual_ale_category = residual_ale_category_temp;
+
 
                 inherent_sle_rate = $scope.affected_assets.total_sle_with_ancillary / max_loss;
                 inherent_sle_rate_percent = inherent_sle_rate * 100;
@@ -4918,34 +4878,20 @@ colorAdminApp.controller('registerAddEntriesController',
                 if( inherent_sle_rate >= 1 )
                     $scope.entry_overview.inherent_sle_category = 'Catastrophic';
                 else {
-                    $http.post('/dashboard/api/impact-categories/')
-                        .then(function (d) {
-                            if (d) {
-                                for (i = 0; i < d.data.length; i++) {
-                                    if (inherent_sle_rate >= d.data[i].min && inherent_sle_rate < d.data[i].max) {
-                                        $scope.entry_overview.inherent_sle_category = d.data[i].name;
-                                    }
-                                }
-                            }
-                        }).catch(function (d) {
-                        return false;
-                    });
+                    for (i = 0; i < impact_categories.length; i++) {
+                        if (inherent_sle_rate >= impact_categories[i].min && inherent_sle_rate < impact_categories[i].max) {
+                            $scope.entry_overview.inherent_sle_category = impact_categories[i].name;
+                        }
+                    }
                 }
                 if( residual_sle_rate >= 1 )
                     $scope.entry_overview.residual_sle_category = 'Catastrophic';
                 else {
-                    $http.post('/dashboard/api/impact-categories/')
-                        .then(function (d) {
-                            if (d) {
-                                for (i = 0; i < d.data.length; i++) {
-                                    if (residual_sle_rate >= d.data[i].min && residual_sle_rate < d.data[i].max) {
-                                        $scope.entry_overview.residual_sle_category = d.data[i].name;
-                                    }
-                                }
-                            }
-                        }).catch(function (d) {
-                        return false;
-                    });
+                    for (i = 0; i < impact_categories.length; i++) {
+                        if (residual_sle_rate >= impact_categories[i].min && residual_sle_rate < impact_categories[i].max) {
+                            $scope.entry_overview.residual_sle_category = impact_categories[i].name;
+                        }
+                    }
                 }
                 inherent_aro_rate = $scope.basicinfo.aro_rate / 100;
                 $scope.entry_overview.inherent_aro_rate = $scope.basicinfo.aro_rate;
@@ -4955,21 +4901,14 @@ colorAdminApp.controller('registerAddEntriesController',
                 residual_aro_rate_percent = residual_aro_rate * 100;
                 $scope.entry_overview.residual_aro_rate = residual_aro_rate_percent.toFixed(3);
                 $scope.entry_overview.residual_aro_in_days = parseInt(365 / residual_aro_rate);
-                $http.post('/dashboard/api/frequencies/')
-                    .then(function (d) {
-                        if (d) {
-                            for( j = 0 ; j < d.data.length ; j++){
-                                if ( d.data[j].min <= inherent_aro_rate && d.data[j].max > inherent_aro_rate) {
-                                    $scope.entry_overview.inherent_aro_category = d.data[j].name;
-                                }
-                                if ( d.data[j].min <= residual_aro_rate && d.data[j].max > residual_aro_rate) {
-                                    $scope.entry_overview.residual_aro_category = d.data[j].name;
-                                }
-                            }
-                        }
-                    }).catch(function (d) {
-                    return false;
-                });
+                for( j = 0 ; j < frequencies.length ; j++){
+                    if ( frequencies[j].min <= inherent_aro_rate && frequencies[j].max > inherent_aro_rate) {
+                        $scope.entry_overview.inherent_aro_category = frequencies[j].name;
+                    }
+                    if ( frequencies[j].min <= residual_aro_rate && frequencies[j].max > residual_aro_rate) {
+                        $scope.entry_overview.residual_aro_category = frequencies[j].name;
+                    }
+                }
                 /*Mitigated Risk*/
                 $scope.entry_overview.mitigated_ale_monitized = $scope.mitigating_controls.total_ale;
                 $scope.entry_overview.mitigated_ale_rate = ($scope.mitigating_controls.total_ale / $scope.affected_assets.total_ale_with_ancillary);

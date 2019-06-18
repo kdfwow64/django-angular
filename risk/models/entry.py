@@ -142,11 +142,11 @@ class Entry(DefaultFields):
             time_unit = TimeUnit.objects.get(
                 id=self.aro_time_unit_id)
             aro_rate = self.aro_known_multiplier * \
-                       time_unit.annual_units / self.aro_known_unit_quantity
-            if aro_rate >= 1:
-                aro_rate = 100
-            else:
-                aro_rate *= 100
+                       time_unit.annual_units / self.aro_known_unit_quantity * 100
+            # if aro_rate >= 1:
+            #     aro_rate = 100
+            # else:
+            #     aro_rate *= 100
         return Decimal(aro_rate)
     def get_residual_ale_rate(self):
         aro_rate = self.get_aro_rate()
