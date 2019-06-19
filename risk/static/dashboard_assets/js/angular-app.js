@@ -315,7 +315,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             url: '/edit-entry-show-mitigation/:id',
             templateUrl: 'views/add_entry.html',
             data: { pageTitle: 'Edit Entry' },
-            controller: 'registerAddEntriresController',
+            controller: 'registerAddEntriesController',
             resolve: {
                 riskTypes: function(RiskTypeService){
                     return RiskTypeService.getAllMyRiskTypes();
@@ -373,6 +373,15 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 },
                 current_company_max_loss: function(CompanyService){
                     return CompanyService.getCompanyMaxLoss();
+                },
+                frequencies: function(FrequencyCategoryService){
+                    return FrequencyCategoryService.getAllFrequencies();
+                },
+                severity_categories: function(SeverityService){
+                    return SeverityService.getAllSeverities();
+                },
+                impact_categories: function(ImpactCategoryService){
+                    return ImpactCategoryService.getAllImpactCategories();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -392,7 +401,7 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
             url: '/edit-entry-show-assets/:id',
             templateUrl: 'views/add_entry.html',
             data: { pageTitle: 'Edit Entry' },
-            controller: 'registerAddEntriresController',
+            controller: 'registerAddEntriesController',
             resolve: {
                 riskTypes: function(RiskTypeService){
                     return RiskTypeService.getAllMyRiskTypes();
@@ -450,6 +459,15 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 },
                 current_company_max_loss: function(CompanyService){
                     return CompanyService.getCompanyMaxLoss();
+                },
+                frequencies: function(FrequencyCategoryService){
+                    return FrequencyCategoryService.getAllFrequencies();
+                },
+                severity_categories: function(SeverityService){
+                    return SeverityService.getAllSeverities();
+                },
+                impact_categories: function(ImpactCategoryService){
+                    return ImpactCategoryService.getAllImpactCategories();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({

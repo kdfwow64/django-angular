@@ -9,8 +9,6 @@
     <list default="true" id="411607c5-1d72-45b2-8946-9847e3f2b403" name="Default Changelist" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js" afterPath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" afterPath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js" afterPath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,11 +36,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="angular-controller.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="angular-controller.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="4861" column="0" lean-forward="false" selection-start-line="4861" selection-start-column="0" selection-end-line="4861" selection-end-column="0" />
+            <state relative-caret-position="203">
+              <caret line="4883" column="21" lean-forward="true" selection-start-line="4883" selection-start-column="21" selection-end-line="4883" selection-end-column="21" />
               <folding>
                 <element signature="e#7023#7912#0" expanded="false" />
                 <element signature="e#9045#18457#0" expanded="false" />
@@ -73,29 +71,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="angular-app.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="angular-app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="293" column="61" lean-forward="false" selection-start-line="293" selection-start-column="46" selection-end-line="293" selection-end-column="61" />
+            <state relative-caret-position="-22">
+              <caret line="470" column="18" lean-forward="false" selection-start-line="470" selection-start-column="18" selection-end-line="470" selection-end-column="18" />
               <folding>
                 <element signature="e#3851#5444#0" expanded="false" />
-                <element signature="e#13974#17729#0" expanded="false" />
-                <element signature="e#21728#23425#0" expanded="false" />
-                <element signature="e#23475#25976#0" expanded="false" />
-                <element signature="e#26030#28557#0" expanded="false" />
-                <element signature="e#28606#30518#0" expanded="false" />
-                <element signature="e#30568#32500#0" expanded="false" />
-                <element signature="e#32553#34053#0" expanded="false" />
-                <element signature="e#34108#35613#0" expanded="false" />
-                <element signature="e#35644#35755#0" expanded="false" />
-                <element signature="e#35798#37487#0" expanded="false" />
-                <element signature="e#37519#37631#0" expanded="false" />
-                <element signature="e#37676#39152#0" expanded="false" />
-                <element signature="e#39185#39298#0" expanded="false" />
-                <element signature="e#39345#40824#0" expanded="false" />
-                <element signature="e#40869#42342#0" expanded="false" />
-                <element signature="e#42376#42490#0" expanded="false" />
+                <element signature="e#9712#13915#0" expanded="false" />
+                <element signature="e#22656#24353#0" expanded="false" />
+                <element signature="e#24403#26904#0" expanded="false" />
+                <element signature="e#26958#29485#0" expanded="false" />
+                <element signature="e#29534#31446#0" expanded="false" />
+                <element signature="e#31496#33428#0" expanded="false" />
+                <element signature="e#33481#34981#0" expanded="false" />
+                <element signature="e#35036#36541#0" expanded="false" />
+                <element signature="e#36572#36683#0" expanded="false" />
+                <element signature="e#36726#38415#0" expanded="false" />
+                <element signature="e#38447#38559#0" expanded="false" />
+                <element signature="e#38604#40080#0" expanded="false" />
+                <element signature="e#40113#40226#0" expanded="false" />
+                <element signature="e#40273#41752#0" expanded="false" />
+                <element signature="e#41797#43270#0" expanded="false" />
+                <element signature="e#43304#43418#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -121,16 +119,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scenario.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/risk/views/dashboard/scenario.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="company.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/views/dashboard/company.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -146,18 +134,8 @@
       <file leaf-file-name="entry.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/views/dashboard/entry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-115">
-              <caret line="1542" column="89" lean-forward="true" selection-start-line="1542" selection-start-column="89" selection-end-line="1542" selection-end-column="89" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="entry.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/risk/models/entry.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="149" column="32" lean-forward="true" selection-start-line="149" selection-start-column="32" selection-end-line="149" selection-end-column="32" />
+            <state relative-caret-position="198">
+              <caret line="1561" column="42" lean-forward="true" selection-start-line="1561" selection-start-column="42" selection-end-line="1561" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -167,8 +145,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>registeradde</find>
-      <find>edit-com</find>
       <find>api_save_company_asset</find>
       <find>companyassetlocation</find>
       <find>companyassetse</find>
@@ -193,10 +169,12 @@
       <find>impact-types</find>
       <find>impact-categories</find>
       <find>entry_overview.inherent_sle_category</find>
-      <find>residual_aro_rate</find>
       <find>current_company_max_loss</find>
       <find>get_all_impact_categories</find>
       <find>SeverityService</find>
+      <find>residual_aro_rate</find>
+      <find>rires</find>
+      <find>rire</find>
     </findStrings>
     <replaceStrings>
       <replace>compliance_requirements</replace>
@@ -270,9 +248,9 @@
         <option value="$PROJECT_DIR$/risk/templates/dashboard/views/add_entry.html" />
         <option value="$PROJECT_DIR$/risk/views/dashboard/entry.py" />
         <option value="$PROJECT_DIR$/risk/models/entry.py" />
-        <option value="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js" />
         <option value="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-services.js" />
         <option value="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" />
+        <option value="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js" />
       </list>
     </option>
   </component>
@@ -461,7 +439,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="121" y="73" width="1327" height="780" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15354638" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50157726" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -471,7 +448,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280757" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27580893" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24941543" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20030816" sideWeight="0.4974208" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20030816" sideWeight="0.4974208" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30354393" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -798,26 +775,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/risk/models/entry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="149" column="32" lean-forward="true" selection-start-line="149" selection-start-column="32" selection-end-line="149" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/risk/views/dashboard/scenario.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/entry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-115">
-          <caret line="1542" column="89" lean-forward="true" selection-start-line="1542" selection-start-column="89" selection-end-line="1542" selection-end-column="89" />
           <folding />
         </state>
       </provider>
@@ -828,32 +789,6 @@
           <caret line="102" column="4" lean-forward="false" selection-start-line="102" selection-start-column="4" selection-end-line="102" selection-end-column="4" />
           <folding>
             <element signature="e#57#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="293" column="61" lean-forward="false" selection-start-line="293" selection-start-column="46" selection-end-line="293" selection-end-column="61" />
-          <folding>
-            <element signature="e#3851#5444#0" expanded="false" />
-            <element signature="e#13974#17729#0" expanded="false" />
-            <element signature="e#21728#23425#0" expanded="false" />
-            <element signature="e#23475#25976#0" expanded="false" />
-            <element signature="e#26030#28557#0" expanded="false" />
-            <element signature="e#28606#30518#0" expanded="false" />
-            <element signature="e#30568#32500#0" expanded="false" />
-            <element signature="e#32553#34053#0" expanded="false" />
-            <element signature="e#34108#35613#0" expanded="false" />
-            <element signature="e#35644#35755#0" expanded="false" />
-            <element signature="e#35798#37487#0" expanded="false" />
-            <element signature="e#37519#37631#0" expanded="false" />
-            <element signature="e#37676#39152#0" expanded="false" />
-            <element signature="e#39185#39298#0" expanded="false" />
-            <element signature="e#39345#40824#0" expanded="false" />
-            <element signature="e#40869#42342#0" expanded="false" />
-            <element signature="e#42376#42490#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -874,10 +809,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/risk/models/entry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="149" column="32" lean-forward="true" selection-start-line="149" selection-start-column="32" selection-end-line="149" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/entry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="1561" column="42" lean-forward="true" selection-start-line="1561" selection-start-column="42" selection-end-line="1561" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="4861" column="0" lean-forward="false" selection-start-line="4861" selection-start-column="0" selection-end-line="4861" selection-end-column="0" />
+        <state relative-caret-position="203">
+          <caret line="4883" column="21" lean-forward="true" selection-start-line="4883" selection-start-column="21" selection-end-line="4883" selection-end-column="21" />
           <folding>
             <element signature="e#7023#7912#0" expanded="false" />
             <element signature="e#9045#18457#0" expanded="false" />
@@ -903,6 +854,32 @@
             <element signature="e#236446#237012#0" expanded="false" />
             <element signature="e#237061#239193#0" expanded="false" />
             <element signature="n#!!block;n#open_company_asset_detail_modal#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-22">
+          <caret line="470" column="18" lean-forward="false" selection-start-line="470" selection-start-column="18" selection-end-line="470" selection-end-column="18" />
+          <folding>
+            <element signature="e#3851#5444#0" expanded="false" />
+            <element signature="e#9712#13915#0" expanded="false" />
+            <element signature="e#22656#24353#0" expanded="false" />
+            <element signature="e#24403#26904#0" expanded="false" />
+            <element signature="e#26958#29485#0" expanded="false" />
+            <element signature="e#29534#31446#0" expanded="false" />
+            <element signature="e#31496#33428#0" expanded="false" />
+            <element signature="e#33481#34981#0" expanded="false" />
+            <element signature="e#35036#36541#0" expanded="false" />
+            <element signature="e#36572#36683#0" expanded="false" />
+            <element signature="e#36726#38415#0" expanded="false" />
+            <element signature="e#38447#38559#0" expanded="false" />
+            <element signature="e#38604#40080#0" expanded="false" />
+            <element signature="e#40113#40226#0" expanded="false" />
+            <element signature="e#40273#41752#0" expanded="false" />
+            <element signature="e#41797#43270#0" expanded="false" />
+            <element signature="e#43304#43418#0" expanded="false" />
           </folding>
         </state>
       </provider>
