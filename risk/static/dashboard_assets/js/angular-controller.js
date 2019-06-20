@@ -4819,7 +4819,7 @@ colorAdminApp.controller('registerAddEntriesController',
             item = $scope.mitigating_controls.multidata[i];
             max_loss = max_loss > item.max_loss ? max_loss : item.max_loss;
         }
-        if(max_loss === 0) {
+        if(parseFloat(max_loss) === 0) {
             max_loss = parseFloat(current_company_max_loss);
         }
         // max_loss = parseFloat(current_company_max_loss);
@@ -4864,7 +4864,6 @@ colorAdminApp.controller('registerAddEntriesController',
 
                 if($scope.entry_overview.residual_ale_category === '')
                     $scope.entry_overview.residual_ale_category = residual_ale_category_temp;
-
 
                 inherent_sle_rate = $scope.affected_assets.total_sle_with_ancillary / max_loss;
                 inherent_sle_rate_percent = inherent_sle_rate * 100;
