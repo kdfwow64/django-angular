@@ -188,9 +188,14 @@ legend {
     margin-bottom:10px !important;
 }
 .bottom-10 {
+    margin-bottom: 10px !important;
+}
+.bottom-20 {
     margin-bottom: 20px !important;
 }
-
+.bottom-30 {
+    margin-bottom: 30px !important;
+}
 
 /*List Entry*/
 .widget-stats .stats-number label{

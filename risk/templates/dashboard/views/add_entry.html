@@ -175,7 +175,7 @@
                 </div>
                 <div class="col-md-1">
                     <div class="form-group">
-                        <label ng-bind="new_as.asset_value  | currency:USD$:2" class="as-asset-value-txt"></label>
+                        <label ng-bind="new_as.asset_value  | currency:USD$:0" class="as-asset-value-txt"></label>
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group aro-cal-res-div">
                                         <span ng-bind="new_as.as_cal_res"></span>
-                                        <span ng-bind="new_as.as_cal_res_value  | currency:USD$:2"></span>
+                                        <span ng-bind="new_as.as_cal_res_value  | currency:USD$:0"></span>
                                     </div>
                                 </div>
                             </div>
@@ -378,11 +378,11 @@
                                     </tr>
                                     <tr>
                                         <td>SLE Cost Reduction</td>
-                                        <td ng-bind="add_control.sle_cost_value  | currency:USD$:2"></td>
+                                        <td ng-bind="add_control.sle_cost_value  | currency:USD$:0"></td>
                                     </tr>
                                     <tr>
                                         <td>ARO Cost Reduction</td>
-                                        <td ng-bind="add_control.aro_cost_value  | currency:USD$:2"></td>
+                                        <td ng-bind="add_control.aro_cost_value  | currency:USD$:0"></td>
                                     </tr>
                                     <tr class="border-tr">
                                         <td></td>
@@ -390,7 +390,7 @@
                                     </tr>
                                     <tr>
                                         <td>Total Cost Reduction</td>
-                                        <td ng-bind="add_control.total_cost_value  | currency:USD$:2"></td>
+                                        <td ng-bind="add_control.total_cost_value  | currency:USD$:0"></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -398,7 +398,7 @@
                                     </tr>
                                     <tr>
                                         <td style="font-weight: bold;">Total ALE Impact</td>
-                                        <td ng-bind="add_control.total_ale_impact_value  | currency:USD$:2"></td>
+                                        <td ng-bind="add_control.total_ale_impact_value  | currency:USD$:0"></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -910,11 +910,11 @@
                                             <tbody>
                                                 <tr ng-repeat="asset in affected_assets.multidata">
                                                     <td ng-bind="asset.name"></td>
-                                                    <td ng-bind="asset.asset_value  | currency:USD$:2"></td>
+                                                    <td ng-bind="asset.asset_value  | currency:USD$:0"></td>
                                                     <td ng-bind="asset.factor"></td>
                                                     <td ng-bind="asset.detail" style="text-align: left !important;"></td>
-                                                    <td ng-bind="asset.sle  | currency:USD$:2"></td>
-                                                    <td ng-bind="asset.ale  | currency:USD$:2"></td>
+                                                    <td ng-bind="asset.sle  | currency:USD$:0"></td>
+                                                    <td ng-bind="asset.ale  | currency:USD$:0"></td>
                                                     <td>
                                                         <a class="btn btn-primary" ng-click="open_edit_affected_asset_modal($index)">Edit</a>
                                                     </td>
@@ -924,11 +924,11 @@
                                                 </tr>
                                                 <tr>
                                                     <td>TOTALS</td>
-                                                    <td ng-bind="affected_assets.total_asset_value  | currency:USD$:2"></td>
+                                                    <td ng-bind="affected_assets.total_asset_value  | currency:USD$:0"></td>
                                                     <td ng-bind="affected_assets.total_factor"></td>
                                                     <td></td>
-                                                    <td ng-bind="affected_assets.total_sle  | currency:USD$:2"></td>
-                                                    <td ng-bind="affected_assets.total_ale  | currency:USD$:2"></td>
+                                                    <td ng-bind="affected_assets.total_sle  | currency:USD$:0"></td>
+                                                    <td ng-bind="affected_assets.total_ale  | currency:USD$:0"></td>
                                                     <td></td>
                                                     <td></td>
                                                 </tr>
@@ -967,9 +967,9 @@
                                                     <td ng-bind="ancillary.type"></td>
                                                     <td ng-bind="ancillary.summary"></td>
                                                     <td ng-bind="ancillary.detail"></td>
-                                                    <td ng-bind="ancillary.cost  | currency:USD$:2"></td>
+                                                    <td ng-bind="ancillary.cost  | currency:USD$:0"></td>
                                                     <td ng-bind="ancillary.occurences"></td>
-                                                    <td ng-bind="ancillary.total_cost  | currency:USD$:2"></td>
+                                                    <td ng-bind="ancillary.total_cost  | currency:USD$:0"></td>
                                                     <td>
                                                         <a class="btn btn-primary" ng-click="open_edit_ancillary_item_modal($index)">Edit</a>
                                                     </td>
@@ -983,7 +983,7 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td ng-bind="ancillary_items.total_cost_value  | currency:USD$:2"></td>
+                                                    <td ng-bind="ancillary_items.total_cost_value  | currency:USD$:0"></td>
                                                     <td></td>
                                                     <td></td>
                                                 </tr>
@@ -1015,15 +1015,15 @@
                                     <div class="form-group">
                                         <div class="col-md-4">
                                             <label>Inherent ALE: </label>
-                                            <label style="font-weight: bold" ng-bind=" affected_assets.total_ale_with_ancillary  | currency:USD$:2"></label>
+                                            <label style="font-weight: bold" ng-bind=" affected_assets.total_ale_with_ancillary  | currency:USD$:0"></label>
                                         </div>
                                         <div class="col-md-4">
                                             <label>Mitigated ALE: </label>
-                                            <label style="font-weight: bold" ng-bind="'(' + (mitigating_controls.total_ale  | currency:USD$:2) + ')'"></label>
+                                            <label style="font-weight: bold" ng-bind="'(' + (mitigating_controls.total_ale  | currency:USD$:0) + ')'"></label>
                                         </div>
                                         <div class="col-md-4">
                                             <label>Residual ALE: </label>
-                                            <label style="font-weight: bold" ng-bind="(affected_assets.total_ale_with_ancillary - mitigating_controls.total_ale)  | currency:USD$:2"></label>
+                                            <label style="font-weight: bold" ng-bind="(affected_assets.total_ale_with_ancillary - mitigating_controls.total_ale)  | currency:USD$:0"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -1056,11 +1056,11 @@
                                                     <td ng-bind="mc.control_name"></td>
                                                     <td ng-bind="mc.vendor_name"></td>
                                                     <td ng-bind="mc.sle_rate + '%'"></td>
-                                                    <td ng-bind="'(' + (mc.sle_cost  | currency:USD$:2) + ')'"></td>
+                                                    <td ng-bind="'(' + (mc.sle_cost  | currency:USD$:0) + ')'"></td>
                                                     <td ng-bind="mc.aro_rate + '%'"></td>
-                                                    <td ng-bind="'(' + (mc.aro_cost  | currency:USD$:2) + ')'"></td>
-                                                    <td ng-bind="'(' + (mc.total_cost_value  | currency:USD$:2) + ')'"></td>
-                                                    <td ng-bind="'(' + (mc.total_ale_impact_value  | currency:USD$:2) + ')'"></td>
+                                                    <td ng-bind="'(' + (mc.aro_cost  | currency:USD$:0) + ')'"></td>
+                                                    <td ng-bind="'(' + (mc.total_cost_value  | currency:USD$:0) + ')'"></td>
+                                                    <td ng-bind="'(' + (mc.total_ale_impact_value  | currency:USD$:0) + ')'"></td>
                                                     <td>
                                                         <a class="btn btn-primary" ng-click="open_edit_control_modal($index)">Edit</a>
                                                     </td>
@@ -1073,11 +1073,11 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td ng-bind="mitigating_controls.sle_rate + '%'"></td>
-                                                    <td ng-bind="'(' + (mitigating_controls.sle_cost  | currency:USD$:2) + ')'"></td>
+                                                    <td ng-bind="'(' + (mitigating_controls.sle_cost  | currency:USD$:0) + ')'"></td>
                                                     <td ng-bind="mitigating_controls.aro_rate + '%'"></td>
-                                                    <td ng-bind="'(' + (mitigating_controls.aro_cost  | currency:USD$:2) + ')'"></td>
-                                                    <td ng-bind="'(' + (mitigating_controls.total_cost  | currency:USD$:2) + ')'"></td>
-                                                    <td ng-bind="'(' + (mitigating_controls.total_ale  | currency:USD$:2) + ')'"></td>
+                                                    <td ng-bind="'(' + (mitigating_controls.aro_cost  | currency:USD$:0) + ')'"></td>
+                                                    <td ng-bind="'(' + (mitigating_controls.total_cost  | currency:USD$:0) + ')'"></td>
+                                                    <td ng-bind="'(' + (mitigating_controls.total_ale  | currency:USD$:0) + ')'"></td>
                                                     <td></td>
                                                     <td></td>
                                                 </tr>
@@ -1174,7 +1174,7 @@
                                     <div class="summary" ng-bind="entry_overview.entry_owner">
                                     </div>
                                     <div class="summary">
-                                        Incident Response Plan:
+                                        IR Plan:
                                     </div>
                                     <div class="summary" ng-if="entry_overview.incident_response == '1'">Yes
                                     </div>
@@ -1220,7 +1220,7 @@
                                         </div>
                                         <div class="summary">Monitized:
                                         </div>
-                                        <div class="summary" ng-bind="entry_overview.inherent_sle_monitized  | currency:USD$:2">
+                                        <div class="summary" ng-bind="entry_overview.inherent_sle_monitized  | currency:USD$:0">
                                         </div>
                                         <div class="summary">Loss Rate:
                                         </div>
@@ -1252,7 +1252,7 @@
                                         </div>
                                         <div class="summary">Monitized:
                                         </div>
-                                        <div class="summary" ng-bind="entry_overview.inherent_ale_monitized  | currency:USD$:2">
+                                        <div class="summary" ng-bind="entry_overview.inherent_ale_monitized  | currency:USD$:0">
                                         </div>
                                         <div class="summary">Loss Rate:
                                         </div>
@@ -1271,7 +1271,7 @@
                                     <div class="col-md-3 summary-container">
                                         <div class="summary">Monitized:
                                         </div>
-                                        <div class="summary" ng-bind="'(' + (entry_overview.mitigated_sle_monitized  | currency:USD$:2) + ')'">
+                                        <div class="summary" ng-bind="'(' + (entry_overview.mitigated_sle_monitized  | currency:USD$:0) + ')'">
                                         </div>
                                         <div class="summary">Reduction Rate:
                                         </div>
@@ -1283,7 +1283,7 @@
                                     <div class="col-md-3 summary-container">
                                         <div class="summary">Monitized:
                                         </div>
-                                        <div class="summary" ng-bind="'(' + (entry_overview.mitigated_aro_monitized  | currency:USD$:2) + ')'">
+                                        <div class="summary" ng-bind="'(' + (entry_overview.mitigated_aro_monitized  | currency:USD$:0) + ')'">
                                         </div>
                                         <div class="summary">Reduction Rate:
                                         </div>
@@ -1295,7 +1295,7 @@
                                     <div class="col-md-3 summary-container">
                                         <div class="summary">Monitized:
                                         </div>
-                                        <div class="summary" ng-bind="'(' + (entry_overview.mitigated_ale_monitized  | currency:USD$:2) + ')'">
+                                        <div class="summary" ng-bind="'(' + (entry_overview.mitigated_ale_monitized  | currency:USD$:0) + ')'">
                                         </div>
                                         <div class="summary">Reduction Rate:
                                         </div>
@@ -1318,7 +1318,7 @@
                                         </div>
                                         <div class="summary">Monitized:
                                         </div>
-                                        <div class="summary" ng-bind=" entry_overview.residual_sle_monitized  | currency:USD$:2">
+                                        <div class="summary" ng-bind=" entry_overview.residual_sle_monitized  | currency:USD$:0">
                                         </div>
                                         <div class="summary">Loss Rate:
                                         </div>
@@ -1350,7 +1350,7 @@
                                         </div>
                                         <div class="summary">Monitized:
                                         </div>
-                                        <div class="summary" ng-bind=" entry_overview.residual_ale_monitized  | currency:USD$:2">
+                                        <div class="summary" ng-bind=" entry_overview.residual_ale_monitized  | currency:USD$:0">
                                         </div>
                                         <div class="summary">Loss Rate:
                                         </div>
@@ -1374,8 +1374,13 @@
                                 </div>
                                 <!-- Locations (Entry Overview) -->
                                 <div class="row">
-                                    <div class="col-md-1 sub-section">Locations:</div>
-                                    <div class="col-md-11">
+                                    <div class="col-md-12 sub-section">Affected Locations:</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="row" ng-repeat="location in entry_overview.locations">
                                             <div class="col-md-12"ng-bind="location">
                                             </div>
@@ -1383,16 +1388,17 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1 sub-section"></div>
-                                    <div class="col-md-11">
-                                        <div class="col-md-12 bottom-bordered-div-30">
-                                        </div>
-                                    </div>
+                                    <div class="col-md-12 bottom-30"></div>
                                 </div>
                                 <!-- Compliance (Entry Overview) -->
                                 <div class="row">
-                                    <div class="col-md-1 sub-section">Compliance:</div>
-                                    <div class="col-md-11">
+                                    <div class="col-md-12 sub-section">Regulations and Compliance:</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="row columnheader">
                                             <div class="col-md-2">
                                                 Type
@@ -1415,17 +1421,18 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1 sub-section"></div>
-                                    <div class="col-md-11">
-                                        <div class="col-md-12 bottom-bordered-div-30">
-                                        </div>
-                                    </div>
+                                    <div class="col-md-12 bottom-30"></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1 sub-section">Actors</div>
-                                    <div class="col-md-11">
+                                    <div class="col-md-12 sub-section">Actors:</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="row columnheader">
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 Actor
                                             </div>
                                             <div class="col-md-1">
@@ -1434,41 +1441,47 @@
                                             <div class="col-md-1">
                                                 Motive
                                             </div>
-                                            <div class="col-md-9">
+                                            <div class="col-md-8">
                                                 Detail
                                             </div>
                                         </div>
                                         <div class="row bottom-bordered-div-1" ng-repeat="threat in threat_details.multidata">
-                                            <div class="col-md-1" ng-bind="threat.actor_name">
+                                            <div class="col-md-2" ng-bind="threat.actor_name">
                                             </div>
                                             <div class="col-md-1" multiple-lines ng-bind="threat.intentions">
                                             </div>
-                                            <div class="col-md-1" multiple-lines ng-bind="threat.motive">
+                                            <div class="col-md-1" multiple-lines ng-bind="threat.motives">
                                             </div>
-                                            <div class="col-md-9" ng-bind="threat.detail">
+                                            <div class="col-md-8" ng-bind="threat.detail">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1 sub-section"></div>
-                                    <div class="col-md-11">
-                                        <div class="col-md-12 bottom-bordered-div-30">
-                                        </div>
+                                    <div class="col-md-12 bottom-30"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10">
+                                        <label class="section">Impact Elements</label>
                                     </div>
                                 </div>
-                                <!-- Exposure (Entry Overview) -->
+                                <!-- Asset Exposure (Entry Overview) -->
                                 <div class="row">
-                                    <div class="col-md-1 sub-section">Exposure:</div>
-                                    <div class="col-md-11">
+                                    <div class="col-md-12 sub-section">Asset Exposure:</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="row columnheader">
                                             <div class="col-md-2">
                                                 Asset
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 Value
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 Exposure
                                             </div>
                                             <div class="col-md-5">
@@ -1484,15 +1497,15 @@
                                         <div class="row" ng-repeat="asset in affected_assets.multidata">
                                             <div class="col-md-2" ng-bind="asset.name">
                                             </div>
-                                            <div class="col-md-1" ng-bind="asset.asset_value | currency:USD$:2">
+                                            <div class="col-md-2" ng-bind="asset.asset_value | currency:USD$:0">
                                             </div>
-                                            <div class="col-md-2" ng-bind="asset.factor">
+                                            <div class="col-md-1" ng-bind="asset.factor">
                                             </div>
                                             <div class="col-md-5" ng-bind="asset.detail">
                                             </div>
-                                            <div class="col-md-1" ng-bind="asset.sle  | currency:USD$:2">
+                                            <div class="col-md-1" ng-bind="asset.sle  | currency:USD$:0">
                                             </div>
-                                            <div class="col-md-1" ng-bind="asset.ale  | currency:USD$:2">
+                                            <div class="col-md-1" ng-bind="asset.ale  | currency:USD$:0">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -1503,33 +1516,30 @@
                                             <div class="col-md-2">
                                                 TOTALS
                                             </div>
-                                            <div class="col-md-1" ng-bind="affected_assets.total_asset_value  | currency:USD$:2">
+                                            <div class="col-md-2" ng-bind="affected_assets.total_asset_value  | currency:USD$:0">
                                             </div>
-                                            <div class="col-md-2" ng-bind="affected_assets.total_factor">
+                                            <div class="col-md-1" ng-bind="affected_assets.total_factor">
                                             </div>
                                             <div class="col-md-5">
                                             </div>
-                                            <div class="col-md-1" ng-bind="affected_assets.total_sle  | currency:USD$:2">
+                                            <div class="col-md-1" ng-bind="affected_assets.total_sle  | currency:USD$:0">
                                             </div>
-                                            <div class="col-md-1" ng-bind="affected_assets.total_ale  | currency:USD$:2">
+                                            <div class="col-md-1" ng-bind="affected_assets.total_ale  | currency:USD$:0">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 bottom-10"></div>
-                            </div>
-                            <!-- Ancillary Items (Entry Overview) -->
-                            <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-md-12 bottom-10">
-                                        <label class="section">Ancillary Item Details</label>
-                                    </div>
+                                    <div class="col-md-12 bottom-30"></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1 sub-section">Ancillary:</div>
-                                    <div class="col-md-11">
+                                    <div class="col-md-12 sub-section">Ancillary Items:</div>
+                                    </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="row columnheader">
                                             <div class="col-md-2">
                                                 Type
@@ -1557,11 +1567,11 @@
                                             </div>
                                             <div class="col-md-3" ng-bind="item.detail">
                                             </div>
-                                            <div class="col-md-1" ng-bind="item.cost  |  currency:USD$:2">
+                                            <div class="col-md-1" ng-bind="item.cost  |  currency:USD$:0">
                                             </div>
                                             <div class="col-md-1" ng-bind="item.occurences">
                                             </div>
-                                            <div class="col-md-2" ng-bind="item.total_cost  |  currency:USD$:2">
+                                            <div class="col-md-2" ng-bind="item.total_cost  |  currency:USD$:0">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -1580,11 +1590,14 @@
                                             </div>
                                             <div class="col-md-1">
                                             </div>
-                                            <div class="col-md-2" ng-bind="ancillary_items.total_cost_value  |  currency:USD$:2">
+                                            <div class="col-md-2" ng-bind="ancillary_items.total_cost_value  |  currency:USD$:0">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 bottom-10"></div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 bottom-10"></div>
@@ -1597,8 +1610,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1 sub-section">Mitigation:</div>
-                                    <div class="col-md-11">
+                                    <div class="col-md-12 sub-section">Control Mitigation:</div>
+                                    </div>
+                                    <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="row columnheader">
                                             <div class="col-md-2">
                                                 Name
@@ -1622,7 +1640,7 @@
                                                 ARO Cost
                                             </div>
                                             <div class="col-md-1">
-                                                Impact Total
+                                                Impact
                                             </div>
                                             <div class="col-md-1">
                                                 ALE Total
@@ -1637,15 +1655,15 @@
                                             </div>
                                             <div class="col-md-1" ng-bind="mc.sle_rate + '%'">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mc.sle_cost  | currency:USD$:2) + ')'">
+                                            <div class="col-md-1" ng-bind="'(' + (mc.sle_cost  | currency:USD$:0) + ')'">
                                             </div>
                                             <div class="col-md-1" ng-bind="mc.aro_rate + '%'">
                                             </div>
-                                            <div class="col-md-1" ng-bing="'(' + (mc.aro_cost  | currency:USD$:2) + ')'">
+                                            <div class="col-md-1" ng-bing="'(' + (mc.aro_cost  | currency:USD$:0) + ')'">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mc.total_cost_value  | currency:USD$:2) + ')'">
+                                            <div class="col-md-1" ng-bind="'(' + (mc.total_cost_value  | currency:USD$:0) + ')'">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mc.total_ale_impact_value  | currency:USD$:2) + ')'">
+                                            <div class="col-md-1" ng-bind="'(' + (mc.total_ale_impact_value  | currency:USD$:0) + ')'">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -1662,61 +1680,46 @@
                                             </div>
                                             <div class="col-md-1" ng-bind="mitigating_controls.sle_rate + '%'">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mitigating_controls.sle_cost  | currency:USD$:2) + ')'">
+                                            <div class="col-md-1" ng-bind="'(' + (mitigating_controls.sle_cost  | currency:USD$:0) + ')'">
                                             </div>
                                             <div class="col-md-1" ng-bind="mitigating_controls.aro_rate + '%'">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mitigating_controls.aro_cost  | currency:USD$:2) + ')'">
+                                            <div class="col-md-1" ng-bind="'(' + (mitigating_controls.aro_cost  | currency:USD$:0) + ')'">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mitigating_controls.total_cost  | currency:USD$:2) + ')'">
+                                            <div class="col-md-1" ng-bind="'(' + (mitigating_controls.total_cost  | currency:USD$:0) + ')'">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mitigating_controls.total_ale  | currency:USD$:2) + ')'">
+                                            <div class="col-md-1" ng-bind="'(' + (mitigating_controls.total_ale  | currency:USD$:0) + ')'">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1 sub-section"></div>
-                                    <div class="col-md-11">
-                                        <div class="col-md-12 bottom-bordered-div-30">
-                                        </div>
-                                    </div>
+                                    <div class="col-md-12 bottom-30"></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 sub-section">Mitigation Notes:</div>
-                                    <div class="col-md-1">
-                                    </div>
-                                    <div class="col-md-11">
-                                        <div class="row">
-                                            <div class="col-md-12" ng-bind="mitigating_controls.notes_mitigation">
-                                            </div>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12" ng-bind="mitigating_controls.notes_mitigation">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-1 sub-section"></div>
-                                    <div class="col-md-11">
-                                        <div class="col-md-12 bottom-bordered-div-30">
-                                        </div>
+                                    <div class="col-md-12 bottom-30"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 sub-section">Additional Opportunites:</div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12" ng-bind="mitigating_controls.additional_mitigation">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 sub-section">Opportunites:</div>
-                                    <div class="col-md-1">
-                                    </div>
-                                    <div class="col-md-11">
-                                        <div class="row">
-                                            <div class="col-md-12" ng-bind="mitigating_controls.additional_mitigation">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1 sub-section"></div>
-                                    <div class="col-md-11">
-                                        <div class="col-md-12 bottom-bordered-div-30">
-                                        </div>
-                                    </div>
+                                    <div class="col-md-12 bottom-30"></div>
                                 </div>
                             </div>
                         </div>
