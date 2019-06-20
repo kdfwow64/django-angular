@@ -311,6 +311,7 @@ def api_company_control_list(request):
                             aro_rate = 100
                         else:
                             aro_rate *= 100
+                    aro_rate = entry.get_aro_rate()
                     aro_rate = Decimal(aro_rate)
                     if entry.is_qualified(rate_relation):
                         # Total SLE
@@ -472,6 +473,7 @@ def api_get_company_control_detail(request, cc_id):
                         aro_rate = 100
                     else:
                         aro_rate *= 100
+                aro_rate = entry.get_aro_rate()
                 aro_rate = Decimal(aro_rate)
                 if entry.is_qualified(rate_relation):
                     total_sle = 0
@@ -606,6 +608,8 @@ def api_get_company_asset_detail(request, ca_id):
                         aro_rate = 100
                     else:
                         aro_rate *= 100
+
+                aro_rate = entry.get_aro_rate()
                 aro_rate = Decimal(aro_rate)
                 if entry.is_qualified(rate_relation):
                     # Total SLE
@@ -698,6 +702,8 @@ def api_company_asset_list(request):
                             aro_rate = 100
                         else:
                             aro_rate *= 100
+
+                    aro_rate = entry.get_aro_rate()
                     aro_rate = Decimal(aro_rate)
                     if entry.is_qualified(rate_relation):
                         # Total SLE
@@ -1572,6 +1578,8 @@ def api_get_risk_entry(request, entry_id):
                     aro_rate = 100
                 else:
                     aro_rate *= 100
+
+            aro_rate = entry.get_aro_rate()
             aro_rate = Decimal(aro_rate)
 
             total_cost_value_an = 0
@@ -1789,6 +1797,8 @@ def api_list_entries_info(request):
                     aro_rate = 100
                 else:
                     aro_rate *= 100
+
+            aro_rate = entry.get_aro_rate()
             aro_rate = Decimal(aro_rate)
             # Total SLE
             total_sle = 0
