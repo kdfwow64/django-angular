@@ -1579,7 +1579,7 @@ def api_get_risk_entry(request, entry_id):
                 else:
                     aro_rate *= 100
 
-            aro_rate = entry.get_aro_rate()
+            aro_rate = risk_entry.get_aro_rate()
             aro_rate = Decimal(aro_rate)
 
             total_cost_value_an = 0
