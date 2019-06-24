@@ -248,7 +248,7 @@ def api_save_company_asset(request):
         }
     except:
         print(traceback.format_exc())
-        rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+        rv = {'status': 'error', 'log': traceback.format_exc(), 'code': 400, 'errors': ["Invalid control"]}
     return JsonResponse(rv)
 
 

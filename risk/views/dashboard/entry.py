@@ -668,10 +668,8 @@ def api_company_asset_list(request):
     try:
         rows = []
         total = 0
-        total_ale_sum = 0
         for asset in CompanyAsset.objects.filter(company_id=company.id):
-            protection_mitigated_ale_cost_sum = 0
-            protection_inherent_ale_cost_sum = 0
+            total_ale_sum = 0
             try:
                 for e_ca in EntryCompanyAsset.objects.filter(id_companyasset_id=asset.id):
                     entry = Entry.objects.get(id=e_ca.id_entry_id)

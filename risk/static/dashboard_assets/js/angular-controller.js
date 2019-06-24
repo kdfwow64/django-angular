@@ -5563,7 +5563,7 @@ colorAdminApp.controller('registerAddCompanyAssetController',
                     window.location.href="#!/app/assets/list-assets";
                     return true;
                 } else {
-                    alert("Backend saving error");
+                    alert(r.data.log);
                     return false;
                 }
             }).catch(function(r){
