@@ -8,9 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="411607c5-1d72-45b2-8946-9847e3f2b403" name="Default Changelist" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" afterPath="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/views/dashboard/company.py" afterPath="$PROJECT_DIR$/risk/views/dashboard/company.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/risk/views/dashboard/entry.py" afterPath="$PROJECT_DIR$/risk/views/dashboard/entry.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,11 +36,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="angular-controller.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="angular-controller.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="5565" column="36" lean-forward="false" selection-start-line="5565" selection-start-column="36" selection-end-line="5565" selection-end-column="36" />
+            <state relative-caret-position="191">
+              <caret line="5554" column="21" lean-forward="true" selection-start-line="5554" selection-start-column="21" selection-end-line="5554" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -72,11 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="company.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="company.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/risk/views/dashboard/company.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="250" column="33" lean-forward="false" selection-start-line="250" selection-start-column="33" selection-end-line="250" selection-end-column="33" />
+            <state relative-caret-position="112">
+              <caret line="210" column="67" lean-forward="false" selection-start-line="210" selection-start-column="67" selection-end-line="210" selection-end-column="67" />
               <folding />
             </state>
           </provider>
@@ -124,8 +122,8 @@
       <find>company_asset_list</find>
       <find>company-asset-list</find>
       <find>total_ale_sum</find>
-      <find>backend saving error</find>
       <find>add-company-asset</find>
+      <find>backend saving error</find>
     </findStrings>
     <replaceStrings>
       <replace>compliance_requirements</replace>
@@ -200,8 +198,8 @@
         <option value="$PROJECT_DIR$/risk/urls.py" />
         <option value="$PROJECT_DIR$/rlb/settings.py" />
         <option value="$PROJECT_DIR$/risk/views/dashboard/entry.py" />
-        <option value="$PROJECT_DIR$/risk/views/dashboard/company.py" />
         <option value="$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js" />
+        <option value="$PROJECT_DIR$/risk/views/dashboard/company.py" />
       </list>
     </option>
   </component>
@@ -796,18 +794,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/company.py">
+    <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="250" column="33" lean-forward="false" selection-start-line="250" selection-start-column="33" selection-end-line="250" selection-end-column="33" />
+        <state relative-caret-position="191">
+          <caret line="5554" column="21" lean-forward="true" selection-start-line="5554" selection-start-column="21" selection-end-line="5554" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
+    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/company.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="5565" column="36" lean-forward="false" selection-start-line="5565" selection-start-column="36" selection-end-line="5565" selection-end-column="36" />
+        <state relative-caret-position="112">
+          <caret line="210" column="67" lean-forward="false" selection-start-line="210" selection-start-column="67" selection-end-line="210" selection-end-column="67" />
           <folding />
         </state>
       </provider>

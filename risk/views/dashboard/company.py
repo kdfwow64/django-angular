@@ -208,7 +208,7 @@ def api_save_company_asset(request):
             new_company_asset.asset_value_fixed = asset_value_fixed
             new_company_asset.asset_quantity_fixed = asset_quantity_fixed
             new_company_asset.asset_value_par = asset_percent
-            new_company_asset.asset_timed_unit_id = TimeUnit.objects.get(annual_units=int(dat.get('asset_time_unit')))
+            new_company_asset.asset_timed_unit_id = asset_time_unit
             new_company_asset.asset_time_unit_max = time_unit_max
             new_company_asset.asset_time_unit_increment = time_unit_increment
             new_company_asset.summary_value = dat.get('summary')
