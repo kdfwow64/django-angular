@@ -142,12 +142,13 @@ class Entry(DefaultFields):
             time_unit = TimeUnit.objects.get(
                 id=self.aro_time_unit_id)
             aro_rate = self.aro_known_multiplier * \
-                       time_unit.annual_units / self.aro_known_unit_quantity * 100
+                time_unit.annual_units / self.aro_known_unit_quantity * 100
             # if aro_rate >= 1:
             #     aro_rate = 100
             # else:
             #     aro_rate *= 100
         return Decimal(aro_rate)
+
     def get_residual_ale_rate(self):
         aro_rate = self.get_aro_rate()
         total_sle = 0
@@ -159,12 +160,13 @@ class Entry(DefaultFields):
                     company_asset = CompanyAsset.objects.get(
                         pk=entry_company_asset.id_companyasset_id)
                     sle_value = round(
-                        Decimal(company_asset.get_asset_value()) * Decimal(entry_company_asset.exposure_factor_rate) / 100,
+                        Decimal(company_asset.get_asset_value()) *
+                        Decimal(entry_company_asset.exposure_factor_rate) / 100,
                         2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
                         entry_company_asset.exposure_factor_fixed, 2)
                     ale_value = round(Decimal(company_asset.get_asset_value()) * Decimal(
                         entry_company_asset.exposure_factor_rate) * aro_rate / 10000,
-                                      2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
+                        2) if entry_company_asset.exposure_factor_toggle == 'P' else round(
                         Decimal(entry_company_asset.exposure_factor_fixed) * aro_rate / 100, 2)
                     total_sle += sle_value
                     total_ale += ale_value
@@ -173,8 +175,10 @@ class Entry(DefaultFields):
 
             try:
                 for item in EntryAncillary.objects.filter(entry=self):
-                    total_sle += Decimal(item.per_occurance * item.ancillary_fixed)
-                    total_ale += Decimal(item.per_occurance * item.ancillary_fixed * aro_rate / 100)
+                    total_sle += Decimal(item.per_occurance *
+                                         item.ancillary_fixed)
+                    total_ale += Decimal(item.per_occurance *
+                                         item.ancillary_fixed * aro_rate / 100)
             except:
                 pass
 
@@ -206,6 +210,7 @@ class Entry(DefaultFields):
             print(traceback.format_exc())
             pass
         return Decimal(total_ale - total_ale_mitigating)
+
     def __str__(self):
         """String."""
         return self.summary
@@ -389,6 +394,8 @@ class EntryAncillary(DefaultFields):
     per_occurance = models.IntegerField(default=1, help_text=(
         'Defines if an ancillary cost is based on a quantity of occurences'),)  # If True, evaluation is needed.
     # Default value for field should be pulled from the
+    cadence = models.CharField(choices=Selector.CADENCE, default='O', max_length=1,
+                               help_text=('Will the ancillary item have a continuous afffect'),)  # This is to make the consumer aware that the there may be a future cost that extends beyond the annual cost idetnifited.
     evaluation_days = models.IntegerField(blank=True, null=True, help_text=(
         'Defines the default number of days an evaluation should occur'),)  # Company.evaluation_days value.
     evaluation_flg = models.BooleanField(

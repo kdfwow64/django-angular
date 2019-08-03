@@ -148,7 +148,7 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Annual Fixed Value</label>
-                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='F'" ng-required="new_ca.toggle=='F'" ng-model="new_ca.asset_value_fixed" step="0.01" name="asset_value_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='F'" ng-required="new_ca.toggle=='F'" ng-model="new_ca.asset_value_fixed" step="1" name="asset_value_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -165,18 +165,13 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Annual Percentage of revenus</label>
+                                                        <label>Annual Percentage of company revenue</label>
                                                         <input min="0" type="number" ng-disabled="new_ca.toggle!='P'" ng-required="new_ca.toggle=='P'" ng-model="new_ca.asset_percent" step="0.01" name="asset_percent" class="form-control" data-parsley-group="wizard-company-asset"/>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-1 letter-margin-top">
-                                                    <span>%</span>
-                                                </div>
-                                                <div class="col-md-1 letter-margin-top">
-                                                    <span>of</span>
-                                                </div>
-                                                <div class="col-md-1 letter-margin-top">
-                                                    <span ng-bind="annual_revenue | currency:USD$:2"></span>
+                                                <div class="col-md-3 letter-margin-top">
+                                                    <span>% of</span>
+                                                    <span ng-bind="annual_revenue | currency:USD$:0"></span>
                                                 </div>
                                             </div>
                                             <div class="row" ng-class="t_class">
@@ -188,7 +183,7 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Time Based</label>
-                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_value_fixed" step="0.01" name="asset_value_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_value_fixed" step="1" name="asset_value_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -220,7 +215,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group aro-cal-res-div">
-                                                        <span>Annualized value would be </span><span ng-bind="preview_value_txt | currency:USD$:2"></span>
+                                                        <span>Annualized value would be </span><span ng-bind="preview_value_txt | currency:USD$:0"></span>
                                                     </div>
                                                 </div>
                                             </div>

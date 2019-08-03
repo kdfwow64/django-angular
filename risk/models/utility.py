@@ -21,6 +21,7 @@ class Selector(models.Model):
     FIXED = 'F'
     CATEGORY = 'C'
     TIMED = 'T'
+    CADENCE = (('R', 'Re-occuring'), ('O', 'Once'))
     YES_NO = (('Y', 'Yes'), ('N', 'No'))
     RAG = (('R', 'Red'), ('A', 'Amber'), ('G', 'Green'), ('U', 'Unknown'))
     HML = (('H', 'High'), ('M', 'Medium'), ('L', 'Low'), ('U', 'Unknown'))
