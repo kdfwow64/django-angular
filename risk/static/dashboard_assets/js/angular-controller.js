@@ -4220,14 +4220,14 @@ colorAdminApp.controller('registerAddEntriesController',
         if ($scope.new_as.exposure_factor_toggle == 'F') {
             if ($scope.new_as.fixed_amount == '')
                 return false;
-            str = 'The monitized value exposed is a Fixed amount of ';
+            str = 'The monitized fixed value exposed is an amount of ';
             $scope.new_as.as_cal_res = str;
             $scope.new_as.as_cal_res_value = $scope.new_as.fixed_amount;
         } else {
             if ($scope.new_as.percent_asset_value == '')
                 return false;
             monetary_conversion = parseFloat($scope.new_as.asset_value) * parseFloat($scope.new_as.percent_asset_value) / 100;
-            str = 'The monitized value exposed is a Percent amount of ';
+            str = 'The monitized percentage exposed is an amount of ';
             $scope.new_as.as_cal_res = str;
             $scope.new_as.as_cal_res_value = monetary_conversion;
         }

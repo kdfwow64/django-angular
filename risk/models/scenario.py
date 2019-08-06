@@ -155,6 +155,8 @@ class CIATriad(DefaultFieldsCategory):
 class SeverityCategory(DefaultFieldsCategory):
     """Severity."""
 
+    measure = models.CharField(
+        max_length=45, blank=False, help_text=('Measurement of the severity'),)  # Measurement of the severity
     minimum = models.FloatField(default=0, blank=True, help_text=(
         'Minimum percentage of severity'),)  # Not in use
     maximum = models.FloatField(default=0, blank=True, help_text=(

@@ -146,14 +146,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
+                                                    <label>Annual Fixed Value</label>
                                                     <div class="form-group">
-                                                        <label>Annual Fixed Value</label>
-                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='F'" ng-required="new_ca.toggle=='F'" ng-model="new_ca.asset_value_fixed" step="1" name="asset_value_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                        <input min="1" type="number" ng-disabled="new_ca.toggle!='F'" ng-required="new_ca.toggle=='F'" ng-model="new_ca.asset_quantity_fixed" step="1" name="asset_quantity_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                        <small>quantity</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='F'" ng-required="new_ca.toggle=='F'" ng-model="new_ca.asset_quantity_fixed" step="1" name="asset_quantity_fixed" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                        <input min="1" type="number" ng-disabled="new_ca.toggle!='F'" ng-required="new_ca.toggle=='F'" ng-model="new_ca.asset_value_fixed" step="1" name="asset_value_fixed" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                        <small>$ amount per</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -163,14 +165,15 @@
                                                         <input type="radio" ng-change="aro_toggle_change()" ng-model="new_ca.toggle" value="P" name="toggle" class="form-control aro-radio-btn" />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Annual Percentage of company revenue</label>
-                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='P'" ng-required="new_ca.toggle=='P'" ng-model="new_ca.asset_percent" step="0.01" name="asset_percent" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                        <label>Annual Percentage of Company Revenue</label>
+                                                        <input min="0.01" type="number" ng-disabled="new_ca.toggle!='P'" ng-required="new_ca.toggle=='P'" ng-model="new_ca.asset_percent" step="0.01" name="asset_percent" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                        <small>percent</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 letter-margin-top">
-                                                    <span>% of</span>
+                                                    <span>%    of</span>
                                                     <span ng-bind="annual_revenue | currency:USD$:0"></span>
                                                 </div>
                                             </div>
@@ -183,27 +186,32 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Time Based</label>
-                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_value_fixed" step="1" name="asset_value_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                        <input min="1" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_quantity_fixed" step="1" name="asset_quantity_fixed" class="form-control" data-parsley-group="wizard-company-asset"/>
+                                                        <small>quantity</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <input min="1" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_value_fixed" step="1" name="asset_value_fixed" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                        <small>$ amount per</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <select name="asset_time_unit" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_time_unit" class="form-control input-without-label" ng-options="k.annual_units as k.name for k in time_units | orderBy:'sort_order'" data-parsley-group="wizard-company-asset"/></select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.asset_quantity_fixed" step="1" name="asset_quantity_fixed" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                        <small>time unit</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.time_unit_max" step="1" name="time_unit_max" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                        <small>max time units</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <input min="0" type="number" ng-disabled="new_ca.toggle!='T'" ng-required="new_ca.toggle=='T'" ng-model="new_ca.time_unit_increment" step="0.01" name="time_unit_increment" class="form-control input-without-label" data-parsley-group="wizard-company-asset"/>
+                                                        <small>compound increment</small>
                                                     </div>
                                                 </div>
                                             </div>

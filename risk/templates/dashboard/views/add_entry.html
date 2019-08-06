@@ -1478,10 +1478,10 @@
                                             <div class="col-md-2">
                                                 Asset
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 Value
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 Exposure
                                             </div>
                                             <div class="col-md-5">
@@ -1497,9 +1497,9 @@
                                         <div class="row" ng-repeat="asset in affected_assets.multidata">
                                             <div class="col-md-2" ng-bind="asset.name">
                                             </div>
-                                            <div class="col-md-2" ng-bind="asset.asset_value | currency:USD$:0">
+                                            <div class="col-md-1" ng-bind="asset.asset_value | currency:USD$:0">
                                             </div>
-                                            <div class="col-md-1" ng-bind="asset.factor">
+                                            <div class="col-md-2" ng-bind="asset.factor">
                                             </div>
                                             <div class="col-md-5" ng-bind="asset.detail">
                                             </div>
@@ -1516,9 +1516,9 @@
                                             <div class="col-md-2">
                                                 TOTALS
                                             </div>
-                                            <div class="col-md-2" ng-bind="affected_assets.total_asset_value  | currency:USD$:0">
+                                            <div class="col-md-1" ng-bind="affected_assets.total_asset_value  | currency:USD$:0">
                                             </div>
-                                            <div class="col-md-1" ng-bind="affected_assets.total_factor">
+                                            <div class="col-md-2" ng-bind="affected_assets.total_factor">
                                             </div>
                                             <div class="col-md-5">
                                             </div>
@@ -1711,6 +1711,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 sub-section">Additional Opportunites:</div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12 bottom-10"></div>
                                 </div>
@@ -1722,6 +1723,183 @@
                                     <div class="col-md-12 bottom-30"></div>
                                 </div>
                             </div>
+                            <!-- end Mitigation Detail -->
+                            <!-- Financial Detail (Entry Overview) -->
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10">
+                                        <label class="section">Financial Detail</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2 sub-section">Company Revenue:</div>
+                                    <div class="col-md-3 sub-section">$100,000.00</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-30"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2 sub-section">Company Max Loss:</div>
+                                    <div class="col-md-1 sub-section">$40,000.00</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-30"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 sub-section">Impact Categories:</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row columnheader">
+                                            <div class="col-md-2">
+                                                Name
+                                            </div>
+                                            <div class="col-md-6">
+                                                Description
+                                            </div>
+                                            <div class="col-md-1">
+                                                Measure
+                                            </div>
+                                            <div class="col-md-1">
+                                                Rating
+                                            </div>
+                                            <div class="col-md-1">
+                                                Minimum
+                                            </div>
+                                            <div class="col-md-1">
+                                                Maximum
+                                            </div>
+                                        </div>
+                                        <div class="row" ng-repeat="mc in mitigating_controls.multidata">
+                                            <div class="col-md-2"ng-bind="mc.company_name">
+                                            </div>
+                                            <div class="col-md-6" ng-bind="mc.control_name">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.vendor_name">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.sle_rate + '%'">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="'(' + (mc.sle_cost  | currency:USD$:0) + ')'">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.aro_rate + '%'">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 bottom-bordered-div-5">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-30"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 sub-section">Frequency Categories:</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row columnheader">
+                                            <div class="col-md-2">
+                                                Name
+                                            </div>
+                                            <div class="col-md-6">
+                                                Description
+                                            </div>
+                                            <div class="col-md-1">
+                                                Measure
+                                            </div>
+                                            <div class="col-md-1">
+                                                Rating
+                                            </div>
+                                            <div class="col-md-1">
+                                                Minimum
+                                            </div>
+                                            <div class="col-md-1">
+                                                Maximum
+                                            </div>
+                                        </div>
+                                        <div class="row" ng-repeat="mc in mitigating_controls.multidata">
+                                            <div class="col-md-2"ng-bind="mc.company_name">
+                                            </div>
+                                            <div class="col-md-6" ng-bind="mc.control_name">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.vendor_name">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.sle_rate + '%'">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="'(' + (mc.sle_cost  | currency:USD$:0) + ')'">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.aro_rate + '%'">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 bottom-bordered-div-5">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-30"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 sub-section">Severity Categories:</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-10"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row columnheader">
+                                            <div class="col-md-2">
+                                                Name
+                                            </div>
+                                            <div class="col-md-6">
+                                                Description
+                                            </div>
+                                            <div class="col-md-1">
+                                                Measure
+                                            </div>
+                                            <div class="col-md-1">
+                                                Rating
+                                            </div>
+                                            <div class="col-md-1">
+                                                Minimum
+                                            </div>
+                                            <div class="col-md-1">
+                                                Maximum
+                                            </div>
+                                        </div>
+                                        <div class="row" ng-repeat="mc in mitigating_controls.multidata">
+                                            <div class="col-md-2"ng-bind="mc.company_name">
+                                            </div>
+                                            <div class="col-md-6" ng-bind="mc.control_name">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.vendor_name">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.sle_rate + '%'">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="'(' + (mc.sle_cost  | currency:USD$:0) + ')'">
+                                            </div>
+                                            <div class="col-md-1" ng-bind="mc.aro_rate + '%'">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 bottom-bordered-div-5">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 bottom-30"></div>
+                                </div>
+                            </div>
+                            <!-- end Financial Detail -->
                         </div>
                     </div>
                 </div>

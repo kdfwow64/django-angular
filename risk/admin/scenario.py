@@ -121,6 +121,7 @@ class SeverityCategoryAdmin(admin.ModelAdmin):
         'id',
         'name',
         'description',
+        'measure',
         'minimum',
         'maximum',
         'sort_order',
