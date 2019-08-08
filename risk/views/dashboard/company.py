@@ -3,7 +3,7 @@ import json
 import traceback
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-
+from decimal import *
 from risk.models import (
     CompanyAsset,
     CompanyAssetLocation,
@@ -19,7 +19,8 @@ from risk.models import (
     Vendor,
     ImpactCategory,
     SeverityCategory,
-    TimeUnit
+    TimeUnit,
+    FrequencyCategory
 )
 
 
@@ -361,3 +362,58 @@ def api_company_max_loss(request):
     }
     return JsonResponse(data, safe=False)
 
+
+@login_required
+def api_get_financial_details(request):
+    try:
+        company_revenue = request.user.get_current_company().annual_revenue
+        company_max_loss = request.user.get_current_company().get_company_max_loss()
+        impact_categories = []
+        for impact in ImpactCategory.objects.all():
+            impact_categories.append({
+                'name': impact.name,
+                'description': impact.description,
+                'measure': impact.measure,
+                'rating': impact.rating,
+                'min': company_max_loss * Decimal(impact.minimum),
+                'max': company_max_loss * Decimal(impact.maximum)
+            })
+
+        frequency_categories = []
+        for frequency in FrequencyCategory.objects.all():
+            frequency_categories.append({
+                'name': frequency.name,
+                'description': frequency.description,
+                'measure': frequency.measure,
+                'rating': frequency.rating,
+                'min': frequency.min_year,
+                'max': frequency.max_year
+                # 'min': company_max_loss * Decimal(frequency.minimum),
+                # 'max': company_max_loss * Decimal(frequency.maximum)
+            })
+
+        severity_categories = []
+        for severity in SeverityCategory.objects.order_by('-sort_order').all():
+            severity_categories.append({
+                'name': severity.name,
+                'description': severity.description,
+                'measure': severity.measure,
+                'min': company_max_loss * Decimal(severity.minimum),
+                'max': company_max_loss * Decimal(severity.maximum)
+            })
+
+        rv = {
+            'status': 'success',
+            'code': 200,
+            'data': {
+                'company_revenue': company_revenue,
+                'company_max_loss': company_max_loss,
+                'impact_categories': impact_categories,
+                'frequency_categories': frequency_categories,
+                'severity_categories': severity_categories,
+            }
+        }
+    except:
+        print(traceback.format_exc())
+        rv = {'status': 'error', 'code': 400, 'errors': ["Invalid control"]}
+    return JsonResponse(rv)

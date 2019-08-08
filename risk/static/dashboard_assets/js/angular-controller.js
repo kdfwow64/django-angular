@@ -3401,7 +3401,8 @@ colorAdminApp.controller('registerAddEntriesController',
         current_company_max_loss,
         frequencies,
         severity_categories,
-        impact_categories
+        impact_categories,
+        financial_detail
     ){
     $scope.risk_types = riskTypes;
     $scope.responses = responses;
@@ -3421,7 +3422,7 @@ colorAdminApp.controller('registerAddEntriesController',
     $scope.entry_company_controls = [];
     $scope.control_measures = controlMeasures;
     $scope.severities = severities;
-
+    $scope.financial_detail = financial_detail;
     if(riskEntry.basicinfo){
         $scope.basicinfo = riskEntry.basicinfo;
     } else{

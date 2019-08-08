@@ -704,6 +704,22 @@ function ImpactCategoryService($http){
     }
     return service;
 }
+/* -----------------------------------
+   27.0 SERVICE - FinancialDetailService
+--------------------------------------*/
+
+function FinancialDetailService($http){
+    function get_financial_detail(){
+        return $http.get('/dashboard/api/financial-detail/').then(function(r){
+            return r.data.data;
+        }, function(r){});
+    }
+
+    var service = {
+        getFinancialDetail: get_financial_detail
+    }
+    return service;
+}
 
 colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('ResponseService', ['$http', ResponseService])
@@ -730,6 +746,7 @@ colorAdminApp.factory('RiskTypeService', ['$http', RiskTypeService])
              .factory('RiskEntryService', ['$http', RiskEntryService])
              .factory('ImpactTypeService', ['$http', ImpactTypeService])
              .factory('ImpactCategoryService', ['$http', ImpactCategoryService])
+             .factory('FinancialDetailService', ['$http', FinancialDetailService])
              .factory('SeverityService', ['$http', SeverityService])
              .factory('WizardFormService', [WizardFormService])
              .factory('TimeUnitService', ['$http', TimeUnitService])

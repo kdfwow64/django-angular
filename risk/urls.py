@@ -127,6 +127,8 @@ urlpatterns = [
             dashboard.api_delete_company_control, name="api-delete-company-control"),
     re_path(r'^dashboard/api/delete-company-asset/(?P<ca_id>[0-9]+)/$',
             dashboard.api_delete_company_asset, name="api-delete-company-asset"),
+    re_path(r'^dashboard/api/financial-detail/$',
+            dashboard.api_get_financial_details, name="financial-detail-entry-overview"),
     # re_path(r'^dashboard/api/file-download/$',
     #         dashboard.file_download, name="api-download-file-entries"),
 

@@ -211,6 +211,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 impact_categories: function(ImpactCategoryService){
                     return ImpactCategoryService.getAllImpactCategories();
                 },
+                financial_detail: function(FinancialDetailService){
+                    return FinancialDetailService.getFinancialDetail();
+                },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         serie: true,
@@ -296,6 +299,9 @@ colorAdminApp.config(['$stateProvider', '$urlRouterProvider', function($statePro
                 },
                 impact_categories: function(ImpactCategoryService){
                     return ImpactCategoryService.getAllImpactCategories();
+                },
+                financial_detail: function(FinancialDetailService){
+                    return FinancialDetailService.getFinancialDetail();
                 },
                 service: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({

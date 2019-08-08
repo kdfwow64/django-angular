@@ -1733,14 +1733,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-2 sub-section">Company Revenue:</div>
-                                    <div class="col-md-3 sub-section">$100,000.00</div>
+                                    <div class="col-md-3 sub-section" ng-bind="financial_detail.company_revenue  | currency:USD$:0"></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 bottom-30"></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-2 sub-section">Company Max Loss:</div>
-                                    <div class="col-md-1 sub-section">$40,000.00</div>
+                                    <div class="col-md-1 sub-section" ng-bind="financial_detail.company_max_loss  | currency:USD$:0"></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 bottom-30"></div>
@@ -1773,18 +1773,18 @@
                                                 Maximum
                                             </div>
                                         </div>
-                                        <div class="row" ng-repeat="mc in mitigating_controls.multidata">
-                                            <div class="col-md-2"ng-bind="mc.company_name">
+                                        <div class="row" ng-repeat="ic in financial_detail.impact_categories">
+                                            <div class="col-md-2" ng-bind="ic.name">
                                             </div>
-                                            <div class="col-md-6" ng-bind="mc.control_name">
+                                            <div class="col-md-6" ng-bind="ic.description">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.vendor_name">
+                                            <div class="col-md-1" ng-bind="ic.measure">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.sle_rate + '%'">
+                                            <div class="col-md-1" ng-bind="ic.rating">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mc.sle_cost  | currency:USD$:0) + ')'">
+                                            <div class="col-md-1" ng-bind="ic.min  | currency:USD$:0">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.aro_rate + '%'">
+                                            <div class="col-md-1" ng-bind="ic.max  | currency:USD$:0">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -1824,18 +1824,18 @@
                                                 Maximum
                                             </div>
                                         </div>
-                                        <div class="row" ng-repeat="mc in mitigating_controls.multidata">
-                                            <div class="col-md-2"ng-bind="mc.company_name">
+                                        <div class="row" ng-repeat="ic in financial_detail.frequency_categories">
+                                            <div class="col-md-2" ng-bind="ic.name">
                                             </div>
-                                            <div class="col-md-6" ng-bind="mc.control_name">
+                                            <div class="col-md-6" ng-bind="ic.description">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.vendor_name">
+                                            <div class="col-md-1" ng-bind="ic.measure">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.sle_rate + '%'">
+                                            <div class="col-md-1" ng-bind="ic.rating">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mc.sle_cost  | currency:USD$:0) + ')'">
+                                            <div class="col-md-1" ng-bind="ic.min">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.aro_rate + '%'">
+                                            <div class="col-md-1" ng-bind="ic.max">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -1875,18 +1875,18 @@
                                                 Maximum
                                             </div>
                                         </div>
-                                        <div class="row" ng-repeat="mc in mitigating_controls.multidata">
-                                            <div class="col-md-2"ng-bind="mc.company_name">
+                                        <div class="row" ng-repeat="ic in financial_detail.severity_categories">
+                                            <div class="col-md-2" ng-bind="ic.name">
                                             </div>
-                                            <div class="col-md-6" ng-bind="mc.control_name">
+                                            <div class="col-md-6" ng-bind="ic.description">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.vendor_name">
+                                            <div class="col-md-1" ng-bind="ic.measure">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.sle_rate + '%'">
+                                            <div class="col-md-1">
                                             </div>
-                                            <div class="col-md-1" ng-bind="'(' + (mc.sle_cost  | currency:USD$:0) + ')'">
+                                            <div class="col-md-1" ng-bind="ic.min  | currency:USD$:0">
                                             </div>
-                                            <div class="col-md-1" ng-bind="mc.aro_rate + '%'">
+                                            <div class="col-md-1" ng-bind="ic.max  | currency:USD$:0">
                                             </div>
                                         </div>
                                         <div class="row">

@@ -52,7 +52,8 @@ from risk.models import (
     Vendor,
     Control,
     ControlCategory,
-    ControlCategoryControl
+    ControlCategoryControl,
+    ImpactCategory
 )
 from risk.forms.entry import(
     RiskEntryBasicForm,
@@ -1735,6 +1736,7 @@ def api_get_risk_entry(request, entry_id):
             except:
                 pass
         except:
+            print(traceback.format_exc())
             pass
 
     return JsonResponse(rv)
