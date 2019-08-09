@@ -367,7 +367,7 @@ def api_company_max_loss(request):
 def api_get_financial_details(request):
     try:
         company_revenue = request.user.get_current_company().annual_revenue
-        company_max_loss = request.user.get_current_company().get_company_max_loss()
+        company_max_loss = Decimal(request.user.get_current_company().get_company_max_loss())
         impact_categories = []
         for impact in ImpactCategory.objects.all():
             impact_categories.append({
