@@ -71,6 +71,8 @@ class ControlCategory(DefaultFieldsCategory):
         'The level at which the control category alerts to repsonder'),)  # Control categories can have multiple operation levels.  This field is used show what may be available for the control.
     core_expectation = models.TextField(
         blank=True, null=True, help_text=('Description of the primary purpose of the control.'),)  # This field will help the user better how to measure value of the control.
+    roi_detail = models.TextField(
+        blank=True, null=True, help_text=('How is the ROI defined for the control category.'),)  # This field will help the user better define the company return on investment for the control.
     control_function = models.ManyToManyField("ControlFunction", through='ControlCategoryFunction', through_fields=('id_controlcategory', 'id_controlfunction'), related_name='ControlFunctions', help_text=(
         'The level at which the control category functions'),)  # Control categories can have multiple functions that they perform for the business.  This field is used show what may be available for the control.
     control_feature = models.ManyToManyField("ControlFeature", through='ControlCategoryFeature', through_fields=('id_controlcategory', 'id_controlfeature'), related_name='ControlCategoryFeatures', help_text=(

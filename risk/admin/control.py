@@ -227,7 +227,7 @@ class ControlCategoryAdmin(admin.ModelAdmin):
     radio_fields = {'control_category_type': admin.HORIZONTAL}
     fieldsets = (
         ('Control Category Specific', {
-         'fields': ('name', 'abbrv', 'description', 'keywords', 'core_expectation', 'control_category_type', 'control_domain', 'control_family')}),
+         'fields': ('name', 'abbrv', 'description', 'keywords', 'core_expectation', 'roi_detail', 'control_category_type', 'control_domain', 'control_family')}),
         ('Management Detail', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('id', 'company', ('is_active', 'is_deleted', 'is_test',), ('date_created', 'created_by',), ('date_modified', 'modified_by',), ('date_deleted', 'deleted_by',), ('date_activated', 'activated_by', 'date_deactivated', 'deactivated_by',))}),

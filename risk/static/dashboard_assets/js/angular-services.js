@@ -693,7 +693,7 @@ function CompanyService($http){
 --------------------------------------*/
 
 function ImpactCategoryService($http){
-    function get_all_impact_categories(){
+    function finan(){
         return $http.get('/dashboard/api/impact-categories/').then(function(r){
             return r.data;
         }, function(r){});

@@ -956,9 +956,10 @@
                                                     <th>Type</th>
                                                     <th>Summary</th>
                                                     <th>Cost Detail</th>
-                                                    <th>Cost</th>
-                                                    <th>Occurence</th>
-                                                    <th>Total Cost</th>
+                                                    <th>Quantity</th>
+                                                    <th>Unit Cost</th>
+                                                    <th>SLE Cost</th>
+                                                    <th>ALE Cost</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -967,9 +968,10 @@
                                                     <td ng-bind="ancillary.type"></td>
                                                     <td ng-bind="ancillary.summary"></td>
                                                     <td ng-bind="ancillary.detail"></td>
-                                                    <td ng-bind="ancillary.cost  | currency:USD$:0"></td>
                                                     <td ng-bind="ancillary.occurences"></td>
+                                                    <td ng-bind="ancillary.cost  | currency:USD$:0"></td>
                                                     <td ng-bind="ancillary.total_cost  | currency:USD$:0"></td>
+                                                    <td ng-bind="affected_assets.total_ale  | currency:USD$:0"></td>
                                                     <td>
                                                         <a class="btn btn-primary" ng-click="open_edit_ancillary_item_modal($index)">Edit</a>
                                                     </td>
@@ -1541,37 +1543,37 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row columnheader">
-                                            <div class="col-md-2">
+                                            <div class="col-md-3">
                                                 Type
                                             </div>
                                             <div class="col-md-3">
                                                 Summary
                                             </div>
-                                            <div class="col-md-3">
-                                                Cost Detail
+                                            <div class="col-md-1">
+                                                Quantity
                                             </div>
                                             <div class="col-md-1">
-                                                Cost
-                                            </div>
-                                            <div class="col-md-1">
-                                                Occurence
+                                                Unit Cost
                                             </div>
                                             <div class="col-md-2">
-                                                Total Cost
+                                                SLE Cost
+                                            </div>
+                                            <div class="col-md-2">
+                                                ALE Cost
                                             </div>
                                         </div>
                                         <div class="row" ng-repeat="item in ancillary_items.multidata">
-                                            <div class="col-md-2"ng-bind="item.type">
+                                            <div class="col-md-3"ng-bind="item.type">
                                             </div>
                                             <div class="col-md-3" ng-bind="item.summary">
                                             </div>
-                                            <div class="col-md-3" ng-bind="item.detail">
+                                            <div class="col-md-1" ng-bind="item.occurences">
                                             </div>
                                             <div class="col-md-1" ng-bind="item.cost  |  currency:USD$:0">
                                             </div>
-                                            <div class="col-md-1" ng-bind="item.occurences">
-                                            </div>
                                             <div class="col-md-2" ng-bind="item.total_cost  |  currency:USD$:0">
+                                            </div>
+                                            <div class="col-md-2" ng-bind="affected_assets.total_ale  | currency:USD$:0">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -1579,10 +1581,8 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-2">
-                                                TOTALS
-                                            </div>
                                             <div class="col-md-3">
+                                                TOTALS
                                             </div>
                                             <div class="col-md-3">
                                             </div>
@@ -1591,6 +1591,8 @@
                                             <div class="col-md-1">
                                             </div>
                                             <div class="col-md-2" ng-bind="ancillary_items.total_cost_value  |  currency:USD$:0">
+                                            </div>
+                                            <div class="col-md-2">
                                             </div>
                                         </div>
                                     </div>
@@ -1754,13 +1756,13 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row columnheader">
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 Name
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-5">
                                                 Description
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 Measure
                                             </div>
                                             <div class="col-md-1">
@@ -1774,11 +1776,11 @@
                                             </div>
                                         </div>
                                         <div class="row" ng-repeat="ic in financial_detail.impact_categories">
-                                            <div class="col-md-2" ng-bind="ic.name">
+                                            <div class="col-md-1" ng-bind="ic.name">
                                             </div>
-                                            <div class="col-md-6" ng-bind="ic.description">
+                                            <div class="col-md-5" ng-bind="ic.description">
                                             </div>
-                                            <div class="col-md-1" ng-bind="ic.measure">
+                                            <div class="col-md-2" ng-bind="ic.measure">
                                             </div>
                                             <div class="col-md-1" ng-bind="ic.rating">
                                             </div>
@@ -1805,37 +1807,37 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row columnheader">
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 Name
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 Description
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 Measure
                                             </div>
                                             <div class="col-md-1">
                                                 Rating
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 Minimum
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 Maximum
                                             </div>
                                         </div>
                                         <div class="row" ng-repeat="ic in financial_detail.frequency_categories">
-                                            <div class="col-md-2" ng-bind="ic.name">
+                                            <div class="col-md-1" ng-bind="ic.name">
                                             </div>
-                                            <div class="col-md-6" ng-bind="ic.description">
+                                            <div class="col-md-4" ng-bind="ic.description">
                                             </div>
-                                            <div class="col-md-1" ng-bind="ic.measure">
+                                            <div class="col-md-2" ng-bind="ic.measure">
                                             </div>
                                             <div class="col-md-1" ng-bind="ic.rating">
                                             </div>
-                                            <div class="col-md-1" ng-bind="ic.min">
+                                            <div class="col-md-2" ng-bind="ic.min">
                                             </div>
-                                            <div class="col-md-1" ng-bind="ic.max">
+                                            <div class="col-md-2" ng-bind="ic.max">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -1856,17 +1858,14 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row columnheader">
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 Name
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-7">
                                                 Description
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 Measure
-                                            </div>
-                                            <div class="col-md-1">
-                                                Rating
                                             </div>
                                             <div class="col-md-1">
                                                 Minimum
@@ -1876,13 +1875,11 @@
                                             </div>
                                         </div>
                                         <div class="row" ng-repeat="ic in financial_detail.severity_categories">
-                                            <div class="col-md-2" ng-bind="ic.name">
+                                            <div class="col-md-1" ng-bind="ic.name">
                                             </div>
-                                            <div class="col-md-6" ng-bind="ic.description">
+                                            <div class="col-md-7" ng-bind="ic.description">
                                             </div>
-                                            <div class="col-md-1" ng-bind="ic.measure">
-                                            </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2" ng-bind="ic.measure">
                                             </div>
                                             <div class="col-md-1" ng-bind="ic.min  | currency:USD$:0">
                                             </div>
