@@ -1383,7 +1383,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="row" ng-repeat="location in entry_overview.locations">
+                                        <div class="row" ng-if="entry_overview.locations.length" ng-repeat="location in entry_overview.locations">
                                             <div class="col-md-12"ng-bind="location">
                                             </div>
                                         </div>
