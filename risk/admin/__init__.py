@@ -8,7 +8,7 @@ from ..models.company import Company, CompanyMember, CompanyMemberRole, CompanyM
 from ..models.actor import ActorIntent, ActorMotive, Actor
 from ..models.audit import Notification, NotificationGroup, AuditChange, Snapshot
 from ..models.common import Calendar, CurrencyType, RAGIndicator, EmailTemplate, Expression, IntegerType, Cadence, TimeUnit, TaskStatus, JobTitle, Appetite
-from ..models.compliance import Compliance, ComplianceType, ComplianceRequirement, ComplianceVersion, KillChain, Naics, PyramidofPain
+from ..models.compliance import Compliance, ComplianceType, ComplianceRequirement, CompliancePenalty, ComplianceVersion, KillChain, Naics, PyramidofPain
 from ..models.control import Control, ControlCsc, ControlCscFamily, ControlDomain, ControlFamily, ControlAlertMethod, ControlFunction, ControlFeature, ControlCategory, ControlCategoryType, ControlCategoryKPO, ControlCategorySLA, DependencyEffort, OnusMethod, DeliveryMethod, BillingMethod
 from ..models.entry import Register, Entry, EntryActor, EntryTask, EntryCause, EntryCompanyControl, EntryCompliance, EntryComplianceRequirement, EntryEvaluation, EntryIndicator, EntryCompanyLocation, EntryResponseSubmission, EntryRiskType, RiskType, EntryAncillary, EntryAncillaryType, Response, ResponseVote, EntryUrl, MitigationAdequacy
 from ..models.feedback import Feedback, FeedbackStatus, FeedbackType, FeedbackQuestion, FeedbackAnswer, FeedbackCorrespondence
@@ -25,7 +25,7 @@ from .company import CompanyAdmin, CompanyMemberAdmin, CompanyMemberRoleAdmin, C
 from .actor import ActorIntentAdmin, ActorMotiveAdmin, ActorAdmin
 from .audit import NotificationAdmin, NotificationGroupAdmin, AuditChangeAdmin, SnapshotAdmin
 from .common import CalendarAdmin, CurrencyTypeAdmin, RAGIndicatorAdmin, EmailTemplateAdmin, ExpressionAdmin, IntegerTypeAdmin, CadenceAdmin, TimeUnitAdmin, TaskStatusAdmin, JobTitleAdmin, AppetiteAdmin
-from .compliance import ComplianceAdmin, ComplianceTypeAdmin, ComplianceVersionAdmin, ComplianceRequirementAdmin, KillChainAdmin, NaicsAdmin, PyramidofPainAdmin
+from .compliance import ComplianceAdmin, ComplianceTypeAdmin, ComplianceVersionAdmin, ComplianceRequirementAdmin, CompliancePenaltyAdmin, KillChainAdmin, NaicsAdmin, PyramidofPainAdmin
 from .control import ControlAdmin, ControlCscAdmin, ControlCscFamilyAdmin, ControlDomainAdmin, ControlFamilyAdmin, ControlAlertMethodAdmin, ControlFunctionAdmin, ControlFeatureAdmin, ControlCategoryAdmin, ControlCategoryTypeAdmin, ControlCategoryKPOAdmin, ControlCategorySLAAdmin, DependencyEffortAdmin, OnusMethodAdmin, DeliveryMethodAdmin, BillingMethodAdmin
 from .entry import RegisterAdmin, EntryAdmin, EntryActorAdmin, EntryTaskAdmin, EntryCauseAdmin, EntryCompanyControlAdmin, EntryComplianceAdmin, EntryComplianceRequirementAdmin, EntryEvaluationAdmin, EntryIndicatorAdmin, EntryCompanyLocationAdmin, EntryResponseSubmissionAdmin, EntryAncillaryAdmin, EntryAncillaryTypeAdmin, ResponseAdmin, ResponseVoteAdmin, EntryUrlAdmin, RiskTypeAdmin, MitigationAdequacyAdmin
 from .feedback import FeedbackAdmin, FeedbackStatusAdmin, FeedbackTypeAdmin, FeedbackQuestionAdmin, FeedbackAnswerAdmin, FeedbackCorrespondenceAdmin
@@ -86,6 +86,7 @@ admin.site.register(CompanyFinding, CompanyFindingAdmin)
 admin.site.register(ContactType, ContactTypeAdmin)
 admin.site.register(CompanyTeam, CompanyTeamAdmin)
 admin.site.register(Compliance, ComplianceAdmin)
+admin.site.register(CompliancePenalty, CompliancePenaltyAdmin)
 admin.site.register(ComplianceType, ComplianceTypeAdmin)
 admin.site.register(ComplianceRequirement, ComplianceRequirementAdmin)
 admin.site.register(ComplianceVersion, ComplianceVersionAdmin)

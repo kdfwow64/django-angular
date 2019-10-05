@@ -29,6 +29,7 @@ class Selector(models.Model):
     ASSET = (('F', 'Fixed Value'), ('P', 'Percent of Revenue'),
              ('T', 'Time Based'))
     LOSS = (('F', 'Fixed Value'), ('P', 'Percent of Revenue'))
+    LOCO = (('I', 'Internal'), ('E', 'External'))
     ARO = (('K', 'Known ARO'), ('C', 'Frequency Category'),
            ('F', 'Annualized Percentage'))
 

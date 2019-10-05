@@ -14,7 +14,9 @@ class Compliance(DefaultFieldsCategory):
     """Compliance."""
 
     is_opensource = models.BooleanField(default=False, help_text=(
-        'Designates whether the compliance is open for public use'),)  # If True, the TM symbol will be added to the compliance name.
+        'Designates whether the compliance is open for public use'),)  # If True, the TM symbol will be added to the compliance name.  Used to determine if the compliance content can be used in the application
+    loco_source = models.CharField(choices=Selector.LOCO, default='E', max_length=1, help_text=(
+        'Determine if governance sourced from inside the company or an external source'),)
     version_number = models.CharField(max_length=30, blank=True, null=True, help_text=(
         'Version indicator of the compliance type'),)  # Version number of the compliance
     year = models.IntegerField(default=0, blank=True, help_text=(
@@ -92,7 +94,7 @@ class ComplianceRequirement(DefaultFields):
     keywords = models.TextField(
         blank=True, null=True,  help_text=('Keywords used to idenify proper category or find correct field name'),)  # Not in use
     # Foreign Key and Relationships
-    compliance = models.ForeignKey('Compliance', default=1, on_delete=models.PROTECT, blank=False, related_name='compliance', help_text=(
+    compliance = models.ForeignKey('Compliance', default=1, on_delete=models.PROTECT, blank=False, related_name='compliance_requirement', help_text=(
         'Compliance.  May have multiple versions'),)  # Compliance requirements.
 
     def __str__(self):
@@ -102,6 +104,28 @@ class ComplianceRequirement(DefaultFields):
     class Meta:
         """Meta class."""
         verbose_name_plural = ("Compliance Requirements")
+
+
+class CompliancePenalty(DefaultFields):
+    """Compliance Penalty."""
+    sort_order = models.IntegerField(
+        blank=True, null=True, help_text=('Sort order of the compliance penalty '),)  # Not in use
+    cid = models.CharField(
+        max_length=128, blank=False, help_text=('Name of the compliance identifier for the penalty'),)  # Not in use
+    description = models.TextField(
+        blank=True, null=True, help_text=('Description of the compliance penalty'),)  # Not in use
+    penalty_cost = models.TextField(
+        blank=True, null=True, help_text=('Cost associated to non-compliance'),)  # Not in use
+    compliance = models.ForeignKey('Compliance', default=1, on_delete=models.PROTECT, blank=False, related_name='compliance_penalty', help_text=(
+        'Compliance.  May have multiple versions'),)  # Compliance requirements.
+
+    def __str__(self):
+        """String."""
+        return self.description
+
+    class Meta:
+        """Meta class."""
+        verbose_name_plural = ("Compliance Penalties")
 
 
 class KillChain(DefaultFieldsCategory):

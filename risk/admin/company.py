@@ -339,7 +339,7 @@ class CompanyControlAdmin(admin.ModelAdmin):
     autocomplete_fields = ['control', ]
     fieldsets = (
         ('Company Control Specific', {
-         'fields': (('control', 'version',), 'name', 'abbrv', 'description', 'company',)}),
+         'fields': (('control', 'version',), 'name', 'abbrv', 'description', 'operating_potential', 'operating_potential_opportunity', 'company',)}),
         ('Cost Detail', {'fields': ('budgeted',
                                     'estimated_maint_opex', 'estimated_dependency_opex', )}),
         ('Advanced options', {

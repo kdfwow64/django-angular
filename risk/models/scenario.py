@@ -164,6 +164,7 @@ class SeverityCategory(DefaultFieldsCategory):
 
     class Meta:
         """Meta class."""
+        ordering = ['sort_order', ]
         verbose_name_plural = ("Severity Categories")
 
     def __str__(self):

@@ -18,6 +18,7 @@ class ComplianceAdmin(admin.ModelAdmin):
         'is_active',
         'is_opensource',
         'version_number',
+        'loco_source',
         'year',
         'compliance_type',
         'keywords',
@@ -106,6 +107,32 @@ class ComplianceRequirementAdmin(admin.ModelAdmin):
         return linebreaks(obj.compensating_control)
     admin_compensating_control.allow_tags = True
     admin_compensating_control.short_description = 'Compensating Controls'
+
+
+class CompliancePenaltyAdmin(admin.ModelAdmin):
+
+    list_select_related = []
+    list_display = (
+        'compliance',
+        'cid',
+        'admin_desc',
+        'admin_penalty_cost',
+    )
+    list_filter = ('compliance', 'cid')
+    search_fields = ('cid', 'description', 'penalty_cost')
+
+    def get_ordering(self, request):
+        return [('sort_order')]
+
+    def admin_desc(self, obj):
+        return linebreaks(obj.description)
+    admin_desc.allow_tags = True
+    admin_desc.short_description = 'Description'
+
+    def admin_penalty_cost(self, obj):
+        return linebreaks(obj.penalty_cost)
+    admin_penalty_cost.allow_tags = True
+    admin_penalty_cost.short_description = 'Penalty Cost'
 
 
 class KillChainAdmin(admin.ModelAdmin):

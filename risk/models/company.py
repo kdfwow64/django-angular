@@ -288,20 +288,26 @@ class CompanyAsset(DefaultFieldsCompany):
             amount = 0
             if self.asset_time_unit_increment == 0:
                 if self.asset_time_unit_max == 0:
-                    amount = self.asset_value_fixed * Decimal(self.asset_quantity_fixed) * Decimal(self.asset_timed_unit.annual_units)
+                    amount = self.asset_value_fixed * \
+                        Decimal(self.asset_quantity_fixed) * \
+                        Decimal(self.asset_timed_unit.annual_units)
                 else:
-                    amount = self.asset_value_fixed * Decimal(self.asset_quantity_fixed) * Decimal(self.asset_time_unit_max)
+                    amount = self.asset_value_fixed * \
+                        Decimal(self.asset_quantity_fixed) * \
+                        Decimal(self.asset_time_unit_max)
             else:
                 if self.asset_time_unit_max == 0:
                     start = self.asset_value_fixed * self.asset_quantity_fixed
                     for i in range(0, self.asset_timed_unit.annual_units):
                         amount += start
-                        start = start * ( 1 + Decimal(self.asset_time_unit_increment) / 100 )
+                        start = start * \
+                            (1 + Decimal(self.asset_time_unit_increment) / 100)
                 else:
                     start = self.asset_value_fixed * self.asset_quantity_fixed
                     for i in range(0, int(self.asset_time_unit_max)):
                         amount += start
-                        start = start * (1 + Decimal(self.asset_time_unit_increment) / 100)
+                        start = start * \
+                            (1 + Decimal(self.asset_time_unit_increment) / 100)
             return Decimal(amount)
 
 
@@ -371,6 +377,10 @@ class CompanyControl(DefaultFieldsCompany):
         'Annual maintenance date'),)  # Used to determine annual date that maintenance is completed for the control.
     budgeted = models.BooleanField(default=True, help_text=(
         'Annually budgeted'),)  # Not in use
+    operating_potential = models.FloatField(blank=False, default=1, help_text=(
+        'What pecentage is the contorol operating at based on its maximum mitigation potential'),)  # This setting determine how well the control is leveraged to meet its mitigation capability.
+    operating_potential_opportunity = models.TextField(blank=True, null=True, help_text=(
+        'Description of addtional opportunites that could maximize the controls mitigation potential'),)  # Description itmes that were considered in the operational expenditures.
     recovery_multiplier = models.FloatField(blank=True, null=True, help_text=(
         'Number of units it takes the control to recover'),)  # This setting combined with the resilience_unit will define the time required to get the control back to an operational state.
     recovery_time_unit = models.ForeignKey(
