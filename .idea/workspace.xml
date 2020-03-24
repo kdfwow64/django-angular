@@ -112,6 +112,7 @@
         </entry>
       </file>
     </leaf>
+    <leaf />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -145,6 +146,23 @@
       <find>entryov</find>
       <find>entry_over</find>
       <find>entry_overview.locations</find>
+      <find>company-control</find>
+      <find>add-company</find>
+      <find>api_save_ass</find>
+      <find>pattern</find>
+      <find>registeradde</find>
+      <find>edit-com</find>
+      <find>api_save_company_asset</find>
+      <find>companyassetlocation</find>
+      <find>companyassetse</find>
+      <find>get_all_company_loc</find>
+      <find>segment</find>
+      <find>modalInstance</find>
+      <find>registerListEntriresController</find>
+      <find>percent_asset_value</find>
+      <find>open_edit_affected_asset_modal</find>
+      <find>registerAddEntriesController</find>
+      <find>percent of</find>
     </findStrings>
     <replaceStrings>
       <replace>compliance_requirements</replace>
@@ -315,6 +333,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../django-react-redux-base" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.django.DjangoModulesConfigurable" />
@@ -425,6 +445,18 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37259924" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+    <frame x="121" y="73" width="1327" height="780" extended-state="6" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22759159" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50157726" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.57310706" sideWeight="0.5025792" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32969603" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280757" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27580893" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24941543" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20030816" sideWeight="0.4974208" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19722651" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24455826" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -749,6 +781,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-setting.js">
+    <entry file="file://$PROJECT_DIR$/../RLB_VENV/lib/python3.6/site-packages/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="15" column="36" lean-forward="true" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
@@ -798,6 +831,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="271">
           <caret line="354" column="0" lean-forward="true" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
+    <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="4186" column="30" lean-forward="false" selection-start-line="4186" selection-start-column="30" selection-end-line="4186" selection-end-column="30" />
           <folding>
             <element signature="e#57#68#0" expanded="true" />
           </folding>
@@ -808,6 +845,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
           <caret line="361" column="25" lean-forward="false" selection-start-line="361" selection-start-column="25" selection-end-line="361" selection-end-column="25" />
+    <entry file="file://$PROJECT_DIR$/risk/views/dashboard/entry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="1627" column="97" lean-forward="false" selection-start-line="1627" selection-start-column="97" selection-end-line="1627" selection-end-column="97" />
           <folding />
         </state>
       </provider>
@@ -824,6 +865,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="172">
           <caret line="4184" column="17" lean-forward="false" selection-start-line="4184" selection-start-column="17" selection-end-line="4184" selection-end-column="17" />
+    <entry file="file://$PROJECT_DIR$/risk/static/dashboard_assets/js/angular-app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="222" column="53" lean-forward="false" selection-start-line="222" selection-start-column="53" selection-end-line="222" selection-end-column="53" />
+          <folding>
+            <element signature="e#3851#5444#0" expanded="false" />
+            <element signature="e#5486#9204#0" expanded="false" />
+            <element signature="e#13044#16799#0" expanded="false" />
+            <element signature="e#20798#22495#0" expanded="false" />
+            <element signature="e#22545#25046#0" expanded="false" />
+            <element signature="e#25100#27627#0" expanded="false" />
+            <element signature="e#27676#29588#0" expanded="false" />
+            <element signature="e#29638#31570#0" expanded="false" />
+            <element signature="e#31623#33123#0" expanded="false" />
+            <element signature="e#33178#34683#0" expanded="false" />
+            <element signature="e#34714#34825#0" expanded="false" />
+            <element signature="e#34868#36557#0" expanded="false" />
+            <element signature="e#36589#36701#0" expanded="false" />
+            <element signature="e#36746#38222#0" expanded="false" />
+            <element signature="e#38255#38368#0" expanded="false" />
+            <element signature="e#38415#39894#0" expanded="false" />
+            <element signature="e#39939#41412#0" expanded="false" />
+            <element signature="e#41446#41560#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/risk/templates/dashboard/views/add_entry.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="211" column="217" lean-forward="false" selection-start-line="211" selection-start-column="198" selection-end-line="211" selection-end-column="217" />
           <folding />
         </state>
       </provider>
